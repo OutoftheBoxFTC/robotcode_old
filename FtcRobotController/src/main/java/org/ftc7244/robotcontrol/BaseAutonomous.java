@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.ftc7244.robotcontrol.controllers.QueuePIDController;
-import org.ftc7244.robotcontrol.sensors.GyroscopeProvider;
+import org.ftc7244.robotcontrol.sensor.GyroscopeProvider;
 
 import static android.content.Context.SENSOR_SERVICE;
 
@@ -31,8 +31,8 @@ public class BaseAutonomous extends LinearOpMode {
         this.provider = new GyroscopeProvider() {
             @Override
             public void onUpdate() {
-                controller.update(currentOrientationQuaternion.getZ());
-                telemetry.addLine(String.valueOf(currentOrientationQuaternion.getZ()));
+                controller.update(this.getZ());
+                telemetry.addLine(this.getZ() + ":" + this.count + ":" + this.omega);
                 telemetry.update();
             }
         };
@@ -43,7 +43,7 @@ public class BaseAutonomous extends LinearOpMode {
         //Setup the motors for our robot
         SensorManager manager = (SensorManager) hardwareMap.appContext.getSystemService(SENSOR_SERVICE);
         provider.start(manager, INTERVAL_PID);
-        robot.init(hardwareMap);
+        robot.init(this);
 
         //Dont start till the play button is clicked
         waitForStart();
@@ -59,8 +59,6 @@ public class BaseAutonomous extends LinearOpMode {
         while (runtime.seconds() < time) {
             if (controller.hasValue()) {
                 double power = controller.getNextValue();
-                telemetry.addLine("Power " + power);
-                telemetry.update();
                 robot.getDriveLeft().setPower(power);
                 robot.getDriveRight().setPower(power);
             }

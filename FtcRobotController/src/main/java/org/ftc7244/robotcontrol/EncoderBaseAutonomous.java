@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Deprecated
 /**
- * This code failed because the robot frame is too sqewed to handle the encoders
+ * This code failed because the robot frame is too skewed to handle the encoders
  * Thus there was not much of an effect for using encoders.
  */
 public class EncoderBaseAutonomous extends LinearOpMode {
@@ -28,7 +28,7 @@ public class EncoderBaseAutonomous extends LinearOpMode {
         //register the listener
         //mSensorManager.registerListener(new GyroscopeReader(), mSensor, 0);
 
-        robot.init(hardwareMap);
+        robot.init(this);
 
         robot.getDriveLeft().setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.getDriveRight().setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
