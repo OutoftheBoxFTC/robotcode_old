@@ -2,7 +2,6 @@ package org.ftc7244.robotcontrol;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.ftc7244.robotcontrol.core.Button;
@@ -11,6 +10,7 @@ import org.ftc7244.robotcontrol.core.PressButton;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by OOTB on 10/16/2016.
@@ -21,12 +21,18 @@ public class WestcoastTeleop extends OpMode {
 
     private WestcoastHardware robot;
     private Button bButton;
+    private AtomicBoolean runningLauncher;
+    private ExecutorService service;
+    //private ElapsedTime servoLiftTimer;
+    //private boolean launcherActive;
 
     @Override
     public void init() {
         robot = new WestcoastHardware();
         robot.init(this);
         bButton = new PressButton(gamepad2, ButtonType.B);
+        runningLauncher = new AtomicBoolean(false);
+        service = Executors.newCachedThreadPool();
     }
 
     @Override
@@ -35,25 +41,30 @@ public class WestcoastTeleop extends OpMode {
         robot.getDriveRight().setPower(gamepad1.right_stick_y);
         robot.getDriveLeft().setPower(gamepad1.left_stick_y);
 
-        //Set the launcher if  b is pressed
-        robot.getLauncher().setPower(gamepad1.b ? -1 : 0);
-
         //Open the door if a button is pressed
-        if (bButton.isPressed()) {
+        if (bButton.isPressed() && !runningLauncher.get()) {
+            runningLauncher.set(true);
+            service.execute(new Runnable() {
+                @Override
+                public void run() {
+                    telemetry.addLine("Info " + System.currentTimeMillis());
+                    telemetry.update();
+                    while (Math.round(robot.getLauncherLimit().getVoltage()) != 0) {
+                        robot.getLauncher().setPower(-1);
+                    }
 
-
+                    ElapsedTime timer = new ElapsedTime();
+                    while (timer.milliseconds() <= 500) {
+                        if (timer.milliseconds() > 250) robot.getLauncher().setPower(0);
+                        robot.getLauncherDoor().setPosition(.7);
+                    }
+                    robot.getLauncherDoor().setPosition(1);
+                    runningLauncher.set(false);
+                }
+            });
             telemetry.addLine("CLICKED " + System.currentTimeMillis());
             telemetry.update();
         }
-        /*if (bButton.isPressed() && !runningLauncher) {
-            runningLauncher = true;
-            robot.getLauncherDoor().setPosition(1);
-            doorTimer.reset();
-        }
-        if (runningLauncher) {
-            if (doorTimer.isValid()) robot.getLauncherDoor().setPosition(0);
-
-        }*/
 
         //INTAKE
         //If no triggers are pressed stop the lift

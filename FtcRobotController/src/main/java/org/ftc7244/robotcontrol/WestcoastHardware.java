@@ -1,6 +1,7 @@
 package org.ftc7244.robotcontrol;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
@@ -23,7 +24,7 @@ public class WestcoastHardware {
     private DcMotor launcher;
     private Servo launcherDoor;
     private DcMotor intake;
-    private DigitalChannel launcherLimit;
+    private AnalogInput launcherLimit;
     private Telemetry telemetry;
 
     public void init(OpMode opMode) {
@@ -34,7 +35,7 @@ public class WestcoastHardware {
         this.driveRight = getOrNull(map.dcMotor, "drive_right");
         this.launcher = getOrNull(map.dcMotor, "launcher");
         this.launcherDoor = getOrNull(map.servo, "launcher_door");
-        this.launcherLimit = getOrNull(map.digitalChannel, "launcher_limit");
+        this.launcherLimit = getOrNull(map.analogInput, "launcher_limit");
         this.intake = getOrNull(map.dcMotor, "intake");
         
         if (driveLeft != null) driveLeft.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -70,7 +71,7 @@ public class WestcoastHardware {
 
     public DcMotor getIntake() { return intake; }
 
-    public DigitalChannel getLauncherLimit() {
+    public AnalogInput getLauncherLimit() {
         return launcherLimit;
     }
 }
