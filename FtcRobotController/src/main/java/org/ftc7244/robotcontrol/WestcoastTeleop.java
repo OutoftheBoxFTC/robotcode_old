@@ -60,8 +60,6 @@ public class WestcoastTeleop extends OpMode {
                     runningLauncher.set(false);
                 }
             });
-            telemetry.addLine("CLICKED " + System.currentTimeMillis());
-            telemetry.update();
         }
 
         //INTAKE
