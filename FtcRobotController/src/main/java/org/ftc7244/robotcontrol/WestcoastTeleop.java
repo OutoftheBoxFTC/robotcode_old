@@ -23,8 +23,6 @@ public class WestcoastTeleop extends OpMode {
     private Button bButton;
     private AtomicBoolean runningLauncher;
     private ExecutorService service;
-    //private ElapsedTime servoLiftTimer;
-    //private boolean launcherActive;
 
     @Override
     public void init() {
