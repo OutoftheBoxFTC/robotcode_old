@@ -25,21 +25,29 @@ public class WestcoastHardware {
     private Servo launcherDoor;
     private DcMotor intake;
     private AnalogInput launcherLimit;
-    private Telemetry telemetry;
+    private OpMode opMode;
 
-    public void init(OpMode opMode) {
+    public WestcoastHardware(OpMode opMode) {
+        this.opMode = opMode;
+    }
+
+    public void init() {
         HardwareMap map = opMode.hardwareMap;
-        this.telemetry = opMode.telemetry;
-
         this.driveLeft = getOrNull(map.dcMotor, "drive_left");
         this.driveRight = getOrNull(map.dcMotor, "drive_right");
         this.launcher = getOrNull(map.dcMotor, "launcher");
         this.launcherDoor = getOrNull(map.servo, "launcher_door");
         this.launcherLimit = getOrNull(map.analogInput, "launcher_limit");
         this.intake = getOrNull(map.dcMotor, "intake");
-        
+
+        initHardware();
+    }
+
+    public void initHardware() {
         if (driveLeft != null) driveLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         if (driveRight != null) driveRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        if (launcher != null) launcher.setDirection(DcMotorSimple.Direction.REVERSE);
+        if (launcherDoor != null) launcherDoor.setPosition(1 );
     }
 
     
@@ -50,7 +58,7 @@ public class WestcoastHardware {
             }
             return item.getValue();
         }
-        telemetry.addLine("ERROR: " + name + " not found!");
+        opMode.telemetry.addLine("ERROR: " + name + " not found!");
         System.err.print("ERROR: " + name + " not found!");
         return null;
     }

@@ -1,14 +1,9 @@
 package org.ftc7244.robotcontrol;
 
-import android.hardware.Sensor;
-import android.hardware.SensorManager;
-
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Deprecated
 /**
  * This code failed because the robot frame is too skewed to handle the encoders
  * Thus there was not much of an effect for using encoders.
@@ -17,7 +12,7 @@ public class EncoderBaseAutonomous extends LinearOpMode {
 
     private final static int COUNTS_PER_INCH = 89;
 
-    protected WestcoastHardware robot = new WestcoastHardware();
+    protected WestcoastHardware robot = new WestcoastHardware(this);
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -28,7 +23,7 @@ public class EncoderBaseAutonomous extends LinearOpMode {
         //register the listener
         //mSensorManager.registerListener(new GyroscopeReader(), mSensor, 0);
 
-        robot.init(this);
+        robot.init();
 
         robot.getDriveLeft().setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.getDriveRight().setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

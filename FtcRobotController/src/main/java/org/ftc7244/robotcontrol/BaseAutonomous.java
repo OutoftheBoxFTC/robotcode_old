@@ -26,7 +26,7 @@ public class BaseAutonomous extends LinearOpMode {
 
     public BaseAutonomous() {
         super();
-        this.robot = new WestcoastHardware();
+        this.robot = new WestcoastHardware(this);
         this.controller = new QueuePIDController(50, 1, 0, 0);
         this.provider = new GyroscopeProvider() {
             @Override
@@ -43,7 +43,7 @@ public class BaseAutonomous extends LinearOpMode {
         //Setup the motors for our robot
         SensorManager manager = (SensorManager) hardwareMap.appContext.getSystemService(SENSOR_SERVICE);
         provider.start(manager, INTERVAL_PID);
-        robot.init(this);
+        robot.init();
 
         //Dont start till the play button is clicked
         waitForStart();

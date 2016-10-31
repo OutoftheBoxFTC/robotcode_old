@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.ftc7244.robotcontrol.core.Button;
 import org.ftc7244.robotcontrol.core.ButtonType;
-import org.ftc7244.robotcontrol.core.PressButton;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -20,17 +19,20 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class WestcoastTeleop extends OpMode {
 
     private WestcoastHardware robot;
-    private Button bButton;
+    private Button bButton, triggerL, triggerR;
     private AtomicBoolean runningLauncher;
     private ExecutorService service;
 
     @Override
     public void init() {
-        robot = new WestcoastHardware();
-        robot.init(this);
-        bButton = new PressButton(gamepad2, ButtonType.B);
+        robot = new WestcoastHardware(this);
+        bButton = new Button(gamepad2, ButtonType.B);
+        triggerL = new Button(gamepad2, ButtonType.LEFT_TRIGGER);
+        triggerR = new Button(gamepad2, ButtonType.RIGHT_TRIGGER);
         runningLauncher = new AtomicBoolean(false);
         service = Executors.newCachedThreadPool();
+
+        robot.init();
     }
 
     @Override
@@ -45,18 +47,37 @@ public class WestcoastTeleop extends OpMode {
             service.execute(new Runnable() {
                 @Override
                 public void run() {
-                    telemetry.addLine("Info " + System.currentTimeMillis());
-                    telemetry.update();
-                    while (Math.round(robot.getLauncherLimit().getVoltage()) != 0) {
-                        robot.getLauncher().setPower(-1);
+                    //Put a pause
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
 
                     ElapsedTime timer = new ElapsedTime();
-                    while (timer.milliseconds() <= 500) {
-                        if (timer.milliseconds() > 250) robot.getLauncher().setPower(0);
-                        robot.getLauncherDoor().setPosition(.7);
+                    boolean failed = false;
+                    //Spin the launcher
+                    do {
+                        if (timer.milliseconds() >= 1000) failed = true;
+                        robot.getLauncher().setPower(1);
+                    } while (Math.round(robot.getLauncherLimit().getVoltage()) != 0 && !failed);
+
+                    //If the code hasn't failed allow the arm to lift or reset spinner
+                    if (!failed) {
+                        timer.reset();
+                        while (timer.milliseconds() <= 500) {
+                            //Stop the spinner after a delay
+                            if (timer.milliseconds() > 250) robot.getLauncher().setPower(0);
+
+                            //lift the arm
+                            robot.getLauncherDoor().setPosition(.7);
+                        }
+                        //reset the arm to staring position
+                        robot.getLauncherDoor().setPosition(1);
+                    } else {
+                        robot.getLauncher().setPower(0);
                     }
-                    robot.getLauncherDoor().setPosition(1);
+
                     runningLauncher.set(false);
                 }
             });
@@ -66,9 +87,9 @@ public class WestcoastTeleop extends OpMode {
         //If no triggers are pressed stop the lift
         int intakeSpeed = 0;
         //If the right trigger is pressed start the lift
-        if (gamepad2.right_trigger > 0) intakeSpeed = 1;
+        if (triggerR.isPressed()) intakeSpeed = 1;
         //If the left trigger is pressed reverse the lift
-        if (gamepad2.left_trigger > 0) intakeSpeed = -1;
+        if (triggerL.isPressed()) intakeSpeed = -1;
         robot.getIntake().setPower(intakeSpeed);
     }
 }
