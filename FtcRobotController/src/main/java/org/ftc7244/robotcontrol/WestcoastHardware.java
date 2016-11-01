@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -31,6 +32,9 @@ public class WestcoastHardware {
         this.opMode = opMode;
     }
 
+    /**
+     * Identify the hardware in the robot and then
+     */
     public void init() {
         HardwareMap map = opMode.hardwareMap;
         this.driveLeft = getOrNull(map.dcMotor, "drive_left");
@@ -40,17 +44,20 @@ public class WestcoastHardware {
         this.launcherLimit = getOrNull(map.analogInput, "launcher_limit");
         this.intake = getOrNull(map.dcMotor, "intake");
 
-        initHardware();
-    }
-
-    public void initHardware() {
+        //Set the default direction for all the hardware and also initialize default positions
         if (driveLeft != null) driveLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         if (driveRight != null) driveRight.setDirection(DcMotorSimple.Direction.REVERSE);
         if (launcher != null) launcher.setDirection(DcMotorSimple.Direction.REVERSE);
-        if (launcherDoor != null) launcherDoor.setPosition(1 );
+        if (launcherDoor != null) launcherDoor.setPosition(1);
     }
 
-    
+    /**
+     * Get the value associated with an id and instead of raising an error return null and log it
+     * @param map the hardware map from the HardwareMap
+     * @param name The ID in the hardware map
+     * @param <T> the type of hardware map
+     * @return the hardware device associated with the name
+     */
     private <T extends HardwareDevice> T getOrNull(HardwareMap.DeviceMapping<T> map, String name) {
         for (Map.Entry<String, T> item : map.entrySet()) {
             if (!item.getKey().equalsIgnoreCase(name)) {
@@ -59,7 +66,7 @@ public class WestcoastHardware {
             return item.getValue();
         }
         opMode.telemetry.addLine("ERROR: " + name + " not found!");
-        System.err.print("ERROR: " + name + " not found!");
+        RobotLog.e("ERROR: " + name + " not found!");
         return null;
     }
 

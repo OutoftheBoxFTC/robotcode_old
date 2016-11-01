@@ -1,4 +1,4 @@
-package org.ftc7244.robotcontrol;
+package org.ftc7244.robotcontrol.core;
 
 import android.hardware.SensorManager;
 
@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.ftc7244.robotcontrol.WestcoastHardware;
 import org.ftc7244.robotcontrol.controllers.QueuePIDController;
 import org.ftc7244.robotcontrol.sensor.GyroscopeProvider;
 
