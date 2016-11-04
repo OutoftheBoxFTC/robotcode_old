@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -18,7 +19,7 @@ import java.util.Map;
  * Created by OOTB on 10/9/2016.
  */
 
-public class WestcoastHardware {
+public class Westcoast {
 
     private DcMotor driveLeft;
     private DcMotor driveRight;
@@ -28,7 +29,7 @@ public class WestcoastHardware {
     private AnalogInput launcherLimit;
     private OpMode opMode;
 
-    public WestcoastHardware(OpMode opMode) {
+    public Westcoast(OpMode opMode) {
         this.opMode = opMode;
     }
 
@@ -68,6 +69,39 @@ public class WestcoastHardware {
         opMode.telemetry.addLine("ERROR: " + name + " not found!");
         RobotLog.e("ERROR: " + name + " not found!");
         return null;
+    }
+
+    public void shoot(long delay) {
+        //Put a pause
+        try {
+            Thread.sleep(delay);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        ElapsedTime timer = new ElapsedTime();
+        boolean failed = false;
+        //Spin the launcher
+        do {
+            if (timer.milliseconds() >= 1000) failed = true;
+            launcher.setPower(1);
+        } while (Math.round(launcherLimit.getVoltage()) != 0 && !failed);
+
+        //If the code hasn't failed allow the arm to lift or reset spinner
+        if (!failed) {
+            timer.reset();
+            while (timer.milliseconds() <= 500) {
+                //Stop the spinner after a delay
+                if (timer.milliseconds() > 250) launcher.setPower(0);
+
+                //lift the arm
+                launcherDoor.setPosition(.7);
+            }
+            //reset the arm to staring position
+            launcherDoor.setPosition(1);
+        } else {
+            launcher.setPower(0);
+        }
     }
 
     public DcMotor getDriveLeft() {

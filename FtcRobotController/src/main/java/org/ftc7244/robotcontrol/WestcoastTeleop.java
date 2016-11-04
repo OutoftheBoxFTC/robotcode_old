@@ -18,14 +18,14 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @TeleOp(name="Westcoast Drive")
 public class WestcoastTeleop extends OpMode {
 
-    private WestcoastHardware robot;
+    private Westcoast robot;
     private Button bButton, triggerL, triggerR;
     private AtomicBoolean runningLauncher;
     private ExecutorService service;
 
     @Override
     public void init() {
-        robot = new WestcoastHardware(this);
+        robot = new Westcoast(this);
         bButton = new Button(gamepad2, ButtonType.B);
         triggerL = new Button(gamepad2, ButtonType.LEFT_TRIGGER);
         triggerR = new Button(gamepad2, ButtonType.RIGHT_TRIGGER);
@@ -47,37 +47,7 @@ public class WestcoastTeleop extends OpMode {
             service.execute(new Runnable() {
                 @Override
                 public void run() {
-                    //Put a pause
-                    try {
-                        Thread.sleep(50);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
-                    ElapsedTime timer = new ElapsedTime();
-                    boolean failed = false;
-                    //Spin the launcher
-                    do {
-                        if (timer.milliseconds() >= 1000) failed = true;
-                        robot.getLauncher().setPower(1);
-                    } while (Math.round(robot.getLauncherLimit().getVoltage()) != 0 && !failed);
-
-                    //If the code hasn't failed allow the arm to lift or reset spinner
-                    if (!failed) {
-                        timer.reset();
-                        while (timer.milliseconds() <= 500) {
-                            //Stop the spinner after a delay
-                            if (timer.milliseconds() > 250) robot.getLauncher().setPower(0);
-
-                            //lift the arm
-                            robot.getLauncherDoor().setPosition(.7);
-                        }
-                        //reset the arm to staring position
-                        robot.getLauncherDoor().setPosition(1);
-                    } else {
-                        robot.getLauncher().setPower(0);
-                    }
-
+                    robot.shoot(50);
                     runningLauncher.set(false);
                 }
             });

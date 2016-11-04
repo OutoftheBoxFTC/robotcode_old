@@ -2,10 +2,9 @@ package org.ftc7244.robotcontrol.core;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.RobotLog;
 
-import org.ftc7244.robotcontrol.WestcoastHardware;
+import org.ftc7244.robotcontrol.Westcoast;
 
 /**
  * This code failed because the robot frame is too skewed to handle the encoders
@@ -13,9 +12,10 @@ import org.ftc7244.robotcontrol.WestcoastHardware;
  */
 public abstract class EncoderBaseAutonomous extends LinearOpMode {
 
-    private final static double COUNTS_PER_INCH = 560 / (Math.PI * 3);
+    private final static double COUNTS_PER_INCH = 1120 / (Math.PI * 3);
+    private final static int ENCODER_THRESHOLD = 100;
 
-    protected WestcoastHardware robot = new WestcoastHardware(this);
+    protected Westcoast robot = new Westcoast(this);
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -44,7 +44,7 @@ public abstract class EncoderBaseAutonomous extends LinearOpMode {
      * @param timeoutS in seconds how long till a fail-safe is ran
      * @throws InterruptedException
      */
-    public void encoderDrive(double speed, double leftInches, double rightInches, double timeoutS) throws InterruptedException {
+    public void moveDistance(double speed, double leftInches, double rightInches, double timeoutS) throws InterruptedException {
         // Ensure that the opmode is still active
         if (!opModeIsActive()) {
             telemetry.addLine("Tried to use encoder while stationary");
@@ -52,94 +52,61 @@ public abstract class EncoderBaseAutonomous extends LinearOpMode {
             return;
         }
 
-        // Determine new target position, and pass to motor controller
-        int targetLeft = (int) (robot.getDriveLeft().getCurrentPosition() + Math.round(leftInches * COUNTS_PER_INCH));
-        int targetRight = (int) (robot.getDriveRight().getCurrentPosition() + Math.round(rightInches * COUNTS_PER_INCH));
-        robot.getDriveLeft().setTargetPosition(targetLeft);
-        robot.getDriveRight().setTargetPosition(targetRight);
+        //Initialize values
+        DcMotor left = robot.getDriveLeft(), right = robot.getDriveRight();
+        int directionFactor = (int) (speed / Math.abs(speed)),
+            targetLeft = (int) Math.round(leftInches * COUNTS_PER_INCH) * directionFactor,
+            targetRight = -1 *(int) Math.round(rightInches * COUNTS_PER_INCH) * directionFactor;
 
-        // Turn On RUN_TO_POSITION
-        robot.getDriveLeft().setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.getDriveRight().setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        resetMotors(right, left);
 
-        // reset the timeout time and start motion.
-        robot.getDriveLeft().setPower(Math.abs(speed));
-        robot.getDriveRight().setPower(Math.abs(speed));
+        //Setup the encoders and get them to move
+        left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        left.setTargetPosition(targetLeft);
+        right.setTargetPosition(targetRight);
+        right.setPower(speed);
+        left.setPower(speed);
 
-        ElapsedTime runtime = new ElapsedTime();
         // keep looping while we are still active, and there is time left, and both motors are running.
-        while (Math.abs(robot.getDriveLeft().getCurrentPosition()) < Math.abs(targetLeft) || Math.abs(robot.getDriveRight().getCurrentPosition()) < Math.abs(targetRight)) {
-            telemetry.addData("Path1",  "Running to %7d :%7d", targetLeft,  targetRight);
-            telemetry.addData("Path2",  "Running at %7d :%7d",
-                    robot.getDriveLeft().getCurrentPosition(),
-                    robot.getDriveRight().getCurrentPosition());
-            telemetry.update();
+        while (left.getPower() != 0 || right.getPower() != 0) {
+            stopWhenComplete(left, targetLeft, ENCODER_THRESHOLD);
+            stopWhenComplete(right, targetRight, ENCODER_THRESHOLD);
 
             idle();
         }
 
-        // Stop all motion;
-        robot.getDriveLeft().setPower(0);
-        robot.getDriveRight().setPower(0);
+        // Stop all motion
+        left.setPower(0);
+        right.setPower(0);
 
         // Turn off RUN_TO_POSITION
-
-        robot.getDriveLeft().setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.getDriveRight().setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        sleep(250);
+        resetMotors(left, right);
+        sleep(500);
     }
 
-    /*public void encoderDrive(double speed,
-                             double leftInches, double rightInches,
-                             double timeoutS) throws InterruptedException {
-        
-        int newLeftTarget;
-        int newRightTarget;
-
-        // Ensure that the opmode is still active
-        if (opModeIsActive()) {
-
-            // Determine new target position, and pass to motor controller
-            newLeftTarget = robot.getDriveLeft().getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
-            newRightTarget = robot.getDriveRight().getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
-            robot.getDriveLeft().setTargetPosition(newLeftTarget);
-            robot.getDriveRight().setTargetPosition(newRightTarget);
-
-            // Turn On RUN_TO_POSITION
-            robot.getDriveLeft().setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.getDriveRight().setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-            // reset the timeout time and start motion.
-            ElapsedTime runtime = new ElapsedTime();
-            robot.getDriveLeft().setPower(Math.abs(speed));
-            robot.getDriveRight().setPower(Math.abs(speed));
-
-            // keep looping while we are still active, and there is time left, and both motors are running.
-            while (opModeIsActive() &&
-                    (runtime.seconds() < timeoutS) &&
-                    (robot.getDriveLeft().isBusy() && robot.getDriveRight().isBusy())) {
-
-                // Display it for the driver.
-                telemetry.addData("Path1",  "Running to %7d :%7d", newLeftTarget,  newRightTarget);
-                telemetry.addData("Path2",  "Running at %7d :%7d",
-                        robot.getDriveLeft().getCurrentPosition(),
-                        robot.getDriveRight().getCurrentPosition());
-                telemetry.update();
-
-                // Allow time for other processes to run.
-                idle();
+    private void resetMotors(DcMotor... motors) {
+        boolean notReset = true;
+        while (notReset) {
+            boolean allReset = true;
+            for (DcMotor motor : motors) {
+                if (motor.getCurrentPosition() == 0) {
+                    continue;
+                }
+                allReset = false;
+                motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             }
-
-            // Stop all motion;
-            robot.getDriveLeft().setPower(0);
-            robot.getDriveRight().setPower(0);
-
-            // Turn off RUN_TO_POSITION
-            robot.getDriveLeft().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.getDriveRight().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-              sleep(250);   // optional pause after each move
+            notReset = !allReset;
         }
-    }*/
+    }
+
+    private boolean stopWhenComplete(DcMotor motor, int target, int threshold) {
+        if (Math.abs(target - motor.getCurrentPosition()) >= threshold) {
+            return false;
+        }
+
+        motor.setPower(0);
+        return true;
+    }
+
 }
