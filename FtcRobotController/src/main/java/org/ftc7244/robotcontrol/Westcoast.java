@@ -4,14 +4,11 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.RobotLog;
-
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import java.util.Map;
 
@@ -95,13 +92,17 @@ public class Westcoast {
                 if (timer.milliseconds() > 250) launcher.setPower(0);
 
                 //lift the arm
-                launcherDoor.setPosition(.7);
+                setDoorState(DoorState.OPEN);
             }
             //reset the arm to staring position
-            launcherDoor.setPosition(1);
+            setDoorState(DoorState.CLOSED);
         } else {
             launcher.setPower(0);
         }
+    }
+
+    public void setDoorState(DoorState status) {
+        launcherDoor.setPosition(status.position);
     }
 
     public DcMotor getDriveLeft() {
@@ -122,5 +123,16 @@ public class Westcoast {
 
     public AnalogInput getLauncherLimit() {
         return launcherLimit;
+    }
+
+    public enum DoorState {
+        OPEN(0.7),
+        CLOSED(1);
+
+        protected final double position;
+
+        DoorState(double position)  {
+            this.position = position;
+        }
     }
 }
