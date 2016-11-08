@@ -5,26 +5,27 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.ftc7244.robotcontrol.core.EncoderBaseAutonomous;
 
 /**
- * Created by OOTB on 10/31/2016.
+ * Created by OOTB on 11/7/2016.
  */
 
-@Autonomous(name="Shoot Ball Red")
-public class ShootBallBlue extends EncoderBaseAutonomous {
+@Autonomous(name="Shoot Ball Blue")
+public class ShootBlueBall extends EncoderBaseAutonomous {
     @Override
     public void run() throws InterruptedException {
-        moveDistance(.4, 13, 0, 100);
-        moveDistance(1, 20, 25, 100);
+        drive(0.4, 8.5, 0);
+        drive(1.0, 26, 21);
 
         //Put a pause
         for (int i = 0; i < 3; i++) robot.shoot(1000);
 
-        moveDistance(1, 8, 8, 100);
-        moveDistance(.4, 13, 0, 100);
+        drive(1.0, 12, 12);
+        drive(0.4, 13, 0);
+        rotate(1.0, 130, Direction.LEFT);
+
         robot.getIntake().setPower(1);
-        moveDistance(-1, 25, 25, 100);
+        drive(0.8, 25, 25);
         sleep(5000);
-        moveDistance(-1, 0, 8, 100);
-        moveDistance(-1, 15, 15, 100);
+        drive(1.0, 15, 15);
         robot.getIntake().setPower(0);
     }
 }

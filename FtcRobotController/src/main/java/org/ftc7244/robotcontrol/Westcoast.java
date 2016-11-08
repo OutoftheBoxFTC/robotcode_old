@@ -42,10 +42,9 @@ public class Westcoast {
         this.launcherLimit = getOrNull(map.analogInput, "launcher_limit");
         this.intake = getOrNull(map.dcMotor, "intake");
 
-        //Set the default direction for all the hardware and also initialize default positions
         if (driveLeft != null) driveLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        if (driveRight != null) driveRight.setDirection(DcMotorSimple.Direction.REVERSE);
         if (launcher != null) launcher.setDirection(DcMotorSimple.Direction.REVERSE);
+        //Set the default direction for all the hardware and also initialize default positions
         if (launcherDoor != null) launcherDoor.setPosition(1);
     }
 

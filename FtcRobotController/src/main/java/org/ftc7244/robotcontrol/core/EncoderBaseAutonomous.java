@@ -2,6 +2,7 @@ package org.ftc7244.robotcontrol.core;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftc7244.robotcontrol.Westcoast;
@@ -38,13 +39,12 @@ public abstract class EncoderBaseAutonomous extends LinearOpMode {
 
     /**
      * Move the robot a certain distance and once it reaches a distance or reaches a timeout then stop the robot
-     * @param speed the power of the robot from 0 to 1
+     * @param power the power of the robot from 0 to 1
      * @param leftInches how many inches the encoder moves in inches
      * @param rightInches how many inches the encoder moves in inches
-     * @param timeoutS in seconds how long till a fail-safe is ran
      * @throws InterruptedException
      */
-    public void moveDistance(double speed, double leftInches, double rightInches, double timeoutS) throws InterruptedException {
+    public void drive(double power, double leftInches, double rightInches) throws InterruptedException {
         // Ensure that the opmode is still active
         if (!opModeIsActive()) {
             telemetry.addLine("Tried to use encoder while stationary");
@@ -54,22 +54,20 @@ public abstract class EncoderBaseAutonomous extends LinearOpMode {
 
         //Initialize values
         DcMotor left = robot.getDriveLeft(), right = robot.getDriveRight();
-        int directionFactor = (int) (speed / Math.abs(speed)),
-            targetLeft = (int) Math.round(leftInches * COUNTS_PER_INCH) * directionFactor,
-            targetRight = -1 *(int) Math.round(rightInches * COUNTS_PER_INCH) * directionFactor;
-
         resetMotors(right, left);
 
-        //Setup the encoders and get them to move
-        left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        left.setTargetPosition(targetLeft);
-        right.setTargetPosition(targetRight);
-        right.setPower(speed);
-        left.setPower(speed);
+        int targetLeft = initEncoderMotor(left, leftInches, power);
+        int targetRight = initEncoderMotor(right, rightInches, power);
+        RobotLog.i("Target Left "+ targetLeft + " Right" + targetRight);
 
         // keep looping while we are still active, and there is time left, and both motors are running.
+        int lastLeft = 0, lastRight = 0;
         while (left.getPower() != 0 || right.getPower() != 0) {
+            if (lastLeft != left.getCurrentPosition() || lastRight != right.getCurrentPosition()) {
+                lastLeft = left.getCurrentPosition();
+                lastRight = right.getCurrentPosition();
+                RobotLog.i("Drive Left " + left.getCurrentPosition() + " Right" + right.getCurrentPosition());
+            }
             stopWhenComplete(left, targetLeft, ENCODER_THRESHOLD);
             stopWhenComplete(right, targetRight, ENCODER_THRESHOLD);
 
@@ -83,6 +81,32 @@ public abstract class EncoderBaseAutonomous extends LinearOpMode {
         // Turn off RUN_TO_POSITION
         resetMotors(left, right);
         sleep(500);
+    }
+
+    /**
+     *
+     * @param degs distance in degrees of 360
+     */
+    public void rotate(double power, int degs, Direction direction) throws InterruptedException {
+        double distance = ((double)degs)/360 * Math.PI * 17.5;
+        drive(power, distance * direction.leftPower, distance * direction.rightPower);
+    }
+
+    private int initEncoderMotor(DcMotor motor, double distance, double power) {
+        if (distance == 0 || power == 0) {
+            motor.setPower(0);
+            return 0;
+        }
+        if (power < 0) {
+            power = Math.abs(power);
+            RobotLog.ww("[Encoder]", "Value for power cannot be negative!");
+        }
+        int distanceTicks = (int) (Math.round(distance * COUNTS_PER_INCH));
+
+        motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motor.setTargetPosition(distanceTicks);
+        motor.setPower(power * (distance > 0 ? 1 : -1));
+        return distanceTicks;
     }
 
     private void resetMotors(DcMotor... motors) {
@@ -101,7 +125,7 @@ public abstract class EncoderBaseAutonomous extends LinearOpMode {
     }
 
     private boolean stopWhenComplete(DcMotor motor, int target, int threshold) {
-        if (Math.abs(target - motor.getCurrentPosition()) >= threshold) {
+        if (Math.sqrt(Math.pow(target, 2) - Math.pow(motor.getCurrentPosition(), 2)) >= threshold) {
             return false;
         }
 
@@ -109,4 +133,15 @@ public abstract class EncoderBaseAutonomous extends LinearOpMode {
         return true;
     }
 
+    public enum Direction {
+        LEFT(-1, 1),
+        RIGHT(1, -1);
+
+        public final int leftPower, rightPower;
+
+        Direction(int leftPower, int rightPower) {
+            this.leftPower = leftPower;
+            this.rightPower = rightPower;
+        }
+    }
 }

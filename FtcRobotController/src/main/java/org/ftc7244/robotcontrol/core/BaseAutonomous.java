@@ -16,7 +16,6 @@ import static android.content.Context.SENSOR_SERVICE;
  * Created by OOTB on 10/16/2016.
  */
 
-@Autonomous(name="I forgot to name it :D")
 public class BaseAutonomous extends LinearOpMode {
 
     public static final int INTERVAL_PID = 50;
