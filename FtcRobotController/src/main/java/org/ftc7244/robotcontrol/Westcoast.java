@@ -2,6 +2,7 @@ package org.ftc7244.robotcontrol;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareDevice;
@@ -25,6 +26,7 @@ public class Westcoast {
     private DcMotor intake;
     private AnalogInput launcherLimit;
     private OpMode opMode;
+    private ColorSensor beaconSensor;
 
     public Westcoast(OpMode opMode) {
         this.opMode = opMode;
@@ -41,6 +43,7 @@ public class Westcoast {
         this.launcherDoor = getOrNull(map.servo, "launcher_door");
         this.launcherLimit = getOrNull(map.analogInput, "launcher_limit");
         this.intake = getOrNull(map.dcMotor, "intake");
+        this.beaconSensor = getOrNull(map.colorSensor, "beacon_sensor");
 
         if (driveLeft != null) driveLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         if (launcher != null) launcher.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -98,6 +101,14 @@ public class Westcoast {
         } else {
             launcher.setPower(0);
         }
+    }
+
+    public void shootLoop(int count, long delay) {
+        for (int i = 0; i < count; i++) this.shoot(delay);
+    }
+
+    public ColorSensor getBeaconSensor() {
+        return beaconSensor;
     }
 
     public void setDoorState(DoorState status) {

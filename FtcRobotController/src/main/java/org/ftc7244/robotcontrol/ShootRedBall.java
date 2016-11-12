@@ -16,7 +16,7 @@ public class ShootRedBall extends EncoderBaseAutonomous {
         drive(1.0, -20, -25);
 
         //Put a pause
-        for (int i = 0; i < 3; i++) robot.shoot(1000);
+        robot.shootLoop(3, 1000);
 
         drive(1.0, -10, -10);
         drive(0.4, -13, 0);

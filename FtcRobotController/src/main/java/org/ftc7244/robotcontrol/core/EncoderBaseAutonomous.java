@@ -134,8 +134,8 @@ public abstract class EncoderBaseAutonomous extends LinearOpMode {
     }
 
     public enum Direction {
-        LEFT(-1, 1),
-        RIGHT(1, -1);
+        LEFT(1, -1),
+        RIGHT(-1, 1);
 
         public final int leftPower, rightPower;
 

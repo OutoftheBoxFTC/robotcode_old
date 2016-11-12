@@ -16,11 +16,11 @@ public class ShootBlueBall extends EncoderBaseAutonomous {
         drive(1.0, 26, 21);
 
         //Put a pause
-        for (int i = 0; i < 3; i++) robot.shoot(1000);
+        robot.shootLoop(3, 1000);
 
         drive(1.0, 12, 12);
         drive(0.4, 13, 0);
-        rotate(1.0, 130, Direction.LEFT);
+        rotate(1.0, 130, Direction.RIGHT);
 
         robot.getIntake().setPower(1);
         drive(0.8, 25, 25);
