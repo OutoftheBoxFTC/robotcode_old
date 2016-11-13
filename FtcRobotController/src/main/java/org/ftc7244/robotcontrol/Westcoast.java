@@ -19,11 +19,8 @@ import java.util.Map;
 
 public class Westcoast {
 
-    private DcMotor driveLeft;
-    private DcMotor driveRight;
-    private DcMotor launcher;
-    private Servo launcherDoor;
-    private DcMotor intake;
+    private DcMotor driveLeft, driveRight, launcher, intake;
+    private Servo launcherDoor, beaconPusher;
     private AnalogInput launcherLimit;
     private OpMode opMode;
     private ColorSensor beaconSensor;
@@ -44,10 +41,12 @@ public class Westcoast {
         this.launcherLimit = getOrNull(map.analogInput, "launcher_limit");
         this.intake = getOrNull(map.dcMotor, "intake");
         this.beaconSensor = getOrNull(map.colorSensor, "beacon_sensor");
+        this.beaconPusher = getOrNull(map.servo, "beacon_pusher");
 
+        //Set the default direction for all the hardware and also initialize default positions
         if (driveLeft != null) driveLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         if (launcher != null) launcher.setDirection(DcMotorSimple.Direction.REVERSE);
-        //Set the default direction for all the hardware and also initialize default positions
+        if (beaconPusher != null) beaconPusher.setPosition(1);
         if (launcherDoor != null) launcherDoor.setPosition(1);
     }
 
@@ -144,5 +143,9 @@ public class Westcoast {
         DoorState(double position)  {
             this.position = position;
         }
+    }
+
+    public Servo getBeaconPusher() {
+        return beaconPusher;
     }
 }

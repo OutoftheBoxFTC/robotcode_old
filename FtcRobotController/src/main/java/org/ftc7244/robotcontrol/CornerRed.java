@@ -2,7 +2,7 @@ package org.ftc7244.robotcontrol;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.ftc7244.robotcontrol.core.EncoderBaseAutonomous;
+import org.ftc7244.robotcontrol.autonomous.EncoderBaseAutonomous;
 
 /**
  * Created by OOTB on 11/11/2016.

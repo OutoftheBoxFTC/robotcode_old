@@ -1,4 +1,4 @@
-package org.ftc7244.robotcontrol.core;
+package org.ftc7244.robotcontrol.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
