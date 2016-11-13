@@ -39,8 +39,8 @@ public class WestcoastTeleop extends OpMode {
     @Override
     public void loop() {
         //Core Drive Code
-        robot.getDriveRight().setPower(gamepad1.right_stick_y);
-        robot.getDriveLeft().setPower(gamepad1.left_stick_y);
+        robot.getDriveRight().setPower(-gamepad1.right_stick_y);
+        robot.getDriveLeft().setPower(-gamepad1.left_stick_y);
 
         //If we are not in running launcher mode then allow for manual
         if (!runningLauncher.get()) {

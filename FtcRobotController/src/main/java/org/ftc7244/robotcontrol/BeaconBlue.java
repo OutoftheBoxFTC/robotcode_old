@@ -20,10 +20,17 @@ public class BeaconBlue extends BeaconBaseAutonomous {
         drive(1.0, 25, 25);
         drive(1.0, 15, 0);
         drive(1.0, 10, 10);
-        drive(1.0, -3, -3);
+        drive(1.0, -2.5, -2.5);
         rotate(.8, 57, Direction.RIGHT);
+        drive(1, 2, 2);
 
-        drive(1.0, 2, 2);
         pushBeaconUntil(BeaconColor.BLUE);
+
+        rotate(1, 60, Direction.RIGHT);
+        robot.getIntake().setPower(1);
+        drive(1, 25, 25);
+        robot.getIntake().setPower(1);
+        sleep(5);
+        drive(1, 10, 10);
     }
 }
