@@ -78,6 +78,7 @@ public abstract class GyroscopeProvider implements SensorEventListener {
         currentQuaternion = multiplyQuaternion(deltaQuaternion, currentQuaternion);
         SensorManager.getRotationMatrixFromVector(deltaRotationMatrix, deltaQuaternion);
 
+        //https://bitbucket.org/apacha/sensor-fusion-demo/src/468b322635d087ab2ba6865a9c4dfb775b0e69ff/app/src/main/java/org/hitlabnz/sensor_fusion_demo/orientationProvider/CalibratedGyroscopeProvider.java?at=master&fileviewer=file-view-default
         onUpdate();
     }
 
