@@ -14,15 +14,11 @@ import android.hardware.SensorManager;
  */
 public abstract class GyroscopeProvider implements SensorEventListener {
 
-    private float x, y, z;
-    public float omega;
-    public long count;
-
     private static final double EPSILON = 0.1f;
 
     private static final float NS2S = 1.0f / 1000000000.0f;
-    private final float[] deltaRotationVector;
-    private float[] rotationCurrent;
+    private final float[] deltaQuaternion;
+    private float[] currentQuaternion;
     private float timestamp;
 
     private SensorManager sensorManager;
@@ -32,12 +28,8 @@ public abstract class GyroscopeProvider implements SensorEventListener {
      */
     public GyroscopeProvider() {
         //Initialize the sensor readings
-        this.deltaRotationVector = new float[4];
-        this.rotationCurrent = new float[9];
-        this.x = 0;
-        this.y = 0;
-        this.z = 0;
-        this.count = 0;
+        this.deltaQuaternion = new float[4];
+        this.currentQuaternion = new float[4];
     }
 
     public void start(SensorManager sensorManager, int samplingPeriod) {
@@ -61,37 +53,31 @@ public abstract class GyroscopeProvider implements SensorEventListener {
             float axisZ = event.values[2];
 
             // Calculate the angular speed of the sample
-            float omegaMagnitude = (float) Math.sqrt(axisX * axisX + axisY * axisY + axisZ * axisZ);
-            this.omega = omegaMagnitude;
-
+            float omega = (float) Math.sqrt(axisX * axisX + axisY * axisY + axisZ * axisZ);
             // Normalize the rotation vector if it's big enough to get the axis
-            if (omegaMagnitude > EPSILON) {
-                axisX /= omegaMagnitude;
-                axisY /= omegaMagnitude;
-                axisZ /= omegaMagnitude;
+            if (omega > EPSILON) {
+                axisX /= omega;
+                axisY /= omega;
+                axisZ /= omega;
             }
 
             // Integrate around this axis with the angular speed by the timestep
             // in order to get a delta rotation from this sample over the timestep
             // We will convert this axis-angle representation of the delta rotation
             // into a quaternion before turning it into the rotation matrix.
-            float thetaOverTwo = omegaMagnitude * dT / 2.0f;
+            float thetaOverTwo = omega * dT / 2.0f;
             float sinThetaOverTwo = (float) Math.sin(thetaOverTwo);
             float cosThetaOverTwo = (float) Math.cos(thetaOverTwo);
-            deltaRotationVector[0] = sinThetaOverTwo * axisX;
-            deltaRotationVector[1] = sinThetaOverTwo * axisY;
-            deltaRotationVector[2] = sinThetaOverTwo * axisZ;
-            deltaRotationVector[3] = cosThetaOverTwo;
+            deltaQuaternion[0] = sinThetaOverTwo * axisX;
+            deltaQuaternion[1] = sinThetaOverTwo * axisY;
+            deltaQuaternion[2] = sinThetaOverTwo * axisZ;
+            deltaQuaternion[3] = -cosThetaOverTwo;
         }
         timestamp = event.timestamp;
         float[] deltaRotationMatrix = new float[9];
-        SensorManager.getRotationMatrixFromVector(deltaRotationMatrix, deltaRotationVector);
-        rotationCurrent = matrixMultiplication(rotationCurrent, deltaRotationMatrix);
+        currentQuaternion = multiplyQuaternion(deltaQuaternion, currentQuaternion);
+        SensorManager.getRotationMatrixFromVector(deltaRotationMatrix, deltaQuaternion);
 
-        this.x = rotationCurrent[0];
-        this.y = rotationCurrent[1];
-        this.z = rotationCurrent[2];
-        this.count++;
         onUpdate();
     }
 
@@ -102,33 +88,14 @@ public abstract class GyroscopeProvider implements SensorEventListener {
         //Do nothing
     }
 
-    private float[] matrixMultiplication(float[] a, float[] b) {
-        float[] result = new float[9];
+    private float[] multiplyQuaternion(float[] a, float[] b) {
+        float[] results = new float[3];
 
-        result[0] = a[0] * b[0] + a[1] * b[3] + a[2] * b[6];
-        result[1] = a[0] * b[1] + a[1] * b[4] + a[2] * b[7];
-        result[2] = a[0] * b[2] + a[1] * b[5] + a[2] * b[8];
+        results[3] = (a[3] * b[3] - a[0] * b[0] - a[1] * b[1] - a[2] * b[2]); //w = w1w2 - x1x2 - y1y2 - z1z2
+        results[0] = (a[3] * b[0] + a[0] * b[3] + a[1] * b[2] - a[2] * b[1]); //x = w1x2 + x1w2 + y1z2 - z1y2
+        results[1] = (a[3] * b[1] + a[1] * b[3] + a[2] * b[0] - a[0] * b[2]); //y = w1y2 + y1w2 + z1x2 - x1z2
+        results[2] = (a[3] * b[2] + a[2] * b[3] + a[0] * b[1] - a[1] * b[0]); //z = w1z2 + z1w2 + x1y2 - y1x2
 
-        result[3] = a[3] * b[0] + a[4] * b[3] + a[5] * b[6];
-        result[4] = a[3] * b[1] + a[4] * b[4] + a[5] * b[7];
-        result[5] = a[3] * b[2] + a[4] * b[5] + a[5] * b[8];
-
-        result[6] = a[6] * b[0] + a[7] * b[3] + a[8] * b[6];
-        result[7] = a[6] * b[1] + a[7] * b[4] + a[8] * b[7];
-        result[8] = a[6] * b[2] + a[7] * b[5] + a[8] * b[8];
-
-        return result;
-    }
-
-    public float getX() {
-        return x;
-    }
-
-    public float getY() {
-        return y;
-    }
-
-    public float getZ() {
-        return z;
+        return results;
     }
 }
