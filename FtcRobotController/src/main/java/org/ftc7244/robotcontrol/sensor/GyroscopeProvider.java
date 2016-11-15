@@ -9,27 +9,64 @@ import android.hardware.SensorManager;
  * The orientation provider that delivers the relative orientation from the {@link Sensor#TYPE_GYROSCOPE
  * Gyroscope}. This sensor does not deliver an absolute orientation (with respect to magnetic north and gravity) but
  * only a relative measurement starting from the point where it started.
- *
+ * 
  * @author Alexander Pacha
+ * 
  */
 public abstract class GyroscopeProvider implements SensorEventListener {
 
+    /**
+     * Constant specifying the factor between a Nano-second and a second
+     */
+    private static final float NS2S = 1.0f / 1000000000.0f;
+
+    /**
+     * This is a filter-threshold for discarding Gyroscope measurements that are below a certain level and
+     * potentially are only noise and not real motion. Values from the gyroscope are usually between 0 (stop) and
+     * 10 (rapid rotation), so 0.1 seems to be a reasonable threshold to filter noise (usually smaller than 0.1) and
+     * real motion (usually > 0.1). Note that there is a chance of missing real motion, if the use is turning the
+     * device really slowly, so this value has to find a balance between accepting noise (threshold = 0) and missing
+     * slow user-action (threshold > 0.5). 0.1 seems to work fine for most applications.
+     *
+     */
     private static final double EPSILON = 0.1f;
 
-    private static final float NS2S = 1.0f / 1000000000.0f;
-    private final float[] deltaQuaternion;
-    private float[] currentQuaternion;
-    private float timestamp;
+    /**
+     * The quaternion that stores the difference that is obtained by the gyroscope.
+     * Basically it contains a rotational difference encoded into a quaternion.
+     * 
+     * To obtain the absolute orientation one must add this into an initial position by
+     * multiplying it with another quaternion
+     */
+    private final Quaternion deltaQuaternion;
+
+    /**
+     * The time-stamp being used to record the time when the last gyroscope event occurred.
+     */
+    private long timestamp;
+
+    /**
+     * The quaternion that holds the current rotation
+     */
+    private final Quaternion currentOrientationQuaternion;
 
     private SensorManager sensorManager;
 
+    private double x, y, z;
+
+
     /**
-     * Initialises a new GyroscopeProvider
+     * Temporary variable to save allocations.
      */
+    private Quaternion correctedQuaternion;
+
     public GyroscopeProvider() {
-        //Initialize the sensor readings
-        this.deltaQuaternion = new float[4];
-        this.currentQuaternion = new float[4];
+        currentOrientationQuaternion = new Quaternion();
+        deltaQuaternion = new Quaternion();
+        correctedQuaternion = new Quaternion();
+        x = 0;
+        y = 0;
+        z = 0;
     }
 
     public void start(SensorManager sensorManager, int samplingPeriod) {
@@ -43,60 +80,82 @@ public abstract class GyroscopeProvider implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        // This timestep's delta rotation to be multiplied by the current rotation
-        // after computing it from the gyro sample data.
-        if (timestamp != 0) {
-            final float dT = (event.timestamp - timestamp) * NS2S;
-            // Axis of the rotation sample, not normalized yet.
-            float axisX = event.values[0];
-            float axisY = event.values[1];
-            float axisZ = event.values[2];
 
-            // Calculate the angular speed of the sample
-            float omega = (float) Math.sqrt(axisX * axisX + axisY * axisY + axisZ * axisZ);
-            // Normalize the rotation vector if it's big enough to get the axis
-            if (omega > EPSILON) {
-                axisX /= omega;
-                axisY /= omega;
-                axisZ /= omega;
+        // we received a sensor event. it is a good practice to check
+        // that we received the proper event
+        if (event.sensor.getType() == Sensor.TYPE_GYROSCOPE) {
+
+            // This timestamps delta rotation to be multiplied by the current rotation
+            // after computing it from the gyro sample data.
+            if (timestamp != 0) {
+                final float dT = (event.timestamp - timestamp) * NS2S;
+                // Axis of the rotation sample, not normalized yet.
+                float axisX = event.values[0];
+                float axisY = event.values[1];
+                float axisZ = event.values[2];
+
+                // Calculate the angular speed of the sample
+                double gyroscopeRotationVelocity = Math.sqrt(axisX * axisX + axisY * axisY + axisZ * axisZ);
+
+                // Normalize the rotation vector if it's big enough to get the axis
+                if (gyroscopeRotationVelocity > EPSILON) {
+                    axisX /= gyroscopeRotationVelocity;
+                    axisY /= gyroscopeRotationVelocity;
+                    axisZ /= gyroscopeRotationVelocity;
+                }
+
+                // Integrate around this axis with the angular speed by the timestep
+                // in order to get a delta rotation from this sample over the timestep
+                // We will convert this axis-angle representation of the delta rotation
+                // into a quaternion before turning it into the rotation matrix.
+                double thetaOverTwo = gyroscopeRotationVelocity * dT / 2.0f;
+                double sinThetaOverTwo = Math.sin(thetaOverTwo);
+                double cosThetaOverTwo = Math.cos(thetaOverTwo);
+                deltaQuaternion.setX((float) (sinThetaOverTwo * axisX));
+                deltaQuaternion.setY((float) (sinThetaOverTwo * axisY));
+                deltaQuaternion.setZ((float) (sinThetaOverTwo * axisZ));
+                deltaQuaternion.setW(-(float) cosThetaOverTwo);
+
+                // Matrix rendering in CubeRenderer does not seem to have this problem.
+                    // Move current gyro orientation if gyroscope should be used
+                deltaQuaternion.multiplyByQuat(currentOrientationQuaternion, currentOrientationQuaternion);
+
+                correctedQuaternion.set(currentOrientationQuaternion);
+                // We inverted getW in the deltaQuaternion, because currentOrientationQuaternion required it.
+                // Before converting it back to matrix representation, we need to revert this process
+                correctedQuaternion.setW(-correctedQuaternion.getW());
+
+
+                // Set the rotation matrix as well to have both representations
+
+                float[] matrix = new float[16];
+                SensorManager.getRotationMatrixFromVector(matrix, correctedQuaternion.array());
+                float[] orientation = new float[3];
+                SensorManager.getOrientation(matrix, orientation);
+                x = Math.toDegrees(orientation[0]);
+                y = Math.toDegrees(orientation[1]);
+                z = Math.toDegrees(orientation[2]);
             }
 
-            // Integrate around this axis with the angular speed by the timestep
-            // in order to get a delta rotation from this sample over the timestep
-            // We will convert this axis-angle representation of the delta rotation
-            // into a quaternion before turning it into the rotation matrix.
-            float thetaOverTwo = omega * dT / 2.0f;
-            float sinThetaOverTwo = (float) Math.sin(thetaOverTwo);
-            float cosThetaOverTwo = (float) Math.cos(thetaOverTwo);
-            deltaQuaternion[0] = sinThetaOverTwo * axisX;
-            deltaQuaternion[1] = sinThetaOverTwo * axisY;
-            deltaQuaternion[2] = sinThetaOverTwo * axisZ;
-            deltaQuaternion[3] = -cosThetaOverTwo;
+            onUpdate();
+            timestamp = event.timestamp;
         }
-        timestamp = event.timestamp;
-        float[] deltaRotationMatrix = new float[9];
-        currentQuaternion = multiplyQuaternion(deltaQuaternion, currentQuaternion);
-        SensorManager.getRotationMatrixFromVector(deltaRotationMatrix, deltaQuaternion);
+    }
 
-        //https://bitbucket.org/apacha/sensor-fusion-demo/src/468b322635d087ab2ba6865a9c4dfb775b0e69ff/app/src/main/java/org/hitlabnz/sensor_fusion_demo/orientationProvider/CalibratedGyroscopeProvider.java?at=master&fileviewer=file-view-default
-        onUpdate();
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {}
+
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public double getZ() {
+        return z;
     }
 
     public abstract void onUpdate();
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        //Do nothing
-    }
-
-    private float[] multiplyQuaternion(float[] a, float[] b) {
-        float[] results = new float[3];
-
-        results[3] = (a[3] * b[3] - a[0] * b[0] - a[1] * b[1] - a[2] * b[2]); //w = w1w2 - x1x2 - y1y2 - z1z2
-        results[0] = (a[3] * b[0] + a[0] * b[3] + a[1] * b[2] - a[2] * b[1]); //x = w1x2 + x1w2 + y1z2 - z1y2
-        results[1] = (a[3] * b[1] + a[1] * b[3] + a[2] * b[0] - a[0] * b[2]); //y = w1y2 + y1w2 + z1x2 - x1z2
-        results[2] = (a[3] * b[2] + a[2] * b[3] + a[0] * b[1] - a[1] * b[0]); //z = w1z2 + z1w2 + x1y2 - y1x2
-
-        return results;
-    }
 }
