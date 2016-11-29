@@ -15,9 +15,9 @@ public class CornerBlue extends EncoderBaseAutonomous {
     public void run() throws InterruptedException {
         drive(.8, 12, 0);
         drive(1, 22, 22);
-        rotate(1, 55, Direction.LEFT);
+        rotate(.8, 55, Direction.LEFT);
         robot.shootLoop(3, 1000);
-        rotate(.8, 55, Direction.RIGHT);
+        rotate(.8, 60, Direction.RIGHT);
         robot.getIntake().setPower(-1);
         drive(1, 20, 20);
 

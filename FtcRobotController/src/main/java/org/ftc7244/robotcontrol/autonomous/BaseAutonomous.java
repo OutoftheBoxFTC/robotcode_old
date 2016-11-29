@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftc7244.robotcontrol.Westcoast;
+import org.ftc7244.robotcontrol.controllers.PIDController;
 import org.ftc7244.robotcontrol.controllers.QueuePIDController;
 import org.ftc7244.robotcontrol.sensor.GyroscopeProvider;
 
@@ -24,18 +25,23 @@ public class BaseAutonomous extends LinearOpMode {
     public static final int INTERVAL_PID = 50;
 
     private Westcoast robot;
-    private QueuePIDController controller;
+    private PIDController controller;
     private GyroscopeProvider provider;
 
     public BaseAutonomous() {
         super();
         this.robot = new Westcoast(this);
-        this.controller = new QueuePIDController(50, 1, 0, 0);
+        this.controller = new PIDController(50, 0.03, 0, 0);
         this.provider = new GyroscopeProvider() {
             @Override
             public void onUpdate() {
-                RobotLog.ii("Test", this.getX() + ":" + this.getY() + ":" + this.getZ());
-                telemetry.update();
+                double update = 0;
+                if (isStarted()) {
+                    update = controller.update(this.getX());
+                    robot.getDriveLeft().setPower(.5);
+                    robot.getDriveRight().setPower(.5 - update);
+                }
+                RobotLog.ii("TESTER", "PID: " + update + " Gyro: " + this.getX());
             }
         };
     }
@@ -49,24 +55,15 @@ public class BaseAutonomous extends LinearOpMode {
         provider.start(manager, INTERVAL_PID);
         robot.init();
 
-        //Dont start till the play button is clicked
+
+        provider.setXToZero();
+        controller.setTarget(provider.getX());
         waitForStart();
-        provider.stop();
-
-        //drive(90, 60);
-    }
-
-    public void drive(int degs, int time) {
-        //controller.setTarget(Math.toRadians(degs));
-        controller.reset();
-        ElapsedTime runtime = new ElapsedTime();
-
-        while (runtime.seconds() < time) {
-            if (controller.hasValue()) {
-                double power = controller.getNextValue();
-                robot.getDriveLeft().setPower(power);
-                robot.getDriveRight().setPower(power);
-            }
+        //Dont start till the play button is clicked
+        try {
+            sleep(5000);
+        } finally {
+            provider.stop();
         }
     }
 }

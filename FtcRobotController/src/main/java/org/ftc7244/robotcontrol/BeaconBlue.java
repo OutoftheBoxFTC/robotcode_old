@@ -7,7 +7,9 @@ import org.ftc7244.robotcontrol.autonomous.BeaconBaseAutonomous;
 /**
  * Created by OOTB on 11/12/2016.
  */
-@Autonomous(name="Beacon Blue")
+//
+// @Autonomous(name="Beacon Blue")
+@Deprecated
 public class BeaconBlue extends BeaconBaseAutonomous {
     @Override
     public void run() throws InterruptedException {

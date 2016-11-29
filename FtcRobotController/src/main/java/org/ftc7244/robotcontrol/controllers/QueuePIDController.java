@@ -1,7 +1,10 @@
 package org.ftc7244.robotcontrol.controllers;
 
+import com.qualcomm.robotcore.util.RobotLog;
+
 import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * Created by OOTB on 10/16/2016.
@@ -17,7 +20,7 @@ public class QueuePIDController extends PIDController {
 
     public QueuePIDController(double testInterval, double kP, double kI, double kD) {
         super(testInterval, kP, kI, kD);
-        this.results = new ArrayBlockingQueue(1000000);
+        this.results = new ConcurrentLinkedQueue<>();
     }
 
     /**

@@ -1,5 +1,7 @@
 package org.ftc7244.robotcontrol.controllers;
 
+import com.qualcomm.robotcore.util.RobotLog;
+
 /**
  * Created by OOTB on 10/16/2016.
  */
@@ -66,6 +68,7 @@ public class PIDController {
      */
     public double update(double measured) {
         double error = setPoint - measured;
+
         integral = integral + error * testInterval;
         double derivative = (error - previous_error) / testInterval;
         previous_error = error;

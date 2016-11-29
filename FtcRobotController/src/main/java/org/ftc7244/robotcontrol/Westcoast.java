@@ -90,7 +90,7 @@ public class Westcoast {
             timer.reset();
             while (timer.milliseconds() <= 500) {
                 //Stop the spinner after a delay
-                if (timer.milliseconds() > 250) launcher.setPower(0);
+                if (timer.milliseconds() > 200) launcher.setPower(0);
 
                 //lift the arm
                 setDoorState(DoorState.OPEN);

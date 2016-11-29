@@ -5,6 +5,10 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
+import com.qualcomm.robotcore.util.RobotLog;
+
+import java.util.Arrays;
+
 /**
  * The orientation provider that delivers the relative orientation from the {@link Sensor#TYPE_GYROSCOPE
  * Gyroscope}. This sensor does not deliver an absolute orientation (with respect to magnetic north and gravity) but
@@ -53,6 +57,7 @@ public abstract class GyroscopeProvider implements SensorEventListener {
     private SensorManager sensorManager;
 
     private double x, y, z;
+    private double xOffset, zOffset;
 
 
     /**
@@ -67,6 +72,8 @@ public abstract class GyroscopeProvider implements SensorEventListener {
         x = 0;
         y = 0;
         z = 0;
+        xOffset = 0;
+        zOffset = 0;
     }
 
     public void start(SensorManager sensorManager, int samplingPeriod) {
@@ -77,6 +84,8 @@ public abstract class GyroscopeProvider implements SensorEventListener {
     public void stop() {
         sensorManager.unregisterListener(this);
     }
+
+    public abstract void onUpdate();
 
     @Override
     public void onSensorChanged(SensorEvent event) {
@@ -132,9 +141,9 @@ public abstract class GyroscopeProvider implements SensorEventListener {
                 SensorManager.getRotationMatrixFromVector(matrix, correctedQuaternion.array());
                 float[] orientation = new float[3];
                 SensorManager.getOrientation(matrix, orientation);
-                x = Math.toDegrees(orientation[0]);
+                x = offsetNumber(Math.toDegrees(orientation[0]), xOffset);
                 y = Math.toDegrees(orientation[1]);
-                z = Math.toDegrees(orientation[2]);
+                z = offsetNumber(Math.toDegrees(orientation[2]), zOffset);
             }
 
             onUpdate();
@@ -157,5 +166,31 @@ public abstract class GyroscopeProvider implements SensorEventListener {
         return z;
     }
 
-    public abstract void onUpdate();
+    public double getXOffset() {
+        return xOffset;
+    }
+
+    public void setXOffset(double xOffset) {
+        this.xOffset = xOffset;
+    }
+
+    public void setXToZero() {
+        setXOffset(this.x);
+    }
+
+    public double getZOffset() {
+        return zOffset;
+    }
+
+    public void setZOffset(double zOffset) {
+        this.zOffset = zOffset;
+    }
+
+    public void setZToZero() {
+        setXOffset(this.z);
+    }
+
+    private double offsetNumber(double orientation, double offset) {
+        return ((orientation + 540 - offset) % 360) - 180;
+    }
 }

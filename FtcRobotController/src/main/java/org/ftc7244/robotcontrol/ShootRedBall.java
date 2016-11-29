@@ -12,18 +12,19 @@ import org.ftc7244.robotcontrol.autonomous.EncoderBaseAutonomous;
 public class ShootRedBall extends EncoderBaseAutonomous {
     @Override
     public void run() throws InterruptedException {
-        drive(0.4, -8.5, 0);
-        drive(1.0, -20, -25);
+        drive(0.8, -7.5, 0);
+        drive(1.0, -16, -16);
 
         //Put a pause
-        robot.shootLoop(3, 1000);
+        robot.shootLoop(3, 1500);
 
-        drive(1.0, -10, -10);
-        drive(0.4, -13, 0);
+        drive(1.0, -16, -16);
+        drive(0.8, -13, 0);
+
         robot.getIntake().setPower(1);
-        drive(1.0, 25, 25);
+        drive(0.8, 26, 26);
         sleep(5000);
-        drive(1.0, 15, 15);
+        drive(1.0, 11, 11);
         robot.getIntake().setPower(0);
     }
 }
