@@ -66,14 +66,14 @@ public class PIDController {
      * @param measured what is the measured value? This will give us info based off the target
      * @return the error correction value from the PID loop
      */
-    public double update(double measured) {
+    public double[] update(double measured) {
         double error = setPoint - measured;
 
         integral = integral + error * testInterval;
         double derivative = (error - previous_error) / testInterval;
         previous_error = error;
 
-        return (kP * error) + (kI * integral) + (kD * derivative);
+        return new double[]{kP * error, kI * integral, kD * derivative, (kP * error) + (kI * integral) + (kD * derivative)};
     }
 
     /**

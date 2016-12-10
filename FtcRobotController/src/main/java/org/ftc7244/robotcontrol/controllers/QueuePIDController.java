@@ -1,9 +1,6 @@
 package org.ftc7244.robotcontrol.controllers;
 
-import com.qualcomm.robotcore.util.RobotLog;
-
 import java.util.Queue;
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -31,9 +28,10 @@ public class QueuePIDController extends PIDController {
      * @return
      */
     @Override
-    public double update(double measured) {
-        double output = super.update(measured);
-        results.add(output);
+    public double[] update(double measured) {
+        double[] output = super.update(measured);
+        //results.add(output);
+        // FIXME: 11/28/2016
         return output;
     }
 

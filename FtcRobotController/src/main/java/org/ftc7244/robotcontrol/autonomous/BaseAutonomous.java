@@ -22,7 +22,7 @@ import static android.content.Context.SENSOR_SERVICE;
 @Autonomous
 public class BaseAutonomous extends LinearOpMode {
 
-    public static final int INTERVAL_PID = 50;
+    public static final int INTERVAL_PID = 1;
 
     private Westcoast robot;
     private PIDController controller;
@@ -31,17 +31,18 @@ public class BaseAutonomous extends LinearOpMode {
     public BaseAutonomous() {
         super();
         this.robot = new Westcoast(this);
-        this.controller = new PIDController(50, 0.03, 0, 0);
+        this.controller = new PIDController(INTERVAL_PID, -0.115, 0, 0);
         this.provider = new GyroscopeProvider() {
             @Override
             public void onUpdate() {
-                double update = 0;
-                if (isStarted()) {
-                    update = controller.update(this.getX());
-                    robot.getDriveLeft().setPower(.5);
-                    robot.getDriveRight().setPower(.5 - update);
+                if (!isStarted()) {
+                    return;
                 }
-                RobotLog.ii("TESTER", "PID: " + update + " Gyro: " + this.getX());
+
+                double[] update = controller.update(this.getZ());
+                robot.getDriveLeft().setPower(.3);
+                robot.getDriveRight().setPower(.3 - update[3]);
+                RobotLog.ii("PID", "|" + update[0] + "|" + update[1] + "|" + update[2] + "|");
             }
         };
     }
@@ -57,11 +58,11 @@ public class BaseAutonomous extends LinearOpMode {
 
 
         provider.setXToZero();
-        controller.setTarget(provider.getX());
+        controller.setTarget(provider.getZ());
         waitForStart();
         //Dont start till the play button is clicked
         try {
-            sleep(5000);
+            sleep(4000);
         } finally {
             provider.stop();
         }
