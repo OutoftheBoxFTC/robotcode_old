@@ -7,7 +7,11 @@ import android.hardware.SensorManager;
 
 import com.qualcomm.robotcore.util.RobotLog;
 
+import org.ftc7244.robotcontrol.core.AtomicDouble;
+
 import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * The orientation provider that delivers the relative orientation from the {@link Sensor#TYPE_GYROSCOPE
@@ -17,7 +21,7 @@ import java.util.Arrays;
  * @author Alexander Pacha
  * 
  */
-public abstract class GyroscopeProvider implements SensorEventListener {
+public class GyroscopeProvider implements SensorEventListener {
 
     /**
      * Constant specifying the factor between a Nano-second and a second
@@ -56,9 +60,8 @@ public abstract class GyroscopeProvider implements SensorEventListener {
 
     private SensorManager sensorManager;
 
-    private double x, y, z;
-    private double xOffset, zOffset;
-
+    private volatile double x, y, z;
+    private volatile double xOffset, zOffset;
 
     /**
      * Temporary variable to save allocations.
@@ -69,11 +72,13 @@ public abstract class GyroscopeProvider implements SensorEventListener {
         currentOrientationQuaternion = new Quaternion();
         deltaQuaternion = new Quaternion();
         correctedQuaternion = new Quaternion();
+
+        xOffset = 0;
+        zOffset = 0;
         x = 0;
         y = 0;
         z = 0;
-        xOffset = 0;
-        zOffset = 0;
+        timestamp = 0;
     }
 
     public void start(SensorManager sensorManager, int samplingPeriod) {
@@ -84,8 +89,6 @@ public abstract class GyroscopeProvider implements SensorEventListener {
     public void stop() {
         sensorManager.unregisterListener(this);
     }
-
-    public abstract void onUpdate();
 
     @Override
     public void onSensorChanged(SensorEvent event) {
@@ -146,7 +149,6 @@ public abstract class GyroscopeProvider implements SensorEventListener {
                 z = offsetNumber(Math.toDegrees(orientation[2]), zOffset);
             }
 
-            onUpdate();
             timestamp = event.timestamp;
         }
     }

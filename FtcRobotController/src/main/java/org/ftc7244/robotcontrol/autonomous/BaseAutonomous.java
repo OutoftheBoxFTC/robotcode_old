@@ -4,15 +4,11 @@ import android.hardware.SensorManager;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftc7244.robotcontrol.Westcoast;
-import org.ftc7244.robotcontrol.controllers.PIDController;
-import org.ftc7244.robotcontrol.controllers.QueuePIDController;
+import org.ftc7244.robotcontrol.core.PIDController;
 import org.ftc7244.robotcontrol.sensor.GyroscopeProvider;
-
-import java.util.Arrays;
 
 import static android.content.Context.SENSOR_SERVICE;
 
@@ -31,40 +27,34 @@ public class BaseAutonomous extends LinearOpMode {
     public BaseAutonomous() {
         super();
         this.robot = new Westcoast(this);
-        this.controller = new PIDController(INTERVAL_PID, -0.115, 0, 0);
-        this.provider = new GyroscopeProvider() {
-            @Override
-            public void onUpdate() {
-                if (!isStarted()) {
-                    return;
-                }
-
-                double[] update = controller.update(this.getZ());
-                robot.getDriveLeft().setPower(.3);
-                robot.getDriveRight().setPower(.3 - update[3]);
-                RobotLog.ii("PID", "|" + update[0] + "|" + update[1] + "|" + update[2] + "|");
-            }
-        };
+        this.controller = new PIDController(INTERVAL_PID, -0.2, 0, -0.1);
+        this.provider = new GyroscopeProvider();
     }
-
 
 
     @Override
     public void runOpMode() throws InterruptedException {
-        //Setup the motors for our robot
-        SensorManager manager = (SensorManager) hardwareMap.appContext.getSystemService(SENSOR_SERVICE);
-        provider.start(manager, INTERVAL_PID);
         robot.init();
 
-
-        provider.setXToZero();
-        controller.setTarget(provider.getZ());
         waitForStart();
         //Dont start till the play button is clicked
-        try {
-            sleep(4000);
-        } finally {
-            provider.stop();
-        }
+        rotate(90);
+    }
+
+
+    protected void rotate(double degs) throws InterruptedException {
+        PIDController controller = new PIDController(-0.0049, -0.000008, 0, 30);
+        provider.start((SensorManager) hardwareMap.appContext.getSystemService(SENSOR_SERVICE), 1);
+        sleep(3000);
+        provider.setZToZero();
+        controller.setTarget(degs);
+        long target = System.currentTimeMillis() + 5000;
+        do {
+            double pid = controller.update(provider.getZ());
+            robot.getDriveLeft().setPower(pid);
+            robot.getDriveRight().setPower(-pid);
+            RobotLog.ii("PID", "|" + controller.getProportional() * controller.getkP() + "|" + controller.getIntegral() * controller.getkI() + "|" + controller.getDerivative() * controller.getkD() + "|" + provider.getZ());
+        } while (target > System.currentTimeMillis());
+        provider.stop();
     }
 }
