@@ -23,7 +23,7 @@ public class PIDController {
     /**
      * How often will the new PID value be calculated.
      */
-    private double dt, cycleTime, delay;
+    private double dt, cycleTime, delay, integralRange, deadband;
 
     public PIDController(double kP, double kI, double kD) {
         this(kP, kI, kD, -1);
@@ -61,11 +61,18 @@ public class PIDController {
             return 0;
         }
 
+
+
         double error = setPoint - measured;
+        if (deadband != 0 && Math.abs(error) < deadband) error = 0;
         proportional = kP * error;
-        integral += kI * error * dt;
+
+        if ((integralRange == 0 || Math.abs(error) < integralRange) && (deadband == 0 || Math.abs(error) > deadband)) integral += kI * error * dt;
+        else integral = 0;
+
         derivative = kD * (error - previous_error) / dt;
         derivative =(isNaN(derivative) || isInfinite(derivative) ? 0 : derivative);
+
         previous_error = error;
 
         if (this.delay > 0) pause((long) (this.delay - (System.currentTimeMillis() - this.cycleTime)));
@@ -84,6 +91,8 @@ public class PIDController {
         this.dt = 0;
         this.cycleTime = 0;
         this.proportional = 0;
+        this.integralRange = 0;
+        this.deadband = 0;
     }
 
     /**
@@ -127,6 +136,22 @@ public class PIDController {
      */
     public double getSetPoint() {
         return setPoint;
+    }
+
+    public double getDeadband() {
+        return deadband;
+    }
+
+    public void setDeadband(double deadband) {
+        this.deadband = deadband;
+    }
+
+    public double getIntegralRange() {
+        return integralRange;
+    }
+
+    public void setIntegralRange(double integralRange) {
+        this.integralRange = integralRange;
     }
 
     private void pause(long period) {

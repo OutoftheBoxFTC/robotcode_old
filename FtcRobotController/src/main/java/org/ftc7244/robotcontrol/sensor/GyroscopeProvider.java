@@ -147,6 +147,7 @@ public class GyroscopeProvider implements SensorEventListener {
                 x = offsetNumber(Math.toDegrees(orientation[0]), xOffset);
                 y = Math.toDegrees(orientation[1]);
                 z = offsetNumber(Math.toDegrees(orientation[2]), zOffset);
+                System.out.println(z);
             }
 
             timestamp = event.timestamp;
@@ -189,7 +190,7 @@ public class GyroscopeProvider implements SensorEventListener {
     }
 
     public void setZToZero() {
-        setXOffset(this.z);
+        setZOffset(this.z);
     }
 
     private double offsetNumber(double orientation, double offset) {

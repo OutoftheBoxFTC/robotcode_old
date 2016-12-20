@@ -18,16 +18,15 @@ import static android.content.Context.SENSOR_SERVICE;
 @Autonomous
 public class BaseAutonomous extends LinearOpMode {
 
-    public static final int INTERVAL_PID = 1;
+    public static final boolean DEBUG = true;
+    private final static double COUNTS_PER_INCH = 1120 / (Math.PI * 3);
 
     private Westcoast robot;
-    private PIDController controller;
     private GyroscopeProvider provider;
 
     public BaseAutonomous() {
         super();
         this.robot = new Westcoast(this);
-        this.controller = new PIDController(INTERVAL_PID, -0.2, 0, -0.1);
         this.provider = new GyroscopeProvider();
     }
 
@@ -37,24 +36,87 @@ public class BaseAutonomous extends LinearOpMode {
         robot.init();
 
         waitForStart();
-        //Dont start till the play button is clicked
-        rotate(90);
+        calibrate();
+
+        drive(0);
+        sleep(250);
+        rotate(-90);
+        sleep(250);
+        drive(0);
+        sleep(250);
+        rotate(-90);
+        sleep(250);
+        drive(0);
+        sleep(250);
+        rotate(-90);
+        sleep(250);
+
+        provider.stop();
     }
 
+    public void drive(final double distance) throws InterruptedException {
+        final long counter = System.currentTimeMillis() + 1500;
+        control(0, new Handler() {
+            @Override
+            public double offset() {
+                return .5;
+            }
 
-    protected void rotate(double degs) throws InterruptedException {
-        PIDController controller = new PIDController(-0.0049, -0.000008, 0, 30);
-        provider.start((SensorManager) hardwareMap.appContext.getSystemService(SENSOR_SERVICE), 1);
-        sleep(3000);
+            @Override
+            public boolean shouldTerminate() {
+                return counter < System.currentTimeMillis();
+            }
+        });
+    }
+
+    public void rotate(final double degrees) throws InterruptedException {
+        control(degrees, new Handler() {
+            private long timestamp = -1;
+
+            @Override
+            public double offset() {
+                return 0;
+            }
+
+            @Override
+            public boolean shouldTerminate() {
+                if (timestamp == -1 && Math.abs(provider.getZ() - degrees) < .8) timestamp = System.currentTimeMillis();
+                else if (Math.abs(provider.getZ() - degrees) > .8) timestamp = -1;
+
+                return Math.abs(System.currentTimeMillis() - timestamp) > 250 && timestamp != -1;
+            }
+        });
+    }
+
+    private void control(double degrees, Handler handler) throws InterruptedException {
+        PIDController controller = new PIDController(-0.02, -0.00003, -3.25, 30);
+        controller.setTarget(degrees);
+        controller.setIntegralRange(15);
+        controller.setDeadband(.25);
+
         provider.setZToZero();
-        controller.setTarget(degs);
-        long target = System.currentTimeMillis() + 5000;
+
         do {
             double pid = controller.update(provider.getZ());
-            robot.getDriveLeft().setPower(pid);
-            robot.getDriveRight().setPower(-pid);
-            RobotLog.ii("PID", "|" + controller.getProportional() * controller.getkP() + "|" + controller.getIntegral() * controller.getkI() + "|" + controller.getDerivative() * controller.getkD() + "|" + provider.getZ());
-        } while (target > System.currentTimeMillis());
-        provider.stop();
+            double offset = handler.offset();
+            robot.getDriveLeft().setPower(offset + pid);
+            robot.getDriveRight().setPower(offset + -pid);
+        } while (!handler.shouldTerminate());
+    }
+
+    private void logPID(PIDController controller) {
+        if (!DEBUG) return;
+        RobotLog.ii("PID", "|" + controller.getProportional() * controller.getkP() + "|" + controller.getIntegral() * controller.getkI() + "|" + controller.getDerivative() * controller.getkD() + "|" + provider.getZ());
+    }
+
+    private void calibrate() throws InterruptedException {
+        provider.start((SensorManager) hardwareMap.appContext.getSystemService(SENSOR_SERVICE), 1);
+        sleep(1000);
+    }
+
+    private interface Handler {
+        double offset();
+
+        boolean shouldTerminate();
     }
 }
