@@ -13,7 +13,7 @@ import org.ftc7244.robotcontrol.Westcoast;
  */
 public abstract class EncoderBaseAutonomous extends LinearOpMode {
 
-    private final static double COUNTS_PER_INCH = 1120 / (Math.PI * 3);
+    public final static double COUNTS_PER_INCH = 1120 / (Math.PI * 3);
     private final static int ENCODER_THRESHOLD = 100;
 
     protected Westcoast robot = new Westcoast(this);
@@ -109,7 +109,7 @@ public abstract class EncoderBaseAutonomous extends LinearOpMode {
         return distanceTicks;
     }
 
-    private void resetMotors(DcMotor... motors) {
+    static void resetMotors(DcMotor... motors) {
         boolean notReset = true;
         while (notReset) {
             boolean allReset = true;
@@ -122,6 +122,7 @@ public abstract class EncoderBaseAutonomous extends LinearOpMode {
             }
             notReset = !allReset;
         }
+        for (DcMotor motor : motors) motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     private boolean stopWhenComplete(DcMotor motor, int target, int threshold) {

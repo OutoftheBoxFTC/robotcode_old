@@ -2,7 +2,6 @@ package org.ftc7244.robotcontrol.autonomous;
 
 import android.hardware.SensorManager;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.RobotLog;
 
@@ -15,56 +14,49 @@ import static android.content.Context.SENSOR_SERVICE;
 /**
  * Created by OOTB on 10/16/2016.
  */
-@Autonomous
-public class BaseAutonomous extends LinearOpMode {
+public abstract class BaseAutonomous extends LinearOpMode {
 
     public static final boolean DEBUG = true;
-    private final static double COUNTS_PER_INCH = 1120 / (Math.PI * 3);
 
-    private Westcoast robot;
+    protected Westcoast robot;
     private GyroscopeProvider provider;
 
-    public BaseAutonomous() {
-        super();
-        this.robot = new Westcoast(this);
-        this.provider = new GyroscopeProvider();
-    }
-
+    public abstract void run() throws InterruptedException;
 
     @Override
     public void runOpMode() throws InterruptedException {
+        this.robot = new Westcoast(this);
+        this.provider = new GyroscopeProvider();
         robot.init();
 
         waitForStart();
         calibrate();
 
-        drive(0);
-        sleep(250);
-        rotate(-90);
-        sleep(250);
-        drive(0);
-        sleep(250);
-        rotate(-90);
-        sleep(250);
-        drive(0);
-        sleep(250);
-        rotate(-90);
-        sleep(250);
-
-        provider.stop();
+        try {
+            run();
+        } catch (Throwable t) {
+            RobotLog.i("Info", "Error");
+            t.printStackTrace();
+        } finally {
+            RobotLog.i("Brandon", "Stopping");
+            provider.stop();
+        }
     }
 
-    public void drive(final double distance) throws InterruptedException {
-        final long counter = System.currentTimeMillis() + 1500;
+    public void drive(final double power, final double inches) throws InterruptedException {
+        final double ticks = inches * EncoderBaseAutonomous.COUNTS_PER_INCH;
+        EncoderBaseAutonomous.resetMotors(robot.getDriveLeft(), robot.getDriveRight());
+        final int offset = getEncoderAverage();
         control(0, new Handler() {
             @Override
             public double offset() {
-                return .5;
+                return power;
             }
 
             @Override
             public boolean shouldTerminate() {
-                return counter < System.currentTimeMillis();
+                RobotLog.ii("Info", Math.abs(getEncoderAverage() / 2) + ":" + ticks);
+                return Math.abs(getEncoderAverage() - offset) >= ticks;
             }
         });
     }
@@ -83,7 +75,7 @@ public class BaseAutonomous extends LinearOpMode {
                 if (timestamp == -1 && Math.abs(provider.getZ() - degrees) < .8) timestamp = System.currentTimeMillis();
                 else if (Math.abs(provider.getZ() - degrees) > .8) timestamp = -1;
 
-                return Math.abs(System.currentTimeMillis() - timestamp) > 250 && timestamp != -1;
+                return Math.abs(System.currentTimeMillis() - timestamp) > 100 && timestamp != -1;
             }
         });
     }
@@ -99,9 +91,17 @@ public class BaseAutonomous extends LinearOpMode {
         do {
             double pid = controller.update(provider.getZ());
             double offset = handler.offset();
+            RobotLog.ii("offset", offset + ":" + pid);
             robot.getDriveLeft().setPower(offset + pid);
-            robot.getDriveRight().setPower(offset + -pid);
-        } while (!handler.shouldTerminate());
+            robot.getDriveRight().setPower(offset - pid);
+        } while (!handler.shouldTerminate() && !this.isStopRequested());
+
+        robot.getDriveLeft().setPower(0);
+        robot.getDriveRight().setPower(0);
+    }
+
+    private int getEncoderAverage() {
+        return (robot.getDriveLeft().getCurrentPosition() + robot.getDriveRight().getCurrentPosition()) / 2;
     }
 
     private void logPID(PIDController controller) {

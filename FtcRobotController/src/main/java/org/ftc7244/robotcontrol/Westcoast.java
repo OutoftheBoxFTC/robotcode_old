@@ -19,8 +19,8 @@ import java.util.Map;
 
 public class Westcoast {
 
-    private DcMotor driveLeft, driveRight, launcher, intake;
-    private Servo launcherDoor, beaconPusher;
+    private DcMotor driveLeft, driveRight, launcher, intake, spooler;
+    private Servo launcherDoor, beaconPusher, carriageRelease;
     private AnalogInput launcherLimit;
     private OpMode opMode;
     private ColorSensor beaconSensor;
@@ -42,12 +42,15 @@ public class Westcoast {
         this.intake = getOrNull(map.dcMotor, "intake");
         this.beaconSensor = getOrNull(map.colorSensor, "beacon_sensor");
         this.beaconPusher = getOrNull(map.servo, "beacon_pusher");
+        this.spooler = getOrNull(map.dcMotor, "spooler");
+        this.carriageRelease = getOrNull(map.servo, "carriage_release");
 
         //Set the default direction for all the hardware and also initialize default positions
         if (driveLeft != null) driveLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         if (launcher != null) launcher.setDirection(DcMotorSimple.Direction.REVERSE);
         if (beaconPusher != null) beaconPusher.setPosition(1);
-        if (launcherDoor != null) launcherDoor.setPosition(1);
+        if (launcherDoor != null) setDoorState(DoorState.CLOSED);
+        if (carriageRelease != null) setCarriageState(CarriageState.CLOSED);
     }
 
     /**
@@ -147,5 +150,24 @@ public class Westcoast {
 
     public Servo getBeaconPusher() {
         return beaconPusher;
+    }
+
+    public DcMotor getSpooler() {
+        return spooler;
+    }
+
+    public enum CarriageState {
+        OPEN(.5),
+        CLOSED(0);
+
+        protected final double position;
+
+        CarriageState(double position)  {
+            this.position = position;
+        }
+    }
+
+    public void setCarriageState(CarriageState status) {
+        this.carriageRelease.setPosition(status.position);
     }
 }

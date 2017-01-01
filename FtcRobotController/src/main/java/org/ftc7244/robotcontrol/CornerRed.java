@@ -22,10 +22,5 @@ public class CornerRed extends EncoderBaseAutonomous {
         drive(1, -15, -15);
         rotate(.8, 40, Direction.LEFT);
         drive(1, -10, -10);
-
-        //Change the first drive from -8 to -12
-        //from 65 to 30
-        //30 to 40
-        //Added a rotate and then drive forward.
     }
 }
