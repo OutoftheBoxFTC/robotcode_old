@@ -16,7 +16,7 @@ import static android.content.Context.SENSOR_SERVICE;
  */
 public abstract class BaseAutonomous extends LinearOpMode {
 
-    public static final boolean DEBUG = true;
+    public static boolean DEBUG = false;
 
     protected Westcoast robot;
     private GyroscopeProvider provider;
@@ -33,12 +33,12 @@ public abstract class BaseAutonomous extends LinearOpMode {
         calibrate();
 
         try {
+            resetOrientation();
             run();
         } catch (Throwable t) {
             RobotLog.i("Info", "Error");
             t.printStackTrace();
         } finally {
-            RobotLog.i("Brandon", "Stopping");
             provider.stop();
         }
     }
@@ -47,7 +47,7 @@ public abstract class BaseAutonomous extends LinearOpMode {
         final double ticks = inches * EncoderBaseAutonomous.COUNTS_PER_INCH;
         EncoderBaseAutonomous.resetMotors(robot.getDriveLeft(), robot.getDriveRight());
         final int offset = getEncoderAverage();
-        control(0, new Handler() {
+        control(provider.getZ(), new Handler() {
             @Override
             public double offset() {
                 return power;
@@ -55,14 +55,15 @@ public abstract class BaseAutonomous extends LinearOpMode {
 
             @Override
             public boolean shouldTerminate() {
-                RobotLog.ii("Info", Math.abs(getEncoderAverage() / 2) + ":" + ticks);
                 return Math.abs(getEncoderAverage() - offset) >= ticks;
             }
         });
     }
 
+
+
     public void rotate(final double degrees) throws InterruptedException {
-        control(degrees, new Handler() {
+        control(degrees + provider.getZ(), new Handler() {
             private long timestamp = -1;
 
             @Override
@@ -75,7 +76,7 @@ public abstract class BaseAutonomous extends LinearOpMode {
                 if (timestamp == -1 && Math.abs(provider.getZ() - degrees) < .8) timestamp = System.currentTimeMillis();
                 else if (Math.abs(provider.getZ() - degrees) > .8) timestamp = -1;
 
-                return Math.abs(System.currentTimeMillis() - timestamp) > 100 && timestamp != -1;
+                return Math.abs(System.currentTimeMillis() - timestamp) > 250 && timestamp != -1;
             }
         });
     }
@@ -86,18 +87,25 @@ public abstract class BaseAutonomous extends LinearOpMode {
         controller.setIntegralRange(15);
         controller.setDeadband(.25);
 
-        provider.setZToZero();
-
         do {
             double pid = controller.update(provider.getZ());
+            logPID(controller);
             double offset = handler.offset();
-            RobotLog.ii("offset", offset + ":" + pid);
             robot.getDriveLeft().setPower(offset + pid);
             robot.getDriveRight().setPower(offset - pid);
         } while (!handler.shouldTerminate() && !this.isStopRequested());
 
         robot.getDriveLeft().setPower(0);
         robot.getDriveRight().setPower(0);
+    }
+
+    public void resetOrientation() throws InterruptedException {
+        provider.setZToZero();
+        RobotLog.ii("Begin reset", "Reset");
+        while (Math.abs(Math.round(provider.getZ())) > 1) {
+            RobotLog.ii("hey", Math.abs(Math.round(provider.getZ())) + "");
+            idle();
+        }
     }
 
     private int getEncoderAverage() {
