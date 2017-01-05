@@ -17,36 +17,35 @@ public class BeaconBlue extends BaseAutonomous {
 
     @Override
     public void run() throws InterruptedException {
-        drive(0.35, 27);
+        drive(0.35, 29);
         sleep(1000);
-        robot.shootLoop(2, 1500);
-        drive(0.35, 14);
-        rotate(40);
-        resetOrientation();
-        BaseAutonomous.DEBUG = true;
-        drive(0.5, 20);
-        BaseAutonomous.DEBUG = false;
+        robot.shootLoop(2,  1500);
+        drive(0.35, 11);
+        //hi
+        rotate(39.5);
+        drive(0.5, 5);
 
-        double beaconDistance = 46.5;
+        sleep(500);
         if (isColor(Color.BLUE)){
             pushBeacon();
         } else {
-            double buttonDis = 3.5;
-            drive(0.3, buttonDis);
+            drive(0.3, 5);
             sleep(1);
             pushBeacon();
-            beaconDistance -= buttonDis;
         }
+
+        rotate(90);
+        robot.getIntake().setPower(1);
+        drive(.75, 40);
     }
 
     public boolean isColor(int color) {
-        final int limit = 10;
+        RobotLog.ii("Color", robot.getBeaconSensor().blue() + ":" + robot.getBeaconSensor().red());
         switch (color) {
             case Color.BLUE:
-                RobotLog.ii("Info", robot.getBeaconSensor().blue() + "");
-                return robot.getBeaconSensor().blue() > limit;
+                return robot.getBeaconSensor().blue() > robot.getBeaconSensor().red();
             case Color.RED:
-                return robot.getBeaconSensor().red() > limit;
+                return robot.getBeaconSensor().blue() < robot.getBeaconSensor().red();
             default:
                 RobotLog.ee("ERROR", "Color does not exist!");
                 return false;

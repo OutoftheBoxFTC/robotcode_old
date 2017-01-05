@@ -47,7 +47,7 @@ public abstract class BaseAutonomous extends LinearOpMode {
         final double ticks = inches * EncoderBaseAutonomous.COUNTS_PER_INCH;
         EncoderBaseAutonomous.resetMotors(robot.getDriveLeft(), robot.getDriveRight());
         final int offset = getEncoderAverage();
-        control(provider.getZ(), new Handler() {
+        control(0, new Handler() {
             @Override
             public double offset() {
                 return power;
@@ -63,7 +63,8 @@ public abstract class BaseAutonomous extends LinearOpMode {
 
 
     public void rotate(final double degrees) throws InterruptedException {
-        control(degrees + provider.getZ(), new Handler() {
+        final double target = degrees + provider.getZ();
+        control(target, new Handler() {
             private long timestamp = -1;
 
             @Override
@@ -73,12 +74,13 @@ public abstract class BaseAutonomous extends LinearOpMode {
 
             @Override
             public boolean shouldTerminate() {
-                if (timestamp == -1 && Math.abs(provider.getZ() - degrees) < .8) timestamp = System.currentTimeMillis();
-                else if (Math.abs(provider.getZ() - degrees) > .8) timestamp = -1;
-
-                return Math.abs(System.currentTimeMillis() - timestamp) > 250 && timestamp != -1;
+                if (timestamp == -1 && Math.abs(provider.getZ() - target) < .5) timestamp = System.currentTimeMillis();
+                else if (Math.abs(provider.getZ() - target) > .5) timestamp = -1;
+                RobotLog.ii("STOP", provider.getZ() + ":" + target);
+                return Math.abs(System.currentTimeMillis() - timestamp) > 100 && timestamp != -1;
             }
         });
+        resetOrientation();
     }
 
     private void control(double degrees, Handler handler) throws InterruptedException {
