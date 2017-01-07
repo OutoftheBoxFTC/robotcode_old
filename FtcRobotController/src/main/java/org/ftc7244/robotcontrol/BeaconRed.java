@@ -6,34 +6,32 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftc7244.robotcontrol.autonomous.BaseAutonomous;
-import org.ftc7244.robotcontrol.autonomous.BeaconBaseAutonomous;
 
 /**
  * Created by OOTB on 11/12/2016.
  */
 //
-@Autonomous(name="Beacon Blue")
-public class BeaconBlue extends BaseAutonomous {
+@Autonomous(name="Beacon Red")
+public class BeaconRed extends BaseAutonomous {
 
     @Override
     public void run() throws InterruptedException {
-        drive(0.35, 29);
+        drive(-0.35, 16);
         sleep(1000);
-        robot.shootLoop(2,  1500);
-        drive(0.35, 11);
-        //hi
-        rotate(39.5);
-        drive(0.5, 5);
+        robot.shootLoop(2, 1500);
+        drive(-0.35, 20);
+        rotate(-44);
+        drive(-0.35, 2);
 
-        sleep(500);
-        if (isColor(Color.BLUE)){
+        sleep(2000);
+        if (isColor(Color.RED)){
             pushBeacon();
         } else {
-            drive(0.3, 5);
-            sleep(1);
+            drive(-0.35, 5);
             pushBeacon();
         }
-        rotate(80);
+
+        rotate(90);
         robot.getIntake().setPower(1);
         drive(.75, 40);
         sleep(2000);
@@ -46,6 +44,7 @@ public class BeaconBlue extends BaseAutonomous {
             case Color.BLUE:
                 return robot.getBeaconSensor().blue() > robot.getBeaconSensor().red();
             case Color.RED:
+                RobotLog.ii("Color", "We are reading red");
                 return robot.getBeaconSensor().blue() < robot.getBeaconSensor().red();
             default:
                 RobotLog.ee("ERROR", "Color does not exist!");
