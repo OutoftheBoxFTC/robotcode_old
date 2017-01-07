@@ -8,7 +8,8 @@ import org.ftc7244.robotcontrol.autonomous.EncoderBaseAutonomous;
  * Created by OOTB on 10/31/2016.
  */
 
-@Autonomous(name="Shoot Ball Red")
+//@Autonomous(name="Shoot Ball Red")
+@Deprecated
 public class ShootRedBall extends EncoderBaseAutonomous {
     @Override
     public void run() throws InterruptedException {
