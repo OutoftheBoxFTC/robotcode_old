@@ -11,7 +11,8 @@ import org.ftc7244.robotcontrol.Westcoast;
  * This code failed because the robot frame is too skewed to handle the encoders
  * Thus there was not much of an effect for using encoders.
  */
-public abstract class EncoderBaseAutonomous extends LinearOpMode {
+@Deprecated
+public abstract class EncoderAutonomous extends LinearOpMode {
 
     public final static double COUNTS_PER_INCH = 1120 / (Math.PI * 3);
     private final static int ENCODER_THRESHOLD = 100;

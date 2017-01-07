@@ -20,7 +20,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class WestcoastTeleop extends OpMode {
 
     private Westcoast robot;
-    private Button aButton, triggerL, triggerR, xButton, yButton;
+    private Button aButton, triggerL, triggerR, xButton, yButton, bButton;
     private Button driverBButton, driverYButton;
     private AtomicBoolean runningLauncher;
     private ExecutorService service;
@@ -33,6 +33,7 @@ public class WestcoastTeleop extends OpMode {
         triggerR = new Button(gamepad2, ButtonType.RIGHT_TRIGGER);
         xButton = new Button(gamepad2, ButtonType.X);
         yButton = new Button(gamepad2, ButtonType.Y);
+        bButton = new Button(gamepad2, ButtonType.B);
 
         driverBButton = new PressButton(gamepad1, ButtonType.B);
         driverYButton = new PressButton(gamepad1, ButtonType.Y);
@@ -53,6 +54,8 @@ public class WestcoastTeleop extends OpMode {
             robot.getDriveRight().setPower(.4 * gamepad1.left_stick_y);
             robot.getDriveLeft().setPower(.4 * gamepad1.right_stick_y);
         }
+
+        robot.getBeaconPusher().setPosition(bButton.isPressed() ? 0 : 1);
 
         //If we are not in running launcher mode then allow for manual
         if (!runningLauncher.get()) {

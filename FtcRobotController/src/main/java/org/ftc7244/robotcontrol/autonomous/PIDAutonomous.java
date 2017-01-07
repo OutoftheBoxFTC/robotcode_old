@@ -14,7 +14,7 @@ import static android.content.Context.SENSOR_SERVICE;
 /**
  * Created by OOTB on 10/16/2016.
  */
-public abstract class BaseAutonomous extends LinearOpMode {
+public abstract class PIDAutonomous extends LinearOpMode {
 
     public static boolean DEBUG = false;
 
@@ -36,7 +36,7 @@ public abstract class BaseAutonomous extends LinearOpMode {
             resetOrientation();
             run();
         } catch (Throwable t) {
-            RobotLog.i("Info", "Error");
+            RobotLog.ee("Error", "Error");
             t.printStackTrace();
         } finally {
             provider.stop();
@@ -44,8 +44,9 @@ public abstract class BaseAutonomous extends LinearOpMode {
     }
 
     public void drive(final double power, final double inches) throws InterruptedException {
-        final double ticks = inches * EncoderBaseAutonomous.COUNTS_PER_INCH;
-        EncoderBaseAutonomous.resetMotors(robot.getDriveLeft(), robot.getDriveRight());
+        final double ticks = inches * EncoderAutonomous.COUNTS_PER_INCH;
+        EncoderAutonomous.resetMotors(robot.getDriveLeft(), robot.getDriveRight());
+        if (inches <= 0) RobotLog.ee("Error", "Invalid distances!");
         final int offset = getEncoderAverage();
         control(0, new Handler() {
             @Override
@@ -103,11 +104,7 @@ public abstract class BaseAutonomous extends LinearOpMode {
 
     public void resetOrientation() throws InterruptedException {
         provider.setZToZero();
-        RobotLog.ii("Begin reset", "Reset");
-        while (Math.abs(Math.round(provider.getZ())) > 1) {
-            RobotLog.ii("hey", Math.abs(Math.round(provider.getZ())) + "");
-            idle();
-        }
+        while (Math.abs(Math.round(provider.getZ())) > 1) idle();
     }
 
     private int getEncoderAverage() {

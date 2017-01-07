@@ -2,15 +2,14 @@ package org.ftc7244.robotcontrol;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.ftc7244.robotcontrol.autonomous.BaseAutonomous;
-import org.ftc7244.robotcontrol.autonomous.EncoderBaseAutonomous;
+import org.ftc7244.robotcontrol.autonomous.PIDAutonomous;
 
 /**
  * Created by OOTB on 11/11/2016.
  */
 
 @Autonomous(name="Corner Blue")
-public class CornerBlue extends BaseAutonomous {
+public class CornerBlue extends PIDAutonomous {
 
     @Override
     public void run() throws InterruptedException {
