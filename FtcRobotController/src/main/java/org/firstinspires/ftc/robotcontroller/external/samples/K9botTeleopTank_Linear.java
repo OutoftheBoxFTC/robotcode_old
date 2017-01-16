@@ -42,7 +42,7 @@ import com.qualcomm.robotcore.util.Range;
  * All device access is managed through the HardwareK9bot class. (See this class for device names)
  * The code is structured as a LinearOpMode
  *
- * This particular OpMode executes a basic Tank Drive WestcoastTeleop for the K9 bot
+ * This particular OpMode executes a basic Tank Drive Teleop for the K9 bot
  * It raises and lowers the arm using the Gampad Y and A buttons respectively.
  * It also opens and closes the claw slowly using the X and B buttons.
  *
@@ -66,7 +66,7 @@ public class K9botTeleopTank_Linear extends LinearOpMode {
     final double    ARM_SPEED       = 0.01 ;                            // sets rate to move servo
 
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         double left;
         double right;
 
@@ -118,7 +118,6 @@ public class K9botTeleopTank_Linear extends LinearOpMode {
 
             // Pause for metronome tick.  40 mS each cycle = update 25 times a second.
             robot.waitForTick(40);
-            idle(); // Always call idle() at the bottom of your while(opModeIsActive()) loop
         }
     }
 }

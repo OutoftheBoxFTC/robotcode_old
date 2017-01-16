@@ -47,7 +47,7 @@ import com.qualcomm.robotcore.util.Range;
  * This OpMode uses the common Pushbot hardware class to define the devices on the robot.
  * All device access is managed through the HardwarePushbot class.
  *
- * This particular OpMode executes a basic Tank Drive WestcoastTeleop for a PushBot
+ * This particular OpMode executes a basic Tank Drive Teleop for a PushBot
  * It raises and lowers the claw using the Gampad Y and A buttons respectively.
  * It also opens and closes the claws slowly using the left and right Bumper buttons.
  *
@@ -55,7 +55,7 @@ import com.qualcomm.robotcore.util.Range;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Pushbot: WestcoastTeleop Tank", group="Pushbot")
+@TeleOp(name="Pushbot: Teleop Tank", group="Pushbot")
 @Disabled
 public class PushbotTeleopTank_Iterative extends OpMode{
 
@@ -78,7 +78,6 @@ public class PushbotTeleopTank_Iterative extends OpMode{
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Say", "Hello Driver");    //
-        updateTelemetry(telemetry);
     }
 
     /*
@@ -132,7 +131,6 @@ public class PushbotTeleopTank_Iterative extends OpMode{
         telemetry.addData("claw",  "Offset = %.2f", clawOffset);
         telemetry.addData("left",  "%.2f", left);
         telemetry.addData("right", "%.2f", right);
-        updateTelemetry(telemetry);
     }
 
     /*

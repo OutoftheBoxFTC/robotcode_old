@@ -46,7 +46,7 @@ import com.qualcomm.robotcore.util.RobotLog;
  * All device access is managed through the HardwarePushbot class.
  * The code is structured as a LinearOpMode
  *
- * This particular OpMode executes a POV Game style WestcoastTeleop for a PushBot
+ * This particular OpMode executes a POV Game style Teleop for a PushBot
  * In this mode the left stick moves the robot FWD and back, the Right stick turns left and right.
  * It raises and lowers the claw using the Gampad Y and A buttons respectively.
  * It also opens and closes the claws slowly using the left and right Bumper buttons.
@@ -55,7 +55,7 @@ import com.qualcomm.robotcore.util.RobotLog;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Pushbot: WestcoastTeleop POV", group="Pushbot")
+@TeleOp(name="Pushbot: Teleop POV", group="Pushbot")
 @Disabled
 public class PushbotTeleopPOV_Linear extends LinearOpMode {
 
@@ -66,7 +66,7 @@ public class PushbotTeleopPOV_Linear extends LinearOpMode {
     final double    CLAW_SPEED      = 0.02 ;                   // sets rate to move servo
 
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         double left;
         double right;
         double max;
