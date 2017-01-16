@@ -6,7 +6,10 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftc7244.robotcontrol.Westcoast;
-import org.ftc7244.robotcontrol.core.PIDController;
+import org.ftc7244.robotcontrol.autonomous.drivers.GyroscopeDrive;
+import org.ftc7244.robotcontrol.autonomous.drivers.GyroscopeDriveControls;
+import org.ftc7244.robotcontrol.autonomous.drivers.UltrasonicDrive;
+import org.ftc7244.robotcontrol.autonomous.drivers.UltrasonicDriveControls;
 import org.ftc7244.robotcontrol.sensor.GyroscopeProvider;
 
 import static android.content.Context.SENSOR_SERVICE;
@@ -14,26 +17,32 @@ import static android.content.Context.SENSOR_SERVICE;
 /**
  * Created by OOTB on 10/16/2016.
  */
-public abstract class PIDAutonomous extends LinearOpMode {
+public abstract class PIDAutonomous extends LinearOpMode implements UltrasonicDriveControls, GyroscopeDriveControls {
 
     public static boolean DEBUG = false;
 
+    protected GyroscopeDrive gyroscope;
+    protected UltrasonicDrive ultrasonic;
     protected Westcoast robot;
     private GyroscopeProvider provider;
 
-    public abstract void run() throws InterruptedException;
+    protected PIDAutonomous() {
+        robot = new Westcoast(this);
+        provider = new GyroscopeProvider();
+        gyroscope = new GyroscopeDrive(robot, provider, DEBUG);
+        ultrasonic = new UltrasonicDrive(robot, DEBUG);
+    }
 
     @Override
     public void runOpMode() throws InterruptedException {
-        this.robot = new Westcoast(this);
-        this.provider = new GyroscopeProvider();
         robot.init();
 
         waitForStart();
-        calibrate();
+        provider.start((SensorManager) hardwareMap.appContext.getSystemService(SENSOR_SERVICE), 1);
+        sleep(1000);
 
         try {
-            resetOrientation();
+            gyroscope.resetOrientation();
             run();
         } catch (Throwable t) {
             RobotLog.ee("Error", "Error");
@@ -43,87 +52,30 @@ public abstract class PIDAutonomous extends LinearOpMode {
         }
     }
 
-    public void drive(final double power, final double inches) throws InterruptedException {
-        final double ticks = inches * EncoderAutonomous.COUNTS_PER_INCH;
-        EncoderAutonomous.resetMotors(robot.getDriveLeft(), robot.getDriveRight());
-        if (inches <= 0) RobotLog.ee("Error", "Invalid distances!");
-        final int offset = getEncoderAverage();
-        control(0, new Handler() {
-            @Override
-            public double offset() {
-                return power;
-            }
+    public abstract void run() throws InterruptedException;
 
-            @Override
-            public boolean shouldTerminate() {
-                return Math.abs(getEncoderAverage() - offset) >= ticks;
-            }
-        });
+    @Override
+    public void drive(double power, double inches) throws InterruptedException {
+        gyroscope.drive(power, inches);
     }
 
-
-
-    public void rotate(final double degrees) throws InterruptedException {
-        final double target = degrees + provider.getZ();
-        control(target, new Handler() {
-            private long timestamp = -1;
-
-            @Override
-            public double offset() {
-                return 0;
-            }
-
-            @Override
-            public boolean shouldTerminate() {
-                if (timestamp == -1 && Math.abs(provider.getZ() - target) < .5) timestamp = System.currentTimeMillis();
-                else if (Math.abs(provider.getZ() - target) > .5) timestamp = -1;
-                RobotLog.ii("STOP", provider.getZ() + ":" + target);
-                return Math.abs(System.currentTimeMillis() - timestamp) > 100 && timestamp != -1;
-            }
-        });
-        resetOrientation();
+    @Override
+    public void rotate(double degrees) throws InterruptedException {
+        gyroscope.rotate(degrees);
     }
 
-    private void control(double degrees, Handler handler) throws InterruptedException {
-        PIDController controller = new PIDController(-0.02, -0.00003, -3.25, 30);
-        controller.setTarget(degrees);
-        controller.setIntegralRange(15);
-        controller.setDeadband(.25);
-
-        do {
-            double pid = controller.update(provider.getZ());
-            logPID(controller);
-            double offset = handler.offset();
-            robot.getDriveLeft().setPower(offset + pid);
-            robot.getDriveRight().setPower(offset - pid);
-        } while (!handler.shouldTerminate() && !this.isStopRequested());
-
-        robot.getDriveLeft().setPower(0);
-        robot.getDriveRight().setPower(0);
-    }
-
+    @Override
     public void resetOrientation() throws InterruptedException {
-        provider.setZToZero();
-        while (Math.abs(Math.round(provider.getZ())) > 1) idle();
+        gyroscope.resetOrientation();
     }
 
-    private int getEncoderAverage() {
-        return (robot.getDriveLeft().getCurrentPosition() + robot.getDriveRight().getCurrentPosition()) / 2;
+    @Override
+    public void parallelize() throws InterruptedException {
+        ultrasonic.parallelize();
     }
 
-    private void logPID(PIDController controller) {
-        if (!DEBUG) return;
-        RobotLog.ii("PID", "|" + controller.getProportional() * controller.getkP() + "|" + controller.getIntegral() * controller.getkI() + "|" + controller.getDerivative() * controller.getkD() + "|" + provider.getZ());
-    }
-
-    private void calibrate() throws InterruptedException {
-        provider.start((SensorManager) hardwareMap.appContext.getSystemService(SENSOR_SERVICE), 1);
-        sleep(1000);
-    }
-
-    private interface Handler {
-        double offset();
-
-        boolean shouldTerminate();
+    @Override
+    public void driveParallel(double power) throws InterruptedException {
+        ultrasonic.driveParallel(power);
     }
 }

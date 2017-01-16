@@ -110,7 +110,7 @@ public abstract class EncoderAutonomous extends LinearOpMode {
         return distanceTicks;
     }
 
-    static void resetMotors(DcMotor... motors) {
+    public static void resetMotors(DcMotor... motors) {
         boolean notReset = true;
         while (notReset) {
             boolean allReset = true;

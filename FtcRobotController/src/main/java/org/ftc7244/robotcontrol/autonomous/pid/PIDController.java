@@ -1,6 +1,5 @@
-package org.ftc7244.robotcontrol.core;
+package org.ftc7244.robotcontrol.autonomous.pid;
 
-import static java.lang.Double.NaN;
 import static java.lang.Double.isInfinite;
 import static java.lang.Double.isNaN;
 
@@ -30,10 +29,16 @@ public class PIDController {
     }
 
     public PIDController(double kP, double kI, double kD, double delay) {
+        this(kP, kI, kD, delay, 0, 0);
+    }
+
+    public PIDController(double kP, double kI, double kD, double delay, double integralRange, double deadband) {
         this.kP = kP;
         this.kI = kI;
         this.kD = kD;
         this.delay = delay;
+        this.integralRange = integralRange;
+        this.deadband = deadband;
 
         reset();
     }
@@ -91,8 +96,6 @@ public class PIDController {
         this.dt = 0;
         this.cycleTime = 0;
         this.proportional = 0;
-        this.integralRange = 0;
-        this.deadband = 0;
     }
 
     /**

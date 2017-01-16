@@ -1,5 +1,6 @@
 package org.ftc7244.robotcontrol;
 
+import com.qualcomm.hardware.hitechnic.HiTechnicNxtUltrasonicSensor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.ColorSensor;
@@ -24,6 +25,7 @@ public class Westcoast {
     private AnalogInput launcherLimit;
     private OpMode opMode;
     private ColorSensor beaconSensor;
+    private HiTechnicNxtUltrasonicSensor leadingUltrasonic, trailingUltrasonic;
 
     public Westcoast(OpMode opMode) {
         this.opMode = opMode;
@@ -44,6 +46,8 @@ public class Westcoast {
         this.beaconPusher = getOrNull(map.servo, "beacon_pusher");
         this.spooler = getOrNull(map.dcMotor, "spooler");
         this.carriageRelease = getOrNull(map.servo, "carriage_release");
+        this.leadingUltrasonic = (HiTechnicNxtUltrasonicSensor) getOrNull(map.ultrasonicSensor, "leading_ultrasonic");
+        this.trailingUltrasonic = (HiTechnicNxtUltrasonicSensor) getOrNull(map.ultrasonicSensor, "trailing_ultrasonic");
 
         //Set the default direction for all the hardware and also initialize default positions
         if (driveLeft != null) driveLeft.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -84,7 +88,7 @@ public class Westcoast {
         boolean failed = false;
         //Spin the launcher
         do {
-            if (timer.milliseconds() >= 1000) failed = true;
+            if (timer.milliseconds() >= 1000 || Thread.interrupted()) failed = true;
             launcher.setPower(1);
         } while (Math.round(launcherLimit.getVoltage()) != 0 && !failed);
 
@@ -170,4 +174,13 @@ public class Westcoast {
     public void setCarriageState(CarriageState status) {
         this.carriageRelease.setPosition(status.position);
     }
+
+    public HiTechnicNxtUltrasonicSensor getLeadingUltrasonic() {
+        return leadingUltrasonic;
+    }
+
+    public HiTechnicNxtUltrasonicSensor getTrailingUltrasonic() {
+        return trailingUltrasonic;
+    }
+
 }
