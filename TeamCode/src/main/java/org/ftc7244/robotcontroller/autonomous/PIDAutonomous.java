@@ -19,7 +19,7 @@ import static android.content.Context.SENSOR_SERVICE;
  */
 public abstract class PIDAutonomous extends LinearOpMode implements UltrasonicDriveControls, GyroscopeDriveControls {
 
-    public static boolean DEBUG = false;
+    public static boolean DEBUG = true;
 
     protected GyroscopeDrive gyroscope;
     protected UltrasonicDrive ultrasonic;
@@ -62,6 +62,11 @@ public abstract class PIDAutonomous extends LinearOpMode implements UltrasonicDr
     @Override
     public void rotate(double degrees) throws InterruptedException {
         gyroscope.rotate(degrees);
+    }
+
+    @Override
+    public void driveUntilLine(double power, GyroscopeDrive.Sensor mode, double distance) throws InterruptedException {
+        gyroscope.driveUntilLine(power, mode, distance);
     }
 
     @Override

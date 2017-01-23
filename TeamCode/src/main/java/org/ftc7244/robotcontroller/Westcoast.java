@@ -1,5 +1,6 @@
 package org.ftc7244.robotcontroller;
 
+import com.qualcomm.hardware.hitechnic.HiTechnicNxtLightSensor;
 import com.qualcomm.hardware.hitechnic.HiTechnicNxtUltrasonicSensor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
@@ -25,6 +26,7 @@ public class Westcoast {
     private AnalogInput launcherLimit;
     private OpMode opMode;
     private ColorSensor beaconSensor;
+    private HiTechnicNxtLightSensor leadingLight, trailingLight;
     private HiTechnicNxtUltrasonicSensor leadingUltrasonic, trailingUltrasonic;
 
     public Westcoast(OpMode opMode) {
@@ -48,6 +50,8 @@ public class Westcoast {
         this.carriageRelease = getOrNull(map.servo, "carriage_release");
         this.leadingUltrasonic = (HiTechnicNxtUltrasonicSensor) getOrNull(map.ultrasonicSensor, "leading_ultrasonic");
         this.trailingUltrasonic = (HiTechnicNxtUltrasonicSensor) getOrNull(map.ultrasonicSensor, "trailing_ultrasonic");
+        this.leadingLight = (HiTechnicNxtLightSensor) getOrNull(map.lightSensor, "leading_light");
+        this.trailingLight = (HiTechnicNxtLightSensor) getOrNull(map.lightSensor, "trailing_light");
 
         //Set the default direction for all the hardware and also initialize default positions
         if (driveLeft != null) driveLeft.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -183,4 +187,11 @@ public class Westcoast {
         return trailingUltrasonic;
     }
 
+    public HiTechnicNxtLightSensor getTrailingLight() {
+        return trailingLight;
+    }
+
+    public HiTechnicNxtLightSensor getLeadingLight() {
+        return leadingLight;
+    }
 }

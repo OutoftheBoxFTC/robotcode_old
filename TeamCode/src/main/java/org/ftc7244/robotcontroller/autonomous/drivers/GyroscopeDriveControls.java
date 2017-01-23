@@ -10,4 +10,6 @@ public interface GyroscopeDriveControls {
     void rotate(final double degrees) throws InterruptedException;
 
     void resetOrientation() throws InterruptedException;
+
+    void driveUntilLine(final double power, GyroscopeDrive.Sensor mode, double distance) throws InterruptedException;
 }

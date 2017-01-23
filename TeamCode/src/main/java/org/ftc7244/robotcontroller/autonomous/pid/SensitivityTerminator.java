@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.util.RobotLog;
  * Created by OOTB on 1/15/2017.
  */
 
-public class SensitivityTerminator extends PIDDriveControl.Handler {
+public class SensitivityTerminator extends Handler {
 
     private long timestamp = -1, successDuration;
     private double maximumError, target;
@@ -19,8 +19,7 @@ public class SensitivityTerminator extends PIDDriveControl.Handler {
         this.context = context;
     }
 
-    @Override
-    protected boolean shouldTerminate() {
+    public boolean shouldTerminate() {
         if (timestamp == -1 && Math.abs(context.getReading() - target) < maximumError) timestamp = System.currentTimeMillis();
         else if (Math.abs(context.getReading() - target) > maximumError) timestamp = -1;
         RobotLog.ii("STOP", context.getReading() + ":" + target);

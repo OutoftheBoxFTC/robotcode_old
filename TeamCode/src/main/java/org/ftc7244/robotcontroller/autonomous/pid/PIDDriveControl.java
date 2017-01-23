@@ -26,8 +26,9 @@ public abstract class PIDDriveControl {
 
     public abstract double getReading();
 
-    protected void control(double val, Handler handler) throws InterruptedException {
+    public void control(double val, Handler handler) throws InterruptedException {
         controller.reset();
+        controller.setTarget(val );
         do {
             double pid = controller.update(getReading());
             if (debug) {
@@ -44,13 +45,5 @@ public abstract class PIDDriveControl {
 
         robot.getDriveLeft().setPower(0);
         robot.getDriveRight().setPower(0);
-    }
-
-    public static abstract class Handler {
-        protected double offset() {
-            return 0;
-        }
-
-        protected abstract boolean shouldTerminate();
     }
 }
