@@ -20,8 +20,8 @@ public class GyroscopeDrive extends PIDDriveControl implements GyroscopeDriveCon
     private GyroscopeProvider provider;
 
     public GyroscopeDrive(Westcoast robot, GyroscopeProvider provider, boolean debug) {
-        //        super(new PIDController(-0.02, -0.00003, -3.25, 30, 15, .25), robot, debug);
-        super(new PIDController(-0.02, 0, -3.25, 30, 0, 0), robot, debug);
+        //        super(new PIDController(-0.02, , -3.25, 30, 15, .25), robot, debug);
+        super(new PIDController(-0.02, -0.00003, -3.25, 30, 6, 0.8), robot, debug);
         this.provider = provider;
     }
 
@@ -76,7 +76,7 @@ public class GyroscopeDrive extends PIDDriveControl implements GyroscopeDriveCon
 
     public void rotate(final double degrees) throws InterruptedException {
         final double target = degrees + provider.getZ();
-        control(target, new SensitivityTerminator(this, degrees, 2, 300));
+        control(target, new SensitivityTerminator(this, degrees, 2, 300, 2000));
         resetOrientation();
     }
 

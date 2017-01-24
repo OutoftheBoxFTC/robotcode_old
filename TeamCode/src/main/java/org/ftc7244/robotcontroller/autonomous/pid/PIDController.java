@@ -22,7 +22,7 @@ public class PIDController {
     /**
      * How often will the new PID value be calculated.
      */
-    private double dt, cycleTime, delay, integralRange, deadband;
+    private double dt, cycleTime, delay, integralRange, outputRange;
 
     public PIDController(double kP, double kI, double kD) {
         this(kP, kI, kD, -1);
@@ -32,13 +32,13 @@ public class PIDController {
         this(kP, kI, kD, delay, 0, 0);
     }
 
-    public PIDController(double kP, double kI, double kD, double delay, double integralRange, double deadband) {
+    public PIDController(double kP, double kI, double kD, double delay, double integralRange, double outputRange) {
         this.kP = kP;
         this.kI = kI;
         this.kD = kD;
         this.delay = delay;
         this.integralRange = integralRange;
-        this.deadband = deadband;
+        this.outputRange = Math.abs(outputRange);
 
         reset();
     }
@@ -66,13 +66,10 @@ public class PIDController {
             return 0;
         }
 
-
-
         double error = setPoint - measured;
-        if (deadband != 0 && Math.abs(error) < deadband) error = 0;
         proportional = kP * error;
 
-        if ((integralRange == 0 || Math.abs(error) < integralRange) && (deadband == 0 || Math.abs(error) > deadband)) integral += kI * error * dt;
+        if ((integralRange == 0 || Math.abs(error) < integralRange)) integral += kI * error * dt;
         else integral = 0;
 
         derivative = kD * (error - previous_error) / dt;
@@ -84,7 +81,9 @@ public class PIDController {
         dt = System.currentTimeMillis() - this.cycleTime;
         cycleTime = System.currentTimeMillis();
 
-        return proportional + integral + derivative;
+        double result = proportional + integral + derivative;
+        if (outputRange != 0) result = Math.max(-outputRange, Math.min(outputRange, result));
+        return result;
     }
 
     /**
@@ -139,14 +138,6 @@ public class PIDController {
      */
     public double getSetPoint() {
         return setPoint;
-    }
-
-    public double getDeadband() {
-        return deadband;
-    }
-
-    public void setDeadband(double deadband) {
-        this.deadband = deadband;
     }
 
     public double getIntegralRange() {
