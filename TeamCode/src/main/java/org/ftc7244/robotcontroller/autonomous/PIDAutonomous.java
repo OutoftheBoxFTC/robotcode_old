@@ -17,7 +17,7 @@ import static android.content.Context.SENSOR_SERVICE;
 /**
  * Created by OOTB on 10/16/2016.
  */
-public abstract class PIDAutonomous extends LinearOpMode implements UltrasonicDriveControls, GyroscopeDriveControls {
+public abstract class PIDAutonomous extends CoreAutonomous implements UltrasonicDriveControls, GyroscopeDriveControls {
 
     public static boolean DEBUG = true;
 
@@ -43,7 +43,7 @@ public abstract class PIDAutonomous extends LinearOpMode implements UltrasonicDr
 
         try {
             gyroscope.resetOrientation();
-            run();
+            super.runOpMode();
         } catch (Throwable t) {
             RobotLog.ee("Error", "Error");
             t.printStackTrace();

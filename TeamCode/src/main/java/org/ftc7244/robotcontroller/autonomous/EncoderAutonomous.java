@@ -11,7 +11,7 @@ import org.ftc7244.robotcontroller.Westcoast;
  * Thus there was not much of an effect for using encoders.
  */
 @Deprecated
-public abstract class EncoderAutonomous extends LinearOpMode {
+public abstract class EncoderAutonomous extends CoreAutonomous {
 
     public final static double COUNTS_PER_INCH = 1120 / (Math.PI * 3);
     private final static int ENCODER_THRESHOLD = 100;
@@ -27,10 +27,8 @@ public abstract class EncoderAutonomous extends LinearOpMode {
 
         initialize();
 
-        idle();
         waitForStart();
-
-        run();
+        super.runOpMode();
     }
 
     public void initialize() {}

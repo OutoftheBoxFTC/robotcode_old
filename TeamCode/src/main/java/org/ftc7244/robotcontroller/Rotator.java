@@ -11,9 +11,10 @@ import org.ftc7244.robotcontroller.autonomous.PIDAutonomous;
 public class Rotator extends PIDAutonomous {
     @Override
     public void run() throws InterruptedException {
-        for (int i = 0; i < 4; i ++) {
+        /*for (int i = 0; i < 4; i ++) {
             sleep(500);
             gyroscope.rotate(-45);
-        }
+        }*/
+        gyroscope.rotate(90);
     }
 }

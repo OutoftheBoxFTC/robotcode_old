@@ -3,6 +3,7 @@ package org.ftc7244.robotcontroller.autonomous.pid;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftc7244.robotcontroller.Westcoast;
+import org.ftc7244.robotcontroller.autonomous.Status;
 
 /**
  * Created by OOTB on 1/15/2017.
@@ -41,7 +42,7 @@ public abstract class PIDDriveControl {
             double offset = handler.offset();
             robot.getDriveLeft().setPower(offset + pid);
             robot.getDriveRight().setPower(offset - pid);
-        } while (!handler.shouldTerminate() && !Thread.interrupted());
+        } while (!handler.shouldTerminate() && !Thread.interrupted() && !Status.isStopRequested());
 
         robot.getDriveLeft().setPower(0);
         robot.getDriveRight().setPower(0);
