@@ -2,7 +2,6 @@ package org.ftc7244.robotcontroller.autonomous;
 
 import android.hardware.SensorManager;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftc7244.robotcontroller.Westcoast;

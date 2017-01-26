@@ -5,7 +5,7 @@ package org.ftc7244.robotcontroller.autonomous.drivers;
  */
 
 public interface GyroscopeDriveControls {
-     void drive(final double power, final double inches) throws InterruptedException;
+    void drive(final double power, final double inches) throws InterruptedException;
 
     void rotate(final double degrees) throws InterruptedException;
 

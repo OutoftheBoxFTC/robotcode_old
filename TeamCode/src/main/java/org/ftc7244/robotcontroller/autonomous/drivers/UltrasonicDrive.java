@@ -16,10 +16,9 @@ import java.util.LinkedList;
 
 public class UltrasonicDrive extends PIDDriveControl implements UltrasonicDriveControls {
 
-    private static final int offsetLeading = 1, offsetTrailing = 0;
+    private static final int offsetLeading = 0, offsetTrailing = 0;
 
     private LinkedList<Double> setLeading, setTrailing;
-    private double lastLeading, lastTrailing;
     private int memory;
 
     public UltrasonicDrive(Westcoast robot, boolean debug) {
@@ -27,9 +26,7 @@ public class UltrasonicDrive extends PIDDriveControl implements UltrasonicDriveC
     }
 
     public UltrasonicDrive(Westcoast robot, int memory, boolean debug) {
-        super(new PIDController(-0.04, 0, 0, 30), robot, debug);
-        this.lastLeading = 0;
-        this.lastTrailing = 0;
+        super(new PIDController(-0.1, -0.0008, 0, 30, .5, .1), robot, debug);
         this.memory = memory;
         this.setLeading = new LinkedList<>();
         this.setTrailing = new LinkedList<>();
@@ -37,19 +34,19 @@ public class UltrasonicDrive extends PIDDriveControl implements UltrasonicDriveC
 
     @Override
     public double getReading() {
-        lastLeading = filter(lastLeading, robot.getLeadingUltrasonic().getUltrasonicLevel(), offsetLeading);
-        lastTrailing = filter(lastTrailing, robot.getTrailingUltrasonic().getUltrasonicLevel(), offsetTrailing);
+        double leading = robot.getLeadingUltrasonic().getUltrasonicLevel() - offsetLeading;
+        double trailing = robot.getTrailingUltrasonic().getUltrasonicLevel() - offsetTrailing;
 
-        RobotLog.ii("INFO", lastLeading + ":" +  lastTrailing);
-        return lastLeading - lastTrailing;
+        RobotLog.ii("INFO", leading + ":" + trailing);
+        return leading - trailing;
     }
 
     public void parallelize() throws InterruptedException {
-        control(0, new SensitivityTerminator(this, 0, 1, 500));
+        control(0, new SensitivityTerminator(this, 0, 0.1, 200));
     }
 
     public void driveParallel(final double power) throws InterruptedException {
-       // FIXME: 1/15/2017
+        // FIXME: 1/15/2017
         control(0, new Handler() {
             long end = System.currentTimeMillis() + 3000;
 
@@ -63,15 +60,6 @@ public class UltrasonicDrive extends PIDDriveControl implements UltrasonicDriveC
                 return System.currentTimeMillis() > end;
             }
         });
-    }
-
-    private double filter(double last, double current, double offset) {
-        if (current > 120) {
-            return last;
-        } else if (current < 1) {
-            return last;
-        }
-        return current - offset;
     }
 
     private double update(double value, LinkedList<Double> list) {

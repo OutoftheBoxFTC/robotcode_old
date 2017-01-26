@@ -9,9 +9,8 @@ import android.hardware.SensorManager;
  * The orientation provider that delivers the relative orientation from the {@link Sensor#TYPE_GYROSCOPE
  * Gyroscope}. This sensor does not deliver an absolute orientation (with respect to magnetic north and gravity) but
  * only a relative measurement starting from the point where it started.
- * 
+ *
  * @author Alexander Pacha
- * 
  */
 public class GyroscopeProvider implements SensorEventListener {
 
@@ -27,29 +26,25 @@ public class GyroscopeProvider implements SensorEventListener {
      * real motion (usually > 0.1). Note that there is a chance of missing real motion, if the use is turning the
      * device really slowly, so this value has to find a balance between accepting noise (threshold = 0) and missing
      * slow user-action (threshold > 0.5). 0.1 seems to work fine for most applications.
-     *
      */
     private static final double EPSILON = 0.1f;
 
     /**
      * The quaternion that stores the difference that is obtained by the gyroscope.
      * Basically it contains a rotational difference encoded into a quaternion.
-     * 
+     * <p>
      * To obtain the absolute orientation one must add this into an initial position by
      * multiplying it with another quaternion
      */
     private final Quaternion deltaQuaternion;
-
-    /**
-     * The time-stamp being used to record the time when the last gyroscope event occurred.
-     */
-    private long timestamp;
-
     /**
      * The quaternion that holds the current rotation
      */
     private final Quaternion currentOrientationQuaternion;
-
+    /**
+     * The time-stamp being used to record the time when the last gyroscope event occurred.
+     */
+    private long timestamp;
     private SensorManager sensorManager;
 
     private volatile double x, y, z;
@@ -121,7 +116,7 @@ public class GyroscopeProvider implements SensorEventListener {
                 deltaQuaternion.setW(-(float) cosThetaOverTwo);
 
                 // Matrix rendering in CubeRenderer does not seem to have this problem.
-                    // Move current gyro orientation if gyroscope should be used
+                // Move current gyro orientation if gyroscope should be used
                 deltaQuaternion.multiplyByQuat(currentOrientationQuaternion, currentOrientationQuaternion);
 
                 correctedQuaternion.set(currentOrientationQuaternion);
@@ -146,7 +141,8 @@ public class GyroscopeProvider implements SensorEventListener {
     }
 
     @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {}
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+    }
 
     public double getX() {
         return x;

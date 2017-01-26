@@ -1,7 +1,6 @@
 package org.ftc7244.robotcontroller;
 
 import com.qualcomm.hardware.hitechnic.HiTechnicNxtLightSensor;
-import com.qualcomm.hardware.hitechnic.HiTechnicNxtUltrasonicSensor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.ColorSensor;
@@ -12,6 +11,9 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.RobotLog;
+
+import org.ftc7244.robotcontroller.autonomous.Status;
+import org.ftc7244.robotcontroller.sensor.SickUltrasonic;
 
 import java.util.Map;
 
@@ -27,7 +29,7 @@ public class Westcoast {
     private OpMode opMode;
     private ColorSensor beaconSensor;
     private HiTechnicNxtLightSensor leadingLight, trailingLight;
-    private HiTechnicNxtUltrasonicSensor leadingUltrasonic, trailingUltrasonic;
+    private SickUltrasonic leadingUltrasonic, trailingUltrasonic;
 
     public Westcoast(OpMode opMode) {
         this.opMode = opMode;
@@ -48,8 +50,8 @@ public class Westcoast {
         this.beaconPusher = getOrNull(map.servo, "beacon_pusher");
         this.spooler = getOrNull(map.dcMotor, "spooler");
         this.carriageRelease = getOrNull(map.servo, "carriage_release");
-        this.leadingUltrasonic = (HiTechnicNxtUltrasonicSensor) getOrNull(map.ultrasonicSensor, "leading_ultrasonic");
-        this.trailingUltrasonic = (HiTechnicNxtUltrasonicSensor) getOrNull(map.ultrasonicSensor, "trailing_ultrasonic");
+        this.leadingUltrasonic = new SickUltrasonic(getOrNull(map.analogInput, "leading_ultrasonic"));
+        this.trailingUltrasonic = new SickUltrasonic(getOrNull(map.analogInput, "trailing_ultrasonic"));
         this.leadingLight = (HiTechnicNxtLightSensor) getOrNull(map.lightSensor, "leading_light");
         this.trailingLight = (HiTechnicNxtLightSensor) getOrNull(map.lightSensor, "trailing_light");
 
@@ -63,9 +65,10 @@ public class Westcoast {
 
     /**
      * Get the value associated with an id and instead of raising an error return null and log it
-     * @param map the hardware map from the HardwareMap
+     *
+     * @param map  the hardware map from the HardwareMap
      * @param name The ID in the hardware map
-     * @param <T> the type of hardware map
+     * @param <T>  the type of hardware map
      * @return the hardware device associated with the name
      */
     private <T extends HardwareDevice> T getOrNull(HardwareMap.DeviceMapping<T> map, String name) {
@@ -92,7 +95,7 @@ public class Westcoast {
         boolean failed = false;
         //Spin the launcher
         do {
-            if (timer.milliseconds() >= 1000 || Thread.interrupted()) failed = true;
+            if (timer.milliseconds() >= 1000 || Status.isStopRequested()) failed = true;
             launcher.setPower(1);
         } while (Math.round(launcherLimit.getVoltage()) != 0 && !failed);
 
@@ -100,6 +103,7 @@ public class Westcoast {
         if (!failed) {
             timer.reset();
             while (timer.milliseconds() <= 500) {
+                if (Status.isStopRequested()) break;
                 //Stop the spinner after a delay
                 if (timer.milliseconds() > 200) launcher.setPower(0);
 
@@ -114,7 +118,10 @@ public class Westcoast {
     }
 
     public void shootLoop(int count, long delay) {
-        for (int i = 0; i < count; i++) this.shoot(delay);
+        for (int i = 0; i < count; i++) {
+            if (Status.isStopRequested()) break;
+            this.shoot(delay);
+        }
     }
 
     public ColorSensor getBeaconSensor() {
@@ -137,23 +144,16 @@ public class Westcoast {
         return launcher;
     }
 
-    public Servo getLauncherDoor() { return launcherDoor; }
+    public Servo getLauncherDoor() {
+        return launcherDoor;
+    }
 
-    public DcMotor getIntake() { return intake; }
+    public DcMotor getIntake() {
+        return intake;
+    }
 
     public AnalogInput getLauncherLimit() {
         return launcherLimit;
-    }
-
-    public enum DoorState {
-        OPEN(0.7),
-        CLOSED(1);
-
-        protected final double position;
-
-        DoorState(double position)  {
-            this.position = position;
-        }
     }
 
     public Servo getBeaconPusher() {
@@ -164,26 +164,15 @@ public class Westcoast {
         return spooler;
     }
 
-    public enum CarriageState {
-        OPEN(.5),
-        CLOSED(0);
-
-        protected final double position;
-
-        CarriageState(double position)  {
-            this.position = position;
-        }
-    }
-
     public void setCarriageState(CarriageState status) {
         this.carriageRelease.setPosition(status.position);
     }
 
-    public HiTechnicNxtUltrasonicSensor getLeadingUltrasonic() {
+    public SickUltrasonic getLeadingUltrasonic() {
         return leadingUltrasonic;
     }
 
-    public HiTechnicNxtUltrasonicSensor getTrailingUltrasonic() {
+    public SickUltrasonic getTrailingUltrasonic() {
         return trailingUltrasonic;
     }
 
@@ -193,5 +182,27 @@ public class Westcoast {
 
     public HiTechnicNxtLightSensor getLeadingLight() {
         return leadingLight;
+    }
+
+    public enum DoorState {
+        OPEN(0.7),
+        CLOSED(1);
+
+        protected final double position;
+
+        DoorState(double position) {
+            this.position = position;
+        }
+    }
+
+    public enum CarriageState {
+        OPEN(.5),
+        CLOSED(0);
+
+        protected final double position;
+
+        CarriageState(double position) {
+            this.position = position;
+        }
     }
 }

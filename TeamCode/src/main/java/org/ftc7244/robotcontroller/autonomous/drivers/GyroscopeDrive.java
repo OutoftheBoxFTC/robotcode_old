@@ -68,7 +68,7 @@ public class GyroscopeDrive extends PIDDriveControl implements GyroscopeDriveCon
             public boolean shouldTerminate() {
                 if (sensor.getLightDetected() > .3) offset = getEncoderAverage();
                 if (offset != 0) sensor.enableLed(false);
-                RobotLog.ii("Color", sensor.getLightDetected() + ":");
+                RobotLog.ii("Color", String.valueOf(sensor.getLightDetected()));
                 return Math.abs(getEncoderAverage() - encoderError - offset) >= ticks && offset != 0;
             }
         });

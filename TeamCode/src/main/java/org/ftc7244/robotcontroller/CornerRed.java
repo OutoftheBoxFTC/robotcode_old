@@ -8,7 +8,7 @@ import org.ftc7244.robotcontroller.autonomous.PIDAutonomous;
  * Created by OOTB on 11/11/2016.
  */
 
-@Autonomous(name="Corner Red")
+@Autonomous(name = "Corner Red")
 public class CornerRed extends PIDAutonomous {
 
     @Override

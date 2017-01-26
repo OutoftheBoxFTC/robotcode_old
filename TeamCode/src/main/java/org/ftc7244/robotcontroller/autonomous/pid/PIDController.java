@@ -73,11 +73,12 @@ public class PIDController {
         else integral = 0;
 
         derivative = kD * (error - previous_error) / dt;
-        derivative =(isNaN(derivative) || isInfinite(derivative) ? 0 : derivative);
+        derivative = (isNaN(derivative) || isInfinite(derivative) ? 0 : derivative);
 
         previous_error = error;
 
-        if (this.delay > 0) pause((long) (this.delay - (System.currentTimeMillis() - this.cycleTime)));
+        if (this.delay > 0)
+            pause((long) (this.delay - (System.currentTimeMillis() - this.cycleTime)));
         dt = System.currentTimeMillis() - this.cycleTime;
         cycleTime = System.currentTimeMillis();
 

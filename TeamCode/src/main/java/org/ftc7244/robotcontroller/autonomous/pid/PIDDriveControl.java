@@ -29,15 +29,15 @@ public abstract class PIDDriveControl {
 
     public void control(double val, Handler handler) throws InterruptedException {
         controller.reset();
-        controller.setTarget(val );
+        controller.setTarget(val);
         do {
             double pid = controller.update(getReading());
             if (debug) {
                 RobotLog.ii("PID",
                         "|" + controller.getProportional() * controller.getkP() +
-                        "|" + controller.getIntegral() * controller.getkI() +
-                        "|" + controller.getDerivative() * controller.getkD() +
-                        "|" + getReading());
+                                "|" + controller.getIntegral() * controller.getkI() +
+                                "|" + controller.getDerivative() * controller.getkD() +
+                                "|" + getReading());
             }
             double offset = handler.offset();
             robot.getDriveLeft().setPower(offset + pid);

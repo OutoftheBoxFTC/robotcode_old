@@ -1,13 +1,17 @@
 package org.ftc7244.robotcontroller;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+
 import org.ftc7244.robotcontroller.autonomous.EncoderAutonomous;
 
 /**
  * Created by OOTB on 11/7/2016.
  */
 
-//@Autonomous(name="Shoot Ball Blue")
+@Autonomous(name = "Shoot Ball Blue")
 @Deprecated
+@Disabled
 public class ShootBlueBall extends EncoderAutonomous {
     @Override
     public void run() throws InterruptedException {

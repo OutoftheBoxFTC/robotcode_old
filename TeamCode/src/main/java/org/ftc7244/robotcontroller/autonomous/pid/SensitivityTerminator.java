@@ -28,7 +28,8 @@ public class SensitivityTerminator extends Handler {
     }
 
     public boolean shouldTerminate() {
-        if (timestamp == -1 && Math.abs(context.getReading() - target) < maximumError) timestamp = System.currentTimeMillis();
+        if (timestamp == -1 && Math.abs(context.getReading() - target) < maximumError)
+            timestamp = System.currentTimeMillis();
         else if (Math.abs(context.getReading() - target) > maximumError) timestamp = -1;
         if (start == -1 && timeout > 0) start = System.currentTimeMillis();
         RobotLog.ii("STOP", context.getReading() + ":" + target);

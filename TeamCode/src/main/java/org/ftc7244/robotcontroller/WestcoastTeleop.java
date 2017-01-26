@@ -3,19 +3,19 @@ package org.ftc7244.robotcontroller;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import org.ftc7244.robotcontroller.core.Button;
 import org.ftc7244.robotcontroller.core.ButtonType;
 import org.ftc7244.robotcontroller.core.PressButton;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by OOTB on 10/16/2016.
  */
 
-@TeleOp(name="Westcoast Drive")
+@TeleOp(name = "Westcoast Drive")
 public class WestcoastTeleop extends OpMode {
 
     private Westcoast robot;

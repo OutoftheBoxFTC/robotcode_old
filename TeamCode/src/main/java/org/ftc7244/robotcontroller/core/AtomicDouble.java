@@ -12,9 +12,8 @@ import static java.lang.Double.longBitsToDouble;
 public class AtomicDouble extends Number {
 
 
-    private transient volatile long value;
-
     private static final AtomicLongFieldUpdater<AtomicDouble> updater = AtomicLongFieldUpdater.newUpdater(AtomicDouble.class, "value");
+    private transient volatile long value;
 
     public AtomicDouble(double initialValue) {
         value = doubleToRawLongBits(initialValue);

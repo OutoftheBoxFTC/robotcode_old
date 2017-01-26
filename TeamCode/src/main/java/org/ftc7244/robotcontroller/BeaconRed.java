@@ -3,6 +3,7 @@ package org.ftc7244.robotcontroller;
 import android.graphics.Color;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.ftc7244.robotcontroller.autonomous.BeaconAutonomous;
 
@@ -10,7 +11,9 @@ import org.ftc7244.robotcontroller.autonomous.BeaconAutonomous;
  * Created by OOTB on 11/12/2016.
  */
 //
-@Autonomous(name="Beacon Red")
+@Autonomous(name = "Beacon Red")
+@Deprecated
+@Disabled
 public class BeaconRed extends BeaconAutonomous {
 
     @Override
@@ -23,7 +26,7 @@ public class BeaconRed extends BeaconAutonomous {
         drive(-0.35, 2);
 
         sleep(2000);
-        if (isColor(Color.RED)){
+        if (isColor(Color.RED)) {
             pushBeacon();
         } else {
             drive(-0.35, 5);

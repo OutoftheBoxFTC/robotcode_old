@@ -1,6 +1,5 @@
 package org.ftc7244.robotcontroller.autonomous;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.RobotLog;
 
@@ -18,6 +17,22 @@ public abstract class EncoderAutonomous extends CoreAutonomous {
 
     protected Westcoast robot = new Westcoast(this);
 
+    public static void resetMotors(DcMotor... motors) {
+        boolean notReset = true;
+        while (notReset) {
+            boolean allReset = true;
+            for (DcMotor motor : motors) {
+                if (motor.getCurrentPosition() == 0) {
+                    continue;
+                }
+                allReset = false;
+                motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            }
+            notReset = !allReset;
+        }
+        for (DcMotor motor : motors) motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+
     @Override
     public void runOpMode() throws InterruptedException {
         robot.init();
@@ -31,14 +46,16 @@ public abstract class EncoderAutonomous extends CoreAutonomous {
         super.runOpMode();
     }
 
-    public void initialize() {}
+    public void initialize() {
+    }
 
     public abstract void run() throws InterruptedException;
 
     /**
      * Move the robot a certain distance and once it reaches a distance or reaches a timeout then stop the robot
-     * @param power the power of the robot from 0 to 1
-     * @param leftInches how many inches the encoder moves in inches
+     *
+     * @param power       the power of the robot from 0 to 1
+     * @param leftInches  how many inches the encoder moves in inches
      * @param rightInches how many inches the encoder moves in inches
      * @throws InterruptedException
      */
@@ -56,7 +73,7 @@ public abstract class EncoderAutonomous extends CoreAutonomous {
 
         int targetLeft = initEncoderMotor(left, leftInches, power);
         int targetRight = initEncoderMotor(right, rightInches, power);
-        RobotLog.i("Target Left "+ targetLeft + " Right" + targetRight);
+        RobotLog.i("Target Left " + targetLeft + " Right" + targetRight);
 
         // keep looping while we are still active, and there is time left, and both motors are running.
         int lastLeft = 0, lastRight = 0;
@@ -82,11 +99,10 @@ public abstract class EncoderAutonomous extends CoreAutonomous {
     }
 
     /**
-     *
      * @param degs distance in degrees of 360
      */
     public void rotate(double power, int degs, Direction direction) throws InterruptedException {
-        double distance = ((double)degs)/360 * Math.PI * 17.5;
+        double distance = ((double) degs) / 360 * Math.PI * 17.5;
         drive(power, distance * direction.leftPower, distance * direction.rightPower);
     }
 
@@ -105,22 +121,6 @@ public abstract class EncoderAutonomous extends CoreAutonomous {
         motor.setTargetPosition(distanceTicks);
         motor.setPower(power * (distance > 0 ? 1 : -1));
         return distanceTicks;
-    }
-
-    public static void resetMotors(DcMotor... motors) {
-        boolean notReset = true;
-        while (notReset) {
-            boolean allReset = true;
-            for (DcMotor motor : motors) {
-                if (motor.getCurrentPosition() == 0) {
-                    continue;
-                }
-                allReset = false;
-                motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            }
-            notReset = !allReset;
-        }
-        for (DcMotor motor : motors) motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     private boolean stopWhenComplete(DcMotor motor, int target, int threshold) {
