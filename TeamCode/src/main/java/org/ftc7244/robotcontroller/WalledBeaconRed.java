@@ -36,6 +36,7 @@ public class WalledBeaconRed extends BeaconAutonomous {
         }
 
         driveUntilLine(-0.2, GyroscopeDrive.Sensor.Trailing, 0);
+        sleep(500);
         drive(.2, 3);
         if (isColor(Color.RED)) {
             pushBeacon();
