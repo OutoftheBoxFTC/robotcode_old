@@ -16,14 +16,15 @@ public class WalledBeaconBlue extends BeaconAutonomous {
 
     @Override
     public void run() throws InterruptedException {
-        drive(.35, 3);
+        drive(.35, 3.5);
         sleep(500);
-        rotate(-54);
+        rotate(-52);
         drive(0.35, 28);
         robot.shootLoop(2, 500);
-        drive(0.35, 16);
+        drive(0.35, 21);
 
-        rotate(51);
+        sleep(500);
+        rotate(50);
         driveUntilLine(.2, GyroscopeDrive.Sensor.Leading, 2);
 
         sleep(500);
@@ -35,6 +36,7 @@ public class WalledBeaconBlue extends BeaconAutonomous {
         }
 
         driveUntilLine(0.2, GyroscopeDrive.Sensor.Leading, .5);
+        sleep(500);
         if (isColor(Color.BLUE)) {
             pushBeacon();
         } else {
