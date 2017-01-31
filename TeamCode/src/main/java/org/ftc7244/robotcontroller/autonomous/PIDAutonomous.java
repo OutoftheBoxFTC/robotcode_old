@@ -5,10 +5,8 @@ import android.hardware.SensorManager;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftc7244.robotcontroller.Westcoast;
-import org.ftc7244.robotcontroller.autonomous.drivers.GyroscopeDrive;
-import org.ftc7244.robotcontroller.autonomous.drivers.GyroscopeDriveControls;
-import org.ftc7244.robotcontroller.autonomous.drivers.UltrasonicDrive;
-import org.ftc7244.robotcontroller.autonomous.drivers.UltrasonicDriveControls;
+import org.ftc7244.robotcontroller.autonomous.pid.drivers.GyroscopeDrive;
+import org.ftc7244.robotcontroller.autonomous.pid.drivers.UltrasonicDrive;
 import org.ftc7244.robotcontroller.sensor.GyroscopeProvider;
 
 import static android.content.Context.SENSOR_SERVICE;
@@ -16,12 +14,12 @@ import static android.content.Context.SENSOR_SERVICE;
 /**
  * Created by OOTB on 10/16/2016.
  */
-public abstract class PIDAutonomous extends CoreAutonomous implements UltrasonicDriveControls, GyroscopeDriveControls {
+public abstract class PIDAutonomous extends CoreAutonomous {
 
     public static boolean DEBUG = true;
 
-    protected GyroscopeDrive gyroscope;
-    protected UltrasonicDrive ultrasonic;
+    protected final GyroscopeDrive gyroscope;
+    protected final UltrasonicDrive ultrasonic;
     protected Westcoast robot;
     private GyroscopeProvider provider;
 
@@ -52,34 +50,4 @@ public abstract class PIDAutonomous extends CoreAutonomous implements Ultrasonic
     }
 
     public abstract void run() throws InterruptedException;
-
-    @Override
-    public void drive(double power, double inches) throws InterruptedException {
-        gyroscope.drive(power, inches);
-    }
-
-    @Override
-    public void rotate(double degrees) throws InterruptedException {
-        gyroscope.rotate(degrees);
-    }
-
-    @Override
-    public void driveUntilLine(double power, GyroscopeDrive.Sensor mode, double distance) throws InterruptedException {
-        gyroscope.driveUntilLine(power, mode, distance);
-    }
-
-    @Override
-    public void resetOrientation() throws InterruptedException {
-        gyroscope.resetOrientation();
-    }
-
-    @Override
-    public void parallelize() throws InterruptedException {
-        ultrasonic.parallelize();
-    }
-
-    @Override
-    public void driveParallel(double power) throws InterruptedException {
-        ultrasonic.driveParallel(power);
-    }
 }

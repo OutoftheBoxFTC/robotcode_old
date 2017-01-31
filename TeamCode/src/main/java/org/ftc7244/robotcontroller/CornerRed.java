@@ -14,22 +14,22 @@ public class CornerRed extends PIDAutonomous {
     @Override
     public void run() throws InterruptedException {
         /*sleep(5000);
-        drive(.8, -10, 0);
-        drive(1, -24, -24);
-        rotate(1, 35, Direction.RIGHT);
+        gyroscope.drive(.8, -10, 0);
+        gyroscope.drive(1, -24, -24);
+        gyroscope.rotate(1, 35, Direction.RIGHT);
         robot.shootLoop(3, 1000);
-        rotate(.8, 35, Direction.LEFT);
-        drive(1, -15, -15);
-        rotate(.8, 40, Direction.LEFT);
-        drive(1, -10, -10);*/
+        gyroscope.rotate(.8, 35, Direction.LEFT);
+        gyroscope.drive(1, -15, -15);
+        gyroscope.rotate(.8, 40, Direction.LEFT);
+        gyroscope.drive(1, -10, -10);*/
 
-        drive(-0.5, 5);
-        rotate(45);
-        drive(-0.5, 5);
-        rotate(77);
+        gyroscope.drive(-0.5, 5);
+        gyroscope.rotate(45);
+        gyroscope.drive(-0.5, 5);
+        gyroscope.rotate(77);
         sleep(1000);
         robot.shootLoop(2, 1500);
-        rotate(-77);
-        drive(-0.5, 36);
+        gyroscope.rotate(-77);
+        gyroscope.drive(-0.5, 36);
     }
 }

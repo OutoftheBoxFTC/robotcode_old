@@ -4,6 +4,8 @@ import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftc7244.robotcontroller.Westcoast;
 import org.ftc7244.robotcontroller.autonomous.Status;
+import org.ftc7244.robotcontroller.autonomous.pid.terminators.TerminationMode;
+import org.ftc7244.robotcontroller.autonomous.pid.terminators.Terminator;
 
 /**
  * Created by OOTB on 1/15/2017.
@@ -27,9 +29,10 @@ public abstract class PIDDriveControl {
 
     public abstract double getReading();
 
-    public void control(double val, Handler handler) throws InterruptedException {
+    protected void control(double target, double powerOffset, Terminator terminator) throws InterruptedException {
         controller.reset();
-        controller.setTarget(val);
+        controller.setTarget(target);
+        boolean shouldTerminate = false;
         do {
             double pid = controller.update(getReading());
             if (debug) {
@@ -39,10 +42,9 @@ public abstract class PIDDriveControl {
                                 "|" + controller.getDerivative() * controller.getkD() +
                                 "|" + getReading());
             }
-            double offset = handler.offset();
-            robot.getDriveLeft().setPower(offset + pid);
-            robot.getDriveRight().setPower(offset - pid);
-        } while (!handler.shouldTerminate() && !Thread.interrupted() && !Status.isStopRequested());
+            robot.getDriveLeft().setPower(powerOffset + pid);
+            robot.getDriveRight().setPower(powerOffset - pid);
+        } while (!terminator.shouldTerminate() && !Thread.interrupted() && !Status.isStopRequested());
 
         robot.getDriveLeft().setPower(0);
         robot.getDriveRight().setPower(0);

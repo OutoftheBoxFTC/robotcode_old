@@ -14,21 +14,21 @@ public class CornerBlue extends PIDAutonomous {
     @Override
     public void run() throws InterruptedException {
         //ENCODER BASE
-        /*drive(.8, 12, 0);
-        drive(1, 22, 22);
-        rotate(.8, 55, Direction.LEFT);
+        /*gyroscope.drive(.8, 12, 0);
+        gyroscope.drive(1, 22, 22);
+        gyroscope.rotate(.8, 55, Direction.LEFT);
         robot.shootLoop(3, 1000);
-        rotate(.8, 60, Direction.RIGHT);
+        gyroscope.rotate(.8, 60, Direction.RIGHT);
         robot.getIntake().setPower(-1);
-        drive(1, 20, 20);*/
+        gyroscope.drive(1, 20, 20);*/
 
-        drive(.5, 5);
-        rotate(-45);
-        drive(.5, 10);
-        rotate(-92);
+        gyroscope.drive(.5, 5);
+        gyroscope.rotate(-45);
+        gyroscope.drive(.5, 10);
+        gyroscope.rotate(-92);
         sleep(1000);
         robot.shootLoop(2, 1500);
-        rotate(90);
-        drive(.5, 36);
+        gyroscope.rotate(90);
+        gyroscope.drive(.5, 36);
     }
 }
