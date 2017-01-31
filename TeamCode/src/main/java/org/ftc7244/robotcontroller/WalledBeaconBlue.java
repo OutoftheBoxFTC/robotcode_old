@@ -25,6 +25,11 @@ public class WalledBeaconBlue extends BeaconAutonomous {
 
         sleep(500);
         gyroscope.rotate(50);
+
+        sleep(100);
+        ultrasonic.parallelize();
+        gyroscope.resetOrientation();
+
         gyroscope.driveUntilLine(.2, GyroscopeDrive.Sensor.Leading, 2);
 
         sleep(500);

@@ -56,7 +56,7 @@ public class GyroscopeDrive extends PIDDriveControl {
     public void driveUntilLine(double power, Sensor mode, double offsetDistance, final double minDistance, final double maxDistance) throws InterruptedException {
         EncoderAutonomous.resetMotors(robot.getDriveLeft(), robot.getDriveRight());
         if (offsetDistance <= 0) RobotLog.ee("Error", "Invalid distances!");
-        final double ticks = offsetDistance * EncoderAutonomous.COUNTS_PER_INCH;
+        final double ticks = offsetDistance * EncoderAutonomous.COUNTS_PER_INCH, maxTicks = maxDistance * EncoderAutonomous.COUNTS_PER_INCH, minTicks = minDistance * EncoderAutonomous.COUNTS_PER_INCH;
         final LightSensor lightSensor = mode == Sensor.Trailing ? robot.getTrailingLight() : robot.getLeadingLight();
         final int encoderError = getEncoderAverage();
         lightSensor.enableLed(true);
@@ -65,7 +65,7 @@ public class GyroscopeDrive extends PIDDriveControl {
                 new Terminator() {
                     @Override
                     public boolean shouldTerminate() {
-                        return Math.abs(getEncoderAverage() - encoderError) >= maxDistance && maxDistance > 0;
+                        return Math.abs(getEncoderAverage() - encoderError) >= maxTicks && maxTicks > 0;
                     }
                 },
                 new ConditionalTerminator(TerminationMode.AND, new Terminator() {
@@ -81,7 +81,7 @@ public class GyroscopeDrive extends PIDDriveControl {
                 }, new Terminator() {
                     @Override
                     public boolean shouldTerminate() {
-                        return Math.abs(getEncoderAverage() - encoderError) > minDistance || minDistance <= 0;
+                        return Math.abs(getEncoderAverage() - encoderError) > minTicks || minTicks <= 0;
                     }
                 })));
     }

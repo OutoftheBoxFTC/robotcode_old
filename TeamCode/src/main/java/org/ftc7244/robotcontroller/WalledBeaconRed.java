@@ -25,6 +25,11 @@ public class WalledBeaconRed extends BeaconAutonomous {
 
         sleep(500);
         gyroscope.rotate(-44);
+
+        sleep(100);
+        ultrasonic.parallelize();
+        gyroscope.resetOrientation();
+
         gyroscope.driveUntilLine(-0.2, GyroscopeDrive.Sensor.Trailing);
 
         sleep(500);
