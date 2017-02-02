@@ -30,7 +30,6 @@ public class BeaconBlue extends BeaconAutonomous {
         gyroscope.resetOrientation();
 
         gyroscope.driveUntilLine(.2, GyroscopeDrive.Sensor.Leading, 2);
-
         sleep(500);
         if (isColor(Color.BLUE)) {
             pushBeacon();

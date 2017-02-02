@@ -20,6 +20,8 @@ import org.ftc7244.robotcontroller.sensor.GyroscopeProvider;
 
 public class GyroscopeDrive extends PIDDriveControl {
 
+    private static final double LIGHT_TUNING = 0.3;
+
     private GyroscopeProvider provider;
 
     public GyroscopeDrive(Westcoast robot, GyroscopeProvider provider, boolean debug) {
@@ -56,10 +58,11 @@ public class GyroscopeDrive extends PIDDriveControl {
     public void driveUntilLine(double power, Sensor mode, double offsetDistance, final double minDistance, final double maxDistance) throws InterruptedException {
         EncoderAutonomous.resetMotors(robot.getDriveLeft(), robot.getDriveRight());
         if (offsetDistance <= 0) RobotLog.ee("Error", "Invalid distances!");
-        final double ticks = offsetDistance * EncoderAutonomous.COUNTS_PER_INCH, maxTicks = maxDistance * EncoderAutonomous.COUNTS_PER_INCH, minTicks = minDistance * EncoderAutonomous.COUNTS_PER_INCH;
-        final LightSensor lightSensor = mode == Sensor.Trailing ? robot.getTrailingLight() : robot.getLeadingLight();
+        final double ticks = offsetDistance * EncoderAutonomous.COUNTS_PER_INCH,
+                maxTicks = maxDistance * EncoderAutonomous.COUNTS_PER_INCH,
+                minTicks = minDistance * EncoderAutonomous.COUNTS_PER_INCH;
         final int encoderError = getEncoderAverage();
-        lightSensor.enableLed(true);
+
 
         control(0, power, new ConditionalTerminator(
                 new Terminator() {
@@ -68,22 +71,17 @@ public class GyroscopeDrive extends PIDDriveControl {
                         return Math.abs(getEncoderAverage() - encoderError) >= maxTicks && maxTicks > 0;
                     }
                 },
-                new ConditionalTerminator(TerminationMode.AND, new Terminator() {
-                    double offset = 0;
-
-                    @Override
-                    public boolean shouldTerminate() {
-                        if (lightSensor.getLightDetected() > .3) offset = getEncoderAverage();
-                        if (offset != 0) lightSensor.enableLed(false);
-                        RobotLog.ii("Light Sensor", String.valueOf(lightSensor.getLightDetected()));
-                        return Math.abs(getEncoderAverage() - encoderError - offset) >= ticks && offset != 0;
-                    }
-                }, new Terminator() {
-                    @Override
-                    public boolean shouldTerminate() {
-                        return Math.abs(getEncoderAverage() - encoderError) > minTicks || minTicks <= 0;
-                    }
-                })));
+                //// FIXME: 2/1/2017 
+                new LineTerminator(mode == Sensor.Leading ? robot.getTrailingLight() : robot.getLeadingLight(), encoderError, 0),
+                new ConditionalTerminator(TerminationMode.AND,
+                        new LineTerminator(mode == Sensor.Trailing ? robot.getTrailingLight() : robot.getLeadingLight(), encoderError, ticks),
+                        new Terminator() {
+                            @Override
+                            public boolean shouldTerminate() {
+                                return Math.abs(getEncoderAverage() - encoderError) > minTicks || minTicks <= 0;
+                            }
+                        }))
+        );
     }
 
     public void rotate(final double degrees) throws InterruptedException {
@@ -101,8 +99,32 @@ public class GyroscopeDrive extends PIDDriveControl {
         return (robot.getDriveLeft().getCurrentPosition() + robot.getDriveRight().getCurrentPosition()) / 2;
     }
 
-    public static enum Sensor {
+    public enum Sensor {
         Leading,
         Trailing
+    }
+
+    public class LineTerminator implements Terminator {
+
+        private double driveAfterDistance, offset, encoderError;
+        private LightSensor sensor;
+
+        public LineTerminator(LightSensor sensor, double encoderError, double driveAfterDistance) {
+            this.sensor = sensor;
+            this.driveAfterDistance = driveAfterDistance;
+            this.offset = 0;
+            this.encoderError = encoderError;
+        }
+
+        @Override
+        public boolean shouldTerminate() {
+            if (sensor.getLightDetected() > 0.3) {
+                offset = getEncoderAverage();
+                sensor.enableLed(false);
+            } else sensor.enableLed(true);
+
+            return Math.abs(getEncoderAverage() - encoderError - offset) >= driveAfterDistance && offset != 0;
+
+        }
     }
 }
