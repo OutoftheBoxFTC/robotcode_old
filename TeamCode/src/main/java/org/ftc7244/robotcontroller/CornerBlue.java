@@ -12,6 +12,7 @@ public class CornerBlue extends PIDAutonomous {
 
     @Override
     public void run() throws InterruptedException {
+        sleep(8000);
         gyroscope.drive(.5, 5);
         gyroscope.rotate(-45);
         gyroscope.drive(.5, 10);

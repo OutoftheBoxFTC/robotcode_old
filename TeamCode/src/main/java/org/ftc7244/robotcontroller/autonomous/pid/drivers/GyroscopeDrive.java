@@ -63,24 +63,23 @@ public class GyroscopeDrive extends PIDDriveControl {
                 minTicks = minDistance * EncoderAutonomous.COUNTS_PER_INCH;
         final int encoderError = getEncoderAverage();
 
-
         control(0, power, new ConditionalTerminator(
-                new Terminator() {
-                    @Override
-                    public boolean shouldTerminate() {
-                        return Math.abs(getEncoderAverage() - encoderError) >= maxTicks && maxTicks > 0;
-                    }
-                },
-                //// FIXME: 2/1/2017 
-                new LineTerminator(mode == Sensor.Leading ? robot.getTrailingLight() : robot.getLeadingLight(), encoderError, 0),
-                new ConditionalTerminator(TerminationMode.AND,
-                        new LineTerminator(mode == Sensor.Trailing ? robot.getTrailingLight() : robot.getLeadingLight(), encoderError, ticks),
                         new Terminator() {
                             @Override
                             public boolean shouldTerminate() {
-                                return Math.abs(getEncoderAverage() - encoderError) > minTicks || minTicks <= 0;
+                                return Math.abs(getEncoderAverage() - encoderError) >= maxTicks && maxTicks > 0;
                             }
-                        }))
+                        },
+                        new ConditionalTerminator(TerminationMode.AND,
+                                new LineTerminator(mode == Sensor.Trailing ? robot.getTrailingLight() : robot.getLeadingLight(), encoderError, ticks),
+                                new Terminator() {
+                                    @Override
+                                    public boolean shouldTerminate() {
+                                        return Math.abs(getEncoderAverage() - encoderError) > minTicks || minTicks <= 0;
+                                    }
+                                }
+                        )
+                )
         );
     }
 
@@ -104,7 +103,7 @@ public class GyroscopeDrive extends PIDDriveControl {
         Trailing
     }
 
-    public class LineTerminator implements Terminator {
+    public class LineTerminator extends Terminator {
 
         private double driveAfterDistance, offset, encoderError;
         private LightSensor sensor;
@@ -120,10 +119,19 @@ public class GyroscopeDrive extends PIDDriveControl {
         public boolean shouldTerminate() {
             if (sensor.getLightDetected() > 0.3) {
                 offset = getEncoderAverage();
-                sensor.enableLed(false);
             } else sensor.enableLed(true);
 
+            return status();
+        }
+
+        private boolean status() {
             return Math.abs(getEncoderAverage() - encoderError - offset) >= driveAfterDistance && offset != 0;
+        }
+
+        @Override
+        public void terminated(boolean status) {
+            if (!status && status()) offset = 0;
+            if (status) sensor.enableLed(false);
 
         }
     }

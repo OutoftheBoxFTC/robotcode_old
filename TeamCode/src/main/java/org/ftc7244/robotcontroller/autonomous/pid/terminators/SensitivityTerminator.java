@@ -8,7 +8,7 @@ import org.ftc7244.robotcontroller.autonomous.pid.PIDDriveControl;
  * Created by OOTB on 1/15/2017.
  */
 
-public class SensitivityTerminator implements Terminator {
+public class SensitivityTerminator extends Terminator {
 
     private long timestamp, successDuration;
     private double maximumError, target;
@@ -30,5 +30,10 @@ public class SensitivityTerminator implements Terminator {
         RobotLog.ii("STOP", context.getReading() + ":" + target);
 
         return Math.abs(System.currentTimeMillis() - timestamp) > successDuration && timestamp != -1;
+    }
+
+    @Override
+    public void terminated(boolean status) {
+        if (status) timestamp = -1;
     }
 }

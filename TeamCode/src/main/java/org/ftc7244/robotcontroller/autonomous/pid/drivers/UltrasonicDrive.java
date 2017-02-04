@@ -31,6 +31,6 @@ public class UltrasonicDrive extends PIDDriveControl {
     }
 
     public void parallelize() throws InterruptedException {
-        control(0, 0, new ConditionalTerminator(new SensitivityTerminator(this, 0, 0.1, 200), new TimerTerminator(4000)));
+        control(0, 0, new ConditionalTerminator(new SensitivityTerminator(this, 0, 0.1, 200), new TimerTerminator(5000)));
     }
 }

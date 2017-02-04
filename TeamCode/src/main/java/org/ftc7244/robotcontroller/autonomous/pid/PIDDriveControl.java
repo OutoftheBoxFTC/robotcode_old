@@ -32,8 +32,8 @@ public abstract class PIDDriveControl {
     protected void control(double target, double powerOffset, Terminator terminator) throws InterruptedException {
         controller.reset();
         controller.setTarget(target);
-        boolean shouldTerminate = false;
         do {
+            terminator.terminated(false);
             double pid = controller.update(getReading());
             if (debug) {
                 RobotLog.ii("PID",
@@ -44,7 +44,8 @@ public abstract class PIDDriveControl {
             }
             robot.getDriveLeft().setPower(powerOffset + pid);
             robot.getDriveRight().setPower(powerOffset - pid);
-        } while (!terminator.shouldTerminate() && !Thread.interrupted() && !Status.isStopRequested());
+        } while (!terminator.shouldTerminate() && !Status.isStopRequested());
+        terminator.terminated(true);
 
         robot.getDriveLeft().setPower(0);
         robot.getDriveRight().setPower(0);

@@ -152,7 +152,6 @@ public class PIDController {
     private void pause(long period) {
         if (period <= 0) return;
         long end = System.currentTimeMillis() + period;
-        boolean interrupted = false;
         do {
             try {
                 Thread.sleep(period);

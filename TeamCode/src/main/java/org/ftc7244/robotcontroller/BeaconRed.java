@@ -20,18 +20,20 @@ public class BeaconRed extends BeaconAutonomous {
         gyroscope.rotate(51);
         gyroscope.drive(-0.35, 14);
         robot.shootLoop(2, 500);
-        gyroscope.drive(-0.35, 29);
+        gyroscope.drive(-0.35, 31);
 
         sleep(500);
         gyroscope.rotate(-44);
 
         sleep(100);
         ultrasonic.parallelize();
+        sleep(300);
         gyroscope.resetOrientation();
 
         gyroscope.driveUntilLine(-0.2, GyroscopeDrive.Sensor.Trailing);
 
         sleep(500);
+        gyroscope.drive(.2, 2);
         if (isColor(Color.RED)) {
             pushBeacon();
         } else {
@@ -39,7 +41,7 @@ public class BeaconRed extends BeaconAutonomous {
             pushBeacon();
         }
 
-        gyroscope.driveUntilLine(-0.2, GyroscopeDrive.Sensor.Trailing, 0, 12, 60);
+        gyroscope.driveUntilLine(-0.2, GyroscopeDrive.Sensor.Trailing, 0, 30, 60);
         sleep(500);
         gyroscope.drive(.2, 2);
         if (isColor(Color.RED)) {
@@ -50,7 +52,7 @@ public class BeaconRed extends BeaconAutonomous {
         }
 
         gyroscope.rotate(45);
-        gyroscope.drive(.75, 45);
+        gyroscope.drive(1, 45);
         sleep(2000);
         gyroscope.drive(.75, 10);
     }

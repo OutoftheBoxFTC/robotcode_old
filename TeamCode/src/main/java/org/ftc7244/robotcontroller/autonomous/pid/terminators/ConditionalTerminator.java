@@ -4,7 +4,7 @@ package org.ftc7244.robotcontroller.autonomous.pid.terminators;
  * Created by FTC 7244 on 1/30/2017.
  */
 
-public class ConditionalTerminator implements Terminator {
+public class ConditionalTerminator extends Terminator {
 
     private TerminationMode mode;
     private Terminator[] terminators;
@@ -30,5 +30,10 @@ public class ConditionalTerminator implements Terminator {
             default:
                 return true;
         }
+    }
+
+    @Override
+    public void terminated(boolean status) {
+        for (Terminator terminator : terminators) terminator.terminated(status);
     }
 }
