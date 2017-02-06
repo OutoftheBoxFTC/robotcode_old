@@ -2,6 +2,7 @@ package org.ftc7244.robotcontroller;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftc7244.robotcontroller.core.Button;
 import org.ftc7244.robotcontroller.core.ButtonType;
@@ -68,7 +69,11 @@ public class WestcoastTeleop extends OpMode {
             service.execute(new Runnable() {
                 @Override
                 public void run() {
-                    robot.shoot(50);
+                    try {
+                        robot.shoot(50);
+                    } catch (InterruptedException e) {
+                        RobotLog.w("Shooting was stopped early");
+                    }
                     runningLauncher.set(false);
                 }
             });

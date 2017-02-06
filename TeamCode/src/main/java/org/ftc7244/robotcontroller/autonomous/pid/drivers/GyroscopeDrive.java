@@ -12,7 +12,7 @@ import org.ftc7244.robotcontroller.autonomous.pid.terminators.SensitivityTermina
 import org.ftc7244.robotcontroller.autonomous.pid.terminators.TerminationMode;
 import org.ftc7244.robotcontroller.autonomous.pid.terminators.Terminator;
 import org.ftc7244.robotcontroller.autonomous.pid.terminators.TimerTerminator;
-import org.ftc7244.robotcontroller.sensor.GyroscopeProvider;
+import org.ftc7244.robotcontroller.sensor.PhoneGyroscopeProvider;
 
 /**
  * Created by OOTB on 1/15/2017.
@@ -22,9 +22,9 @@ public class GyroscopeDrive extends PIDDriveControl {
 
     private static final double LIGHT_TUNING = 0.3;
 
-    private GyroscopeProvider provider;
+    private PhoneGyroscopeProvider provider;
 
-    public GyroscopeDrive(Westcoast robot, GyroscopeProvider provider, boolean debug) {
+    public GyroscopeDrive(Westcoast robot, PhoneGyroscopeProvider provider, boolean debug) {
         super(new PIDController(-0.02, -0.00003, -3.25, 30, 6, 0.8), robot, debug);
         this.provider = provider;
     }

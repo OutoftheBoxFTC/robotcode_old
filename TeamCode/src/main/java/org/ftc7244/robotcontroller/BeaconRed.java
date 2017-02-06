@@ -4,14 +4,14 @@ import android.graphics.Color;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.ftc7244.robotcontroller.autonomous.BeaconAutonomous;
+import org.ftc7244.robotcontroller.autonomous.PIDAutonomous;
 import org.ftc7244.robotcontroller.autonomous.pid.drivers.GyroscopeDrive;
 
 /**
  * Created by OOTB on 11/12/2016.
  */
 @Autonomous(name = "Beacon Red", group = "Red")
-public class BeaconRed extends BeaconAutonomous {
+public class BeaconRed extends PIDAutonomous {
 
     @Override
     public void run() throws InterruptedException {
@@ -31,24 +31,23 @@ public class BeaconRed extends BeaconAutonomous {
         gyroscope.resetOrientation();
 
         gyroscope.driveUntilLine(-0.2, GyroscopeDrive.Sensor.Trailing);
-
         sleep(500);
         gyroscope.drive(.2, 2);
-        if (isColor(Color.RED)) {
-            pushBeacon();
+        if (robot.isColor(Color.RED)) {
+            robot.pushBeacon();
         } else {
             gyroscope.drive(-0.3, 2.5);
-            pushBeacon();
+            robot.pushBeacon();
         }
 
         gyroscope.driveUntilLine(-0.2, GyroscopeDrive.Sensor.Trailing, 0, 30, 60);
         sleep(500);
         gyroscope.drive(.2, 2);
-        if (isColor(Color.RED)) {
-            pushBeacon();
+        if (robot.isColor(Color.RED)) {
+            robot.pushBeacon();
         } else {
             gyroscope.drive(-0.3, 4);
-            pushBeacon();
+            robot.pushBeacon();
         }
 
         gyroscope.rotate(45);

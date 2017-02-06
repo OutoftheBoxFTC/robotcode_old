@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftc7244.robotcontroller.Westcoast;
 import org.ftc7244.robotcontroller.autonomous.Status;
-import org.ftc7244.robotcontroller.autonomous.pid.terminators.TerminationMode;
 import org.ftc7244.robotcontroller.autonomous.pid.terminators.Terminator;
 
 /**

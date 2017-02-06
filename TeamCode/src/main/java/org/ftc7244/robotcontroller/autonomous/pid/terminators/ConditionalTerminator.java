@@ -22,10 +22,12 @@ public class ConditionalTerminator extends Terminator {
     public boolean shouldTerminate() {
         switch (mode) {
             case OR:
-                for (Terminator terminator : terminators) if (terminator.shouldTerminate()) return true;
+                for (Terminator terminator : terminators)
+                    if (terminator.shouldTerminate()) return true;
                 return false;
             case AND:
-                for (Terminator terminator : terminators) if (!terminator.shouldTerminate()) return false;
+                for (Terminator terminator : terminators)
+                    if (!terminator.shouldTerminate()) return false;
                 return true;
             default:
                 return true;

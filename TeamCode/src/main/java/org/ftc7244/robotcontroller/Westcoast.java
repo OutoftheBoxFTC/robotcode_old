@@ -1,5 +1,7 @@
 package org.ftc7244.robotcontroller;
 
+import android.graphics.Color;
+
 import com.qualcomm.hardware.hitechnic.HiTechnicNxtLightSensor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
@@ -17,18 +19,26 @@ import org.ftc7244.robotcontroller.sensor.SickUltrasonic;
 
 import java.util.Map;
 
+import lombok.Getter;
+
 /**
  * Created by OOTB on 10/9/2016.
  */
 
 public class Westcoast {
 
+    @Getter
     private DcMotor driveLeft, driveRight, launcher, intake, spooler;
+    @Getter
     private Servo launcherDoor, beaconPusher, carriageRelease;
+    @Getter
     private AnalogInput launcherLimit;
     private OpMode opMode;
+    @Getter
     private ColorSensor beaconSensor;
+    @Getter
     private HiTechnicNxtLightSensor leadingLight, trailingLight;
+    @Getter
     private SickUltrasonic leadingUltrasonic, trailingUltrasonic;
 
     public Westcoast(OpMode opMode) {
@@ -83,13 +93,20 @@ public class Westcoast {
         return null;
     }
 
-    public void shoot(long delay) {
-        //Put a pause
-        try {
-            Thread.sleep(delay);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+    private void sleep(long ms) throws InterruptedException {
+        long target = System.currentTimeMillis() + ms;
+        while (target > System.currentTimeMillis() && !Status.isStopRequested()) wait();
+    }
+
+    public void shootLoop(int count, long delay) throws InterruptedException {
+        for (int i = 0; i < count; i++) {
+            if (Status.isStopRequested()) break;
+            this.shoot(delay);
         }
+    }
+
+    public void shoot(long delay) throws InterruptedException {
+        sleep(delay);
 
         ElapsedTime timer = new ElapsedTime();
         boolean failed = false;
@@ -102,7 +119,7 @@ public class Westcoast {
         //If the code hasn't failed allow the arm to lift or reset spinner
         if (!failed) {
             timer.reset();
-            while (timer.milliseconds() <= 500) {
+            while (timer.milliseconds() <= 500 && !Status.isStopRequested()) {
                 if (Status.isStopRequested()) break;
                 //Stop the spinner after a delay
                 if (timer.milliseconds() > 200) launcher.setPower(0);
@@ -117,71 +134,33 @@ public class Westcoast {
         }
     }
 
-    public void shootLoop(int count, long delay) {
-        for (int i = 0; i < count; i++) {
-            if (Status.isStopRequested()) break;
-            this.shoot(delay);
+    public boolean isColor(int color) {
+        RobotLog.ii("Color", beaconSensor.blue() + ":" + beaconSensor.red());
+        switch (color) {
+            case Color.BLUE:
+                return beaconSensor.blue() > beaconSensor.red();
+            case Color.RED:
+                RobotLog.ii("Color", "We are reading red");
+                return beaconSensor.blue() < beaconSensor.red();
+            default:
+                RobotLog.ee("ERROR", "Color does not exist!");
+                return false;
         }
     }
 
-    public ColorSensor getBeaconSensor() {
-        return beaconSensor;
+    public void pushBeacon() throws InterruptedException {
+        beaconPusher.setPosition(0);
+        sleep(750);
+        beaconPusher.setPosition(1);
+        sleep(750);
     }
 
     public void setDoorState(DoorState status) {
         launcherDoor.setPosition(status.position);
     }
 
-    public DcMotor getDriveLeft() {
-        return driveLeft;
-    }
-
-    public DcMotor getDriveRight() {
-        return driveRight;
-    }
-
-    public DcMotor getLauncher() {
-        return launcher;
-    }
-
-    public Servo getLauncherDoor() {
-        return launcherDoor;
-    }
-
-    public DcMotor getIntake() {
-        return intake;
-    }
-
-    public AnalogInput getLauncherLimit() {
-        return launcherLimit;
-    }
-
-    public Servo getBeaconPusher() {
-        return beaconPusher;
-    }
-
-    public DcMotor getSpooler() {
-        return spooler;
-    }
-
     public void setCarriageState(CarriageState status) {
         this.carriageRelease.setPosition(status.position);
-    }
-
-    public SickUltrasonic getLeadingUltrasonic() {
-        return leadingUltrasonic;
-    }
-
-    public SickUltrasonic getTrailingUltrasonic() {
-        return trailingUltrasonic;
-    }
-
-    public HiTechnicNxtLightSensor getTrailingLight() {
-        return trailingLight;
-    }
-
-    public HiTechnicNxtLightSensor getLeadingLight() {
-        return leadingLight;
     }
 
     public enum DoorState {
