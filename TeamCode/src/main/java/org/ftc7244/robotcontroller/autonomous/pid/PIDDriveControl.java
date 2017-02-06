@@ -6,10 +6,6 @@ import org.ftc7244.robotcontroller.Westcoast;
 import org.ftc7244.robotcontroller.autonomous.Status;
 import org.ftc7244.robotcontroller.autonomous.pid.terminators.Terminator;
 
-/**
- * Created by OOTB on 1/15/2017.
- */
-
 public abstract class PIDDriveControl {
 
     protected boolean debug;

@@ -21,10 +21,6 @@ import java.util.Map;
 
 import lombok.Getter;
 
-/**
- * Created by OOTB on 10/9/2016.
- */
-
 public class Westcoast {
 
     @Getter

@@ -14,10 +14,6 @@ import org.ftc7244.robotcontroller.autonomous.pid.terminators.Terminator;
 import org.ftc7244.robotcontroller.autonomous.pid.terminators.TimerTerminator;
 import org.ftc7244.robotcontroller.sensor.PhoneGyroscopeProvider;
 
-/**
- * Created by OOTB on 1/15/2017.
- */
-
 public class GyroscopeDrive extends PIDDriveControl {
 
     private static final double LIGHT_TUNING = 0.3;

@@ -4,9 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.ftc7244.robotcontroller.autonomous.PIDAutonomous;
 
-/**
- * Created by OOTB on 11/11/2016.
- */
 @Autonomous(name = "Corner Red", group = "Red")
 public class CornerRed extends PIDAutonomous {
 

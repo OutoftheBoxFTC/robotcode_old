@@ -12,10 +12,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-/**
- * Created by OOTB on 10/16/2016.
- */
-
 @TeleOp(name = "Westcoast Drive")
 public class WestcoastTeleop extends OpMode {
 

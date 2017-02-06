@@ -9,10 +9,6 @@ import org.ftc7244.robotcontroller.autonomous.pid.terminators.ConditionalTermina
 import org.ftc7244.robotcontroller.autonomous.pid.terminators.SensitivityTerminator;
 import org.ftc7244.robotcontroller.autonomous.pid.terminators.TimerTerminator;
 
-/**
- * Created by OOTB on 1/15/2017.
- */
-
 public class UltrasonicDrive extends PIDDriveControl {
 
     private static final int offsetLeading = 0, offsetTrailing = 0;

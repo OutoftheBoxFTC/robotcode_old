@@ -2,10 +2,6 @@ package org.ftc7244.robotcontroller.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-/**
- * Created by OOTB on 1/23/2017.
- */
-
 public class Status {
 
     private static LinearOpMode autonomous;

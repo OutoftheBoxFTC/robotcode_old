@@ -5,10 +5,6 @@ import java.util.concurrent.atomic.AtomicLongFieldUpdater;
 import static java.lang.Double.doubleToRawLongBits;
 import static java.lang.Double.longBitsToDouble;
 
-/**
- * Created by OOTB on 12/12/2016.
- */
-
 public class AtomicDouble extends Number {
 
 

@@ -7,9 +7,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.ftc7244.robotcontroller.autonomous.PIDAutonomous;
 import org.ftc7244.robotcontroller.autonomous.pid.drivers.GyroscopeDrive;
 
-/**
- * Created by OOTB on 11/12/2016.
- */
 @Autonomous(name = "Beacon Red", group = "Red")
 public class BeaconRed extends PIDAutonomous {
 

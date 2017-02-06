@@ -3,10 +3,6 @@ package org.ftc7244.robotcontroller.sensor;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 
-/**
- * Created by OOTB on 1/25/2017.
- */
-
 public class SickUltrasonic implements UltrasonicSensor {
 
     private AnalogInput input;

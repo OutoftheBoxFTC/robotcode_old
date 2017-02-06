@@ -2,10 +2,6 @@ package org.ftc7244.robotcontroller.core;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-/**
- * Created by OOTB on 10/30/2016.
- */
-
 public class Button {
 
     private Gamepad gamepad;

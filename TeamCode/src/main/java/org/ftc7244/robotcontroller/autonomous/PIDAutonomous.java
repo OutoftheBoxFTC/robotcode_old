@@ -7,9 +7,6 @@ import org.ftc7244.robotcontroller.autonomous.pid.drivers.GyroscopeDrive;
 import org.ftc7244.robotcontroller.autonomous.pid.drivers.UltrasonicDrive;
 import org.ftc7244.robotcontroller.sensor.PhoneGyroscopeProvider;
 
-/**
- * Created by OOTB on 10/16/2016.
- */
 public abstract class PIDAutonomous extends CoreAutonomous {
 
     public static boolean DEBUG = true;
