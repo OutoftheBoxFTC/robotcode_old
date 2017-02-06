@@ -36,9 +36,9 @@ public abstract class PIDDriveControl {
             double pid = controller.update(getReading());
             if (debug) {
                 RobotLog.ii("PID",
-                        "|" + controller.getProportional() * controller.getkP() +
-                                "|" + controller.getIntegral() * controller.getkI() +
-                                "|" + controller.getDerivative() * controller.getkD() +
+                        "|" + controller.getProportional() * controller.getKP() +
+                                "|" + controller.getIntegral() * controller.getKI() +
+                                "|" + controller.getDerivative() * controller.getKD() +
                                 "|" + getReading());
             }
             robot.getDriveLeft().setPower(powerOffset + pid);

@@ -160,7 +160,7 @@ public class Westcoast {
     }
 
     public void setCarriageState(CarriageState status) {
-        this.carriageRelease.setPosition(status.position);
+        carriageRelease.setPosition(status.position);
     }
 
     public enum DoorState {

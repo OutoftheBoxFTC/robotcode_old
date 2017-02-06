@@ -40,19 +40,8 @@ public class PhoneGyroscopeProvider extends GyroscopeProvider implements SensorE
      * To obtain the absolute orientation one must add this into an initial position by
      * multiplying it with another quaternion
      */
-    private Quaternion deltaQuaternion;
-    /**
-     * The quaternion that holds the current rotation
-     */
-    private Quaternion currentOrientationQuaternion;
-
-    /**
-     * Temporary variable to save allocations.
-     */
-    private Quaternion correctedQuaternion;
-
+    private Quaternion correctedQuaternion, currentOrientationQuaternion, deltaQuaternion;
     private SensorManager sensorManager;
-
     private long finishedCalibrating;
 
     public PhoneGyroscopeProvider() {

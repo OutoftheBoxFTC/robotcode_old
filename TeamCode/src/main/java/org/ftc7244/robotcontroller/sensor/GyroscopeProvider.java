@@ -4,6 +4,9 @@ import android.hardware.Sensor;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * The orientation provider that delivers the relative orientation from the {@link Sensor#TYPE_GYROSCOPE
  * Gyroscope}. This sensor does not deliver an absolute orientation (with respect to magnetic north and gravity) but
@@ -18,6 +21,8 @@ public abstract class GyroscopeProvider {
     private long timestamp;
 
     private volatile double x, y, z;
+    @Getter
+    @Setter
     private volatile double xOffset, zOffset;
 
     public GyroscopeProvider() {
@@ -69,24 +74,8 @@ public abstract class GyroscopeProvider {
         this.timestamp = timestamp;
     }
 
-    public double getXOffset() {
-        return xOffset;
-    }
-
-    public void setXOffset(double xOffset) {
-        this.xOffset = xOffset;
-    }
-
     public void setXToZero() {
         setXOffset(this.x + xOffset);
-    }
-
-    public double getZOffset() {
-        return zOffset;
-    }
-
-    public void setZOffset(double zOffset) {
-        this.zOffset = zOffset;
     }
 
     public void setZToZero() {

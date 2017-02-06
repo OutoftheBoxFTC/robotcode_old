@@ -1,28 +1,36 @@
 package org.ftc7244.robotcontroller.autonomous.pid;
 
+import org.ftc7244.robotcontroller.autonomous.Status;
+
+import lombok.Getter;
+import lombok.Setter;
+
 import static java.lang.Double.isInfinite;
 import static java.lang.Double.isNaN;
 
-/**
- * Created by OOTB on 10/16/2016.
- */
-
 public class PIDController {
 
+    @Getter
+    @Setter
     private double kP, kI, kD;
+
+    @Getter
+    private double proportional, integral, derivative;
 
     /**
      * Information required to calculate each PID Loop
      */
-    private double previous_error, proportional, integral, derivative;
+    private double previous_error;
 
 
-    private double setPoint;
+    @Getter
+    @Setter
+    private double setPoint, delay, integralRange, outputRange;
 
     /**
      * How often will the new PID value be calculated.
      */
-    private double dt, cycleTime, delay, integralRange, outputRange;
+    private double dt, cycleTime;
 
     public PIDController(double kP, double kI, double kD) {
         this(kP, kI, kD, -1);
@@ -98,57 +106,6 @@ public class PIDController {
         this.proportional = 0;
     }
 
-    /**
-     * Increase the  Kp until the output of the loop oscillates, then the kP should be set to
-     * approximately half of that value for a "quarter amplitude decay" type response.
-     */
-    public double getkP() {
-        return kP;
-    }
-
-    /**
-     * Increase kI until any offset is corrected in sufficient time for the process.
-     * However, too much kI will cause instability.
-     */
-    public double getkI() {
-        return kI;
-    }
-
-    /**
-     * Increase kD, if required, until the loop is acceptably quick to reach its reference after
-     * a load disturbance. However, too much kD will cause excessive response and overshoot.
-     */
-    public double getkD() {
-        return kD;
-    }
-
-    public double getProportional() {
-        return proportional;
-    }
-
-    public double getIntegral() {
-        return integral;
-    }
-
-    public double getDerivative() {
-        return derivative;
-    }
-
-    /**
-     * The target value of the robot which will be used to calculate the correction value.
-     */
-    public double getSetPoint() {
-        return setPoint;
-    }
-
-    public double getIntegralRange() {
-        return integralRange;
-    }
-
-    public void setIntegralRange(double integralRange) {
-        this.integralRange = integralRange;
-    }
-
     private void pause(long period) {
         if (period <= 0) return;
         long end = System.currentTimeMillis() + period;
@@ -156,8 +113,9 @@ public class PIDController {
             try {
                 Thread.sleep(period);
             } catch (InterruptedException e) {
+                //ignore
             }
             period = end - System.currentTimeMillis();
-        } while (period > 0);
+        } while (period > 0 && !Status.isStopRequested());
     }
 }
