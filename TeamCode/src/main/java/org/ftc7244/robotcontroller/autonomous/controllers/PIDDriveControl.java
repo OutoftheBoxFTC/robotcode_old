@@ -1,10 +1,10 @@
-package org.ftc7244.robotcontroller.autonomous.pid;
+package org.ftc7244.robotcontroller.autonomous.controllers;
 
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftc7244.robotcontroller.Westcoast;
 import org.ftc7244.robotcontroller.autonomous.Status;
-import org.ftc7244.robotcontroller.autonomous.pid.terminators.Terminator;
+import org.ftc7244.robotcontroller.autonomous.terminators.Terminator;
 
 /**
  * Abstract tool that handles a majority of the PID when driving and handles when the PID should
@@ -39,8 +39,8 @@ public abstract class PIDDriveControl {
      * until the looping count is matched. It will also update the terminators with termination status
      * and requests to terminate unless the code is stopped otherwise
      *
-     * There are many different terminators that can be used: ${@link org.ftc7244.robotcontroller.autonomous.pid.terminators.ConditionalTerminator},
-     * ${@link org.ftc7244.robotcontroller.autonomous.pid.terminators.SensitivityTerminator}, ${@link org.ftc7244.robotcontroller.autonomous.pid.terminators.TimerTerminator}
+     * There are many different terminators that can be used: ${@link org.ftc7244.robotcontroller.autonomous.terminators.ConditionalTerminator},
+     * ${@link org.ftc7244.robotcontroller.autonomous.terminators.SensitivityTerminator}, ${@link org.ftc7244.robotcontroller.autonomous.terminators.TimerTerminator}
      *
      * @param target the target value for the sensor
      * @param powerOffset power level from -1 to 1 to convert a rotate function to a drive function

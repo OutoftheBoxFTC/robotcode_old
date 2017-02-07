@@ -5,7 +5,7 @@ import android.graphics.Color;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.ftc7244.robotcontroller.autonomous.PIDAutonomous;
-import org.ftc7244.robotcontroller.autonomous.pid.drivers.GyroscopeDrive;
+import org.ftc7244.robotcontroller.autonomous.drivers.GyroscopeDrive;
 
 @Autonomous(name = "Beacon Blue", group = "Blue")
 public class BeaconBlue extends PIDAutonomous {

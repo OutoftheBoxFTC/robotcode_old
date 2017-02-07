@@ -2,14 +2,17 @@ package org.ftc7244.robotcontroller;
 
 import android.graphics.Color;
 
+import com.kauailabs.navx.ftc.AHRS;
 import com.qualcomm.hardware.hitechnic.HiTechnicNxtLightSensor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
 import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.I2cDevice;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.RobotLog;
@@ -22,6 +25,44 @@ import java.util.Map;
 import lombok.Getter;
 
 public class Westcoast {
+
+
+    public static final byte NAVX_DEVICE_UPDATE_RATE_HZ = 50;
+    public final static double COUNTS_PER_INCH = 1120 / (Math.PI * 3);
+
+    /**
+     * Waits for all the motors to have zero position and if it is not zero tell it to reset
+     *
+     * @param motors all the motors to reset
+     */
+    public static void resetMotors(DcMotor... motors) {
+        boolean notReset = true;
+        while (notReset) {
+            boolean allReset = true;
+            for (DcMotor motor : motors) {
+                if (motor.getCurrentPosition() == 0) {
+                    continue;
+                }
+                allReset = false;
+                motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            }
+            notReset = !allReset;
+        }
+        for (DcMotor motor : motors) motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+
+
+    /**
+     * Obtains the NavX-Micro from the hardware map expecting a "navx" and then uses reflection
+     * to obtain all the information to properly setup the sensor
+     *
+     * @param map with the "navx" device
+     * @return setup navx sensor
+     */
+    public static AHRS getNavX(HardwareMap map) {
+        final I2cDevice navx = map.i2cDevice.get("navx");
+        return AHRS.getInstance((DeviceInterfaceModule) navx.getController(), navx.getPort(), AHRS.DeviceDataType.kProcessedData, NAVX_DEVICE_UPDATE_RATE_HZ);
+    }
 
     @Getter
     private DcMotor driveLeft, driveRight, launcher, intake, spooler;

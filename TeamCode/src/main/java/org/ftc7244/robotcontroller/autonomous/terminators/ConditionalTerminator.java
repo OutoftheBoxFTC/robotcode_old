@@ -1,4 +1,4 @@
-package org.ftc7244.robotcontroller.autonomous.pid.terminators;
+package org.ftc7244.robotcontroller.autonomous.terminators;
 
 /**
  * Is a way of mixing and matching terminators so that they can be conditional and allowing for

@@ -1,18 +1,19 @@
-package org.ftc7244.robotcontroller.autonomous.pid.drivers;
+package org.ftc7244.robotcontroller.autonomous.drivers;
 
 import com.qualcomm.robotcore.hardware.LightSensor;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftc7244.robotcontroller.Westcoast;
-import org.ftc7244.robotcontroller.autonomous.pid.PIDController;
-import org.ftc7244.robotcontroller.autonomous.pid.PIDDriveControl;
-import org.ftc7244.robotcontroller.autonomous.pid.terminators.ConditionalTerminator;
-import org.ftc7244.robotcontroller.autonomous.pid.terminators.SensitivityTerminator;
-import org.ftc7244.robotcontroller.autonomous.pid.terminators.TerminationMode;
-import org.ftc7244.robotcontroller.autonomous.pid.terminators.Terminator;
-import org.ftc7244.robotcontroller.autonomous.pid.terminators.TimerTerminator;
-import org.ftc7244.robotcontroller.core.EncoderUtils;
-import org.ftc7244.robotcontroller.sensor.PhoneGyroscopeProvider;
+import org.ftc7244.robotcontroller.autonomous.Status;
+import org.ftc7244.robotcontroller.autonomous.controllers.PIDController;
+import org.ftc7244.robotcontroller.autonomous.controllers.PIDDriveControl;
+import org.ftc7244.robotcontroller.autonomous.terminators.ConditionalTerminator;
+import org.ftc7244.robotcontroller.autonomous.terminators.SensitivityTerminator;
+import org.ftc7244.robotcontroller.autonomous.terminators.TerminationMode;
+import org.ftc7244.robotcontroller.autonomous.terminators.Terminator;
+import org.ftc7244.robotcontroller.autonomous.terminators.TimerTerminator;
+import org.ftc7244.robotcontroller.sensor.accerometer.AccelerometerProvider;
+import org.ftc7244.robotcontroller.sensor.gyroscope.GyroscopeProvider;
 
 /**
  * This class is instrumental in the control of the robot and uses the gyroscope as a frame of
@@ -23,24 +24,55 @@ public class GyroscopeDrive extends PIDDriveControl {
 
     private static final double LIGHT_TUNING = 0.3;
 
-    private PhoneGyroscopeProvider provider;
+    private GyroscopeProvider gyroProvider;
+    private AccelerometerProvider accelProvider;
+
+    /**
+     * Same as the parent constructor but passes a debug as fault by default since most users will
+     * not want to debug the code.
+     *
+     * @param robot access to motors on the robot
+     * @param gyro base way to read gyroscope values
+     * @param accel tells the robot when to stop
+     */
+    public GyroscopeDrive(Westcoast robot, GyroscopeProvider gyro, AccelerometerProvider accel) {
+        this(robot, gyro, accel, false);
+    }
 
     /**
      * Pass the robot in to get access to the hardware needed to execute and setup the motors. This
      * also comes pre-initalized with the PID tunings for the robot.
      *
      * @param robot access to motors on the robot
+     * @param accel tells the robot when to stop
      * @param provider base way to read gyroscope values
      * @param debug whether to log PID result
      */
-    public GyroscopeDrive(Westcoast robot, PhoneGyroscopeProvider provider, boolean debug) {
+    public GyroscopeDrive(Westcoast robot, GyroscopeProvider provider, AccelerometerProvider accel, boolean debug) {
         super(new PIDController(-0.02, -0.00003, -3.25, 30, 6, 0.8), robot, debug);
-        this.provider = provider;
+        this.gyroProvider = provider;
+        this.accelProvider = accel;
     }
 
     @Override
     public double getReading() {
-        return this.provider.getZ();
+        return this.gyroProvider.getZ();
+    }
+
+    /**
+     * Enhanced the control function to allow the code to wait until the robot has stopped moving. The
+     * control function still has the same functions but will wait until the moving status is changed.
+     * Or if the code stopped is requested from the outside context.
+     *
+     * @param target the target value for the sensor
+     * @param powerOffset power level from -1 to 1 to convert a rotate function to a drive function
+     * @param terminator tells the PID when to end
+     * @throws InterruptedException  if code fails to terminate on stop requested
+     */
+    @Override
+    protected void control(double target, double powerOffset, Terminator terminator) throws InterruptedException {
+        super.control(target, powerOffset, terminator);
+        while (accelProvider.getStatus() == AccelerometerProvider.Status.MOVING && !Status.isStopRequested()) wait();
     }
 
     /**
@@ -53,8 +85,8 @@ public class GyroscopeDrive extends PIDDriveControl {
      * @throws InterruptedException if code fails to terminate on stop requested
      */
     public void drive(double power, double inches) throws InterruptedException {
-        final double ticks = inches * EncoderUtils.COUNTS_PER_INCH;
-        EncoderUtils.resetMotors(robot.getDriveLeft(), robot.getDriveRight());
+        final double ticks = inches * Westcoast.COUNTS_PER_INCH;
+        Westcoast.resetMotors(robot.getDriveLeft(), robot.getDriveRight());
         if (inches <= 0) RobotLog.ee("Error", "Invalid distances!");
         final int offset = getEncoderAverage();
         control(0, power, new Terminator() {
@@ -106,11 +138,11 @@ public class GyroscopeDrive extends PIDDriveControl {
      * @throws InterruptedException if code fails to terminate on stop requested
      */
     public void driveUntilLine(double power, Sensor mode, double offsetDistance, final double minDistance, final double maxDistance) throws InterruptedException {
-        EncoderUtils.resetMotors(robot.getDriveLeft(), robot.getDriveRight());
+        Westcoast.resetMotors(robot.getDriveLeft(), robot.getDriveRight());
         if (offsetDistance <= 0) RobotLog.ee("Error", "Invalid distances!");
-        final double ticks = offsetDistance * EncoderUtils.COUNTS_PER_INCH,
-                maxTicks = maxDistance * EncoderUtils.COUNTS_PER_INCH,
-                minTicks = minDistance * EncoderUtils.COUNTS_PER_INCH;
+        final double ticks = offsetDistance * Westcoast.COUNTS_PER_INCH,
+                maxTicks = maxDistance * Westcoast.COUNTS_PER_INCH,
+                minTicks = minDistance * Westcoast.COUNTS_PER_INCH;
         final int encoderError = getEncoderAverage();
 
         control(0, power, new ConditionalTerminator(
@@ -142,7 +174,7 @@ public class GyroscopeDrive extends PIDDriveControl {
      * @throws InterruptedException if code fails to terminate on stop requested
      */
     public void rotate(double degrees) throws InterruptedException {
-        double target = degrees + provider.getZ();
+        double target = degrees + gyroProvider.getZ();
         control(target, 0, new ConditionalTerminator(new SensitivityTerminator(this, degrees, 2, 300), new TimerTerminator(2000)));
         resetOrientation();
     }
@@ -152,8 +184,8 @@ public class GyroscopeDrive extends PIDDriveControl {
      * @throws InterruptedException if code fails to terminate on stop requested
      */
     public void resetOrientation() throws InterruptedException {
-        provider.setZToZero();
-        while (Math.abs(Math.round(provider.getZ())) > 1) Thread.yield();
+        gyroProvider.setZToZero();
+        while (Math.abs(Math.round(gyroProvider.getZ())) > 1) Thread.yield();
     }
 
     private int getEncoderAverage() {

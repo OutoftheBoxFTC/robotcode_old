@@ -1,4 +1,4 @@
-package org.ftc7244.robotcontroller.autonomous.pid;
+package org.ftc7244.robotcontroller.autonomous.controllers;
 
 import org.ftc7244.robotcontroller.autonomous.Status;
 

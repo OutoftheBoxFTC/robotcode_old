@@ -4,9 +4,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftc7244.robotcontroller.Westcoast;
-import org.ftc7244.robotcontroller.autonomous.pid.drivers.GyroscopeDrive;
-import org.ftc7244.robotcontroller.autonomous.pid.drivers.UltrasonicDrive;
-import org.ftc7244.robotcontroller.sensor.PhoneGyroscopeProvider;
+import org.ftc7244.robotcontroller.autonomous.drivers.GyroscopeDrive;
+import org.ftc7244.robotcontroller.autonomous.drivers.UltrasonicDrive;
+import org.ftc7244.robotcontroller.sensor.gyroscope.PhoneGyroscopeProvider;
 
 /**
  * Contains all the code for different drive types including ${@link GyroscopeDrive}

@@ -1,4 +1,4 @@
-package org.ftc7244.robotcontroller.autonomous.pid.terminators;
+package org.ftc7244.robotcontroller.autonomous.terminators;
 
 /**
  * After a certain duration the terminator will trigger. This acts as a psuedo timeout terminator

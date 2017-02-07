@@ -1,8 +1,10 @@
-package org.ftc7244.robotcontroller.sensor;
+package org.ftc7244.robotcontroller.sensor.gyroscope;
 
 import android.hardware.Sensor;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
+
+import org.ftc7244.robotcontroller.sensor.SensorProvider;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +14,7 @@ import lombok.Setter;
  * Gyroscope}. This sensor does not deliver an absolute orientation (with respect to magnetic north and gravity) but
  * only a relative measurement starting from the point where it started.
  */
-public abstract class GyroscopeProvider {
+public abstract class GyroscopeProvider extends SensorProvider {
     /**
      * The time-stamp being used to record the time when the last gyroscope event occurred.
      */
@@ -37,6 +39,7 @@ public abstract class GyroscopeProvider {
         z = 0;
         timestamp = 0;
     }
+
 
     /**
      * Begin running the sensor and based off the sampling period update the values. It will

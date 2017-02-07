@@ -1,4 +1,4 @@
-package org.ftc7244.robotcontroller.autonomous.pid.terminators;
+package org.ftc7244.robotcontroller.autonomous.terminators;
 
 public abstract class Terminator {
     /**

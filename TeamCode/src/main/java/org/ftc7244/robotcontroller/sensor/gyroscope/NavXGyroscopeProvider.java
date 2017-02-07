@@ -1,10 +1,10 @@
-package org.ftc7244.robotcontroller.sensor;
+package org.ftc7244.robotcontroller.sensor.gyroscope;
 
 import com.kauailabs.navx.ftc.AHRS;
 import com.kauailabs.navx.ftc.IDataArrivalSubscriber;
-import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.I2cDevice;
+
+import org.ftc7244.robotcontroller.Westcoast;
 
 /**
  * Utilizes the NavX-Micro to get an orientatio and prevents code from executing until it
@@ -12,14 +12,12 @@ import com.qualcomm.robotcore.hardware.I2cDevice;
  */
 public class NavXGyroscopeProvider extends GyroscopeProvider implements IDataArrivalSubscriber {
 
-    private static final byte NAVX_DEVICE_UPDATE_RATE_HZ = 50;
 
     private AHRS navxDevice;
 
     @Override
     public void start(HardwareMap map) {
-        final I2cDevice navx = map.i2cDevice.get("navx");
-        navxDevice = AHRS.getInstance((DeviceInterfaceModule) navx.getController(), navx.getPort(), AHRS.DeviceDataType.kProcessedData, NAVX_DEVICE_UPDATE_RATE_HZ);
+        navxDevice = Westcoast.getNavX(map);
         navxDevice.zeroYaw();
         navxDevice.registerCallback(this);
         calibrate();
