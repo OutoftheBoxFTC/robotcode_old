@@ -36,6 +36,7 @@ public class NavXGyroscopeProvider extends GyroscopeProvider implements IDataArr
     @Override
     public void stop() {
         navxDevice.close();
+        navxDevice = null;
     }
 
     @Override

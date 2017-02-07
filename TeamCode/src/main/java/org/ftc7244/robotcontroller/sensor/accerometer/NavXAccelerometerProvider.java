@@ -22,6 +22,7 @@ public class NavXAccelerometerProvider extends AccelerometerProvider implements 
 
     @Override
     public void start(HardwareMap map) {
+        moving = false;
         navxDevice = Westcoast.getNavX(map);
         navxDevice.zeroYaw();
         navxDevice.registerCallback(this);
@@ -30,6 +31,7 @@ public class NavXAccelerometerProvider extends AccelerometerProvider implements 
     @Override
     public void stop() {
         navxDevice.deregisterCallback(this);
+        navxDevice = null;
     }
 
     @Override

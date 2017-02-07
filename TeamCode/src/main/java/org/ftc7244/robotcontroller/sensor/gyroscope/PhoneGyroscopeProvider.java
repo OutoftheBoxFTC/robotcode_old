@@ -78,6 +78,7 @@ public class PhoneGyroscopeProvider extends GyroscopeProvider implements SensorE
 
     public void stop() {
         sensorManager.unregisterListener(this);
+        sensorManager = null;
     }
 
     @Override

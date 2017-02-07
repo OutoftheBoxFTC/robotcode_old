@@ -37,6 +37,7 @@ public class PhoneAccelerometerProvider extends AccelerometerProvider implements
     @Override
     public void stop() {
         manager.unregisterListener(this);
+        manager = null;
     }
 
     @Override
