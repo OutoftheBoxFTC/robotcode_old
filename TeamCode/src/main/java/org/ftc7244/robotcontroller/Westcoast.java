@@ -42,7 +42,8 @@ public class Westcoast {
     }
 
     /**
-     * Identify the hardware in the robot and then
+     * Identify hardware and then set it up with different objects. Other initialization properties are
+     * set to ensure that everything is in the default position or correct mode for the robot.
      */
     public void init() {
         HardwareMap map = opMode.hardwareMap;
@@ -89,11 +90,27 @@ public class Westcoast {
         return null;
     }
 
+    /**
+     * This is the codes own way of pausing. This has the the capability of stopping the wait if
+     * stop is requested and passing up an exception if it fails as well
+     *
+     * @param ms the duration to sleep in milliseconds
+     * @throws InterruptedException if the code fails to terminate before stop requested
+     */
     private void sleep(long ms) throws InterruptedException {
         long target = System.currentTimeMillis() + ms;
         while (target > System.currentTimeMillis() && !Status.isStopRequested()) wait();
     }
 
+    /**
+     * Uses the {@link Westcoast#shoot(long)} function to shoot a specified amount of balls. The
+     * only time it will end before shooting is if the code is manually stopped; otherwise, it will
+     * continue to the specified amount.
+     *
+     * @param count the amount of times it will shoot
+     * @param delay the time in milliseconds to wait before each shoot
+     * @throws InterruptedException if the code fails to terminate before stop requested
+     */
     public void shootLoop(int count, long delay) throws InterruptedException {
         for (int i = 0; i < count; i++) {
             if (Status.isStopRequested()) break;
@@ -101,6 +118,16 @@ public class Westcoast {
         }
     }
 
+    /**
+     *  A tuned tool to shoot a ball from the robot with many fail-safes integrated to prevent the
+     *  shooting from not completing. First it will spin no more than 1000 milliseconds or until the
+     *  limit switch is triggered. Then if the shooter will continue to run for 200 more milliseconds
+     *  and lift the arm up for the remaining 500 milliseconds to load another ball. If anything fails
+     *  it will be reset to its normal positions and turned off.
+     *
+     * @param delay the time in milliseconds to wait before each shot
+     * @throws InterruptedException if the code fails to terminate before stop requested
+     */
     public void shoot(long delay) throws InterruptedException {
         sleep(delay);
 
@@ -130,13 +157,19 @@ public class Westcoast {
         }
     }
 
+    /**
+     * Depending on the color specified ${@link Color#BLUE} or ${@link Color#RED} the robot will do
+     * a simple greater than comparison to see if the color specified is greater than the other.
+     *
+     * @param color only  ${@link Color#BLUE} or ${@link Color#RED} can be inputted
+     * @return whether it sees the color or not
+     */
     public boolean isColor(int color) {
         RobotLog.ii("Color", beaconSensor.blue() + ":" + beaconSensor.red());
         switch (color) {
             case Color.BLUE:
                 return beaconSensor.blue() > beaconSensor.red();
             case Color.RED:
-                RobotLog.ii("Color", "We are reading red");
                 return beaconSensor.blue() < beaconSensor.red();
             default:
                 RobotLog.ee("ERROR", "Color does not exist!");
@@ -144,6 +177,12 @@ public class Westcoast {
         }
     }
 
+    /**
+     * Waits a set amount of time to put the beacon arm out and the same amount of time to pull it
+     * back in. This takes a total of 1.5 seconds.
+     *
+     * @throws InterruptedException if the code fails to terminate before stop requested
+     */
     public void pushBeacon() throws InterruptedException {
         beaconPusher.setPosition(0);
         sleep(750);
@@ -151,12 +190,23 @@ public class Westcoast {
         sleep(750);
     }
 
-    public void setDoorState(DoorState status) {
-        launcherDoor.setPosition(status.position);
+    /**
+     * Use ${@link DoorState} to either raise the arm to allow a ball in or set it to the zero
+     * position to prevent balls to go into the robot.
+     *
+     * @param state the position of the door
+     */
+    public void setDoorState(DoorState state) {
+        launcherDoor.setPosition(state.position);
     }
 
-    public void setCarriageState(CarriageState status) {
-        carriageRelease.setPosition(status.position);
+    /**
+     * Uses the ${@link CarriageState} to release the lift or lock the lift.
+     *
+     * @param state of the lock on the robot
+     */
+    public void setCarriageState(CarriageState state) {
+        carriageRelease.setPosition(state.position);
     }
 
     public enum DoorState {

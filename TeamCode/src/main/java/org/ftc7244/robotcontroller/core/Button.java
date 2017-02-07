@@ -2,6 +2,10 @@ package org.ftc7244.robotcontroller.core;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
+/**
+ * A cleaner way of checking if a button is pressed and allow for different button types to be passed
+ * around as variables for different button types
+ */
 public class Button {
 
     private Gamepad gamepad;
@@ -12,6 +16,12 @@ public class Button {
         this.type = type;
     }
 
+    /**
+     * Based off the button pressed register the state through different inputs. If it is analog
+     * then ensure the value is greater than zero.
+     *
+     * @return if the button is pressed
+     */
     public boolean isPressed() {
         switch (type) {
             case A:

@@ -1,14 +1,34 @@
 package org.ftc7244.robotcontroller.autonomous.pid.terminators;
 
+/**
+ * Is a way of mixing and matching terminators so that they can be conditional and allowing for
+ * more than one terminator.
+ */
 public class ConditionalTerminator extends Terminator {
 
     private TerminationMode mode;
     private Terminator[] terminators;
 
+    /**
+     * It by default uses ${@link TerminationMode#OR} and allows for a dynmaic amount of terminators
+     * to decided if the code should end
+     *
+     * @param terminators dynamic amount of terminators
+     */
     public ConditionalTerminator(Terminator... terminators) {
         this(TerminationMode.OR, terminators);
     }
 
+    /**
+     * Similar to the single argument but allows for changing of modes.
+     *
+     * There are different supported modes:
+     * ${@link TerminationMode#OR} will end if any are true
+     * ${@link TerminationMode#AND} will end if ONLY if all true
+     *
+     * @param mode the mode to use
+     * @param terminators dynamic amount of terminators
+     */
     public ConditionalTerminator(TerminationMode mode, Terminator... terminators) {
         this.mode = mode;
         this.terminators = terminators;

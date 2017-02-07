@@ -13,8 +13,6 @@ import static android.content.Context.SENSOR_SERVICE;
  * The orientation provider that delivers the relative orientation from the {@link Sensor#TYPE_GYROSCOPE
  * Gyroscope}. This sensor does not deliver an absolute orientation (with respect to magnetic north and gravity) but
  * only a relative measurement starting from the point where it started.
- *
- * @author Brandon Barker
  */
 public class PhoneGyroscopeProvider extends GyroscopeProvider implements SensorEventListener {
 
@@ -47,13 +45,13 @@ public class PhoneGyroscopeProvider extends GyroscopeProvider implements SensorE
     public PhoneGyroscopeProvider() {
         super();
         finishedCalibrating = -1;
-        calibrate();
     }
 
     @Override
-    public void start(HardwareMap map, int msSamplingPeriod) {
+    public void start(HardwareMap map) {
         this.sensorManager = (SensorManager) map.appContext.getSystemService(SENSOR_SERVICE);
         sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE), SensorManager.SENSOR_DELAY_FASTEST);
+        calibrate();
     }
 
     @Override

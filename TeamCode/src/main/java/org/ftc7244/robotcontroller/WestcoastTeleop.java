@@ -15,6 +15,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @TeleOp(name = "Westcoast Drive")
 public class WestcoastTeleop extends OpMode {
 
+    private static final double LIFT_DRIVE_COEFFICIENT = 0.4;
+
     private Westcoast robot;
     private Button aButton, triggerL, triggerR, xButton, yButton, bButton;
     private Button driverBButton, driverYButton;
@@ -42,13 +44,15 @@ public class WestcoastTeleop extends OpMode {
 
     @Override
     public void loop() {
-        //Core Drive Code
+        //DRIVE
+        //Allow for full power of the robot
         if (!driverYButton.isPressed()) {
             robot.getDriveRight().setPower(-gamepad1.right_stick_y);
             robot.getDriveLeft().setPower(-gamepad1.left_stick_y);
+        //Invert power and ramp down control
         } else {
-            robot.getDriveRight().setPower(.4 * gamepad1.left_stick_y);
-            robot.getDriveLeft().setPower(.4 * gamepad1.right_stick_y);
+            robot.getDriveRight().setPower(LIFT_DRIVE_COEFFICIENT * gamepad1.left_stick_y);
+            robot.getDriveLeft().setPower(LIFT_DRIVE_COEFFICIENT * gamepad1.right_stick_y);
         }
 
         robot.getBeaconPusher().setPosition(bButton.isPressed() ? 0 : 1);
@@ -76,6 +80,8 @@ public class WestcoastTeleop extends OpMode {
         }
 
         robot.setCarriageState(driverBButton.isPressed() ? Westcoast.CarriageState.OPEN : Westcoast.CarriageState.CLOSED);
+
+        //Spool with a minimum power
         float spoolerPower = gamepad1.right_trigger - gamepad1.left_trigger;
         robot.getSpooler().setPower(Math.abs(spoolerPower) > 0.5 ? spoolerPower : 0);
 

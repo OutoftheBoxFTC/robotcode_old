@@ -7,9 +7,9 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.I2cDevice;
 
 /**
- * Created by brandon on 2/6/17.
+ * Utilizes the NavX-Micro to get an orientatio and prevents code from executing until it
+ * has been fully calibrated.
  */
-
 public class NavXGyroscopeProvider extends GyroscopeProvider implements IDataArrivalSubscriber {
 
     private static final byte NAVX_DEVICE_UPDATE_RATE_HZ = 50;
@@ -17,11 +17,12 @@ public class NavXGyroscopeProvider extends GyroscopeProvider implements IDataArr
     private AHRS navxDevice;
 
     @Override
-    public void start(HardwareMap map, int msSamplingPeriod) {
+    public void start(HardwareMap map) {
         final I2cDevice navx = map.i2cDevice.get("navx");
         navxDevice = AHRS.getInstance((DeviceInterfaceModule) navx.getController(), navx.getPort(), AHRS.DeviceDataType.kProcessedData, NAVX_DEVICE_UPDATE_RATE_HZ);
         navxDevice.zeroYaw();
         navxDevice.registerCallback(this);
+        calibrate();
     }
 
     @Override
@@ -40,9 +41,7 @@ public class NavXGyroscopeProvider extends GyroscopeProvider implements IDataArr
     }
 
     @Override
-    public void untimestampedDataReceived(long l, Object o) {
-
-    }
+    public void untimestampedDataReceived(long l, Object o) {}
 
     @Override
     public void timestampedDataReceived(long systemTimestamp, long sensorTimestamp, Object o) {

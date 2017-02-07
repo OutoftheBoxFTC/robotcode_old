@@ -9,14 +9,19 @@ public class CornerBlue extends PIDAutonomous {
 
     @Override
     public void run() throws InterruptedException {
-        sleep(8000);
+        //Move off the wall and head in the direction of the line
         gyroscope.drive(.5, 5);
         gyroscope.rotate(-45);
+        //Drive to the middle of the field
         gyroscope.drive(.5, 10);
+        //Orient for shooting balls
         gyroscope.rotate(-92);
         sleep(1000);
+        //shoot two balls
         robot.shootLoop(2, 1500);
+        //rotate backwards
         gyroscope.rotate(90);
+        //drive onto the platform
         gyroscope.drive(.5, 36);
     }
 }
