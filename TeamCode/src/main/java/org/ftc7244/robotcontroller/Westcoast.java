@@ -1,6 +1,8 @@
 package org.ftc7244.robotcontroller;
 
 import android.graphics.Color;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.kauailabs.navx.ftc.AHRS;
 import com.qualcomm.hardware.hitechnic.HiTechnicNxtLightSensor;
@@ -35,7 +37,7 @@ public class Westcoast {
      *
      * @param motors all the motors to reset
      */
-    public static void resetMotors(DcMotor... motors) {
+    public static void resetMotors(@NonNull DcMotor... motors) {
         boolean notReset = true;
         while (notReset) {
             boolean allReset = true;
@@ -59,22 +61,28 @@ public class Westcoast {
      * @param map with the "navx" device
      * @return setup navx sensor
      */
-    public static AHRS getNavX(HardwareMap map) {
+    public static AHRS getNavX(@NonNull HardwareMap map) {
         final I2cDevice navx = map.i2cDevice.get("navx");
         return AHRS.getInstance((DeviceInterfaceModule) navx.getController(), navx.getPort(), AHRS.DeviceDataType.kProcessedData, NAVX_DEVICE_UPDATE_RATE_HZ);
     }
 
+    @Nullable
     @Getter
     private DcMotor driveLeft, driveRight, launcher, intake, spooler;
+    @Nullable
     @Getter
     private Servo launcherDoor, beaconPusher, carriageRelease;
+    @Nullable
     @Getter
     private AnalogInput launcherLimit;
     private OpMode opMode;
+    @Nullable
     @Getter
     private ColorSensor beaconSensor;
+    @Nullable
     @Getter
     private HiTechnicNxtLightSensor leadingLight, trailingLight;
+    @Nullable
     @Getter
     private SickUltrasonic leadingUltrasonic, trailingUltrasonic;
 
@@ -119,7 +127,7 @@ public class Westcoast {
      * @param <T>  the type of hardware map
      * @return the hardware device associated with the name
      */
-    private <T extends HardwareDevice> T getOrNull(HardwareMap.DeviceMapping<T> map, String name) {
+    private <T extends HardwareDevice> T getOrNull(@NonNull HardwareMap.DeviceMapping<T> map, String name) {
         for (Map.Entry<String, T> item : map.entrySet()) {
             if (!item.getKey().equalsIgnoreCase(name)) {
                 continue;
@@ -237,7 +245,7 @@ public class Westcoast {
      *
      * @param state the position of the door
      */
-    public void setDoorState(DoorState state) {
+    public void setDoorState(@NonNull DoorState state) {
         launcherDoor.setPosition(state.position);
     }
 
@@ -246,7 +254,7 @@ public class Westcoast {
      *
      * @param state of the lock on the robot
      */
-    public void setCarriageState(CarriageState state) {
+    public void setCarriageState(@NonNull CarriageState state) {
         carriageRelease.setPosition(state.position);
     }
 

@@ -1,11 +1,16 @@
 package org.ftc7244.robotcontroller.autonomous;
 
+import android.support.annotation.NonNull;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftc7244.robotcontroller.Westcoast;
 import org.ftc7244.robotcontroller.autonomous.drivers.GyroscopeDrive;
 import org.ftc7244.robotcontroller.autonomous.drivers.UltrasonicDrive;
+import org.ftc7244.robotcontroller.sensor.accerometer.AccelerometerProvider;
+import org.ftc7244.robotcontroller.sensor.accerometer.PhoneAccelerometerProvider;
+import org.ftc7244.robotcontroller.sensor.gyroscope.GyroscopeProvider;
 import org.ftc7244.robotcontroller.sensor.gyroscope.PhoneGyroscopeProvider;
 
 /**
@@ -19,19 +24,23 @@ public abstract class PIDAutonomous extends LinearOpMode {
 
     public static boolean DEBUG = true;
 
+    @NonNull
     protected final GyroscopeDrive gyroscope;
+    @NonNull
     protected final UltrasonicDrive ultrasonic;
     protected Westcoast robot;
 
-    private PhoneGyroscopeProvider provider;
+    private GyroscopeProvider gyroProvider;
+    private AccelerometerProvider accelProvider;
 
     /**
      * Set the classes up and allow for java
      */
     protected PIDAutonomous() {
         robot = new Westcoast(this);
-        provider = new PhoneGyroscopeProvider();
-        gyroscope = new GyroscopeDrive(robot, provider, DEBUG);
+        gyroProvider = new PhoneGyroscopeProvider();
+        accelProvider = new PhoneAccelerometerProvider();
+        gyroscope = new GyroscopeDrive(robot, gyroProvider, accelProvider, DEBUG);
         ultrasonic = new UltrasonicDrive(robot, DEBUG);
     }
 
@@ -39,18 +48,20 @@ public abstract class PIDAutonomous extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         robot.init();
         Status.setAutonomous(this);
-
         waitForStart();
 
+        gyroProvider.start(hardwareMap);
+        accelProvider.start(hardwareMap);
+
         try {
-            while (!provider.isCalibrated()) idle();
+            while (!gyroProvider.isCalibrated()) idle();
             gyroscope.resetOrientation();
             run();
         } catch (Throwable t) {
-            RobotLog.ee("Error", "Error");
-            t.printStackTrace();
+            RobotLog.e(t.getMessage());
         } finally {
-            provider.stop();
+            gyroProvider.stop();
+            accelProvider.stop();
             Status.setAutonomous(null);
         }
     }

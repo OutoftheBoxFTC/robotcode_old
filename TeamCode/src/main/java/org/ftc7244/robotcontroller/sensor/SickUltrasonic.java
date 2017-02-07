@@ -1,5 +1,7 @@
 package org.ftc7244.robotcontroller.sensor;
 
+import android.support.annotation.NonNull;
+
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 
@@ -44,15 +46,18 @@ public class SickUltrasonic implements UltrasonicSensor {
         return mode.multiplyer * input.getVoltage();
     }
 
+    @NonNull
     @Override
     public String status() {
         return mode.name() + "[" + (getUltrasonicLevel() == mode.cap ? "WAITING" : "DETECTING") + "]";
     }
+    @NonNull
     @Override
     public Manufacturer getManufacturer() {
         return Manufacturer.Other;
     }
 
+    @NonNull
     @Override
     public String getDeviceName() {
         return "SENSICK UM18-2 Pro";

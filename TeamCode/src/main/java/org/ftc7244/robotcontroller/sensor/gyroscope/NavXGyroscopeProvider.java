@@ -1,5 +1,7 @@
 package org.ftc7244.robotcontroller.sensor.gyroscope;
 
+import android.support.annotation.Nullable;
+
 import com.kauailabs.navx.ftc.AHRS;
 import com.kauailabs.navx.ftc.IDataArrivalSubscriber;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -13,6 +15,7 @@ import org.ftc7244.robotcontroller.Westcoast;
 public class NavXGyroscopeProvider extends GyroscopeProvider implements IDataArrivalSubscriber {
 
 
+    @Nullable
     private AHRS navxDevice;
 
     @Override

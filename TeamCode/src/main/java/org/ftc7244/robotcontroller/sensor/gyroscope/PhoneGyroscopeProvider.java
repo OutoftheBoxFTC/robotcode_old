@@ -4,6 +4,8 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -33,6 +35,7 @@ public class PhoneGyroscopeProvider extends GyroscopeProvider implements SensorE
      * multiplying it with another quaternion
      */
     private Quaternion correctedQuaternion, currentOrientationQuaternion, deltaQuaternion;
+    @Nullable
     private SensorManager sensorManager;
     private long finishedCalibrating;
     private float errorX, errorY, errorZ, errorCount;
@@ -51,7 +54,7 @@ public class PhoneGyroscopeProvider extends GyroscopeProvider implements SensorE
     }
 
     @Override
-    public void start(HardwareMap map) {
+    public void start(@NonNull HardwareMap map) {
         this.sensorManager = (SensorManager) map.appContext.getSystemService(SENSOR_SERVICE);
         Sensor sensor = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
         epsilon = sensor.getResolution();
@@ -82,7 +85,7 @@ public class PhoneGyroscopeProvider extends GyroscopeProvider implements SensorE
     }
 
     @Override
-    public void onSensorChanged(SensorEvent event) {
+    public void onSensorChanged(@NonNull SensorEvent event) {
 
         // we received a sensor event. it is a good practice to check
         // that we received the proper event

@@ -1,5 +1,7 @@
 package org.ftc7244.robotcontroller.autonomous.controllers;
 
+import android.support.annotation.NonNull;
+
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftc7244.robotcontroller.Westcoast;
@@ -47,7 +49,7 @@ public abstract class PIDDriveControl {
      * @param terminator tells the PID when to end
      * @throws InterruptedException if the code fails to end on finish request
      */
-    protected void control(double target, double powerOffset, Terminator terminator) throws InterruptedException {
+    protected void control(double target, double powerOffset, @NonNull Terminator terminator) throws InterruptedException {
         //setup the PID loop
         controller.reset();
         controller.setTarget(target);

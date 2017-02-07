@@ -1,5 +1,7 @@
 package org.ftc7244.robotcontroller.sensor;
 
+import android.support.annotation.NonNull;
+
 /**
  * Representation of a four-dimensional float-vector
  */
@@ -28,7 +30,7 @@ public class Quaternion {
      *
      * @param quat The quaternion to copy from
      */
-    public void set(Quaternion quat) {
+    public void set(@NonNull Quaternion quat) {
         this.points[0] = quat.points[0];
         this.points[1] = quat.points[1];
         this.points[2] = quat.points[2];
@@ -41,7 +43,7 @@ public class Quaternion {
      * @param input the quaternion to multiply with
      * @param output the quaternion where the values are saved
      */
-    public void multiplyByQuat(Quaternion input, Quaternion output) {
+    public void multiplyByQuat(@NonNull Quaternion input, @NonNull Quaternion output) {
 
         if (input != output) {
             //getW = w1w2 - x1x2 - y1y2 - z1z2
@@ -139,6 +141,7 @@ public class Quaternion {
     }
 
 
+    @NonNull
     @Override
     public String toString() {
         return "X:" + points[0] + " Y:" + points[1] + " Z:" + points[2] + " W:" + points[3];

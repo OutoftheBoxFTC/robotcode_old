@@ -8,5 +8,5 @@ public enum ButtonType {
     LEFT_TRIGGER,
     RIGHT_TRIGGER,
     LEFT_BUMPER,
-    RIGHT_BUMPER;
+    RIGHT_BUMPER
 }

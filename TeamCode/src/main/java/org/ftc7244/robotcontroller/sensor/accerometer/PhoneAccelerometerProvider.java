@@ -5,6 +5,8 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -17,8 +19,10 @@ public class PhoneAccelerometerProvider extends AccelerometerProvider implements
 
     private double movement, resolution;
 
+    @Nullable
     private SensorManager manager;
 
+    @NonNull
     @Override
     public Status getStatus() {
         //if the movement is greater than the resolution say its moving
@@ -26,7 +30,7 @@ public class PhoneAccelerometerProvider extends AccelerometerProvider implements
     }
 
     @Override
-    public void start(HardwareMap map) {
+    public void start(@NonNull HardwareMap map) {
         movement = 0;
         manager = (SensorManager) map.appContext.getSystemService(Context.SENSOR_SERVICE);
         Sensor sensor = manager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
@@ -41,7 +45,7 @@ public class PhoneAccelerometerProvider extends AccelerometerProvider implements
     }
 
     @Override
-    public void onSensorChanged(SensorEvent event) {
+    public void onSensorChanged(@NonNull SensorEvent event) {
         float x = event.values[0];
         float y = event.values[1];
         float z = event.values[2];

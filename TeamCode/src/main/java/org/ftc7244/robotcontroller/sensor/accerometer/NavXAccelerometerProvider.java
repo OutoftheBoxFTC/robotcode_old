@@ -1,5 +1,8 @@
 package org.ftc7244.robotcontroller.sensor.accerometer;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import com.kauailabs.navx.ftc.AHRS;
 import com.kauailabs.navx.ftc.IDataArrivalSubscriber;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -12,9 +15,11 @@ import org.ftc7244.robotcontroller.Westcoast;
  */
 public class NavXAccelerometerProvider extends AccelerometerProvider implements IDataArrivalSubscriber {
 
+    @Nullable
     private AHRS navxDevice;
     private boolean moving;
 
+    @NonNull
     @Override
     public Status getStatus() {
         return moving ? Status.MOVING : Status.STOPPED;
