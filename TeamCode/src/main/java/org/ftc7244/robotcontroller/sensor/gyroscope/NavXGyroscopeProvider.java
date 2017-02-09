@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import com.kauailabs.navx.ftc.AHRS;
 import com.kauailabs.navx.ftc.IDataArrivalSubscriber;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftc7244.robotcontroller.Westcoast;
 
@@ -17,13 +18,14 @@ public class NavXGyroscopeProvider extends GyroscopeProvider implements IDataArr
 
     @Nullable
     private AHRS navxDevice;
+    private boolean calibrating;
 
     @Override
     public void start(HardwareMap map) {
         navxDevice = Westcoast.getNavX(map);
         navxDevice.zeroYaw();
         navxDevice.registerCallback(this);
-        calibrate();
+        calibrating = false;
     }
 
     @Override
@@ -33,7 +35,7 @@ public class NavXGyroscopeProvider extends GyroscopeProvider implements IDataArr
 
     @Override
     public boolean isCalibrated() {
-        return !navxDevice.isCalibrating();
+        return !calibrating;
     }
 
     @Override
@@ -47,10 +49,12 @@ public class NavXGyroscopeProvider extends GyroscopeProvider implements IDataArr
 
     @Override
     public void timestampedDataReceived(long systemTimestamp, long sensorTimestamp, Object o) {
-        setX(navxDevice.getRoll());
-        setY(navxDevice.getPitch());
-        setZ(navxDevice.getYaw());
+        setX(navxDevice.getRoll() - 180);
+        setY(navxDevice.getPitch() - 180);
+        setZ(navxDevice.getYaw() - 180);
         setTimestamp(systemTimestamp);
+        calibrating = navxDevice.isCalibrating();
+
     }
 
     @Override

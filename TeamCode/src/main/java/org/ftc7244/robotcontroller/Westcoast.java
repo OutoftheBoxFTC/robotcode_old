@@ -24,12 +24,10 @@ import org.ftc7244.robotcontroller.sensor.SickUltrasonic;
 
 import java.util.Map;
 
-import lombok.Getter;
-
 public class Westcoast {
 
 
-    public static final byte NAVX_DEVICE_UPDATE_RATE_HZ = 50;
+    public static final byte NAVX_DEVICE_UPDATE_RATE_HZ = (byte) 100;
     public final static double COUNTS_PER_INCH = 1120 / (Math.PI * 3);
 
     /**
@@ -67,23 +65,17 @@ public class Westcoast {
     }
 
     @Nullable
-    @Getter
     private DcMotor driveLeft, driveRight, launcher, intake, spooler;
     @Nullable
-    @Getter
     private Servo launcherDoor, beaconPusher, carriageRelease;
     @Nullable
-    @Getter
     private AnalogInput launcherLimit;
     private OpMode opMode;
     @Nullable
-    @Getter
     private ColorSensor beaconSensor;
     @Nullable
-    @Getter
     private HiTechnicNxtLightSensor leadingLight, trailingLight;
     @Nullable
-    @Getter
     private SickUltrasonic leadingUltrasonic, trailingUltrasonic;
 
     public Westcoast(OpMode opMode) {
@@ -148,7 +140,7 @@ public class Westcoast {
      */
     private void sleep(long ms) throws InterruptedException {
         long target = System.currentTimeMillis() + ms;
-        while (target > System.currentTimeMillis() && !Status.isStopRequested()) wait();
+        while (target > System.currentTimeMillis() && !Status.isStopRequested()) Thread.sleep(1);
     }
 
     /**
@@ -256,6 +248,76 @@ public class Westcoast {
      */
     public void setCarriageState(@NonNull CarriageState state) {
         carriageRelease.setPosition(state.position);
+    }
+
+    @Nullable
+    public DcMotor getDriveLeft() {
+        return this.driveLeft;
+    }
+
+    @Nullable
+    public DcMotor getDriveRight() {
+        return this.driveRight;
+    }
+
+    @Nullable
+    public DcMotor getLauncher() {
+        return this.launcher;
+    }
+
+    @Nullable
+    public DcMotor getIntake() {
+        return this.intake;
+    }
+
+    @Nullable
+    public DcMotor getSpooler() {
+        return this.spooler;
+    }
+
+    @Nullable
+    public Servo getLauncherDoor() {
+        return this.launcherDoor;
+    }
+
+    @Nullable
+    public Servo getBeaconPusher() {
+        return this.beaconPusher;
+    }
+
+    @Nullable
+    public Servo getCarriageRelease() {
+        return this.carriageRelease;
+    }
+
+    @Nullable
+    public AnalogInput getLauncherLimit() {
+        return this.launcherLimit;
+    }
+
+    @Nullable
+    public ColorSensor getBeaconSensor() {
+        return this.beaconSensor;
+    }
+
+    @Nullable
+    public HiTechnicNxtLightSensor getLeadingLight() {
+        return this.leadingLight;
+    }
+
+    @Nullable
+    public HiTechnicNxtLightSensor getTrailingLight() {
+        return this.trailingLight;
+    }
+
+    @Nullable
+    public SickUltrasonic getLeadingUltrasonic() {
+        return this.leadingUltrasonic;
+    }
+
+    @Nullable
+    public SickUltrasonic getTrailingUltrasonic() {
+        return this.trailingUltrasonic;
     }
 
     public enum DoorState {

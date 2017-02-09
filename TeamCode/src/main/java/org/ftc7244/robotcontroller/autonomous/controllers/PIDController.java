@@ -2,9 +2,6 @@ package org.ftc7244.robotcontroller.autonomous.controllers;
 
 import org.ftc7244.robotcontroller.autonomous.Status;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import static java.lang.Double.isInfinite;
 import static java.lang.Double.isNaN;
 
@@ -19,8 +16,6 @@ public class PIDController {
      *
      * Increase the P gain until the response to a disturbance is steady oscillation.
      */
-    @Getter
-    @Setter
     private double kP;
 
     /**
@@ -30,8 +25,6 @@ public class PIDController {
      * desired (normally zero but a quicker response can be had if you don't mind a couple
      * oscillations of overshoot)
      */
-    @Getter
-    @Setter
     private double kI;
 
     /**
@@ -39,11 +32,8 @@ public class PIDController {
      *
      * Increase the D gain until the the oscillations go away (i.e. it's critically damped).
      */
-    @Getter
-    @Setter
     private double kD;
 
-    @Getter
     private double proportional, integral, derivative;
 
     /**
@@ -52,8 +42,6 @@ public class PIDController {
     private double previous_error;
 
 
-    @Getter
-    @Setter
     private double setPoint, delay, integralRange, outputRange;
 
     /**
@@ -158,5 +146,73 @@ public class PIDController {
             }
             period = end - System.currentTimeMillis();
         } while (period > 0 && !Status.isStopRequested());
+    }
+
+    public double getKP() {
+        return this.kP;
+    }
+
+    public double getKI() {
+        return this.kI;
+    }
+
+    public double getKD() {
+        return this.kD;
+    }
+
+    public double getProportional() {
+        return this.proportional;
+    }
+
+    public double getIntegral() {
+        return this.integral;
+    }
+
+    public double getDerivative() {
+        return this.derivative;
+    }
+
+    public double getSetPoint() {
+        return this.setPoint;
+    }
+
+    public double getDelay() {
+        return this.delay;
+    }
+
+    public double getIntegralRange() {
+        return this.integralRange;
+    }
+
+    public double getOutputRange() {
+        return this.outputRange;
+    }
+
+    public void setKP(double kP) {
+        this.kP = kP;
+    }
+
+    public void setKI(double kI) {
+        this.kI = kI;
+    }
+
+    public void setKD(double kD) {
+        this.kD = kD;
+    }
+
+    public void setSetPoint(double setPoint) {
+        this.setPoint = setPoint;
+    }
+
+    public void setDelay(double delay) {
+        this.delay = delay;
+    }
+
+    public void setIntegralRange(double integralRange) {
+        this.integralRange = integralRange;
+    }
+
+    public void setOutputRange(double outputRange) {
+        this.outputRange = outputRange;
     }
 }

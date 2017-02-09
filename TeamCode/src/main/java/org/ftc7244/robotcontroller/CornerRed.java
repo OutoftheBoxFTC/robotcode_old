@@ -11,16 +11,16 @@ public class CornerRed extends PIDAutonomous {
     public void run() throws InterruptedException {
         //Move off the wall and head in the direction of the line
         gyroscope.drive(-0.5, 5);
-        gyroscope.rotate(45);
+        gyroscope.rotate(-45);
         //Drive to the middle of the field
-        gyroscope.drive(-0.5, 5);
+        gyroscope.drive(-0.5, 8);
         //rotate so that the shooter is facing the vortex
-        gyroscope.rotate(77);
+        gyroscope.rotate(-90);
         //shoot two balls
         sleep(1000);
         robot.shootLoop(2, 1500);
         //rotate back and drive onto the base
-        gyroscope.rotate(-77);
-        gyroscope.drive(-0.5, 36);
+        gyroscope.rotate(90);
+        gyroscope.drive(-0.5, 28);
     }
 }

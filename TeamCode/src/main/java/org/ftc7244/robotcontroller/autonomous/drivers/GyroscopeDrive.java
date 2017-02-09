@@ -25,7 +25,6 @@ public class GyroscopeDrive extends PIDDriveControl {
     private static final double LIGHT_TUNING = 0.3;
 
     private GyroscopeProvider gyroProvider;
-    private AccelerometerProvider accelProvider;
 
     /**
      * Same as the parent constructor but passes a debug as fault by default since most users will
@@ -33,10 +32,9 @@ public class GyroscopeDrive extends PIDDriveControl {
      *
      * @param robot access to motors on the robot
      * @param gyro base way to read gyroscope values
-     * @param accel tells the robot when to stop
      */
-    public GyroscopeDrive(Westcoast robot, GyroscopeProvider gyro, AccelerometerProvider accel) {
-        this(robot, gyro, accel, false);
+    public GyroscopeDrive(Westcoast robot, GyroscopeProvider gyro) {
+        this(robot, gyro, false);
     }
 
     /**
@@ -44,35 +42,17 @@ public class GyroscopeDrive extends PIDDriveControl {
      * also comes pre-initalized with the PID tunings for the robot.
      *
      * @param robot access to motors on the robot
-     * @param accel tells the robot when to stop
      * @param provider base way to read gyroscope values
      * @param debug whether to log PID result
      */
-    public GyroscopeDrive(Westcoast robot, GyroscopeProvider provider, AccelerometerProvider accel, boolean debug) {
-        super(new PIDController(-0.02, -0.00003, -3.25, 30, 6, 0.8), robot, debug);
+    public GyroscopeDrive(Westcoast robot, GyroscopeProvider provider, boolean debug) {
+        super(new PIDController(0.02, 0.00003, 3.25, 30, 6, 0.8), robot, debug);
         this.gyroProvider = provider;
-        this.accelProvider = accel;
     }
 
     @Override
     public double getReading() {
         return this.gyroProvider.getZ();
-    }
-
-    /**
-     * Enhanced the control function to allow the code to wait until the robot has stopped moving. The
-     * control function still has the same functions but will wait until the moving status is changed.
-     * Or if the code stopped is requested from the outside context.
-     *
-     * @param target the target value for the sensor
-     * @param powerOffset power level from -1 to 1 to convert a rotate function to a drive function
-     * @param terminator tells the PID when to end
-     * @throws InterruptedException  if code fails to terminate on stop requested
-     */
-    @Override
-    protected void control(double target, double powerOffset, Terminator terminator) throws InterruptedException {
-        super.control(target, powerOffset, terminator);
-        while (accelProvider.getStatus() == AccelerometerProvider.Status.MOVING && !Status.isStopRequested()) wait();
     }
 
     /**
@@ -184,8 +164,10 @@ public class GyroscopeDrive extends PIDDriveControl {
      * @throws InterruptedException if code fails to terminate on stop requested
      */
     public void resetOrientation() throws InterruptedException {
-        gyroProvider.setZToZero();
-        while (Math.abs(Math.round(gyroProvider.getZ())) > 1) Thread.yield();
+        do {
+            gyroProvider.setZToZero();
+            Thread.sleep(1);
+        } while (Math.abs(Math.round(gyroProvider.getZ())) > 1);
     }
 
     private int getEncoderAverage() {

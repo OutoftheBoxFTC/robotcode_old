@@ -6,9 +6,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.ftc7244.robotcontroller.sensor.SensorProvider;
 
-import lombok.Getter;
-import lombok.Setter;
-
 /**
  * The orientation provider that delivers the relative orientation from the {@link Sensor#TYPE_GYROSCOPE
  * Gyroscope}. This sensor does not deliver an absolute orientation (with respect to magnetic north and gravity) but
@@ -20,15 +17,12 @@ public abstract class GyroscopeProvider extends SensorProvider {
      */
     private long timestamp;
 
-    @Setter
     private volatile double x, y, z;
 
     /**
      * Will offset the value of the gyroscope by the value specified which can be used as a way of
      * zeroing the offset and changing the heading.
      */
-    @Getter
-    @Setter
     private volatile double xOffset, zOffset;
 
     public GyroscopeProvider() {
@@ -129,5 +123,33 @@ public abstract class GyroscopeProvider extends SensorProvider {
 
     protected double offsetNumber(double orientation, double offset) {
         return ((orientation + 540 - offset) % 360) - 180;
+    }
+
+    protected synchronized void setX(double x) {
+        this.x = x;
+    }
+
+    protected synchronized void setY(double y) {
+        this.y = y;
+    }
+
+    protected synchronized void setZ(double z) {
+        this.z = z;
+    }
+
+    public double getXOffset() {
+        return this.xOffset;
+    }
+
+    public double getZOffset() {
+        return this.zOffset;
+    }
+
+    public void setXOffset(double xOffset) {
+        this.xOffset = xOffset;
+    }
+
+    public void setZOffset(double zOffset) {
+        this.zOffset = zOffset;
     }
 }

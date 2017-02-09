@@ -46,7 +46,7 @@ public class NavXAccelerometerProvider extends AccelerometerProvider implements 
 
     @Override
     public void timestampedDataReceived(long l, long l1, Object o) {
-        moving = navxDevice.isMoving() || navxDevice.isRotating();
+        moving = navxDevice.isMoving();
     }
 
     @Override

@@ -3,6 +3,7 @@ package org.ftc7244.robotcontroller;
 import android.graphics.Color;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftc7244.robotcontroller.autonomous.PIDAutonomous;
 import org.ftc7244.robotcontroller.autonomous.drivers.GyroscopeDrive;
@@ -16,7 +17,7 @@ public class BeaconBlue extends PIDAutonomous {
         gyroscope.drive(.35, 3.5);
         //allow the robot to settle and then rotate a little more than parallel to the side vortex
         sleep(500);
-        gyroscope.rotate(-54);
+        gyroscope.rotate(54);
         //drive to the center of the field and shoot then got the wall
         gyroscope.drive(0.35, 28);
         robot.shootLoop(2, 500);
@@ -24,7 +25,7 @@ public class BeaconBlue extends PIDAutonomous {
 
         //attempt to rotate using our code then use the ultrasonic sensors to re-parallelize
         sleep(500);
-        gyroscope.rotate(54);
+        gyroscope.rotate(-54);
         sleep(100);
         ultrasonic.parallelize();
         sleep(300);
@@ -53,10 +54,11 @@ public class BeaconBlue extends PIDAutonomous {
         }
 
         //rotate to be parallel with the field divider
-        gyroscope.rotate(-45);
+        gyroscope.rotate(45);
         gyroscope.drive(-1, 40);
         //pause and push the robot onto the platform in case it was pushed off
-        sleep(2000);
+        long sleep = getAutonomousEnd() - (System.currentTimeMillis() + 500);
+        if (sleep > 0) sleep(sleep);
         gyroscope.drive(-.75, 10);
     }
 }
