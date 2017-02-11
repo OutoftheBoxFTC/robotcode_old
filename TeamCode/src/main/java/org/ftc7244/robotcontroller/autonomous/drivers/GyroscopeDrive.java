@@ -22,8 +22,6 @@ import org.ftc7244.robotcontroller.sensor.gyroscope.GyroscopeProvider;
  */
 public class GyroscopeDrive extends PIDDriveControl {
 
-    private static final double LIGHT_TUNING = 0.3;
-
     private GyroscopeProvider gyroProvider;
 
     /**
@@ -121,7 +119,7 @@ public class GyroscopeDrive extends PIDDriveControl {
                             }
                         },
                         new ConditionalTerminator(TerminationMode.AND,
-                                new LineTerminator(mode == Sensor.Trailing ? robot.getTrailingLight() : robot.getLeadingLight(), encoderError, ticks),
+                                new LineTerminator(mode, encoderError, ticks),
                                 new Terminator() {
                                     @Override
                                     public boolean shouldTerminate() {
@@ -167,8 +165,14 @@ public class GyroscopeDrive extends PIDDriveControl {
      * streamlined in choice of sensor
      */
     public enum Sensor {
-        Leading,
-        Trailing
+        Leading(0.3),
+        Trailing(0.4);
+
+        protected double white;
+
+        Sensor(double white) {
+            this.white = white;
+        }
     }
 
     /**
@@ -180,17 +184,19 @@ public class GyroscopeDrive extends PIDDriveControl {
 
         private double driveAfterDistance, offset, encoderError;
         private LightSensor sensor;
+        private double white;
 
-        public LineTerminator(LightSensor sensor, double encoderError, double driveAfterDistance) {
-            this.sensor = sensor;
+        public LineTerminator(Sensor mode, double encoderError, double driveAfterDistance) {
+            this.sensor = mode == Sensor.Trailing ? robot.getTrailingLight() : robot.getLeadingLight();
             this.driveAfterDistance = driveAfterDistance;
+            this.white = mode.white;
             this.offset = 0;
             this.encoderError = encoderError;
         }
 
         @Override
         public boolean shouldTerminate() {
-            if (sensor.getLightDetected() > LIGHT_TUNING) {
+            if (sensor.getLightDetected() > white) {
                 offset = getEncoderAverage();
             } else sensor.enableLed(true);
 

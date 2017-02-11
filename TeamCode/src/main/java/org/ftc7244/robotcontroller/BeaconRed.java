@@ -30,26 +30,25 @@ public class BeaconRed extends PIDAutonomous {
         gyroscope.resetOrientation();
 
         //drive until a line is seen
-        gyroscope.drive(.2, 4);
-        gyroscope.driveUntilLine(-0.2, GyroscopeDrive.Sensor.Trailing);
+        gyroscope.drive(.2, 2);
+        gyroscope.driveUntilLine(-0.2, GyroscopeDrive.Sensor.Trailing, 2);
         sleep(500);
         //the robot has passed the beacon but drive backwards to compensate
         if (robot.isColor(Color.RED)) {
             robot.pushBeacon();
         } else {
             //drive forward and press beacon
-            gyroscope.drive(-0.3, 2.5);
+            gyroscope.drive(0.3, 4);
             robot.pushBeacon();
         }
 
         //repeat above
-        gyroscope.driveUntilLine(-0.2, GyroscopeDrive.Sensor.Trailing, 0, 30, 60);
+        gyroscope.driveUntilLine(-0.2, GyroscopeDrive.Sensor.Trailing, 2, 30, 60);
         sleep(500);
-        gyroscope.drive(.2, 2);
         if (robot.isColor(Color.RED)) {
             robot.pushBeacon();
         } else {
-            gyroscope.drive(-0.3, 4);
+            gyroscope.drive(0.3, 4);
             robot.pushBeacon();
         }
 
