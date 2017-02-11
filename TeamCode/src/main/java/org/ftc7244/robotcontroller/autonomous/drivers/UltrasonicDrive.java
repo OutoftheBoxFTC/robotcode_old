@@ -2,6 +2,7 @@ package org.ftc7244.robotcontroller.autonomous.drivers;
 
 import com.qualcomm.robotcore.util.RobotLog;
 
+import org.ftc7244.robotcontroller.Debug;
 import org.ftc7244.robotcontroller.Westcoast;
 import org.ftc7244.robotcontroller.autonomous.controllers.PIDController;
 import org.ftc7244.robotcontroller.autonomous.controllers.PIDDriveControl;
@@ -43,7 +44,7 @@ public class UltrasonicDrive extends PIDDriveControl {
         double leading = robot.getLeadingUltrasonic().getUltrasonicLevel() - OFFSET_LEADING;
         double trailing = robot.getTrailingUltrasonic().getUltrasonicLevel() - OFFSET_TRAILING;
 
-        RobotLog.ii("INFO", leading + ":" + trailing);
+        if (Debug.STATUS) RobotLog.ii("ULTRASONIC", leading + ":" + trailing);
         return leading - trailing;
     }
 

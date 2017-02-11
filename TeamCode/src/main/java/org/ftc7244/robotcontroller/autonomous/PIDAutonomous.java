@@ -23,8 +23,6 @@ import org.ftc7244.robotcontroller.sensor.gyroscope.NavXGyroscopeProvider;
  */
 public abstract class PIDAutonomous extends LinearOpMode {
 
-    public static boolean DEBUG = true;
-
     @NonNull
     protected final GyroscopeDrive gyroscope;
     @NonNull
@@ -40,8 +38,8 @@ public abstract class PIDAutonomous extends LinearOpMode {
     protected PIDAutonomous() {
         robot = new Westcoast(this);
         gyroProvider = new NavXGyroscopeProvider();
-        gyroscope = new GyroscopeDrive(robot, gyroProvider, DEBUG);
-        ultrasonic = new UltrasonicDrive(robot, DEBUG);
+        gyroscope = new GyroscopeDrive(robot, gyroProvider);
+        ultrasonic = new UltrasonicDrive(robot);
     }
 
     @Override

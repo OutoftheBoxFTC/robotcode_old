@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.qualcomm.robotcore.util.RobotLog;
 
+import org.ftc7244.robotcontroller.Debug;
 import org.ftc7244.robotcontroller.Westcoast;
 import org.ftc7244.robotcontroller.autonomous.Status;
 import org.ftc7244.robotcontroller.autonomous.terminators.Terminator;
@@ -61,8 +62,8 @@ public abstract class PIDDriveControl {
             double pid = controller.update(getReading());
 
             //debug if wanted
-            if (debug)
-                RobotLog.ii("PID", "|" + controller.getProportional() + "|" + controller.getIntegral() +"|" + controller.getDerivative() + "|" + getReading());
+            if (Debug.STATUS)
+                RobotLog.ii("PID", "|" + controller.getProportional() + "|" + controller.getIntegral() +"|" + controller.getDerivative() + "|" + pid + "|" + getReading());
 
             //take the PID and provide poweroffset if the robot wants to drive while using PID
             robot.getDriveLeft().setPower(powerOffset + pid);

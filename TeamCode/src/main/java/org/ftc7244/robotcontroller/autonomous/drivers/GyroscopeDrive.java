@@ -31,23 +31,11 @@ public class GyroscopeDrive extends PIDDriveControl {
      * not want to debug the code.
      *
      * @param robot access to motors on the robot
-     * @param gyro base way to read gyroscope values
+     * @param gyroProvider base way to read gyroscope values
      */
-    public GyroscopeDrive(Westcoast robot, GyroscopeProvider gyro) {
-        this(robot, gyro, false);
-    }
-
-    /**
-     * Pass the robot in to get access to the hardware needed to execute and setup the motors. This
-     * also comes pre-initalized with the PID tunings for the robot.
-     *
-     * @param robot access to motors on the robot
-     * @param provider base way to read gyroscope values
-     * @param debug whether to log PID result
-     */
-    public GyroscopeDrive(Westcoast robot, GyroscopeProvider provider, boolean debug) {
-        super(new PIDController(0.02, 0.00003, 3.25, 30, 6, 0.8), robot, debug);
-        this.gyroProvider = provider;
+    public GyroscopeDrive(Westcoast robot, GyroscopeProvider gyroProvider) {
+        super(new PIDController(0.02, 0.00004, 3.5, 30, 6, 0.8), robot);
+        this.gyroProvider = gyroProvider;
     }
 
     @Override
@@ -67,7 +55,7 @@ public class GyroscopeDrive extends PIDDriveControl {
     public void drive(double power, double inches) throws InterruptedException {
         final double ticks = inches * Westcoast.COUNTS_PER_INCH;
         Westcoast.resetMotors(robot.getDriveLeft(), robot.getDriveRight());
-        if (inches <= 0) RobotLog.ee("Error", "Invalid distances!");
+        if (inches <= 0) RobotLog.e("Invalid distances!");
         final int offset = getEncoderAverage();
         control(0, power, new Terminator() {
             @Override
@@ -119,7 +107,7 @@ public class GyroscopeDrive extends PIDDriveControl {
      */
     public void driveUntilLine(double power, Sensor mode, double offsetDistance, final double minDistance, final double maxDistance) throws InterruptedException {
         Westcoast.resetMotors(robot.getDriveLeft(), robot.getDriveRight());
-        if (offsetDistance <= 0) RobotLog.ee("Error", "Invalid distances!");
+        if (offsetDistance <= 0) RobotLog.e("Invalid distances!");
         final double ticks = offsetDistance * Westcoast.COUNTS_PER_INCH,
                 maxTicks = maxDistance * Westcoast.COUNTS_PER_INCH,
                 minTicks = minDistance * Westcoast.COUNTS_PER_INCH;
@@ -155,7 +143,7 @@ public class GyroscopeDrive extends PIDDriveControl {
      */
     public void rotate(double degrees) throws InterruptedException {
         double target = degrees + gyroProvider.getZ();
-        control(target, 0, new ConditionalTerminator(new SensitivityTerminator(this, degrees, 2, 300), new TimerTerminator(2000)));
+        control(target, 0, new ConditionalTerminator(new SensitivityTerminator(this, degrees, 1, 300), new TimerTerminator(2000)));
         resetOrientation();
     }
 

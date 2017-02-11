@@ -206,14 +206,14 @@ public class Westcoast {
      * @return whether it sees the color or not
      */
     public boolean isColor(int color) {
-        RobotLog.ii("Color", beaconSensor.blue() + ":" + beaconSensor.red());
+        if (Debug.STATUS) RobotLog.ii("COLOR", beaconSensor.blue() + ":" + beaconSensor.red());
         switch (color) {
             case Color.BLUE:
                 return beaconSensor.blue() > beaconSensor.red();
             case Color.RED:
                 return beaconSensor.blue() < beaconSensor.red();
             default:
-                RobotLog.ee("ERROR", "Color does not exist!");
+                RobotLog.e("Color does not exist!");
                 return false;
         }
     }

@@ -2,6 +2,7 @@ package org.ftc7244.robotcontroller.autonomous.terminators;
 
 import com.qualcomm.robotcore.util.RobotLog;
 
+import org.ftc7244.robotcontroller.Debug;
 import org.ftc7244.robotcontroller.autonomous.controllers.PIDDriveControl;
 
 /**
@@ -38,7 +39,7 @@ public class SensitivityTerminator extends Terminator {
         if (timestamp == -1 && Math.abs(context.getReading() - target) < maximumError)
             timestamp = System.currentTimeMillis();
         else if (Math.abs(context.getReading() - target) > maximumError) timestamp = -1;
-        RobotLog.ii("STOP", context.getReading() + ":" + target);
+        if (Debug.STATUS) RobotLog.ii("STOP", context.getReading() + ":" + target);
 
         return Math.abs(System.currentTimeMillis() - timestamp) > successDuration && timestamp != -1;
     }
