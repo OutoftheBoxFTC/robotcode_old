@@ -21,6 +21,8 @@ import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftc7244.robotcontroller.autonomous.Status;
 import org.ftc7244.robotcontroller.sensor.SickUltrasonic;
+import org.ftc7244.robotcontroller.sensor.leds.LedStrip;
+import org.ftc7244.robotcontroller.sensor.leds.RGBStrip;
 
 import java.util.Map;
 
@@ -77,6 +79,7 @@ public class Westcoast {
     private HiTechnicNxtLightSensor leadingLight, trailingLight;
     @Nullable
     private SickUltrasonic leadingUltrasonic, trailingUltrasonic;
+    private RGBStrip rgbStrip;
 
     public Westcoast(OpMode opMode) {
         this.opMode = opMode;
@@ -102,6 +105,10 @@ public class Westcoast {
         this.trailingUltrasonic = new SickUltrasonic(getOrNull(map.analogInput, "trailing_ultrasonic"));
         this.leadingLight = (HiTechnicNxtLightSensor) getOrNull(map.lightSensor, "leading_light");
         this.trailingLight = (HiTechnicNxtLightSensor) getOrNull(map.lightSensor, "trailing_light");
+
+        LedStrip red = new LedStrip(getOrNull(map.pwmOutput, "red"));
+        LedStrip blue = new LedStrip(getOrNull(map.pwmOutput, "blue"));
+        this.rgbStrip = new RGBStrip(red, null, blue);
 
         //Set the default direction for all the hardware and also initialize default positions
         if (driveLeft != null) driveLeft.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -248,6 +255,10 @@ public class Westcoast {
      */
     public void setCarriageState(@NonNull CarriageState state) {
         carriageRelease.setPosition(state.position);
+    }
+
+    public RGBStrip getRGBStrip() {
+        return rgbStrip;
     }
 
     @Nullable

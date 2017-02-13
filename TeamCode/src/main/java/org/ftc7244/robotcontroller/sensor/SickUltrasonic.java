@@ -111,5 +111,13 @@ public class SickUltrasonic implements UltrasonicSensor {
             this.cap = distance;
             this.multiplyer = 2 * (distance / 10);
         }
+
+        public double getMultiplyer() {
+            return multiplyer;
+        }
+
+        public double getCap() {
+            return cap;
+        }
     }
 }
