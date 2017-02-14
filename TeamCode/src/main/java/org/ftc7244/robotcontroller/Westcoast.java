@@ -26,7 +26,6 @@ import java.util.Map;
 
 public class Westcoast {
 
-
     public static final byte NAVX_DEVICE_UPDATE_RATE_HZ = (byte) 100;
     public final static double COUNTS_PER_INCH = 1120 / (Math.PI * 3);
 
