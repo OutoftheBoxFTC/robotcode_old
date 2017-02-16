@@ -1,5 +1,7 @@
 package org.ftc7244.robotcontroller;
 
+import android.graphics.Color;
+
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.RobotLog;
@@ -7,6 +9,7 @@ import com.qualcomm.robotcore.util.RobotLog;
 import org.ftc7244.robotcontroller.core.Button;
 import org.ftc7244.robotcontroller.core.ButtonType;
 import org.ftc7244.robotcontroller.core.PressButton;
+import org.ftc7244.robotcontroller.sensor.SickUltrasonic;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -93,5 +96,10 @@ public class WestcoastTeleop extends OpMode {
         //If the left trigger is pressed reverse the lift
         if (triggerL.isPressed()) intakeSpeed = -1;
         robot.getIntake().setPower(intakeSpeed);
+
+        //Wall Notifier
+        double trailing = robot.getTrailingUltrasonic().getUltrasonicLevel(), leading = robot.getLeadingUltrasonic().getUltrasonicLevel();
+        double error = (0.2 * (Math.abs(trailing - leading) / SickUltrasonic.Mode.INCHES.getCap())) + (0.8 * (((trailing + leading) / 2) / 4));
+        robot.getRGBStrip().setColor(Color.rgb((int) (255 * error), (int) (255 * (1 - error)), 0));
     }
 }
