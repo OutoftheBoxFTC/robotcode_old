@@ -16,5 +16,6 @@ public abstract class Terminator {
      *
      * @param status if the code terminated
      */
-    public void terminated(boolean status) {}
+    public void terminated(boolean status) {
+    }
 }

@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import com.kauailabs.navx.ftc.AHRS;
 import com.kauailabs.navx.ftc.IDataArrivalSubscriber;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftc7244.robotcontroller.Westcoast;
 
@@ -45,7 +44,8 @@ public class NavXGyroscopeProvider extends GyroscopeProvider implements IDataArr
     }
 
     @Override
-    public void untimestampedDataReceived(long l, Object o) {}
+    public void untimestampedDataReceived(long l, Object o) {
+    }
 
     @Override
     public void timestampedDataReceived(long systemTimestamp, long sensorTimestamp, Object o) {

@@ -23,7 +23,7 @@ public class PressButton extends Button {
         if (!pressed && state) {
             //change the pressed status to true to wait for the button to be released
             pressed = true;
-        //once the pressed status no longer matches the state the button has been released
+            //once the pressed status no longer matches the state the button has been released
         } else if (pressed && !state) {
             //change the active state and forget the pressed state
             active = !active;

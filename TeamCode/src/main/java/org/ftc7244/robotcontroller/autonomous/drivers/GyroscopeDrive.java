@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.hardware.LightSensor;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftc7244.robotcontroller.Westcoast;
-import org.ftc7244.robotcontroller.autonomous.Status;
 import org.ftc7244.robotcontroller.autonomous.controllers.PIDController;
 import org.ftc7244.robotcontroller.autonomous.controllers.PIDDriveControl;
 import org.ftc7244.robotcontroller.autonomous.terminators.ConditionalTerminator;
@@ -12,7 +11,6 @@ import org.ftc7244.robotcontroller.autonomous.terminators.SensitivityTerminator;
 import org.ftc7244.robotcontroller.autonomous.terminators.TerminationMode;
 import org.ftc7244.robotcontroller.autonomous.terminators.Terminator;
 import org.ftc7244.robotcontroller.autonomous.terminators.TimerTerminator;
-import org.ftc7244.robotcontroller.sensor.accerometer.AccelerometerProvider;
 import org.ftc7244.robotcontroller.sensor.gyroscope.GyroscopeProvider;
 
 /**
@@ -28,7 +26,7 @@ public class GyroscopeDrive extends PIDDriveControl {
      * Same as the parent constructor but passes a debug as fault by default since most users will
      * not want to debug the code.
      *
-     * @param robot access to motors on the robot
+     * @param robot        access to motors on the robot
      * @param gyroProvider base way to read gyroscope values
      */
     public GyroscopeDrive(Westcoast robot, GyroscopeProvider gyroProvider) {
@@ -46,7 +44,7 @@ public class GyroscopeDrive extends PIDDriveControl {
      * then will then be added to the PID to get the drive. It is important to note that both motors
      * are reset before driving is started and will end once it reaches it's target in inches.
      *
-     * @param power offset of the PID from -1 to 1
+     * @param power  offset of the PID from -1 to 1
      * @param inches total distance to travel
      * @throws InterruptedException if code fails to terminate on stop requested
      */
@@ -69,7 +67,7 @@ public class GyroscopeDrive extends PIDDriveControl {
      * when to terminate driving.
      *
      * @param power offset of the PID from -1 to 1
-     * @param mode which sensor to use {@link Sensor#Leading} or {@link Sensor#Trailing}
+     * @param mode  which sensor to use {@link Sensor#Leading} or {@link Sensor#Trailing}
      * @throws InterruptedException if code fails to terminate on stop requested
      */
     public void driveUntilLine(double power, Sensor mode) throws InterruptedException {
@@ -82,8 +80,8 @@ public class GyroscopeDrive extends PIDDriveControl {
      * and after that the robot will travel that set distance. There is a slight offset because of
      * sensor lag.
      *
-     * @param power offset of the PID from -1 to 1
-     * @param mode which sensor to use {@link Sensor#Leading} or {@link Sensor#Trailing}
+     * @param power          offset of the PID from -1 to 1
+     * @param mode           which sensor to use {@link Sensor#Leading} or {@link Sensor#Trailing}
      * @param offsetDistance distance after line to travel in inches
      * @throws InterruptedException if code fails to terminate on stop requested
      */
@@ -96,11 +94,11 @@ public class GyroscopeDrive extends PIDDriveControl {
      * feet into this function but the main difference is that this will only execute parts of the
      * code if the paramters are within a certain range value range.
      *
-     * @param power offset of the PID from -1 to 1
-     * @param mode which sensor to use {@link Sensor#Leading} or {@link Sensor#Trailing}
+     * @param power          offset of the PID from -1 to 1
+     * @param mode           which sensor to use {@link Sensor#Leading} or {@link Sensor#Trailing}
      * @param offsetDistance distance after line to travel in inches
-     * @param minDistance minimum distance before searching for line to prevent early triggering in inches
-     * @param maxDistance maximum distance for searching to prevent overshoot in inches
+     * @param minDistance    minimum distance before searching for line to prevent early triggering in inches
+     * @param maxDistance    maximum distance for searching to prevent overshoot in inches
      * @throws InterruptedException if code fails to terminate on stop requested
      */
     public void driveUntilLine(double power, Sensor mode, double offsetDistance, final double minDistance, final double maxDistance) throws InterruptedException {
@@ -114,23 +112,19 @@ public class GyroscopeDrive extends PIDDriveControl {
         control(0, power, new ConditionalTerminator(
                         new Terminator() {
                             @Override
-                            public boolean shouldTerminate() {
-                                return Math.abs(getEncoderAverage() - encoderError) >= maxTicks && maxTicks > 0;
-                            }
+                            public boolean shouldTerminate() {return Math.abs(getEncoderAverage() - encoderError) >= maxTicks && maxTicks > 0;}
                         },
                         new ConditionalTerminator(TerminationMode.AND,
                                 new LineTerminator(mode, encoderError, ticks),
                                 new Terminator() {
                                     @Override
-                                    public boolean shouldTerminate() {
-                                        return Math.abs(getEncoderAverage() - encoderError) > minTicks || minTicks <= 0;
-                                    }
+                                    public boolean shouldTerminate() {return Math.abs(getEncoderAverage() - encoderError) > minTicks || minTicks <= 0;}
                                 }
                         )
                 )
         );
     }
-
+j
     /**
      * This will rotate the robot until it is within 2 degrees for 300 milliseconds. It will also
      * manually terminate if the rotate takes longer than two seconds. This is important because
@@ -149,6 +143,7 @@ public class GyroscopeDrive extends PIDDriveControl {
 
     /**
      * Resets the current orientation to 0 and waits till the change occurs
+     *
      * @throws InterruptedException if code fails to terminate on stop requested
      */
     public void resetOrientation() throws InterruptedException {

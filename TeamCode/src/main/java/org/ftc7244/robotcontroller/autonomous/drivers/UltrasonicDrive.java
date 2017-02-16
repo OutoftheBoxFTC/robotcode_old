@@ -53,7 +53,7 @@ public class UltrasonicDrive extends PIDDriveControl {
      * seconds before terminating. It expects to be within .1 of an inch of the wall for 200
      * milliseconds before it can continue
      *
-     * @throws InterruptedException  if code fails to terminate on stop requested
+     * @throws InterruptedException if code fails to terminate on stop requested
      */
     public void parallelize() throws InterruptedException {
         control(0, 0, new ConditionalTerminator(new SensitivityTerminator(this, 0, 0.1, 200), new TimerTerminator(5000)));

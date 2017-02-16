@@ -40,7 +40,7 @@ public class Quaternion {
     /**
      * Multiply this quaternion by the input quaternion and store the result in the out quaternion
      *
-     * @param input the quaternion to multiply with
+     * @param input  the quaternion to multiply with
      * @param output the quaternion where the values are saved
      */
     public void multiplyByQuat(@NonNull Quaternion input, @NonNull Quaternion output) {
@@ -74,6 +74,7 @@ public class Quaternion {
 
     /**
      * Gets the X value of the quaternion
+     *
      * @return value in radians
      */
     public float getX() {
@@ -82,6 +83,7 @@ public class Quaternion {
 
     /**
      * Gets the Y value of the quaternion
+     *
      * @return value in radians
      */
     public float getY() {
@@ -90,6 +92,7 @@ public class Quaternion {
 
     /**
      * Gets the Z value of the quaternion
+     *
      * @return value in radians
      */
     public float getZ() {
@@ -98,6 +101,7 @@ public class Quaternion {
 
     /**
      * Gets the W value of the quaternion
+     *
      * @return from -1 to 1
      */
     public float getW() {
@@ -106,6 +110,7 @@ public class Quaternion {
 
     /**
      * Updates the X value of the quaternion
+     *
      * @param x value in radians
      * @return new value in radians
      */
@@ -115,6 +120,7 @@ public class Quaternion {
 
     /**
      * Updates the Y value of the quaternion
+     *
      * @param y value in radians
      * @return new value in radians
      */
@@ -124,6 +130,7 @@ public class Quaternion {
 
     /**
      * Updates the Z value of the quaternion
+     *
      * @param z value in radians
      * @return new value in radians
      */
@@ -133,6 +140,7 @@ public class Quaternion {
 
     /**
      * Updates the W value of the quaternion
+     *
      * @param w from -1 to 1
      * @return the new value
      */

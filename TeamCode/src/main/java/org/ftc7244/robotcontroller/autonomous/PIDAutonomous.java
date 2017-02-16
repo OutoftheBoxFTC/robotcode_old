@@ -3,14 +3,11 @@ package org.ftc7244.robotcontroller.autonomous;
 import android.support.annotation.NonNull;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.robocol.TelemetryMessage;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftc7244.robotcontroller.Westcoast;
 import org.ftc7244.robotcontroller.autonomous.drivers.GyroscopeDrive;
 import org.ftc7244.robotcontroller.autonomous.drivers.UltrasonicDrive;
-import org.ftc7244.robotcontroller.sensor.accerometer.AccelerometerProvider;
-import org.ftc7244.robotcontroller.sensor.accerometer.NavXAccelerometerProvider;
 import org.ftc7244.robotcontroller.sensor.gyroscope.GyroscopeProvider;
 import org.ftc7244.robotcontroller.sensor.gyroscope.NavXGyroscopeProvider;
 
@@ -27,9 +24,8 @@ public abstract class PIDAutonomous extends LinearOpMode {
     protected final GyroscopeDrive gyroscope;
     @NonNull
     protected final UltrasonicDrive ultrasonic;
-    protected Westcoast robot;
-
     protected final GyroscopeProvider gyroProvider;
+    protected Westcoast robot;
     private long end;
 
     /**

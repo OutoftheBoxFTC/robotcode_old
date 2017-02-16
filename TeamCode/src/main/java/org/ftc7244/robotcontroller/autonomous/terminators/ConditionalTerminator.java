@@ -21,12 +21,12 @@ public class ConditionalTerminator extends Terminator {
 
     /**
      * Similar to the single argument but allows for changing of modes.
-     *
+     * <p>
      * There are different supported modes:
      * ${@link TerminationMode#OR} will end if any are true
      * ${@link TerminationMode#AND} will end if ONLY if all true
      *
-     * @param mode the mode to use
+     * @param mode        the mode to use
      * @param terminators dynamic amount of terminators
      */
     public ConditionalTerminator(TerminationMode mode, Terminator... terminators) {

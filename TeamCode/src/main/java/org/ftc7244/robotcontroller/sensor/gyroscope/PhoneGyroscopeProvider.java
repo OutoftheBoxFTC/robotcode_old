@@ -26,7 +26,6 @@ public class PhoneGyroscopeProvider extends GyroscopeProvider implements SensorE
     private static final float NS2S = 1.0f / 1000000000.0f;
 
 
-
     /**
      * The quaternion that stores the difference that is obtained by the gyroscope.
      * Basically it contains a rotational difference encoded into a quaternion.
@@ -91,12 +90,12 @@ public class PhoneGyroscopeProvider extends GyroscopeProvider implements SensorE
         // that we received the proper event
         if (event.sensor.getType() != Sensor.TYPE_GYROSCOPE) return;
 
-        
+
         //get the raw values for calculations
         float axisX = event.values[0];
         float axisY = event.values[1];
         float axisZ = event.values[2];
-        
+
         //Wait a certain duration finding the average of the offset to gain an offset to correct for
         if (!isCalibrated()) {
             float newErrorCount = errorCount + 1;
@@ -104,8 +103,8 @@ public class PhoneGyroscopeProvider extends GyroscopeProvider implements SensorE
             errorY = ((errorY * errorCount) + Math.abs(axisY)) / newErrorCount;
             errorZ = ((errorZ * errorCount) + Math.abs(axisZ)) / newErrorCount;
             errorCount = newErrorCount;
-        // This timestamps delta rotation to be multiplied by the current rotation
-        // after computing it from the gyro sample data.
+            // This timestamps delta rotation to be multiplied by the current rotation
+            // after computing it from the gyro sample data.
         } else if (getTimestamp() != 0) {
             final float dT = (event.timestamp - getTimestamp()) * NS2S;
             // Axis of the rotation sample, not normalized yet.
@@ -154,7 +153,7 @@ public class PhoneGyroscopeProvider extends GyroscopeProvider implements SensorE
             setX(Math.toDegrees(orientation[0]));
             setY(Math.toDegrees(orientation[1]));
             setZ(Math.toDegrees(orientation[2]));
-        } 
+        }
 
         setTimestamp(event.timestamp);
     }

@@ -13,14 +13,14 @@ public class PIDController {
 
     /**
      * This is the coefficient used to calculate the effect of the proportional of the robot.
-     *
+     * <p>
      * Increase the P gain until the response to a disturbance is steady oscillation.
      */
     private double kP;
 
     /**
      * This is the coefficient used to calculate the effect of the integral of the robot.
-     *
+     * <p>
      * Increase the I gain until it brings you to the setpoint with the number of oscillations
      * desired (normally zero but a quicker response can be had if you don't mind a couple
      * oscillations of overshoot)
@@ -29,7 +29,7 @@ public class PIDController {
 
     /**
      * This is the coefficient used to calculate the effect of the derivative of the robot.
-     *
+     * <p>
      * Increase the D gain until the the oscillations go away (i.e. it's critically damped).
      */
     private double kD;
@@ -152,12 +152,24 @@ public class PIDController {
         return this.kP;
     }
 
+    public void setKP(double kP) {
+        this.kP = kP;
+    }
+
     public double getKI() {
         return this.kI;
     }
 
+    public void setKI(double kI) {
+        this.kI = kI;
+    }
+
     public double getKD() {
         return this.kD;
+    }
+
+    public void setKD(double kD) {
+        this.kD = kD;
     }
 
     public double getProportional() {
@@ -176,40 +188,28 @@ public class PIDController {
         return this.setPoint;
     }
 
-    public double getDelay() {
-        return this.delay;
-    }
-
-    public double getIntegralRange() {
-        return this.integralRange;
-    }
-
-    public double getOutputRange() {
-        return this.outputRange;
-    }
-
-    public void setKP(double kP) {
-        this.kP = kP;
-    }
-
-    public void setKI(double kI) {
-        this.kI = kI;
-    }
-
-    public void setKD(double kD) {
-        this.kD = kD;
-    }
-
     public void setSetPoint(double setPoint) {
         this.setPoint = setPoint;
+    }
+
+    public double getDelay() {
+        return this.delay;
     }
 
     public void setDelay(double delay) {
         this.delay = delay;
     }
 
+    public double getIntegralRange() {
+        return this.integralRange;
+    }
+
     public void setIntegralRange(double integralRange) {
         this.integralRange = integralRange;
+    }
+
+    public double getOutputRange() {
+        return this.outputRange;
     }
 
     public void setOutputRange(double outputRange) {

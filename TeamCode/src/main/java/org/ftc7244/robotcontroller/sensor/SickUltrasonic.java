@@ -27,7 +27,7 @@ public class SickUltrasonic implements UltrasonicSensor {
      * Setup the sick ultrasonic using an AnalogInput and handle its input as distance.
      *
      * @param input which sensor to use
-     * @param mode the distance units in ${@link Mode#INCHES} or ${@link Mode#CENTIMETERS}
+     * @param mode  the distance units in ${@link Mode#INCHES} or ${@link Mode#CENTIMETERS}
      */
     public SickUltrasonic(AnalogInput input, Mode mode) {
         this.input = input;
@@ -51,6 +51,7 @@ public class SickUltrasonic implements UltrasonicSensor {
     public String status() {
         return mode.name() + "[" + (getUltrasonicLevel() == mode.cap ? "WAITING" : "DETECTING") + "]";
     }
+
     @NonNull
     @Override
     public Manufacturer getManufacturer() {

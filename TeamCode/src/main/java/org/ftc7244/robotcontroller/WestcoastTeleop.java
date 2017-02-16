@@ -49,7 +49,7 @@ public class WestcoastTeleop extends OpMode {
         if (!driverYButton.isPressed()) {
             robot.getDriveRight().setPower(-gamepad1.right_stick_y);
             robot.getDriveLeft().setPower(-gamepad1.left_stick_y);
-        //Invert power and ramp down control
+            //Invert power and ramp down control
         } else {
             robot.getDriveRight().setPower(LIFT_DRIVE_COEFFICIENT * gamepad1.left_stick_y);
             robot.getDriveLeft().setPower(LIFT_DRIVE_COEFFICIENT * gamepad1.right_stick_y);

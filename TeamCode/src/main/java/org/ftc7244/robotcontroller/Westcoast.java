@@ -28,6 +28,22 @@ public class Westcoast {
 
     public static final byte NAVX_DEVICE_UPDATE_RATE_HZ = (byte) 100;
     public final static double COUNTS_PER_INCH = 1120 / (Math.PI * 3);
+    @Nullable
+    private DcMotor driveLeft, driveRight, launcher, intake, spooler;
+    @Nullable
+    private Servo launcherDoor, beaconPusher, carriageRelease;
+    @Nullable
+    private AnalogInput launcherLimit;
+    private OpMode opMode;
+    @Nullable
+    private ColorSensor beaconSensor;
+    @Nullable
+    private HiTechnicNxtLightSensor leadingLight, trailingLight;
+    @Nullable
+    private SickUltrasonic leadingUltrasonic, trailingUltrasonic;
+    public Westcoast(OpMode opMode) {
+        this.opMode = opMode;
+    }
 
     /**
      * Waits for all the motors to have zero position and if it is not zero tell it to reset
@@ -50,7 +66,6 @@ public class Westcoast {
         for (DcMotor motor : motors) motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-
     /**
      * Obtains the NavX-Micro from the hardware map expecting a "navx" and then uses reflection
      * to obtain all the information to properly setup the sensor
@@ -61,24 +76,6 @@ public class Westcoast {
     public static AHRS getNavX(@NonNull HardwareMap map) {
         final I2cDevice navx = map.i2cDevice.get("navx");
         return AHRS.getInstance((DeviceInterfaceModule) navx.getController(), navx.getPort(), AHRS.DeviceDataType.kProcessedData, NAVX_DEVICE_UPDATE_RATE_HZ);
-    }
-
-    @Nullable
-    private DcMotor driveLeft, driveRight, launcher, intake, spooler;
-    @Nullable
-    private Servo launcherDoor, beaconPusher, carriageRelease;
-    @Nullable
-    private AnalogInput launcherLimit;
-    private OpMode opMode;
-    @Nullable
-    private ColorSensor beaconSensor;
-    @Nullable
-    private HiTechnicNxtLightSensor leadingLight, trailingLight;
-    @Nullable
-    private SickUltrasonic leadingUltrasonic, trailingUltrasonic;
-
-    public Westcoast(OpMode opMode) {
-        this.opMode = opMode;
     }
 
     /**
@@ -159,11 +156,11 @@ public class Westcoast {
     }
 
     /**
-     *  A tuned tool to shoot a ball from the robot with many fail-safes integrated to prevent the
-     *  shooting from not completing. First it will spin no more than 1000 milliseconds or until the
-     *  limit switch is triggered. Then if the shooter will continue to run for 200 more milliseconds
-     *  and lift the arm up for the remaining 500 milliseconds to load another ball. If anything fails
-     *  it will be reset to its normal positions and turned off.
+     * A tuned tool to shoot a ball from the robot with many fail-safes integrated to prevent the
+     * shooting from not completing. First it will spin no more than 1000 milliseconds or until the
+     * limit switch is triggered. Then if the shooter will continue to run for 200 more milliseconds
+     * and lift the arm up for the remaining 500 milliseconds to load another ball. If anything fails
+     * it will be reset to its normal positions and turned off.
      *
      * @param delay the time in milliseconds to wait before each shot
      * @throws InterruptedException if the code fails to terminate before stop requested

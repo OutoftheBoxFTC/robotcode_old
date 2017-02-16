@@ -20,9 +20,9 @@ public class SensitivityTerminator extends Terminator {
      * Requires the PID context to know if the values are in the target value and if they are within
      * a maximum amount of error kill the PID.
      *
-     * @param context the PID being used in the ${@link PIDDriveControl}
-     * @param target the target value of the PID
-     * @param maximumError the absolute value of error the PID can have
+     * @param context         the PID being used in the ${@link PIDDriveControl}
+     * @param target          the target value of the PID
+     * @param maximumError    the absolute value of error the PID can have
      * @param successDuration how long after the target value must the target value retain before terminating
      */
     public SensitivityTerminator(PIDDriveControl context, double target, double maximumError, long successDuration) {

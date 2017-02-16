@@ -54,5 +54,6 @@ public class PhoneAccelerometerProvider extends AccelerometerProvider implements
     }
 
     @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {}
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+    }
 }

@@ -70,6 +70,10 @@ public abstract class GyroscopeProvider extends SensorProvider {
         return offsetNumber(x, zOffset);
     }
 
+    protected synchronized void setX(double x) {
+        this.x = x;
+    }
+
     /**
      * The output of this is from -90 to 90 degrees but this cannot be offsetted because of its
      * limitation of range
@@ -80,6 +84,10 @@ public abstract class GyroscopeProvider extends SensorProvider {
         return y;
     }
 
+    protected synchronized void setY(double y) {
+        this.y = y;
+    }
+
     /**
      * Get the current value of the Y with the offset specified in ${@link #setZOffset(double)}
      *
@@ -87,6 +95,10 @@ public abstract class GyroscopeProvider extends SensorProvider {
      */
     public double getZ() {
         return offsetNumber(z, zOffset);
+    }
+
+    protected synchronized void setZ(double z) {
+        this.z = z;
     }
 
     /**
@@ -125,28 +137,16 @@ public abstract class GyroscopeProvider extends SensorProvider {
         return ((orientation + 540 - offset) % 360) - 180;
     }
 
-    protected synchronized void setX(double x) {
-        this.x = x;
-    }
-
-    protected synchronized void setY(double y) {
-        this.y = y;
-    }
-
-    protected synchronized void setZ(double z) {
-        this.z = z;
-    }
-
     public double getXOffset() {
         return this.xOffset;
     }
 
-    public double getZOffset() {
-        return this.zOffset;
-    }
-
     public void setXOffset(double xOffset) {
         this.xOffset = xOffset;
+    }
+
+    public double getZOffset() {
+        return this.zOffset;
     }
 
     public void setZOffset(double zOffset) {
