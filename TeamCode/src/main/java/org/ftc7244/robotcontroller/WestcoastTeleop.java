@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.RobotLog;
 
+import org.ftc7244.robotcontroller.autonomous.drivers.UltrasonicDrive;
 import org.ftc7244.robotcontroller.core.Button;
 import org.ftc7244.robotcontroller.core.ButtonType;
 import org.ftc7244.robotcontroller.core.PressButton;
@@ -23,7 +24,7 @@ public class WestcoastTeleop extends OpMode {
     private Westcoast robot;
     private Button aButton, triggerL, triggerR, xButton, yButton, bButton;
     private Button driverBButton, driverYButton;
-    private AtomicBoolean runningLauncher;
+    private AtomicBoolean runningLauncher, flicker;
     private ExecutorService service;
 
     @Override
@@ -86,7 +87,7 @@ public class WestcoastTeleop extends OpMode {
 
         //Spool with a minimum power
         float spoolerPower = gamepad1.right_trigger - gamepad1.left_trigger;
-        robot.getSpooler().setPower(Math.abs(spoolerPower) > 0.5 ? spoolerPower : 0);
+        robot.setSpoolerPower(Math.abs(spoolerPower) > 0.5 ? spoolerPower : 0);
 
         //INTAKE
         //If no triggers are pressed stop the lift
@@ -99,7 +100,16 @@ public class WestcoastTeleop extends OpMode {
 
         //Wall Notifier
         double trailing = robot.getTrailingUltrasonic().getUltrasonicLevel(), leading = robot.getLeadingUltrasonic().getUltrasonicLevel();
-        double error = (0.2 * (Math.abs(trailing - leading) / SickUltrasonic.Mode.INCHES.getCap())) + (0.8 * (((trailing + leading) / 2) / 4));
-        robot.getRGBStrip().setColor(Color.rgb((int) (255 * error), (int) (255 * (1 - error)), 0));
+        boolean hitWall = ((trailing + leading) / 2) < 7.5 && (trailing < SickUltrasonic.Mode.INCHES.getCap() || leading < SickUltrasonic.Mode.INCHES.getCap());
+        //Lift Raised
+        boolean liftRaised = Math.abs(robot.getSpoolerTicks()) > 8525;
+
+        //Raised Lift
+        robot.getLights().setPower(hitWall || liftRaised ? 1 : 0);
+    }
+
+    @Override
+    public void stop() {
+        service.shutdown();
     }
 }

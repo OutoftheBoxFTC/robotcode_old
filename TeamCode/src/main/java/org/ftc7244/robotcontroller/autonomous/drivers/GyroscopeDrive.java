@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.hardware.LightSensor;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftc7244.robotcontroller.Westcoast;
-import org.ftc7244.robotcontroller.autonomous.controllers.PIDController;
+import org.ftc7244.robotcontroller.autonomous.controllers.PIDControllerBuilder;
 import org.ftc7244.robotcontroller.autonomous.controllers.PIDDriveControl;
 import org.ftc7244.robotcontroller.autonomous.terminators.ConditionalTerminator;
 import org.ftc7244.robotcontroller.autonomous.terminators.SensitivityTerminator;
@@ -30,7 +30,15 @@ public class GyroscopeDrive extends PIDDriveControl {
      * @param gyroProvider base way to read gyroscope values
      */
     public GyroscopeDrive(Westcoast robot, GyroscopeProvider gyroProvider) {
-        super(new PIDController(0.02, 0.00004, 3.5, 30, 6, 0.8), robot);
+        super(new PIDControllerBuilder()
+                .setProportional(0.02)
+                .setIntegral(0.00004)
+                .setDerivative(3.5)
+                .setDelay(30)
+                .setIntegralRange(6)
+                .setOutputRange(0.8)
+                .createController(),
+            robot);
         this.gyroProvider = gyroProvider;
     }
 
@@ -112,19 +120,24 @@ public class GyroscopeDrive extends PIDDriveControl {
         control(0, power, new ConditionalTerminator(
                         new Terminator() {
                             @Override
-                            public boolean shouldTerminate() {return Math.abs(getEncoderAverage() - encoderError) >= maxTicks && maxTicks > 0;}
+                            public boolean shouldTerminate() {
+                                return Math.abs(getEncoderAverage() - encoderError) >= maxTicks && maxTicks > 0;
+                            }
                         },
                         new ConditionalTerminator(TerminationMode.AND,
                                 new LineTerminator(mode, encoderError, ticks),
                                 new Terminator() {
                                     @Override
-                                    public boolean shouldTerminate() {return Math.abs(getEncoderAverage() - encoderError) > minTicks || minTicks <= 0;}
+                                    public boolean shouldTerminate() {
+                                        return Math.abs(getEncoderAverage() - encoderError) > minTicks || minTicks <= 0;
+                                    }
                                 }
                         )
                 )
         );
     }
-j
+
+
     /**
      * This will rotate the robot until it is within 2 degrees for 300 milliseconds. It will also
      * manually terminate if the rotate takes longer than two seconds. This is important because

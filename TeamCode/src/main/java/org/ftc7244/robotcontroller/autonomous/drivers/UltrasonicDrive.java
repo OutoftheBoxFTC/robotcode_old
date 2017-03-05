@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftc7244.robotcontroller.Debug;
 import org.ftc7244.robotcontroller.Westcoast;
-import org.ftc7244.robotcontroller.autonomous.controllers.PIDController;
+import org.ftc7244.robotcontroller.autonomous.controllers.PIDControllerBuilder;
 import org.ftc7244.robotcontroller.autonomous.controllers.PIDDriveControl;
 import org.ftc7244.robotcontroller.autonomous.terminators.ConditionalTerminator;
 import org.ftc7244.robotcontroller.autonomous.terminators.SensitivityTerminator;
@@ -36,7 +36,15 @@ public class UltrasonicDrive extends PIDDriveControl {
      * @param debug whether to log or not
      */
     public UltrasonicDrive(Westcoast robot, boolean debug) {
-        super(new PIDController(0.15, 0.0005, 0, 30, 0.75, .22), robot, debug);
+        super(new PIDControllerBuilder()
+                .setProportional(0.15)
+                .setIntegral(0.0005)
+                .setDelay(30)
+                .setIntegralRange(0.75)
+                .setIntegralReset(true)
+                .setOutputRange(.22)
+                .createController(),
+            robot, debug);
     }
 
     @Override

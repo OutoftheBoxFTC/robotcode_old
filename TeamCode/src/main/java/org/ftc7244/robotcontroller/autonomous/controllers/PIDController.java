@@ -1,5 +1,7 @@
 package org.ftc7244.robotcontroller.autonomous.controllers;
 
+import com.qualcomm.robotcore.util.RobotLog;
+
 import org.ftc7244.robotcontroller.autonomous.Status;
 
 import static java.lang.Double.isInfinite;
@@ -39,7 +41,7 @@ public class PIDController {
     /**
      * Information required to calculate each PID Loop
      */
-    private double previous_error;
+    private double previousError;
 
 
     private double setPoint, delay, integralRange, outputRange;
@@ -49,21 +51,16 @@ public class PIDController {
      */
     private double dt, cycleTime;
 
-    public PIDController(double kP, double kI, double kD) {
-        this(kP, kI, kD, -1);
-    }
+    private boolean integralReset;
 
-    public PIDController(double kP, double kI, double kD, double delay) {
-        this(kP, kI, kD, delay, 0, 0);
-    }
-
-    public PIDController(double kP, double kI, double kD, double delay, double integralRange, double outputRange) {
+    public PIDController(double kP, double kI, double kD, double delay, double integralRange, double outputRange, boolean integralReset) {
         this.kP = kP;
         this.kI = kI;
         this.kD = kD;
         this.delay = delay;
         this.integralRange = integralRange;
         this.outputRange = Math.abs(outputRange);
+        this.integralReset = integralReset;
 
         reset();
     }
@@ -92,7 +89,7 @@ public class PIDController {
         //if the PID has yet to execute more than once grab a timestamp to use in the future
         if (cycleTime == 0) {
             this.cycleTime = System.currentTimeMillis();
-            previous_error = error;
+            previousError = error;
             return 0;
         }
 
@@ -103,13 +100,18 @@ public class PIDController {
         if ((integralRange == 0 || Math.abs(error) < integralRange)) integral += kI * error * dt;
         else integral = 0;
 
+        double previousPosition = previousError / Math.abs(previousError), currentPosition = error / Math.abs(error);
+        if (previousPosition != currentPosition) {
+            integral = 0;
+            RobotLog.ii("RESET", "Reset Integral");
+        }
         //calculate derivative and then increase it by its kD
-        derivative = kD * (error - previous_error) / dt;
+        derivative = kD * (error - previousError) / dt;
         //sanity check to prevent errors in the derivative
         derivative = (isNaN(derivative) || isInfinite(derivative) ? 0 : derivative);
 
         //save previous error for next integral
-        previous_error = error;
+        previousError = error;
 
         //ensure that the PID is only calculating at certain intervals otherwise halt till next time
         if (this.delay > 0)
@@ -128,7 +130,7 @@ public class PIDController {
      * Reset the PID loop. Clearing all previous results
      */
     public void reset() {
-        this.previous_error = 0;
+        this.previousError = 0;
         this.integral = 0;
         this.dt = 0;
         this.cycleTime = 0;
@@ -215,4 +217,5 @@ public class PIDController {
     public void setOutputRange(double outputRange) {
         this.outputRange = outputRange;
     }
+
 }

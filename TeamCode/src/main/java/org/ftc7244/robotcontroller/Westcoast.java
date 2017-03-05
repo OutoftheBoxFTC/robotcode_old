@@ -28,8 +28,9 @@ public class Westcoast {
 
     public static final byte NAVX_DEVICE_UPDATE_RATE_HZ = (byte) 100;
     public final static double COUNTS_PER_INCH = 1120 / (Math.PI * 3);
+
     @Nullable
-    private DcMotor driveLeft, driveRight, launcher, intake, spooler;
+    private DcMotor driveLeft, driveRight, launcher, intake, spoolerTop, spoolerBottom, lights;
     @Nullable
     private Servo launcherDoor, beaconPusher, carriageRelease;
     @Nullable
@@ -41,6 +42,9 @@ public class Westcoast {
     private HiTechnicNxtLightSensor leadingLight, trailingLight;
     @Nullable
     private SickUltrasonic leadingUltrasonic, trailingUltrasonic;
+
+    private int blueOffset, redOffset;
+
     public Westcoast(OpMode opMode) {
         this.opMode = opMode;
     }
@@ -92,12 +96,14 @@ public class Westcoast {
         this.intake = getOrNull(map.dcMotor, "intake");
         this.beaconSensor = getOrNull(map.colorSensor, "beacon_sensor");
         this.beaconPusher = getOrNull(map.servo, "beacon_pusher");
-        this.spooler = getOrNull(map.dcMotor, "spooler");
+        this.spoolerTop = getOrNull(map.dcMotor, "spoolerTop");
+        this.spoolerBottom = getOrNull(map.dcMotor, "spoolerBottom");
         this.carriageRelease = getOrNull(map.servo, "carriage_release");
         this.leadingUltrasonic = new SickUltrasonic(getOrNull(map.analogInput, "leading_ultrasonic"));
         this.trailingUltrasonic = new SickUltrasonic(getOrNull(map.analogInput, "trailing_ultrasonic"));
         this.leadingLight = (HiTechnicNxtLightSensor) getOrNull(map.lightSensor, "leading_light");
         this.trailingLight = (HiTechnicNxtLightSensor) getOrNull(map.lightSensor, "trailing_light");
+        this.lights = getOrNull(map.dcMotor, "lights");
 
         //Set the default direction for all the hardware and also initialize default positions
         if (driveLeft != null) driveLeft.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -105,6 +111,15 @@ public class Westcoast {
         if (beaconPusher != null) beaconPusher.setPosition(1);
         if (launcherDoor != null) setDoorState(DoorState.CLOSED);
         if (carriageRelease != null) setCarriageState(CarriageState.CLOSED);
+        if (spoolerTop != null) spoolerTop.setDirection(DcMotorSimple.Direction.REVERSE);
+        if (spoolerTop != null && spoolerBottom != null) resetMotors(spoolerBottom, spoolerTop);
+        if (beaconSensor != null) {
+            redOffset = beaconSensor.red();
+            blueOffset = beaconSensor.blue();
+        } else {
+            redOffset = 0;
+            blueOffset = 0;
+        }
     }
 
     /**
@@ -202,12 +217,13 @@ public class Westcoast {
      * @return whether it sees the color or not
      */
     public boolean isColor(int color) {
-        if (Debug.STATUS) RobotLog.ii("COLOR", beaconSensor.blue() + ":" + beaconSensor.red());
+        int blue = beaconSensor.blue() - blueOffset, red = beaconSensor.red() - redOffset;
+        if (Debug.STATUS) RobotLog.ii("COLOR", blue + ":" + red);
         switch (color) {
             case Color.BLUE:
-                return beaconSensor.blue() > beaconSensor.red();
+                return blue > red;
             case Color.RED:
-                return beaconSensor.blue() < beaconSensor.red();
+                return blue < red;
             default:
                 RobotLog.e("Color does not exist!");
                 return false;
@@ -246,6 +262,16 @@ public class Westcoast {
         carriageRelease.setPosition(state.position);
     }
 
+    public void setSpoolerPower(double power) {
+        spoolerTop.setPower(power);
+        spoolerBottom.setPower(power);
+    }
+
+    public int getSpoolerTicks() {
+        return (spoolerBottom.getCurrentPosition() + spoolerTop.getCurrentPosition()) / 2;
+    }
+
+
     @Nullable
     public DcMotor getDriveLeft() {
         return this.driveLeft;
@@ -267,8 +293,13 @@ public class Westcoast {
     }
 
     @Nullable
-    public DcMotor getSpooler() {
-        return this.spooler;
+    public DcMotor getSpoolerBottom() {
+        return spoolerBottom;
+    }
+
+    @Nullable
+    public DcMotor getSpoolerTop() {
+        return spoolerTop;
     }
 
     @Nullable
@@ -314,6 +345,11 @@ public class Westcoast {
     @Nullable
     public SickUltrasonic getTrailingUltrasonic() {
         return this.trailingUltrasonic;
+    }
+
+    @Nullable
+    public DcMotor getLights() {
+        return lights;
     }
 
     public enum DoorState {
