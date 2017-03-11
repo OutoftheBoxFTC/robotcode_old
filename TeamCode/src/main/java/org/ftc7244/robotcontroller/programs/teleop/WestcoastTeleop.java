@@ -1,4 +1,4 @@
-package org.ftc7244.robotcontroller;
+package org.ftc7244.robotcontroller.programs.teleop;
 
 import android.graphics.Color;
 
@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.RobotLog;
 
+import org.ftc7244.robotcontroller.Westcoast;
 import org.ftc7244.robotcontroller.autonomous.drivers.UltrasonicDrive;
 import org.ftc7244.robotcontroller.core.Button;
 import org.ftc7244.robotcontroller.core.ButtonType;

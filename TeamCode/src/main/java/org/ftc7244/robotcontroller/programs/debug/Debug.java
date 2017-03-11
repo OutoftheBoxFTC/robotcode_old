@@ -1,4 +1,4 @@
-package org.ftc7244.robotcontroller;
+package org.ftc7244.robotcontroller.programs.debug;
 
 /**
  * Created by FTC 7244 on 2/10/2017.

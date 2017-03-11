@@ -1,4 +1,4 @@
-package org.ftc7244.robotcontroller;
+package org.ftc7244.robotcontroller.programs.autonomous;
 
 import android.graphics.Color;
 
@@ -38,7 +38,7 @@ public class BeaconRed extends PIDAutonomous {
             robot.pushBeacon();
         } else {
             //drive forward and press beacon
-            gyroscope.drive(0.3, 3.5);
+            gyroscope.drive(0.3, 3);
             robot.pushBeacon();
         }
 
@@ -48,7 +48,7 @@ public class BeaconRed extends PIDAutonomous {
         if (robot.isColor(Color.RED)) {
             robot.pushBeacon();
         } else {
-            gyroscope.drive(0.3, 3.5);
+            gyroscope.drive(0.3, 3);
             robot.pushBeacon();
         }
 

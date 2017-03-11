@@ -176,7 +176,7 @@ public class GyroscopeDrive extends PIDDriveControl {
      */
     public enum Sensor {
         Leading(0.3),
-        Trailing(0.4);
+        Trailing(0.3);
 
         protected double white;
 

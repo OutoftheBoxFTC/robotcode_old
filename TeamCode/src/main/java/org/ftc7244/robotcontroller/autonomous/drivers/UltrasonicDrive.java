@@ -1,8 +1,5 @@
 package org.ftc7244.robotcontroller.autonomous.drivers;
 
-import com.qualcomm.robotcore.util.RobotLog;
-
-import org.ftc7244.robotcontroller.Debug;
 import org.ftc7244.robotcontroller.Westcoast;
 import org.ftc7244.robotcontroller.autonomous.controllers.PIDControllerBuilder;
 import org.ftc7244.robotcontroller.autonomous.controllers.PIDDriveControl;
@@ -16,7 +13,7 @@ import org.ftc7244.robotcontroller.autonomous.terminators.TimerTerminator;
  */
 public class UltrasonicDrive extends PIDDriveControl {
 
-    private static final int OFFSET_LEADING = 0, OFFSET_TRAILING = 0;
+    private static final double OFFSET_LEADING = 0.0407, OFFSET_TRAILING = 0;
 
     /**
      * Same as the parent constructor but instead disable debugging.
@@ -52,7 +49,6 @@ public class UltrasonicDrive extends PIDDriveControl {
         double leading = robot.getLeadingUltrasonic().getUltrasonicLevel() - OFFSET_LEADING;
         double trailing = robot.getTrailingUltrasonic().getUltrasonicLevel() - OFFSET_TRAILING;
 
-        if (Debug.STATUS) RobotLog.ii("ULTRASONIC", leading + ":" + trailing);
         return leading - trailing;
     }
 
@@ -64,6 +60,6 @@ public class UltrasonicDrive extends PIDDriveControl {
      * @throws InterruptedException if code fails to terminate on stop requested
      */
     public void parallelize() throws InterruptedException {
-        control(0, 0, new ConditionalTerminator(new SensitivityTerminator(this, 0, 0.1, 200), new TimerTerminator(5000)));
+        control(0, 0, new ConditionalTerminator(new SensitivityTerminator(this, 0, 0.08, 90), new TimerTerminator(5000)));
     }
 }

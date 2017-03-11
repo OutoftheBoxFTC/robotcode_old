@@ -20,6 +20,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftc7244.robotcontroller.autonomous.Status;
+import org.ftc7244.robotcontroller.programs.debug.Debug;
 import org.ftc7244.robotcontroller.sensor.SickUltrasonic;
 
 import java.util.Map;

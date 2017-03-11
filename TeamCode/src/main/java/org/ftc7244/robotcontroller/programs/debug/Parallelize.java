@@ -1,4 +1,4 @@
-package org.ftc7244.robotcontroller;
+package org.ftc7244.robotcontroller.programs.debug;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 

@@ -1,8 +1,9 @@
-package org.ftc7244.robotcontroller;
+package org.ftc7244.robotcontroller.programs.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.ftc7244.robotcontroller.Westcoast;
 import org.ftc7244.robotcontroller.core.Button;
 import org.ftc7244.robotcontroller.core.ButtonType;
 
