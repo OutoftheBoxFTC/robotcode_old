@@ -150,7 +150,7 @@ public class Westcoast {
      * @param ms the duration to sleep in milliseconds
      * @throws InterruptedException if the code fails to terminate before stop requested
      */
-    private void sleep(long ms) throws InterruptedException {
+    public static void sleep(long ms) throws InterruptedException {
         long target = System.currentTimeMillis() + ms;
         while (target > System.currentTimeMillis() && !Status.isStopRequested()) Thread.sleep(1);
     }

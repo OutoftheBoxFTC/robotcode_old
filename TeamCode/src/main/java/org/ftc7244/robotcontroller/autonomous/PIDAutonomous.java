@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftc7244.robotcontroller.Westcoast;
+import org.ftc7244.robotcontroller.autonomous.drivers.EncoderDrive;
 import org.ftc7244.robotcontroller.autonomous.drivers.GyroscopeDrive;
 import org.ftc7244.robotcontroller.autonomous.drivers.UltrasonicDrive;
 import org.ftc7244.robotcontroller.sensor.gyroscope.GyroscopeProvider;
@@ -24,6 +25,7 @@ public abstract class PIDAutonomous extends LinearOpMode {
     protected final GyroscopeDrive gyroscope;
     @NonNull
     protected final UltrasonicDrive ultrasonic;
+    protected final EncoderDrive encoder;
     protected final GyroscopeProvider gyroProvider;
     protected Westcoast robot;
     private long end;
@@ -36,12 +38,11 @@ public abstract class PIDAutonomous extends LinearOpMode {
         gyroProvider = new NavXGyroscopeProvider();
         gyroscope = new GyroscopeDrive(robot, gyroProvider);
         ultrasonic = new UltrasonicDrive(robot);
+        encoder = new EncoderDrive(robot);
     }
 
     @Override
     public void runOpMode() throws InterruptedException {
-        end = System.currentTimeMillis() + 30000;
-
         robot.init();
         Status.setAutonomous(this);
         gyroProvider.start(hardwareMap);
@@ -62,6 +63,7 @@ public abstract class PIDAutonomous extends LinearOpMode {
 
         try {
             gyroscope.resetOrientation();
+            end = System.currentTimeMillis() + 30000;
             run();
         } catch (Throwable t) {
             RobotLog.e(t.getMessage());

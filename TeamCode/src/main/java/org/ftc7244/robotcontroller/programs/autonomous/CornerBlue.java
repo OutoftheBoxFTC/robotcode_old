@@ -16,13 +16,13 @@ public class CornerBlue extends PIDAutonomous {
         //Drive to the middle of the field
         gyroscope.drive(.5, 8);
         //Orient for shooting balls
-        gyroscope.rotate(95);
+        gyroscope.rotate(100);
         //shoot two balls
         robot.shootLoop(2, 1500);
         sleep(5000);
         robot.shoot(0);
         //rotate backwards
-        gyroscope.rotate(-90);
+        gyroscope.rotate(-95);
         //drive onto the platform
         gyroscope.drive(.5, 38);
     }
