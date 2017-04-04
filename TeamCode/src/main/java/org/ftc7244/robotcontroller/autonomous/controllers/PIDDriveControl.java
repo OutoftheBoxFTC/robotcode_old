@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.qualcomm.robotcore.util.RobotLog;
 
-import org.ftc7244.robotcontroller.programs.debug.Debug;
+import org.ftc7244.robotcontroller.Debug;
 import org.ftc7244.robotcontroller.Westcoast;
 import org.ftc7244.robotcontroller.autonomous.Status;
 import org.ftc7244.robotcontroller.autonomous.terminators.Terminator;
@@ -16,18 +16,12 @@ import org.ftc7244.robotcontroller.autonomous.terminators.Terminator;
  */
 public abstract class PIDDriveControl {
 
-    protected boolean debug;
     protected PIDController controller;
     protected Westcoast robot;
 
     public PIDDriveControl(PIDController controller, Westcoast robot) {
-        this(controller, robot, false);
-    }
-
-    public PIDDriveControl(PIDController controller, Westcoast robot, boolean debug) {
         this.controller = controller;
         this.robot = robot;
-        this.debug = debug;
     }
 
     /**

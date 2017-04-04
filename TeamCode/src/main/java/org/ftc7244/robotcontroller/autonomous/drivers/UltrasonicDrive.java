@@ -16,32 +16,22 @@ public class UltrasonicDrive extends PIDDriveControl {
     private static final double OFFSET_LEADING = 0.0407, OFFSET_TRAILING = 0;
 
     /**
-     * Same as the parent constructor but instead disable debugging.
-     *
-     * @param robot the code to access the motors
-     */
-    public UltrasonicDrive(Westcoast robot) {
-        this(robot, false);
-    }
-
-    /**
      * Incorporates the default PID tunings but allows for debugging within the code. Additionally,
      * it has deadbands for the integral and a limit for the PID output. It is fairly simple and
      * uses the ultrasonic sensors from the robot class.
      *
      * @param robot access to the ${@link Westcoast#getLeadingUltrasonic()} and ${@link Westcoast#getTrailingUltrasonic()} ()}
-     * @param debug whether to log or not
      */
-    public UltrasonicDrive(Westcoast robot, boolean debug) {
+    public UltrasonicDrive(Westcoast robot) {
         super(new PIDControllerBuilder()
-                .setProportional(0.15)
-                .setIntegral(0.0005)
-                .setDelay(30)
-                .setIntegralRange(0.75)
-                .setIntegralReset(true)
-                .setOutputRange(.22)
-                .createController(),
-            robot, debug);
+                        .setProportional(0.15)
+                        .setIntegral(0.0005)
+                        .setDelay(30)
+                        .setIntegralRange(0.75)
+                        .setIntegralReset(true)
+                        .setOutputRange(.22)
+                        .createController(),
+                robot);
     }
 
     @Override

@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created by FTC 7244 on 3/6/2017.
  */
-@Autonomous(name="Ultrasonic Debug")
+@Autonomous(name = "Ultrasonic Debug")
 public class UltrasonicDebug extends PIDAutonomous {
 
     private List<Double> leadingHistory = new ArrayList<>();

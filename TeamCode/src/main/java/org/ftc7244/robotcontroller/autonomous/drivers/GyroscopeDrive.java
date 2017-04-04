@@ -3,6 +3,7 @@ package org.ftc7244.robotcontroller.autonomous.drivers;
 import com.qualcomm.robotcore.hardware.LightSensor;
 import com.qualcomm.robotcore.util.RobotLog;
 
+import org.ftc7244.robotcontroller.Debug;
 import org.ftc7244.robotcontroller.Westcoast;
 import org.ftc7244.robotcontroller.autonomous.controllers.PIDControllerBuilder;
 import org.ftc7244.robotcontroller.autonomous.controllers.PIDDriveControl;
@@ -31,20 +32,24 @@ public class GyroscopeDrive extends PIDDriveControl {
      */
     public GyroscopeDrive(Westcoast robot, GyroscopeProvider gyroProvider) {
         super(new PIDControllerBuilder()
-                .setProportional(0.02)
-                .setIntegral(0.00004)
-                .setDerivative(3.5)
-                .setDelay(30)
-                .setIntegralRange(6)
-                .setOutputRange(0.8)
-                .createController(),
-            robot);
+                        .setProportional(0.02)
+                        .setIntegral(0.00004)
+                        .setDerivative(3.5)
+                        .setDelay(30)
+                        .setIntegralRange(6)
+                        .setOutputRange(0.8)
+                        .createController(),
+                robot);
         this.gyroProvider = gyroProvider;
     }
 
     @Override
     public double getReading() {
         return this.gyroProvider.getZ();
+    }
+
+    public void drive(double power, double inches) throws InterruptedException {
+        drive(power, inches, 0);
     }
 
     /**
@@ -56,12 +61,12 @@ public class GyroscopeDrive extends PIDDriveControl {
      * @param inches total distance to travel
      * @throws InterruptedException if code fails to terminate on stop requested
      */
-    public void drive(double power, double inches) throws InterruptedException {
+    public void drive(double power, double inches, double target) throws InterruptedException {
         final double ticks = inches * Westcoast.COUNTS_PER_INCH;
         Westcoast.resetMotors(robot.getDriveLeft(), robot.getDriveRight());
         if (inches <= 0) RobotLog.e("Invalid distances!");
         final int offset = getEncoderAverage();
-        control(0, power, new Terminator() {
+        control(target, power, new Terminator() {
             @Override
             public boolean shouldTerminate() {
                 return Math.abs(getEncoderAverage() - offset) >= ticks;
@@ -206,6 +211,7 @@ public class GyroscopeDrive extends PIDDriveControl {
 
         @Override
         public boolean shouldTerminate() {
+            if (Debug.STATUS) RobotLog.ii("Light", sensor.getLightDetected() + "");
             if (sensor.getLightDetected() > white) {
                 offset = getEncoderAverage();
             } else sensor.enableLed(true);

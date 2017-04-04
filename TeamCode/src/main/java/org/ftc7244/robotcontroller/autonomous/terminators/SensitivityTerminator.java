@@ -2,7 +2,7 @@ package org.ftc7244.robotcontroller.autonomous.terminators;
 
 import com.qualcomm.robotcore.util.RobotLog;
 
-import org.ftc7244.robotcontroller.programs.debug.Debug;
+import org.ftc7244.robotcontroller.Debug;
 import org.ftc7244.robotcontroller.autonomous.controllers.PIDDriveControl;
 
 /**

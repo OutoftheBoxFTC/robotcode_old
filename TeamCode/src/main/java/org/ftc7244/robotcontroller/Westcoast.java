@@ -20,7 +20,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftc7244.robotcontroller.autonomous.Status;
-import org.ftc7244.robotcontroller.programs.debug.Debug;
 import org.ftc7244.robotcontroller.sensor.SickUltrasonic;
 
 import java.util.Map;
@@ -84,6 +83,18 @@ public class Westcoast {
     }
 
     /**
+     * This is the codes own way of pausing. This has the the capability of stopping the wait if
+     * stop is requested and passing up an exception if it fails as well
+     *
+     * @param ms the duration to sleep in milliseconds
+     * @throws InterruptedException if the code fails to terminate before stop requested
+     */
+    public static void sleep(long ms) throws InterruptedException {
+        long target = System.currentTimeMillis() + ms;
+        while (target > System.currentTimeMillis() && !Status.isStopRequested()) Thread.sleep(1);
+    }
+
+    /**
      * Identify hardware and then set it up with different objects. Other initialization properties are
      * set to ensure that everything is in the default position or correct mode for the robot.
      */
@@ -141,18 +152,6 @@ public class Westcoast {
         opMode.telemetry.addLine("ERROR: " + name + " not found!");
         RobotLog.e("ERROR: " + name + " not found!");
         return null;
-    }
-
-    /**
-     * This is the codes own way of pausing. This has the the capability of stopping the wait if
-     * stop is requested and passing up an exception if it fails as well
-     *
-     * @param ms the duration to sleep in milliseconds
-     * @throws InterruptedException if the code fails to terminate before stop requested
-     */
-    public static void sleep(long ms) throws InterruptedException {
-        long target = System.currentTimeMillis() + ms;
-        while (target > System.currentTimeMillis() && !Status.isStopRequested()) Thread.sleep(1);
     }
 
     /**
@@ -219,7 +218,8 @@ public class Westcoast {
      */
     public boolean isColor(int color) {
         int blue = beaconSensor.blue() - blueOffset, red = beaconSensor.red() - redOffset;
-        if (Debug.STATUS) RobotLog.ii("COLOR", blue + ":" + red);
+        if (Debug.STATUS)
+            RobotLog.ii("COLOR", blue + "(" + blueOffset + ")" + ":" + red + "(" + redOffset + ")");
         switch (color) {
             case Color.BLUE:
                 return blue > red;
@@ -241,7 +241,6 @@ public class Westcoast {
         beaconPusher.setPosition(0);
         sleep(750);
         beaconPusher.setPosition(1);
-        sleep(750);
     }
 
     /**
@@ -351,6 +350,14 @@ public class Westcoast {
     @Nullable
     public DcMotor getLights() {
         return lights;
+    }
+
+    public int getBlueOffset() {
+        return blueOffset;
+    }
+
+    public int getRedOffset() {
+        return redOffset;
     }
 
     public enum DoorState {

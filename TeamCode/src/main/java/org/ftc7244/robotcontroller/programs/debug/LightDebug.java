@@ -8,7 +8,7 @@ import org.ftc7244.robotcontroller.autonomous.PIDAutonomous;
 /**
  * Created by FTC 7244 on 2/11/2017.
  */
-@Autonomous(name="Light Sensor Debug")
+@Autonomous(name = "Light Sensor Debug")
 public class LightDebug extends PIDAutonomous {
     @Override
     public void run() throws InterruptedException {
