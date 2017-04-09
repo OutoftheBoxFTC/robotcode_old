@@ -11,12 +11,10 @@ public class BaseReverseBeaconBlue extends ReverseBeaconBlue {
     @Override
     public void run() throws InterruptedException {
         super.run();
-        gyroscope.rotate(-85);
+        gyroscope.rotate(-90);
         robot.getIntake().setPower(1);
         gyroscope.drive(0.5, 20);
-        gyroscope.rotate(90);
-        gyroscope.rotate(-90);
-        long sleep = getAutonomousEnd() - (System.currentTimeMillis() + 750);
+        long sleep = getAutonomousEnd() - (System.currentTimeMillis() + 1250);
         if (sleep > 0) sleep(sleep);
         gyroscope.drive(0.5, 20);
     }

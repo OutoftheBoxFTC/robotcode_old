@@ -12,7 +12,7 @@ public class ReverseBeaconBlue extends PIDAutonomous {
 
     @Override
     public void run() throws InterruptedException {
-        gyroscope.drive(0.75, 90, 35);
+        gyroscope.drive(0.75, 90, 40);
         sleep(500);
         gyroscope.rotate(-24);
         ultrasonic.parallelize();
@@ -25,11 +25,11 @@ public class ReverseBeaconBlue extends PIDAutonomous {
             robot.pushBeacon();
         } else {
             //if it is red drive forward then press the button
-            gyroscope.drive(-0.3, 2.5);
+            gyroscope.drive(-0.2, 2.5);
             robot.pushBeacon();
         }
 
-        gyroscope.driveUntilLine(-0.3, GyroscopeDrive.Sensor.Trailing, 0.5, 35, 55);
+        gyroscope.driveUntilLine(-0.25, GyroscopeDrive.Sensor.Trailing, 0.5, 35, 55);
         sleep(500);
         if (robot.isColor(Color.BLUE)) {
             //if it is in front of blue immediately press the button
@@ -40,7 +40,7 @@ public class ReverseBeaconBlue extends PIDAutonomous {
             robot.pushBeacon();
         }
 
-        gyroscope.rotate(30);
+        gyroscope.rotate(40);
         gyroscope.drive(-0.5, 20);
         robot.shootLoop(2, 500);
     }
