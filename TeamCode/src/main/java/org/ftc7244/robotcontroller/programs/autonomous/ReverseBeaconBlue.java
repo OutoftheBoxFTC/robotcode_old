@@ -12,9 +12,9 @@ public class ReverseBeaconBlue extends PIDAutonomous {
 
     @Override
     public void run() throws InterruptedException {
-        gyroscope.drive(0.75, 90, 40);
+        gyroscope.drive(0.75, 85, 36);
         sleep(500);
-        gyroscope.rotate(-24);
+        gyroscope.rotate(-38);
         ultrasonic.parallelize();
         sleep(300);
         gyroscope.resetOrientation();

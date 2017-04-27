@@ -361,8 +361,8 @@ public class Westcoast {
     }
 
     public enum DoorState {
-        OPEN(0.7),
-        CLOSED(1);
+        OPEN(0.5),
+        CLOSED(0.67);
 
         protected final double position;
 

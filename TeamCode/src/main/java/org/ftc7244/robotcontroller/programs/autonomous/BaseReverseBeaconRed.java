@@ -18,7 +18,7 @@ public class BaseReverseBeaconRed extends ReverseBeaconRed {
         gyroscope.drive(0.5, 30);
 
         EncoderDrive.Direction direction = EncoderDrive.Direction.LEFT;
-        while (getAutonomousEnd() - (System.currentTimeMillis() + 1250) > 0) {
+        while (getAutonomousEnd() - (System.currentTimeMillis() + 1500) > 0) {
             encoder.rotate(1, 20, direction);
             direction = direction == EncoderDrive.Direction.LEFT ? EncoderDrive.Direction.RIGHT : EncoderDrive.Direction.LEFT;
         }

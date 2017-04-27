@@ -17,7 +17,7 @@ public class BaseReverseBeaconBlue extends ReverseBeaconBlue {
         robot.getIntake().setPower(1);
         gyroscope.drive(0.5, 20);
         EncoderDrive.Direction direction = EncoderDrive.Direction.LEFT;
-        while (getAutonomousEnd() - (System.currentTimeMillis() + 1250) > 0) {
+        while (getAutonomousEnd() - (System.currentTimeMillis() + 1500) > 0) {
             encoder.rotate(1, 20, direction);
             direction = direction == EncoderDrive.Direction.LEFT ? EncoderDrive.Direction.RIGHT : EncoderDrive.Direction.LEFT;
         }
