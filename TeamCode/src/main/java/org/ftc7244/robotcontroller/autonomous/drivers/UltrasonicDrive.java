@@ -24,7 +24,7 @@ public class UltrasonicDrive extends PIDDriveControl {
      */
     public UltrasonicDrive(Westcoast robot) {
         super(new PIDControllerBuilder()
-                        .setProportional(0.15)
+                        .setProportional(0.18)
                         .setIntegral(0.0005)
                         .setDelay(30)
                         .setIntegralRange(0.75)

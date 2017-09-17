@@ -72,7 +72,8 @@ public class WestcoastTeleop extends OpMode {
                 @Override
                 public void run() {
                     try {
-                        robot.shoot(50);
+                        robot.shoot(0);
+                        Westcoast.sleep(200);
                     } catch (InterruptedException e) {
                         RobotLog.e("Shooting was stopped early");
                     }

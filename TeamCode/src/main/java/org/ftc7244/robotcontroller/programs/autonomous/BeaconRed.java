@@ -19,7 +19,7 @@ public class BeaconRed extends PIDAutonomous {
         gyroscope.rotate(-51);
         gyroscope.drive(-0.35, 14);
         robot.shootLoop(2, 500);
-        gyroscope.drive(-0.35, 31);
+        gyroscope.drive(-0.35, 33);
 
         //rotate and get parallel with wall
         sleep(500);

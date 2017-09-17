@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.ftc7244.robotcontroller.autonomous.PIDAutonomous;
 
-@Autonomous(name = "Corner Blue", group = "Blue")
 public class CornerBlue extends PIDAutonomous {
 
     @Override
@@ -21,9 +20,5 @@ public class CornerBlue extends PIDAutonomous {
         robot.shootLoop(2, 1500);
         sleep(5000);
         robot.shoot(0);
-        //rotate backwards
-        gyroscope.rotate(-95);
-        //drive onto the platform
-        gyroscope.drive(.5, 38);
     }
 }
