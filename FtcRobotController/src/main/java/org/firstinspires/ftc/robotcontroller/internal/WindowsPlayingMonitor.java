@@ -44,9 +44,9 @@ import com.qualcomm.robotcore.robot.RobotStatus;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.ftccommon.external.RobotStateMonitor;
-import org.firstinspires.ftc.robotcore.internal.AppUtil;
 import org.firstinspires.ftc.robotcore.internal.network.NetworkStatus;
 import org.firstinspires.ftc.robotcore.internal.network.PeerStatus;
+import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 
 /**
  * {@link WindowsPlayingMonitor} is an implementation of {@link RobotStateMonitor} that
@@ -122,14 +122,13 @@ public class WindowsPlayingMonitor implements RobotStateMonitor
             if (DEBUG) RobotLog.vv(SoundPlayer.TAG, "updateRobotStatus(%s)", robotStatus.toString());
             switch (robotStatus)
                 {
-                case NONE:                      break;
-                case SCANNING_USB:              break;
-                case WAITING_ON_NETWORK:        break;
-                case NETWORK_TIMED_OUT:         break;
-                case STARTING_ROBOT:            break;
-                case FAILED_TO_START_ROBOT:     break;
-                case UNABLE_TO_CREATE_ROBOT:    break;
-                default:                        break;
+                case NONE:                          break;
+                case SCANNING_USB:                  break;
+                case WAITING_ON_NETWORK_CONNECTION: break;
+                case NETWORK_TIMED_OUT:             break;
+                case STARTING_ROBOT:                break;
+                case UNABLE_TO_START_ROBOT:         break;
+                default:                            break;
                 }
             }
         this.robotStatus = robotStatus;

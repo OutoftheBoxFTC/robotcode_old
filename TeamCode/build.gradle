@@ -15,5 +15,4 @@
 apply from: '../build.common.gradle'
 
 dependencies {
-    compile 'com.android.support:support-annotations:24.1.1'
 }

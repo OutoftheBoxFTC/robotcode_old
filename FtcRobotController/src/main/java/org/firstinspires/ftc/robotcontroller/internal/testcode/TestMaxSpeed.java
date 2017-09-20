@@ -75,8 +75,8 @@ public class TestMaxSpeed extends LinearOpMode
         for (int degreesPerSecond = 300; degreesPerSecond <= 1000; degreesPerSecond += 100)
             {
             int ticksPerSecond = ticksPerSecFromDegsPerSec(degreesPerSecond);
-            this.motorLeft.setMaxSpeed(ticksPerSecond);
-            this.motorRight.setMaxSpeed(ticksPerSecond);
+            //this.motorLeft.setMaxSpeed(ticksPerSecond);
+            //this.motorRight.setMaxSpeed(ticksPerSecond);
 
             telemetry.addData("deg/s", degreesPerSecond);
             telemetry.addData("ticks/s", ticksPerSecond);
@@ -110,7 +110,7 @@ public class TestMaxSpeed extends LinearOpMode
      * for the motors you are actually using. */
     int ticksPerSecFromDegsPerSec(int degreesPerSecond)
         {
-        final int encoderTicksPerRevolution = HiTechnicConstants.TETRIX_MOTOR_TICKS_PER_REVOLUTION; // assume Tetrix motors; change if you use different motors!
+        final int encoderTicksPerRevolution = 1; // assume Tetrix motors; change if you use different motors!
         final int degreesPerRevolution      = 360;
 
         return encoderTicksPerRevolution * degreesPerSecond / degreesPerRevolution;
