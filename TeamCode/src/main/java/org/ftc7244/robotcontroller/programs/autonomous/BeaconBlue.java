@@ -3,11 +3,13 @@ package org.ftc7244.robotcontroller.programs.autonomous;
 import android.graphics.Color;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.ftc7244.robotcontroller.autonomous.PIDAutonomous;
 import org.ftc7244.robotcontroller.autonomous.drivers.GyroscopeDrive;
-
+@Deprecated
 @Autonomous(name = "Beacon Blue", group = "Blue")
+@Disabled
 public class BeaconBlue extends PIDAutonomous {
 
     @Override

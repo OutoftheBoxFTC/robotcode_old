@@ -1,9 +1,11 @@
 package org.ftc7244.robotcontroller.programs.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.ftc7244.robotcontroller.autonomous.PIDAutonomous;
-
+@Deprecated
+@Disabled
 public class CornerRed extends PIDAutonomous {
 
     @Override

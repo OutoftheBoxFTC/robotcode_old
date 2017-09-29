@@ -1,8 +1,11 @@
 package org.ftc7244.robotcontroller.programs.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
+@Deprecated
 @Autonomous(name = "Corner Red [CORNER]", group = "Red")
+@Disabled
 public class CornerCornerRed extends CornerRed {
 
     @Override

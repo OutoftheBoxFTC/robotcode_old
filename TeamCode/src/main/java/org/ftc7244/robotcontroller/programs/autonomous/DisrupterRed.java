@@ -1,11 +1,14 @@
 package org.ftc7244.robotcontroller.programs.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.ftc7244.robotcontroller.autonomous.PIDAutonomous;
 import org.ftc7244.robotcontroller.autonomous.drivers.EncoderDrive;
 
+@Deprecated
 @Autonomous(name = "Disrupter Red", group = "Red")
+@Disabled
 public class DisrupterRed extends PIDAutonomous {
 
     @Override

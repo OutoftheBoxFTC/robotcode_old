@@ -1,11 +1,14 @@
 package org.ftc7244.robotcontroller.programs.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 /**
  * Created by FTC 7244 on 4/3/2017.
  */
+@Deprecated
 @Autonomous(name = "Beacon Blue [REVERSE] [CORNER]", group = "Blue")
+@Disabled
 public class CornerReverseBeaconBlue extends ReverseBeaconBlue {
 
     @Override

@@ -2,12 +2,16 @@ package org.ftc7244.robotcontroller.programs.autonomous;
 
 import android.graphics.Color;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+
 import org.ftc7244.robotcontroller.autonomous.PIDAutonomous;
 import org.ftc7244.robotcontroller.autonomous.drivers.GyroscopeDrive;
 
 /**
  * Created by FTC 7244 on 3/31/2017.
  */
+@Deprecated
+@Disabled
 public class ReverseBeaconBlue extends PIDAutonomous {
 
     @Override
