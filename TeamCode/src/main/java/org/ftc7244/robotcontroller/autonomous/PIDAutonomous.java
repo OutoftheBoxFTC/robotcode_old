@@ -16,7 +16,7 @@ import org.ftc7244.robotcontroller.sensor.gyroscope.NavXGyroscopeProvider;
  * Contains all the code for different drive types including ${@link GyroscopeDrive}
  * and ${@link UltrasonicDrive} it also connects to the ${@link Westcoast} class to handle robot
  * control. Not much happens here beyond the essentials for each control method. It also
- * automatically handles wait for start since most of the setup is completed and only driving
+ * automatically handles wait for startImageReading since most of the setup is completed and only driving
  * instructions are needed.
  */
 public abstract class PIDAutonomous extends LinearOpMode {
@@ -25,8 +25,10 @@ public abstract class PIDAutonomous extends LinearOpMode {
     protected final GyroscopeDrive gyroscope;
     @NonNull
     protected final UltrasonicDrive ultrasonic;
+
     protected final EncoderDrive encoder;
     protected final GyroscopeProvider gyroProvider;
+
     protected Westcoast robot;
     private long end;
 

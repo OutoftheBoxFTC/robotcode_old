@@ -11,6 +11,7 @@ import org.ftc7244.robotcontroller.Westcoast;
  * It also respects if the request to terminate was ignored and continues to only drive until
  * a specific set of parameters were fulfilled;
  */
+@Deprecated
 public class LineTerminator extends Terminator {
 
     /**

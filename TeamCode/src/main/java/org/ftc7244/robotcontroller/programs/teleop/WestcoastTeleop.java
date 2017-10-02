@@ -91,7 +91,7 @@ public class WestcoastTeleop extends OpMode {
         //INTAKE
         //If no triggers are pressed stop the lift
         int intakeSpeed = 0;
-        //If the right trigger is pressed start the lift
+        //If the right trigger is pressed startImageReading the lift
         if (triggerR.isPressed()) intakeSpeed = 1;
         //If the left trigger is pressed reverse the lift
         if (triggerL.isPressed()) intakeSpeed = -1;

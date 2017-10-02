@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 
 import com.kauailabs.navx.ftc.AHRS;
 import com.qualcomm.hardware.hitechnic.HiTechnicNxtLightSensor;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.ColorSensor;
@@ -19,6 +20,12 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.RobotLog;
 
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.navigation.VuMarkInstanceId;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.ftc7244.robotcontroller.autonomous.Status;
 import org.ftc7244.robotcontroller.sensor.SickUltrasonic;
 
@@ -28,6 +35,7 @@ public class Westcoast {
 
     public static final byte NAVX_DEVICE_UPDATE_RATE_HZ = (byte) 100;
     public static final double COUNTS_PER_INCH = 1120 / (Math.PI * 3);
+    public static final String VUFORIA_LICENSE_KEY = "AQ7YHUT/////AAAAGVOxmiN4SkHwqyEIEpsDKxo9Gpbkev2MCSd8RFB1jHcnH21ZDRyGXPK9hwVuWRRN4eiOU42jJhNeOiOlyh7yAdqsjfotKCW71TMFv7OiZr7uw6kS049r5LuvfMrxc9DyfDVCRh8aViWYNSuJVAGk6nF8D9dC9i5hy1FQFCRN3wxdQ49o/YqMfLeQNMgQIW/K3fqLi8ez+Ek9cF0mH1SGqBcv6dJrRavFqV/twq9F9fK+yW1rwcAQGunLKu2g6p0r1YXeSQe0qiMkfwumVwb2Sq0ZmEKQjHV4hwm14opyvtbXZzJwHppKOmBC0XXpkCBs7xLcYgoGbEiiGwEQv+N1xVnRha3NZXCmHH44JweTvmbh";
 
     @Nullable
     private DcMotor driveLeft, driveRight, launcher, intake, spoolerTop, spoolerBottom, lights;
@@ -42,8 +50,12 @@ public class Westcoast {
     private HiTechnicNxtLightSensor leadingLight, trailingLight;
     @Nullable
     private SickUltrasonic leadingUltrasonic, trailingUltrasonic;
-
+    @Deprecated
     private int blueOffset, redOffset;
+    @Nullable
+    private VuforiaLocalizer vuforia;
+    @Nullable
+    private VuforiaTrackables crypts;
 
     public Westcoast(OpMode opMode) {
         this.opMode = opMode;
@@ -99,6 +111,7 @@ public class Westcoast {
      * set to ensure that everything is in the default position or correct mode for the robot.
      */
     public void init() {
+        //Initialize or nullify all hardware
         HardwareMap map = opMode.hardwareMap;
         this.driveLeft = getOrNull(map.dcMotor, "drive_left");
         this.driveRight = getOrNull(map.dcMotor, "drive_right");
@@ -132,6 +145,19 @@ public class Westcoast {
             redOffset = 0;
             blueOffset = 0;
         }
+    }
+
+    /**
+     * Initializes Vuforia to be used in autonomous. This will not be called in teleop. This will be
+     * called before ${@link LinearOpMode#waitForStart()}, but after ${@link #init()}
+     */
+    public void initVuforia(){
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
+        parameters.vuforiaLicenseKey = VUFORIA_LICENSE_KEY;
+        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.FRONT;
+        vuforia = ClassFactory.createVuforiaLocalizer(parameters);
+        crypts = vuforia.loadTrackablesFromAsset("RelicVuMark");
+        crypts.activate();
     }
 
     /**
@@ -351,13 +377,37 @@ public class Westcoast {
     public DcMotor getLights() {
         return lights;
     }
-
+    @Deprecated
     public int getBlueOffset() {
         return blueOffset;
     }
-
+    @Deprecated
     public int getRedOffset() {
         return redOffset;
+    }
+
+    public CryptReading getCryptReading(){
+        VuforiaTrackable crypt = crypts.get(0);
+        if(crypt != null){
+            VuforiaTrackable.Listener listener = crypt.getListener();
+            if(listener instanceof VuforiaTrackableDefaultListener){
+                VuMarkInstanceId instanceId = ((VuforiaTrackableDefaultListener)listener).getVuMarkInstanceId();
+                if(instanceId != null){
+                    if(instanceId.getType() == VuMarkInstanceId.Type.NUMERIC){
+                        int value = Integer.parseInt(instanceId.toString().split(",")[1].replace(")", ""));
+                        switch (value){
+                            case 1:
+                                return CryptReading.LEFT;
+                            case 2:
+                                return CryptReading.CENTER;
+                            case 3:
+                                return CryptReading.RIGHT;
+                        }
+                    }
+                }
+            }
+        }
+        return CryptReading.UNKNOWN;
     }
 
     public enum DoorState {
@@ -380,5 +430,13 @@ public class Westcoast {
         CarriageState(double position) {
             this.position = position;
         }
+    }
+
+    public enum CryptReading {
+        LEFT,
+        CENTER,
+        RIGHT,
+        UNKNOWN
+
     }
 }
