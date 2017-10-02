@@ -37,7 +37,7 @@ public abstract class PIDAutonomous extends LinearOpMode {
      */
     protected PIDAutonomous() {
         robot = new Westcoast(this);
-        gyroProvider = new NavXGyroscopeProvider();
+        gyroProvider = new NavXGyroscopeProvider(robot);
         gyroscope = new GyroscopeDrive(robot, gyroProvider);
         ultrasonic = new UltrasonicDrive(robot);
         encoder = new EncoderDrive(robot);

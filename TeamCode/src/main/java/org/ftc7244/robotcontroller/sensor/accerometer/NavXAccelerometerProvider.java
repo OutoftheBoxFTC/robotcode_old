@@ -18,6 +18,10 @@ public class NavXAccelerometerProvider extends AccelerometerProvider implements 
     @Nullable
     private AHRS navxDevice;
     private boolean moving;
+    private Westcoast robot;
+    public NavXAccelerometerProvider(Westcoast robot){
+        this.robot = robot;
+    }
 
     @NonNull
     @Override
@@ -28,7 +32,7 @@ public class NavXAccelerometerProvider extends AccelerometerProvider implements 
     @Override
     public void start(HardwareMap map) {
         moving = false;
-        navxDevice = Westcoast.getNavX(map);
+        navxDevice = robot.getNavX();
         navxDevice.zeroYaw();
         navxDevice.registerCallback(this);
     }

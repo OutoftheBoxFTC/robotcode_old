@@ -57,6 +57,8 @@ public class Westcoast {
     private VuforiaLocalizer vuforia;
     @Nullable
     private VuforiaTrackables crypts;
+    @Nullable
+    private I2cDevice navx;
 
     public Westcoast(OpMode opMode) {
         this.opMode = opMode;
@@ -81,18 +83,6 @@ public class Westcoast {
             notReset = !allReset;
         }
         for (DcMotor motor : motors) motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-    }
-
-    /**
-     * Obtains the NavX-Micro from the hardware map expecting a "navx" and then uses reflection
-     * to obtain all the information to properly setup the sensor
-     *
-     * @param map with the "navx" device
-     * @return setup navx sensor
-     */
-    public static AHRS getNavX(@NonNull HardwareMap map) {
-        final I2cDevice navx = map.i2cDevice.get("navx");
-        return AHRS.getInstance((DeviceInterfaceModule) navx.getController(), navx.getPort(), AHRS.DeviceDataType.kProcessedData, NAVX_DEVICE_UPDATE_RATE_HZ);
     }
 
     /**
@@ -129,6 +119,7 @@ public class Westcoast {
         this.trailingUltrasonic = new SickUltrasonic(getOrNull(map.analogInput, "trailing_ultrasonic"));
         this.leadingLight = (HiTechnicNxtLightSensor) getOrNull(map.lightSensor, "leading_light");
         this.trailingLight = (HiTechnicNxtLightSensor) getOrNull(map.lightSensor, "trailing_light");
+        this.navx = getOrNull(map.i2cDevice, "navx");
         this.lights = getOrNull(map.dcMotor, "lights");
 
         //Set the default direction for all the hardware and also initialize default positions
@@ -385,6 +376,17 @@ public class Westcoast {
     @Deprecated
     public int getRedOffset() {
         return redOffset;
+    }
+
+    /**
+     * Uses reflection to obtain all the information to properly setup the navx sensor
+     *
+     * @return setup navx sensor
+     */
+    @Nullable
+    public AHRS getNavX(){
+        if(navx==null)return null;
+        return AHRS.getInstance((DeviceInterfaceModule) navx.getController(), navx.getPort(), AHRS.DeviceDataType.kProcessedData, NAVX_DEVICE_UPDATE_RATE_HZ);
     }
 
     public CryptReading getPictographReading(){
