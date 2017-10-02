@@ -21,6 +21,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.navigation.VuMarkInstanceId;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
@@ -386,7 +387,7 @@ public class Westcoast {
         return redOffset;
     }
 
-    public CryptReading getCryptReading(){
+    public CryptReading getPictographReading(){
         VuforiaTrackable crypt = crypts.get(0);
         if(crypt != null){
             VuforiaTrackable.Listener listener = crypt.getListener();
@@ -408,6 +409,18 @@ public class Westcoast {
             }
         }
         return CryptReading.UNKNOWN;
+    }
+
+    public double inchesFromPictograph(PosAxis axis){
+        VuforiaTrackable crypt = crypts.get(0);
+        if(crypt != null){
+            VuforiaTrackable.Listener listener = crypt.getListener();
+            if(listener instanceof VuforiaTrackableDefaultListener){
+                OpenGLMatrix pose = ((VuforiaTrackableDefaultListener)listener).getPose();
+                return pose.getTranslation().get(axis.equals(PosAxis.X)?0:axis.equals(PosAxis.Y)?1:2);
+            }
+        }
+        return -1;
     }
 
     public enum DoorState {
@@ -437,6 +450,9 @@ public class Westcoast {
         CENTER,
         RIGHT,
         UNKNOWN
+    }
 
+    public enum PosAxis{
+        X,Y,Z
     }
 }
