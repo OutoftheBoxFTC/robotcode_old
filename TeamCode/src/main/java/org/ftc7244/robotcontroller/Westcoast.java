@@ -38,7 +38,7 @@ public class Westcoast {
     public static final byte NAVX_DEVICE_UPDATE_RATE_HZ = (byte) 100;
     public static final double COUNTS_PER_INCH = 1120 / (Math.PI * 3), MM_TO_NCHES = 25.4;
     public static final String VUFORIA_LICENSE_KEY = "AQ7YHUT/////AAAAGVOxmiN4SkHwqyEIEpsDKxo9Gpbkev2MCSd8RFB1jHcnH21ZDRyGXPK9hwVuWRRN4eiOU42jJhNeOiOlyh7yAdqsjfotKCW71TMFv7OiZr7uw6kS049r5LuvfMrxc9DyfDVCRh8aViWYNSuJVAGk6nF8D9dC9i5hy1FQFCRN3wxdQ49o/YqMfLeQNMgQIW/K3fqLi8ez+Ek9cF0mH1SGqBcv6dJrRavFqV/twq9F9fK+yW1rwcAQGunLKu2g6p0r1YXeSQe0qiMkfwumVwb2Sq0ZmEKQjHV4hwm14opyvtbXZzJwHppKOmBC0XXpkCBs7xLcYgoGbEiiGwEQv+N1xVnRha3NZXCmHH44JweTvmbh";
-
+    private boolean vuforiaInitialized;
 
     @Nullable
     private DcMotor driveLeft, driveRight, launcher, intake, spoolerTop, spoolerBottom, lights;
@@ -66,6 +66,7 @@ public class Westcoast {
 
     public Westcoast(OpMode opMode) {
         this.opMode = opMode;
+        vuforiaInitialized = false;
     }
 
     /**
@@ -148,13 +149,16 @@ public class Westcoast {
      * called before ${@link LinearOpMode#waitForStart()}, but after ${@link #init()}
      */
     public void initVuforia(HardwareMap hardwareMap){
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName()));
-        parameters.vuforiaLicenseKey = VUFORIA_LICENSE_KEY;
-        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
-        vuforia = ClassFactory.createVuforiaLocalizer(parameters);
-        pictographs = vuforia.loadTrackablesFromAsset("RelicVuMark");
-        template = pictographs.get(0);
-        pictographs.activate();
+        if(!vuforiaInitialized) {
+            VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName()));
+            parameters.vuforiaLicenseKey = VUFORIA_LICENSE_KEY;
+            parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
+            vuforia = ClassFactory.createVuforiaLocalizer(parameters);
+            pictographs = vuforia.loadTrackablesFromAsset("RelicVuMark");
+            template = pictographs.get(0);
+            pictographs.activate();
+            vuforiaInitialized = true;
+        }
     }
 
     /**
@@ -411,7 +415,6 @@ public class Westcoast {
         }
         return -1;
     }
-    //tjos os a cpmment
 
     public enum DoorState {
         OPEN(0.5),
