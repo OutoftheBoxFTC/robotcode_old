@@ -22,6 +22,7 @@ import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
+import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 import org.firstinspires.ftc.robotcore.external.navigation.VuMarkInstanceId;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
@@ -35,8 +36,9 @@ import java.util.Map;
 public class Westcoast {
 
     public static final byte NAVX_DEVICE_UPDATE_RATE_HZ = (byte) 100;
-    public static final double COUNTS_PER_INCH = 1120 / (Math.PI * 3);
+    public static final double COUNTS_PER_INCH = 1120 / (Math.PI * 3), MM_TO_NCHES = 25.4;
     public static final String VUFORIA_LICENSE_KEY = "AQ7YHUT/////AAAAGVOxmiN4SkHwqyEIEpsDKxo9Gpbkev2MCSd8RFB1jHcnH21ZDRyGXPK9hwVuWRRN4eiOU42jJhNeOiOlyh7yAdqsjfotKCW71TMFv7OiZr7uw6kS049r5LuvfMrxc9DyfDVCRh8aViWYNSuJVAGk6nF8D9dC9i5hy1FQFCRN3wxdQ49o/YqMfLeQNMgQIW/K3fqLi8ez+Ek9cF0mH1SGqBcv6dJrRavFqV/twq9F9fK+yW1rwcAQGunLKu2g6p0r1YXeSQe0qiMkfwumVwb2Sq0ZmEKQjHV4hwm14opyvtbXZzJwHppKOmBC0XXpkCBs7xLcYgoGbEiiGwEQv+N1xVnRha3NZXCmHH44JweTvmbh";
+
 
     @Nullable
     private DcMotor driveLeft, driveRight, launcher, intake, spoolerTop, spoolerBottom, lights;
@@ -56,7 +58,9 @@ public class Westcoast {
     @Nullable
     private VuforiaLocalizer vuforia;
     @Nullable
-    private VuforiaTrackables crypts;
+    private VuforiaTrackables pictographs;
+    @Nullable
+    private VuforiaTrackable template;
     @Nullable
     private I2cDevice navx;
 
@@ -143,13 +147,14 @@ public class Westcoast {
      * Initializes Vuforia to be used in autonomous. This will not be called in teleop. This will be
      * called before ${@link LinearOpMode#waitForStart()}, but after ${@link #init()}
      */
-    public void initVuforia(){
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
+    public void initVuforia(HardwareMap hardwareMap){
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName()));
         parameters.vuforiaLicenseKey = VUFORIA_LICENSE_KEY;
-        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.FRONT;
+        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
         vuforia = ClassFactory.createVuforiaLocalizer(parameters);
-        crypts = vuforia.loadTrackablesFromAsset("RelicVuMark");
-        crypts.activate();
+        pictographs = vuforia.loadTrackablesFromAsset("RelicVuMark");
+        template = pictographs.get(0);
+        pictographs.activate();
     }
 
     /**
@@ -389,38 +394,20 @@ public class Westcoast {
         return AHRS.getInstance((DeviceInterfaceModule) navx.getController(), navx.getPort(), AHRS.DeviceDataType.kProcessedData, NAVX_DEVICE_UPDATE_RATE_HZ);
     }
 
-    public CryptReading getPictographReading(){
-        VuforiaTrackable crypt = crypts.get(0);
-        if(crypt != null){
-            VuforiaTrackable.Listener listener = crypt.getListener();
-            if(listener instanceof VuforiaTrackableDefaultListener){
-                VuMarkInstanceId instanceId = ((VuforiaTrackableDefaultListener)listener).getVuMarkInstanceId();
-                if(instanceId != null){
-                    if(instanceId.getType() == VuMarkInstanceId.Type.NUMERIC){
-                        int value = Integer.parseInt(instanceId.toString().split(",")[1].replace(")", ""));
-                        switch (value){
-                            case 1:
-                                return CryptReading.LEFT;
-                            case 2:
-                                return CryptReading.CENTER;
-                            case 3:
-                                return CryptReading.RIGHT;
-                        }
-                    }
-                }
-            }
-        }
-        return CryptReading.UNKNOWN;
+    public RelicRecoveryVuMark getPictographReading(){
+        return RelicRecoveryVuMark.from(template);
     }
 
     public double inchesFromPictograph(PosAxis axis){
-        VuforiaTrackable crypt = crypts.get(0);
-        if(crypt != null){
-            VuforiaTrackable.Listener listener = crypt.getListener();
-            if(listener instanceof VuforiaTrackableDefaultListener){
-                OpenGLMatrix pose = ((VuforiaTrackableDefaultListener)listener).getPose();
-                return pose.getTranslation().get(axis.equals(PosAxis.X)?0:axis.equals(PosAxis.Y)?1:2);
-            }
+        if(RelicRecoveryVuMark.from(template).equals(RelicRecoveryVuMark.UNKNOWN)) return -1;
+        OpenGLMatrix pose = ((VuforiaTrackableDefaultListener)template.getListener()).getPose();
+        switch (axis){
+            case X:
+                return (pose.getTranslation().get(0)) / MM_TO_NCHES;
+            case Y:
+                return pose.getTranslation().get(1) / MM_TO_NCHES;
+            case Z:
+                return pose.getTranslation().get(2) / MM_TO_NCHES;
         }
         return -1;
     }
@@ -445,13 +432,6 @@ public class Westcoast {
         CarriageState(double position) {
             this.position = position;
         }
-    }
-
-    public enum CryptReading {
-        LEFT,
-        CENTER,
-        RIGHT,
-        UNKNOWN
     }
 
     public enum PosAxis{
