@@ -1,4 +1,4 @@
-package org.ftc7244.robotcontroller.core;
+package org.ftc7244.robotcontroller.input;
 
 public enum ButtonType {
     A,

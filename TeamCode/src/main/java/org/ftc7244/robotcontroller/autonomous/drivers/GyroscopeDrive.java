@@ -165,7 +165,6 @@ public class GyroscopeDrive extends PIDDriveControl {
     public void resetOrientation() throws InterruptedException {
         do {
             gyroProvider.setZToZero();
-            Thread.sleep(1);
         } while (Math.abs(Math.round(gyroProvider.getZ())) > 1);
     }
 

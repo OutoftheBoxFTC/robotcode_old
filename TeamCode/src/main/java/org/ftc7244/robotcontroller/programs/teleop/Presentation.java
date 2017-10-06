@@ -4,8 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.ftc7244.robotcontroller.Westcoast;
-import org.ftc7244.robotcontroller.core.Button;
-import org.ftc7244.robotcontroller.core.ButtonType;
+import org.ftc7244.robotcontroller.input.Button;
+import org.ftc7244.robotcontroller.input.ButtonType;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

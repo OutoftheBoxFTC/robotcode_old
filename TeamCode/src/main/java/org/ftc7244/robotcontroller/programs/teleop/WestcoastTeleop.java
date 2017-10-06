@@ -5,9 +5,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftc7244.robotcontroller.Westcoast;
-import org.ftc7244.robotcontroller.core.Button;
-import org.ftc7244.robotcontroller.core.ButtonType;
-import org.ftc7244.robotcontroller.core.PressButton;
+import org.ftc7244.robotcontroller.input.Button;
+import org.ftc7244.robotcontroller.input.ButtonType;
+import org.ftc7244.robotcontroller.input.PressButton;
 import org.ftc7244.robotcontroller.sensor.SickUltrasonic;
 
 import java.util.concurrent.ExecutorService;

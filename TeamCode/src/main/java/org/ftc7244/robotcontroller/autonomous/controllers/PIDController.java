@@ -100,7 +100,7 @@ public class PIDController {
         if ((integralRange == 0 || Math.abs(error) < integralRange)) integral += kI * error * dt;
         else integral = 0;
 
-        double previousPosition = previousError / Math.abs(previousError), currentPosition = error / Math.abs(error);
+        double previousPosition = (previousError<0?-1:previousError>0?1:0) , currentPosition = (error<0?-1:error>0?1:0);
         if (previousPosition != currentPosition) {
             integral = 0;
             RobotLog.ii("RESET", "Reset Integral");

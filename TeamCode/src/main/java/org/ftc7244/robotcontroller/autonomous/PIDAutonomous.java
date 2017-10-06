@@ -11,6 +11,7 @@ import org.ftc7244.robotcontroller.autonomous.drivers.GyroscopeDrive;
 import org.ftc7244.robotcontroller.autonomous.drivers.UltrasonicDrive;
 import org.ftc7244.robotcontroller.sensor.gyroscope.GyroscopeProvider;
 import org.ftc7244.robotcontroller.sensor.gyroscope.NavXGyroscopeProvider;
+import org.ftc7244.robotcontroller.sensor.vuforia.ImageTransformProvider;
 
 /**
  * Contains all the code for different drive types including ${@link GyroscopeDrive}
@@ -27,7 +28,9 @@ public abstract class PIDAutonomous extends LinearOpMode {
     protected final UltrasonicDrive ultrasonic;
 
     protected final EncoderDrive encoder;
+
     protected final GyroscopeProvider gyroProvider;
+    protected final ImageTransformProvider imageProvider;
 
     protected Westcoast robot;
     private long end;
@@ -41,6 +44,7 @@ public abstract class PIDAutonomous extends LinearOpMode {
         gyroscope = new GyroscopeDrive(robot, gyroProvider);
         ultrasonic = new UltrasonicDrive(robot);
         encoder = new EncoderDrive(robot);
+        imageProvider = new ImageTransformProvider();
     }
 
     @Override
@@ -48,6 +52,7 @@ public abstract class PIDAutonomous extends LinearOpMode {
         robot.init();
         Status.setAutonomous(this);
         gyroProvider.start(hardwareMap);
+        imageProvider.start(hardwareMap);
 
         boolean calibratedMsg = false;
         while (!isStarted()) {
