@@ -86,7 +86,7 @@ public class ImageTransformProvider extends SensorProvider implements Runnable {
         while (running){
             if(!RelicRecoveryVuMark.from(template).equals(RelicRecoveryVuMark.UNKNOWN)){
                 if(imageSeen){
-//lel
+//lel3fewea
                 }
                 else {
                     OpenGLMatrix transform = ((VuforiaTrackableDefaultListener)template.getListener()).getPose();
