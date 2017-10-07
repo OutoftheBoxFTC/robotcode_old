@@ -52,7 +52,7 @@ import com.qualcomm.robotcore.util.Range;
  */
 
 @TeleOp(name="K9bot: Telop Tank", group="K9bot")
-@Disabled
+//@Disabled
 public class K9botTeleopTank_Linear extends LinearOpMode {
 
     /* Declare OpMode members. */
