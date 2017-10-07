@@ -15,11 +15,14 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
+import org.ftc7244.robotcontroller.sensor.DataFilter;
 import org.ftc7244.robotcontroller.sensor.SensorProvider;
 
-public class ImageTransformProvider extends SensorProvider {
+import java.util.Vector;
+
+public class ImageTransformProvider extends SensorProvider implements Runnable {
     public static final String VUFORIA_LICENSE_KEY = "AQ7YHUT/////AAAAGVOxmiN4SkHwqyEIEpsDKxo9Gpbkev2MCSd8RFB1jHcnH21ZDRyGXPK9hwVuWRRN4eiOU42jJhNeOiOlyh7yAdqsjfotKCW71TMFv7OiZr7uw6kS049r5LuvfMrxc9DyfDVCRh8aViWYNSuJVAGk6nF8D9dC9i5hy1FQFCRN3wxdQ49o/YqMfLeQNMgQIW/K3fqLi8ez+Ek9cF0mH1SGqBcv6dJrRavFqV/twq9F9fK+yW1rwcAQGunLKu2g6p0r1YXeSQe0qiMkfwumVwb2Sq0ZmEKQjHV4hwm14opyvtbXZzJwHppKOmBC0XXpkCBs7xLcYgoGbEiiGwEQv+N1xVnRha3NZXCmHH44JweTvmbh";
-    private boolean vuforiaInitialized;
+    private boolean vuforiaInitialized, running;
     private static final double MM_TO_INCHES = 25.4;
     @Nullable
     private VuforiaLocalizer vuforia;
@@ -27,21 +30,34 @@ public class ImageTransformProvider extends SensorProvider {
     private VuforiaTrackables pictographs;
     @Nullable
     private VuforiaTrackable template;
+
+    private DataFilter xTrans, yTrans, zTrans, xRot, yRot, zRot;
+
     public ImageTransformProvider(){
         vuforiaInitialized = false;
+        xTrans = new DataFilter(10);
+        yTrans = new DataFilter(10);
+        zTrans = new DataFilter(10);
+        xRot = new DataFilter(10);
+        yRot = new DataFilter(10);
+        zRot = new DataFilter(10);
     }
     @Override
     public void start(HardwareMap map) {
-        if(!vuforiaInitialized) {
-            VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(map.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", map.appContext.getPackageName()));
-            parameters.vuforiaLicenseKey = VUFORIA_LICENSE_KEY;
-            parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
-            vuforia = ClassFactory.createVuforiaLocalizer(parameters);
-            pictographs = vuforia.loadTrackablesFromAsset("RelicVuMark");
-            template = pictographs.get(0);
-            pictographs.activate();
-            vuforiaInitialized = true;
-        }
+        if(!vuforiaInitialized)initializeVuforia(map);
+        Thread thread = new Thread(this);
+        thread.start();
+    }
+
+    private void initializeVuforia(HardwareMap  map){
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(map.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", map.appContext.getPackageName()));
+        parameters.vuforiaLicenseKey = VUFORIA_LICENSE_KEY;
+        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
+        vuforia = ClassFactory.createVuforiaLocalizer(parameters);
+        pictographs = vuforia.loadTrackablesFromAsset("RelicVuMark");
+        template = pictographs.get(0);
+        pictographs.activate();
+        vuforiaInitialized = true;
     }
 
     public RelicRecoveryVuMark getImageReading(){
@@ -78,6 +94,15 @@ public class ImageTransformProvider extends SensorProvider {
                 return rotation.thirdAngle;
         }
         return -1;
+    }
+
+    @Override
+    public void run() {
+        while (running){
+            if(RelicRecoveryVuMark.from(template).equals(RelicRecoveryVuMark.UNKNOWN)){
+
+            }
+        }
     }
 
     @Override

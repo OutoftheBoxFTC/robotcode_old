@@ -12,18 +12,9 @@ import org.ftc7244.robotcontroller.autonomous.PIDAutonomous;
  * Created by BeaverDuck on 9/20/17.
  */
 @Autonomous(name = "Vuforia Debug")
-public class VuforiaDebug extends LinearOpMode {
-    Westcoast robot;
+public class VuforiaDebug extends PIDAutonomous {
     @Override
-    public void runOpMode() throws InterruptedException {
-        robot = new Westcoast(this);
-        robot.init();
-        robot.initVuforia(hardwareMap);
-        waitForStart();
-        while (opModeIsActive()){
-            telemetry.addData("Distance", robot.inchesFromPictograph(Westcoast.PosAxis.Z));
-            telemetry.addData("Image Seen", robot.getPictographReading());
-            telemetry.update();
-        }
+    public void run() throws InterruptedException {
+
     }
 }

@@ -3,11 +3,10 @@ package org.ftc7244.robotcontroller.autonomous.drivers;
 import org.ftc7244.robotcontroller.Westcoast;
 import org.ftc7244.robotcontroller.autonomous.controllers.PIDControllerBuilder;
 import org.ftc7244.robotcontroller.autonomous.controllers.PIDDriveControl;
+import org.ftc7244.robotcontroller.autonomous.terminators.ConditionalTerminator;
+import org.ftc7244.robotcontroller.autonomous.terminators.SensitivityTerminator;
+import org.ftc7244.robotcontroller.autonomous.terminators.TimerTerminator;
 import org.ftc7244.robotcontroller.sensor.vuforia.ImageTransformProvider;
-
-/**
- * Created by BeaverDuck on 10/4/17.
- */
 
 public class ImageTranformDrive extends PIDDriveControl{
     private ImageTransformProvider imageProvider;
@@ -26,10 +25,13 @@ public class ImageTranformDrive extends PIDDriveControl{
         return this.imageProvider.getImageRotation(ImageTransformProvider.Axis.Z);
     }
 
-    public void allignToImage(){
+    public void allignToImage() throws InterruptedException {
         double offset = imageProvider.getImageRotation(ImageTransformProvider.Axis.Z),
-        target = -offset;
-        control(target, 0, );
+        degrees = -offset;
+        control(0, 0, new ConditionalTerminator(new SensitivityTerminator(this, degrees, 1, 300), new TimerTerminator(2000)));
+    }
+
+    public void drive(double inches, double power){
 
     }
 }
