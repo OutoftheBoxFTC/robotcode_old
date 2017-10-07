@@ -24,11 +24,11 @@ public class DataFilter{
      * @return average of all remembered data points
      */
     public double getReading(){
-        double avg = 0;
+        double total = 0;
         for(double num : data){
-            avg += num;
+            total += num;
         }
-        return avg/length;
+        return total/length;
     }
 
     /**
