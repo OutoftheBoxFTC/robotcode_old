@@ -18,7 +18,7 @@ public class ServoTests extends LinearOpMode {
         while (opModeIsActive()){
             servo.setPosition(position);
             telemetry.addData("Position: ", servo.getPosition());
-            telemetry.update(); //100 RPM over 60 seconds is One rotation per 5/3 seconds.
+            telemetry.update(); //100 RPM over 60 seconds is One rotation per 5/3 seconds
         }
     }
 }
