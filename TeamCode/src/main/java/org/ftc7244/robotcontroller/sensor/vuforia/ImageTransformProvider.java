@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
+import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
@@ -22,7 +23,7 @@ import java.util.Vector;
 
 public class ImageTransformProvider extends SensorProvider implements Runnable {
     public static final String VUFORIA_LICENSE_KEY = "AQ7YHUT/////AAAAGVOxmiN4SkHwqyEIEpsDKxo9Gpbkev2MCSd8RFB1jHcnH21ZDRyGXPK9hwVuWRRN4eiOU42jJhNeOiOlyh7yAdqsjfotKCW71TMFv7OiZr7uw6kS049r5LuvfMrxc9DyfDVCRh8aViWYNSuJVAGk6nF8D9dC9i5hy1FQFCRN3wxdQ49o/YqMfLeQNMgQIW/K3fqLi8ez+Ek9cF0mH1SGqBcv6dJrRavFqV/twq9F9fK+yW1rwcAQGunLKu2g6p0r1YXeSQe0qiMkfwumVwb2Sq0ZmEKQjHV4hwm14opyvtbXZzJwHppKOmBC0XXpkCBs7xLcYgoGbEiiGwEQv+N1xVnRha3NZXCmHH44JweTvmbh";
-    private boolean vuforiaInitialized, running;
+    private boolean vuforiaInitialized, running, imageSeen;
     private static final double MM_TO_INCHES = 25.4;
     @Nullable
     private VuforiaLocalizer vuforia;
@@ -65,42 +66,38 @@ public class ImageTransformProvider extends SensorProvider implements Runnable {
     }
 
     public double getImageDistance(Axis axis){
-        if(RelicRecoveryVuMark.from(template).equals(RelicRecoveryVuMark.UNKNOWN)) return -1;
-        OpenGLMatrix pose = ((VuforiaTrackableDefaultListener)template.getListener()).getPose();
-        if(pose==null)return -1;
+        if(imageSeen){
 
-        switch (axis){
-            case X:
-                return (pose.getTranslation().get(0)) / MM_TO_INCHES;
-            case Y:
-                return pose.getTranslation().get(1) / MM_TO_INCHES;
-            case Z:
-                return pose.getTranslation().get(2) / MM_TO_INCHES;
         }
         return -1;
     }
 
     public double getImageRotation(Axis axis){
-        if(RelicRecoveryVuMark.from(template).equals(RelicRecoveryVuMark.UNKNOWN)) return -1;
-        OpenGLMatrix pose = ((VuforiaTrackableDefaultListener)template.getListener()).getPose();
-        Orientation rotation = Orientation.getOrientation(pose, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
-        if(pose==null)return -1;
-        switch (axis){
-            case X:
-                return rotation.firstAngle;
-            case Y:
-                return rotation.secondAngle;
-            case Z:
-                return rotation.thirdAngle;
+        if(imageSeen){
+
         }
         return -1;
     }
 
     @Override
     public void run() {
+        VectorF translation = null;
+        Orientation rotation = null;
         while (running){
-            if(RelicRecoveryVuMark.from(template).equals(RelicRecoveryVuMark.UNKNOWN)){
+            if(!RelicRecoveryVuMark.from(template).equals(RelicRecoveryVuMark.UNKNOWN)){
+                if(imageSeen){
 
+                }
+                else {
+                    OpenGLMatrix transform = ((VuforiaTrackableDefaultListener)template.getListener()).getPose();
+                    translation = transform.getTranslation();
+                    rotation = Orientation.getOrientation(transform, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
+                    imageSeen = true;
+                }
+            }
+            else {
+                translation = null;
+                rotation = null;
             }
         }
     }
