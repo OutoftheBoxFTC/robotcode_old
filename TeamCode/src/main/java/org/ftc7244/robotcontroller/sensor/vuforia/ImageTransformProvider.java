@@ -116,6 +116,11 @@ public class ImageTransformProvider extends SensorProvider implements Runnable {
                 rotation = null;
                 imageSeen = false;
             }
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
