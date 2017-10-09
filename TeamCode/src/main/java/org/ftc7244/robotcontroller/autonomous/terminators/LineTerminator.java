@@ -18,7 +18,7 @@ public class LineTerminator extends Terminator {
      * Which light sensor to use based off the the user input. This only allows the code to be more
      * streamlined in choice of sensor
      */
-    public static enum Sensor {
+    public enum Sensor {
         Leading(0.3),
         Trailing(0.3);
 
