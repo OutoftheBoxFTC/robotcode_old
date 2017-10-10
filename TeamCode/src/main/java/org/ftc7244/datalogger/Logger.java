@@ -1,5 +1,7 @@
 package org.ftc7244.datalogger;
 
+import org.ftc7244.robotcontroller.Debug;
+
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.InetAddress;
@@ -40,19 +42,21 @@ public class Logger implements Runnable{
     }
 
     private Logger() {
-        running = true;
+        if(Debug.STATUS) {
+            running = true;
 
-        data = new HashMap<>();
+            data = new HashMap<>();
 
-        try {
-            logger = new Socket(InetAddress.getByName(INET_ADDRESS), PORT);
-            out = new PrintStream(logger.getOutputStream());
-        } catch (IOException e) {
-            e.printStackTrace();
+            try {
+                logger = new Socket(InetAddress.getByName(INET_ADDRESS), PORT);
+                out = new PrintStream(logger.getOutputStream());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            thread = new Thread(this);
+            thread.start();
         }
-
-        thread = new Thread(this);
-        thread.start();
     }
 
     /**
@@ -96,8 +100,12 @@ public class Logger implements Runnable{
     private String generateOutput(String key){
         String out = key + ":";
         for(Double num : data.get(key)){
-            out += num + ":";
+            out += truncate(num + "") + ":";
         }
         return out;
+    }
+
+    private String truncate(String raw){
+        return raw.substring(0, raw.indexOf('.')+4);
     }
 }
