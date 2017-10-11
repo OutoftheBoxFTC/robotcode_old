@@ -23,7 +23,7 @@ public class Logger implements Runnable{
 
     private static final String INET_ADDRESS = "";
 
-    private static final int PORT = 0;
+    private static final int PORT = 0, FIGURES_AFTER_DECIMAL = 4;
 
     private static final long SEND_INTERVAL_MS = 100;
 
@@ -105,7 +105,13 @@ public class Logger implements Runnable{
         return out;
     }
 
+    /**
+     * shortens length of sent data string to avoid long messages due to floating point inaccuracy
+     * @param raw the raw, unshortened data
+     * @return shortened data string
+     */
+
     private String truncate(String raw){
-        return raw.substring(0, raw.indexOf('.')+4);
+        return raw.substring(0, raw.indexOf('.')+FIGURES_AFTER_DECIMAL);
     }
 }
