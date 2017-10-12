@@ -37,15 +37,16 @@ import java.util.Map;
  */
 
 public class XDrive {
+    public static boolean stopIntake = false;
     public static final byte NAVX_DEVICE_UPDATE_RATE_HZ = (byte) 100;
     public static final double COUNTS_PER_INCH = 1120 / (Math.PI * 3);
 
     @Nullable
-    private DcMotor driveTopLeft, driveTopRight, driveBottomLeft, driveBottomRight, launcher, intake, spoolerTop, spoolerBottom, lights;
+    private DcMotor driveTopLeft, driveTopRight, driveBottomLeft, driveBottomRight, launcher, btm_intake_left, btm_intake_right, raising_intake_motor, top_intake_left, top_intake_right, spoolerTop, spoolerBottom, lights;
     @Nullable
     private Servo launcherDoor, beaconPusher, carriageRelease;
     @Nullable
-    private AnalogInput launcherLimit;
+    private AnalogInput lower_input_limit, top_input_limit;
     private OpMode opMode;
     @Nullable
     private ColorSensor beaconSensor;
@@ -108,8 +109,13 @@ public class XDrive {
         this.driveBottomRight = getOrNull(map.dcMotor, "drive_bottom_right");
         this.launcher = getOrNull(map.dcMotor, "launcher");
         this.launcherDoor = getOrNull(map.servo, "launcher_door");
-        this.launcherLimit = getOrNull(map.analogInput, "launcher_limit");
-        this.intake = getOrNull(map.dcMotor, "intake");
+        this.lower_input_limit = getOrNull(map.analogInput, "lower_input_limit");
+        this.top_input_limit = getOrNull(map.analogInput, "top_input_limit");
+        this.btm_intake_left = getOrNull(map.dcMotor, "btm_intake_left");
+        this.btm_intake_right = getOrNull(map.dcMotor, "btm_intake_right");
+        this.raising_intake_motor = getOrNull(map.dcMotor, "raising_intake_motor");
+        this.top_intake_left = getOrNull(map.dcMotor, "top_intake_left");
+        this.top_intake_right = getOrNull(map.dcMotor, "top_intake_right");
         this.beaconSensor = getOrNull(map.colorSensor, "beacon_sensor");
         this.beaconPusher = getOrNull(map.servo, "beacon_pusher");
         this.spoolerTop = getOrNull(map.dcMotor, "spoolerTop");
@@ -169,13 +175,13 @@ public class XDrive {
      * @param delay the time in milliseconds to wait before each shoot
      * @throws InterruptedException if the code fails to terminate before stop requested
      */
-    public void shootLoop(int count, long delay) throws InterruptedException {
+/*    public void shootLoop(int count, long delay) throws InterruptedException {
         for (int i = 0; i < count; i++) {
             if (Status.isStopRequested()) break;
             this.shoot(delay);
         }
     }
-
+*/
     /**
      * A tuned tool to shoot a ball from the robot with many fail-safes integrated to prevent the
      * shooting from not completing. First it will spin no more than 1000 milliseconds or until the
@@ -186,7 +192,7 @@ public class XDrive {
      * @param delay the time in milliseconds to wait before each shot
      * @throws InterruptedException if the code fails to terminate before stop requested
      */
-    public void shoot(long delay) throws InterruptedException {
+/*    public void shoot(long delay) throws InterruptedException {
         sleep(delay);
 
         ElapsedTime timer = new ElapsedTime();
@@ -214,7 +220,39 @@ public class XDrive {
             launcher.setPower(0);
         }
     }
+*/
 
+    /**
+     * System for intake on the robot.
+     * The system spins the intake motors until the limit switch is pressed, then stops the intake
+     * motors and spins the raising motors. When the limit switch on the top is pressed, the
+     * raising motor stops. When the method is called again, the cube is intaked, but does not
+     * raise to prevent hitting the top block
+     */
+    public void intakeBlock(long delay) throws InterruptedException{
+        stopIntake = false;
+        sleep(delay);
+
+        while(Math.round(lower_input_limit.getVoltage()) == 0 && stopIntake == false){
+            btm_intake_left.setPower(1);
+            btm_intake_right.setPower(1);
+        }
+        btm_intake_left.setPower(0);
+        btm_intake_right.setPower(0);
+        if(Math.round(top_input_limit.getVoltage()) == 0 && stopIntake == false){
+            while (Math.round(top_input_limit.getVoltage()) == 0){
+                raising_intake_motor.setPower(1);
+            }
+            raising_intake_motor.setPower(0);
+        }
+
+    }
+    /**
+     * Class that can be called to cancel IntakeBlock
+     */
+    public void stopIntake() throws InterruptedException{
+        stopIntake = true;
+    }
     /**
      * Depending on the color specified ${@link Color#BLUE} or ${@link Color#RED} the robot will do
      * a simple greater than comparison to see if the color specified is greater than the other.
@@ -302,10 +340,13 @@ public class XDrive {
         return this.launcher;
     }
 
+
+
     @Nullable
-    public DcMotor getIntake() {
-        return this.intake;
-    }
+    public AnalogInput getLower_input_limit(){return this.lower_input_limit;}
+
+    @Nullable
+    public AnalogInput getTop_input_limit(){return this.top_input_limit;}
 
     @Nullable
     public DcMotor getSpoolerBottom() {
@@ -330,11 +371,6 @@ public class XDrive {
     @Nullable
     public Servo getCarriageRelease() {
         return this.carriageRelease;
-    }
-
-    @Nullable
-    public AnalogInput getLauncherLimit() {
-        return this.launcherLimit;
     }
 
     @Nullable
