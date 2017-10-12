@@ -254,6 +254,34 @@ public class XDrive {
         stopIntake = true;
     }
     /**
+     * Code to raise the linear slide and expel the block
+     */
+    public void expelBlock(long delay, boolean top) throws InterruptedException{
+        if(top){
+            top_intake_left.setDirection(DcMotorSimple.Direction.REVERSE);
+            top_intake_right.setDirection(DcMotorSimple.Direction.REVERSE);
+            top_intake_left.setPower(1);
+            top_intake_right.setPower(1);
+            sleep(500);
+            top_intake_left.setPower(0);
+            top_intake_right.setPower(0);
+        }else if(!top) {
+            btm_intake_left.setDirection(DcMotorSimple.Direction.REVERSE);
+            btm_intake_right.setDirection(DcMotorSimple.Direction.REVERSE);
+            btm_intake_left.setPower(1);
+            btm_intake_right.setPower(1);
+            sleep(500);
+            btm_intake_left.setPower(0);
+            btm_intake_right.setPower(0);
+        }
+        top_intake_left.setDirection(DcMotorSimple.Direction.FORWARD);
+        top_intake_right.setDirection(DcMotorSimple.Direction.FORWARD);
+        btm_intake_left.setDirection(DcMotorSimple.Direction.FORWARD);
+        btm_intake_right.setDirection(DcMotorSimple.Direction.FORWARD);
+
+    }
+
+    /**
      * Depending on the color specified ${@link Color#BLUE} or ${@link Color#RED} the robot will do
      * a simple greater than comparison to see if the color specified is greater than the other.
      *
