@@ -23,9 +23,11 @@ public class XDriveTeleop extends OpMode {
     }
     @Override
     public void loop(){
+        //haks the robot and goes into NSA database!!!!!!!!!!!!!!!!!!!!!! //int virus_22 start
+        //erpsv 3efsf file acces//33
         robot.getDriveBottomLeft().setPower(gamepad1.right_stick_y + gamepad1.right_stick_x - gamepad1.left_stick_x);
         robot.getDriveBottomRight().setPower(gamepad1.right_stick_y - gamepad1.right_stick_x - gamepad1.left_stick_x);
         robot.getDriveTopLeft().setPower(gamepad1.right_stick_y - gamepad1.right_stick_x - gamepad1.left_stick_x);
-        robot.getDriveBottomLeft().setPower(gamepad1.right_stick_y + gamepad1.right_stick_x - gamepad1.left_stick_x);
+        robot.getDriveTopRight().setPower(gamepad1.right_stick_y + gamepad1.right_stick_x - gamepad1.left_stick_x);
     }
 }
