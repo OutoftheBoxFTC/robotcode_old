@@ -57,7 +57,7 @@ public abstract class PIDAutonomous extends LinearOpMode {
         boolean calibratedMsg = false;
         while (!isStarted()) {
             if (!calibratedMsg && gyroProvider.isCalibrated()) {
-                telemetry.addLine("Gyroscope calibrated!");
+                //telemetry.addLine("Gyroscope calibrated!");
                 telemetry.update();
                 calibratedMsg = true;
             } else if (calibratedMsg && !gyroProvider.isCalibrated()) {
@@ -73,7 +73,8 @@ public abstract class PIDAutonomous extends LinearOpMode {
             end = System.currentTimeMillis() + 30000;
             run();
         } catch (Throwable t) {
-            RobotLog.e(t.getMessage());
+            t.printStackTrace();
+            //RobotLog.e(err);
         } finally {
             gyroProvider.stop();
             Status.setAutonomous(null);

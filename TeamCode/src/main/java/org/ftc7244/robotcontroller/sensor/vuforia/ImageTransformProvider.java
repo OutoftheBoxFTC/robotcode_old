@@ -27,6 +27,7 @@ public class ImageTransformProvider extends SensorProvider implements Runnable {
 
     private boolean vuforiaInitialized, running, imageSeen;
     private static final double MM_TO_INCHES = 25.4;
+    private static final long UPDATE_INTERVAL = 1;
 
     private DataFilter xTrans, yTrans, zTrans, xRot, yRot, zRot;
 
@@ -46,6 +47,7 @@ public class ImageTransformProvider extends SensorProvider implements Runnable {
     public void start(HardwareMap map) {
         if(!vuforiaInitialized)initializeVuforia(map);
         imageSeen = false;
+        running = true;
         thread.start();
     }
 
@@ -117,7 +119,7 @@ public class ImageTransformProvider extends SensorProvider implements Runnable {
                 imageSeen = false;
             }
             try {
-                Thread.sleep(1000);
+                Thread.sleep(UPDATE_INTERVAL);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

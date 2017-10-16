@@ -9,7 +9,7 @@ given length ago.
 public class DataFilter{
     private ArrayList<Double> data;
     private int length;
-
+    boolean updating, reading;
     /**
      *
      * @param length Determines how many data points the filter remembers
@@ -17,6 +17,8 @@ public class DataFilter{
     public DataFilter(int length){
         this.length = length;
         data = new ArrayList<>();
+        updating = false;
+        reading = false;
     }
 
     /**
@@ -24,10 +26,13 @@ public class DataFilter{
      * @return average of all remembered data points
      */
     public double getReading(){
+        while (updating);
+        reading = true;
         double total = 0;
         for(double num : data){
             total += num;
         }
+        reading = false;
         return total/length;
     }
 
@@ -36,10 +41,13 @@ public class DataFilter{
      * @param num raw input directly from the sensor
      */
 
-    public void update(double num){
+    public void update(double num) {
+        while (reading);
+        updating = false;
         if(data.size() >= length){
             data.remove(0);
         }
         data.add(num);
+        updating = true;
     }
 }
