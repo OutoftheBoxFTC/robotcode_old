@@ -16,11 +16,15 @@ public class XDriveTeleop extends OpMode {
         robot = new XDrive(this);
         robot.init();
     }
+
+    /**
+     * This kid
+     */
     @Override
     public void loop(){
-        robot.getDriveBottomLeft().setPower(gamepad1.right_stick_y + gamepad1.right_stick_x - gamepad1.left_stick_x);
-        robot.getDriveBottomRight().setPower(gamepad1.right_stick_y - gamepad1.right_stick_x - gamepad1.left_stick_x);
-        robot.getDriveTopLeft().setPower(gamepad1.right_stick_y - gamepad1.right_stick_x - gamepad1.left_stick_x);
-        robot.getDriveTopRight().setPower(gamepad1.right_stick_y + gamepad1.right_stick_x - gamepad1.left_stick_x);
+        robot.getDriveBottomLeft().setPower(gamepad1.right_stick_y - gamepad1.left_stick_x);
+        robot.getDriveBottomRight().setPower(gamepad1.right_stick_x - gamepad1.left_stick_x);
+        robot.getDriveTopLeft().setPower(-gamepad1.right_stick_x - gamepad1.left_stick_x);
+        robot.getDriveTopRight().setPower(-gamepad1.right_stick_y - gamepad1.left_stick_x);
     }
 }
