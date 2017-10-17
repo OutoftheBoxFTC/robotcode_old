@@ -9,12 +9,21 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Objects;
+import java.util.Set;
+
+import javax.annotation.processing.AbstractProcessor;
+import javax.annotation.processing.RoundEnvironment;
+import javax.lang.model.element.Element;
+import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.VariableElement;
+import javax.lang.model.util.ElementFilter;
 
 /**
  * Created by BeaverDuck on 10/8/17.
  */
 
-public class Logger implements Runnable{
+public class Logger extends AbstractProcessor implements Runnable{
     /**
      * Logger sends sets of data from the used android device to a computer on the receiving port
      * hosting the logger program.
@@ -27,7 +36,7 @@ public class Logger implements Runnable{
 
     private static final long SEND_INTERVAL_MS = 100;
 
-    private HashMap<String, ArrayList<Double>> data;
+    private HashMap<String, ArrayList<Number>> data;
 
     private Thread thread;
 
@@ -60,13 +69,28 @@ public class Logger implements Runnable{
     }
 
     /**
+     * @param set A set of all elements in the project with an annotation
+     * @param roundEnvironment idk
+     * @return processing successful
+     */
+    @Override
+    public boolean process(Set<? extends TypeElement> set, RoundEnvironment roundEnvironment) {
+        for(VariableElement e : ElementFilter.fieldsIn(roundEnvironment.getElementsAnnotatedWith(Logged.class))){
+            Object variable = e.getConstantValue();
+            if(variable instanceof Number) addData(e.getAnnotation(Logged.class).name(), (Number)variable);
+        }
+        return true;
+    }
+
+    /**
      *
      * @param tag identifier for the data
      * @param data data point being added
      * @throws InvalidCharacterException if tag contains ":", which is used for parsing on the
      * receiving end
      */
-    public void addData(String tag, double data) {
+
+    public void addData(String tag, Number data) {
         if(this.data.containsKey(tag)) {
             this.data.get(tag).add(data);
         }
@@ -99,7 +123,7 @@ public class Logger implements Runnable{
      */
     private String generateOutput(String key){
         String out = key + ":";
-        for(Double num : data.get(key)){
+        for(Number num : data.get(key)){
             out += truncate(num + "") + ":";
         }
         return out;
@@ -112,6 +136,7 @@ public class Logger implements Runnable{
      */
 
     private String truncate(String raw){
-        return raw.substring(0, raw.indexOf('.')+FIGURES_AFTER_DECIMAL);
+        if(raw.contains(".")) return raw.substring(0, raw.indexOf('.')+FIGURES_AFTER_DECIMAL);
+        return raw;
     }
 }
