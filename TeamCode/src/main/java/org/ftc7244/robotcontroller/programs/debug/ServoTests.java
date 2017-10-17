@@ -3,9 +3,8 @@ package org.ftc7244.robotcontroller.programs.debug;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-import org.ftc7244.robotcontroller.Westcoast;
+import org.ftc7244.robotcontroller.hardware.Westcoast;
 
 /**
  * Created by Stargamer285 on 10/6/17.

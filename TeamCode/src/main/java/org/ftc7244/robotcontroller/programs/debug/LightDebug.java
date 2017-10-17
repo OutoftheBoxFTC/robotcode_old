@@ -3,13 +3,13 @@ package org.ftc7244.robotcontroller.programs.debug;
 import com.qualcomm.hardware.hitechnic.HiTechnicNxtLightSensor;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.ftc7244.robotcontroller.autonomous.PIDAutonomous;
+import org.ftc7244.robotcontroller.autonomous.bases.VelocityVortexPIDAutonomous;
 
 /**
  * Created by FTC 7244 on 2/11/2017.
  */
 @Autonomous(name = "Light Sensor Debug")
-public class LightDebug extends PIDAutonomous {
+public class LightDebug extends VelocityVortexPIDAutonomous {
     @Override
     public void run() throws InterruptedException {
         HiTechnicNxtLightSensor trailing = robot.getTrailingLight();

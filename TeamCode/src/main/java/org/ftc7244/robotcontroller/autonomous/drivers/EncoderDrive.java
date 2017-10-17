@@ -3,7 +3,7 @@ package org.ftc7244.robotcontroller.autonomous.drivers;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.RobotLog;
 
-import org.ftc7244.robotcontroller.Westcoast;
+import org.ftc7244.robotcontroller.hardware.Westcoast;
 
 /**
  * Created by FTC 7244 on 3/19/2017.

@@ -1,4 +1,4 @@
-package org.ftc7244.robotcontroller;
+package org.ftc7244.robotcontroller.hardware;
 
 import android.graphics.Color;
 import android.support.annotation.NonNull;
@@ -6,34 +6,23 @@ import android.support.annotation.Nullable;
 
 import com.kauailabs.navx.ftc.AHRS;
 import com.qualcomm.hardware.hitechnic.HiTechnicNxtLightSensor;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
-import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.I2cDevice;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.RobotLog;
 
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
-import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
-import org.firstinspires.ftc.robotcore.external.navigation.VuMarkInstanceId;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
+import org.ftc7244.robotcontroller.Debug;
 import org.ftc7244.robotcontroller.autonomous.Status;
 import org.ftc7244.robotcontroller.sensor.SickUltrasonic;
 
-import java.util.Map;
-
-public class Westcoast {
+public class Westcoast extends Hardware{
 
     public static final byte NAVX_DEVICE_UPDATE_RATE_HZ = (byte) 100;
     public static final double COUNTS_PER_INCH = 1120 / (Math.PI * 3);
@@ -57,7 +46,7 @@ public class Westcoast {
     private I2cDevice navx;
 
     public Westcoast(OpMode opMode) {
-        this.opMode = opMode;
+        super(opMode);
     }
 
     /**
@@ -82,21 +71,10 @@ public class Westcoast {
     }
 
     /**
-     * This is the codes own way of pausing. This has the the capability of stopping the wait if
-     * stop is requested and passing up an exception if it fails as well
-     *
-     * @param ms the duration to sleep in milliseconds
-     * @throws InterruptedException if the code fails to terminate before stop requested
-     */
-    public static void sleep(long ms) throws InterruptedException {
-        long target = System.currentTimeMillis() + ms;
-        while (target > System.currentTimeMillis() && !Status.isStopRequested()) Thread.sleep(1);
-    }
-
-    /**
      * Identify hardware and then set it up with different objects. Other initialization properties are
      * set to ensure that everything is in the default position or correct mode for the robot.
      */
+    @Override
     public void init() {
         //Initialize or nullify all hardware
         HardwareMap map = opMode.hardwareMap;
@@ -133,26 +111,6 @@ public class Westcoast {
             redOffset = 0;
             blueOffset = 0;
         }
-    }
-
-    /**
-     * Get the value associated with an id and instead of raising an error return null and log it
-     *
-     * @param map  the hardware map from the HardwareMap
-     * @param name The ID in the hardware map
-     * @param <T>  the type of hardware map
-     * @return the hardware device associated with the name
-     */
-    private <T extends HardwareDevice> T getOrNull(@NonNull HardwareMap.DeviceMapping<T> map, String name) {
-        for (Map.Entry<String, T> item : map.entrySet()) {
-            if (!item.getKey().equalsIgnoreCase(name)) {
-                continue;
-            }
-            return item.getValue();
-        }
-        opMode.telemetry.addLine("ERROR: " + name + " not found!");
-        RobotLog.e("ERROR: " + name + " not found!");
-        return null;
     }
 
     /**
@@ -392,9 +350,5 @@ public class Westcoast {
         CarriageState(double position) {
             this.position = position;
         }
-    }
-
-    public enum PosAxis{
-        X,Y,Z
     }
 }
