@@ -126,8 +126,8 @@ public class XDrive {
         if (driveBottomRight != null) driveBottomLeft.setDirection(DcMotorSimple.Direction.FORWARD);
         if (launcher != null) launcher.setDirection(DcMotorSimple.Direction.REVERSE);
         if (beaconPusher != null) beaconPusher.setPosition(1);
-        if (launcherDoor != null) setDoorState(Westcoast.DoorState.CLOSED);
-        if (carriageRelease != null) setCarriageState(Westcoast.CarriageState.CLOSED);
+//        if (launcherDoor != null) setDoorState(Westcoast.DoorState.CLOSED);
+//        if (carriageRelease != null) setCarriageState(Westcoast.CarriageState.CLOSED);
         if (spoolerTop != null) spoolerTop.setDirection(DcMotorSimple.Direction.REVERSE);
         if (spoolerTop != null && spoolerBottom != null) resetMotors(spoolerBottom, spoolerTop);
         if (beaconSensor != null) {
@@ -314,19 +314,19 @@ public class XDrive {
      *
      * @param state the position of the door
      */
-    public void setDoorState(@NonNull Westcoast.DoorState state) {
+/*    public void setDoorState(@NonNull Westcoast.DoorState state) {
         launcherDoor.setPosition(state.position);
     }
-
+*/
     /**
      * Uses the ${@link Westcoast.CarriageState} to release the lift or lock the lift.
      *
-     * @param state of the lock on the robot
+//     * @param state of the lock on the robot
      */
-    public void setCarriageState(@NonNull Westcoast.CarriageState state) {
+/*    public void setCarriageState(@NonNull Westcoast.CarriageState state) {
         carriageRelease.setPosition(state.position);
     }
-
+*/
     public void setSpoolerPower(double power) {
         spoolerTop.setPower(power);
         spoolerBottom.setPower(power);
