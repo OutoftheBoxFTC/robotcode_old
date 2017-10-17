@@ -1,6 +1,6 @@
 package org.ftc7244.robotcontroller.autonomous.drivers;
 
-import org.ftc7244.robotcontroller.Westcoast;
+import org.ftc7244.robotcontroller.hardware.Westcoast;
 import org.ftc7244.robotcontroller.autonomous.controllers.PIDControllerBuilder;
 import org.ftc7244.robotcontroller.autonomous.controllers.PIDDriveControl;
 import org.ftc7244.robotcontroller.autonomous.terminators.ConditionalTerminator;

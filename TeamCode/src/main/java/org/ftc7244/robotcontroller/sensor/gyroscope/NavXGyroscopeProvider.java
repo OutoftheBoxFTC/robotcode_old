@@ -6,8 +6,7 @@ import com.kauailabs.navx.ftc.AHRS;
 import com.kauailabs.navx.ftc.IDataArrivalSubscriber;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.ftc7244.robotcontroller.Westcoast;
-import org.ftc7244.robotcontroller.sensor.accerometer.NavXAccelerometerProvider;
+import org.ftc7244.robotcontroller.hardware.Westcoast;
 
 /**
  * Utilizes the NavX-Micro to get an orientatio and prevents code from executing until it

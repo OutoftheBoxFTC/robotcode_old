@@ -3,7 +3,6 @@ package org.ftc7244.robotcontroller.programs.autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
-import org.ftc7244.robotcontroller.autonomous.PIDAutonomous;
 @Deprecated
 @Autonomous(name = "Corner Red [BASE]", group = "Red")
 @Disabled

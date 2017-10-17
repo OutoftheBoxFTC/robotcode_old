@@ -4,7 +4,7 @@ import android.graphics.Color;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
-import org.ftc7244.robotcontroller.autonomous.PIDAutonomous;
+import org.ftc7244.robotcontroller.autonomous.bases.VelocityVortexPIDAutonomous;
 import org.ftc7244.robotcontroller.autonomous.drivers.GyroscopeDrive;
 
 /**
@@ -12,7 +12,7 @@ import org.ftc7244.robotcontroller.autonomous.drivers.GyroscopeDrive;
  */
 @Deprecated
 @Disabled
-public class ReverseBeaconBlue extends PIDAutonomous {
+public class ReverseBeaconBlue extends VelocityVortexPIDAutonomous {
 
     @Override
     public void run() throws InterruptedException {

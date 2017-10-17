@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.hardware.LightSensor;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftc7244.robotcontroller.Debug;
-import org.ftc7244.robotcontroller.Westcoast;
+import org.ftc7244.robotcontroller.hardware.Westcoast;
 import org.ftc7244.robotcontroller.autonomous.controllers.PIDControllerBuilder;
 import org.ftc7244.robotcontroller.autonomous.controllers.PIDDriveControl;
 import org.ftc7244.robotcontroller.autonomous.terminators.ConditionalTerminator;

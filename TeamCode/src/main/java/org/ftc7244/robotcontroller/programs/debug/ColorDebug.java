@@ -2,13 +2,13 @@ package org.ftc7244.robotcontroller.programs.debug;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.ftc7244.robotcontroller.autonomous.PIDAutonomous;
+import org.ftc7244.robotcontroller.autonomous.bases.VelocityVortexPIDAutonomous;
 
 /**
  * Created by FTC 7244 on 4/3/2017.
  */
 @Autonomous(name = "Color Debug")
-public class ColorDebug extends PIDAutonomous {
+public class ColorDebug extends VelocityVortexPIDAutonomous {
     @Override
     public void run() throws InterruptedException {
         while (!this.isStopRequested()) {

@@ -2,7 +2,7 @@ package org.ftc7244.robotcontroller.programs.debug;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.ftc7244.robotcontroller.autonomous.PIDAutonomous;
+import org.ftc7244.robotcontroller.autonomous.bases.VelocityVortexPIDAutonomous;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.List;
  * Created by FTC 7244 on 3/6/2017.
  */
 @Autonomous(name = "Ultrasonic Debug")
-public class UltrasonicDebug extends PIDAutonomous {
+public class UltrasonicDebug extends VelocityVortexPIDAutonomous {
 
     private List<Double> leadingHistory = new ArrayList<>();
     private List<Double> trailingHistory = new ArrayList<>();

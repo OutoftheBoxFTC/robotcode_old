@@ -1,14 +1,11 @@
-package org.ftc7244.robotcontroller.autonomous;
+package org.ftc7244.robotcontroller.autonomous.bases;
 
 import android.support.annotation.NonNull;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.util.RobotLog;
-
-import org.ftc7244.robotcontroller.Westcoast;
 import org.ftc7244.robotcontroller.autonomous.drivers.EncoderDrive;
 import org.ftc7244.robotcontroller.autonomous.drivers.GyroscopeDrive;
 import org.ftc7244.robotcontroller.autonomous.drivers.UltrasonicDrive;
+import org.ftc7244.robotcontroller.hardware.Westcoast;
 import org.ftc7244.robotcontroller.sensor.gyroscope.GyroscopeProvider;
 import org.ftc7244.robotcontroller.sensor.gyroscope.NavXGyroscopeProvider;
 import org.ftc7244.robotcontroller.sensor.vuforia.ImageTransformProvider;
@@ -20,7 +17,7 @@ import org.ftc7244.robotcontroller.sensor.vuforia.ImageTransformProvider;
  * automatically handles wait for startImageReading since most of the setup is completed and only driving
  * instructions are needed.
  */
-public abstract class PIDAutonomous extends LinearOpMode {
+public abstract class VelocityVortexPIDAutonomous extends PIDAutonamous {
 
     @NonNull
     protected final GyroscopeDrive gyroscope;
@@ -33,56 +30,50 @@ public abstract class PIDAutonomous extends LinearOpMode {
     protected final ImageTransformProvider imageProvider;
 
     protected Westcoast robot;
-    private long end;
+
+    private boolean calibratedMsg;
 
     /**
      * Set the classes up and allow for java
      */
-    protected PIDAutonomous() {
+    protected VelocityVortexPIDAutonomous() {
         robot = new Westcoast(this);
         gyroProvider = new NavXGyroscopeProvider(robot);
         gyroscope = new GyroscopeDrive(robot, gyroProvider);
         ultrasonic = new UltrasonicDrive(robot);
         encoder = new EncoderDrive(robot);
         imageProvider = new ImageTransformProvider();
+        calibratedMsg = false;
     }
 
     @Override
-    public void runOpMode() throws InterruptedException {
-        robot.init();
-        Status.setAutonomous(this);
-        gyroProvider.start(hardwareMap);
-        imageProvider.start(hardwareMap);
+    protected void onEnd(boolean err) {
+        gyroProvider.stop();
+    }
 
-        boolean calibratedMsg = false;
-        while (!isStarted()) {
-            if (!calibratedMsg && gyroProvider.isCalibrated()) {
-                //telemetry.addLine("Gyroscope calibrated!");
-                telemetry.update();
-                calibratedMsg = true;
-            } else if (calibratedMsg && !gyroProvider.isCalibrated()) {
-                telemetry.addLine("LOST CONNECTION");
-                telemetry.update();
-                calibratedMsg = false;
-            }
-            idle();
-        }
-
-        try {
-            gyroscope.resetOrientation();
-            end = System.currentTimeMillis() + 30000;
-            run();
-        } catch (Throwable t) {
-            t.printStackTrace();
-            //RobotLog.e(err);
-        } finally {
-            gyroProvider.stop();
-            Status.setAutonomous(null);
+    @Override
+    protected void whileNotStarted() {
+        if (!calibratedMsg && gyroProvider.isCalibrated()) {
+            telemetry.addLine("Gyroscope calibrated!");
+            telemetry.update();
+            calibratedMsg = true;
+        } else if (calibratedMsg && !gyroProvider.isCalibrated()) {
+            telemetry.addLine("LOST CONNECTION");
+            telemetry.update();
+            calibratedMsg = false;
         }
     }
 
-    public long getAutonomousEnd() {
-        return end;
+    @Override
+    protected void startProviders() {
+        robot.init();
+        gyroProvider.start(hardwareMap);
+        imageProvider.start(hardwareMap);
+    }
+
+    @Override
+    protected void beforeStart() throws InterruptedException{
+        gyroscope.resetOrientation();
     }
 
     public abstract void run() throws InterruptedException;

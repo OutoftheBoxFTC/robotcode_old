@@ -5,13 +5,13 @@ import android.graphics.Color;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
-import org.ftc7244.robotcontroller.autonomous.PIDAutonomous;
+import org.ftc7244.robotcontroller.autonomous.bases.VelocityVortexPIDAutonomous;
 import org.ftc7244.robotcontroller.autonomous.drivers.GyroscopeDrive;
 
 @Deprecated
 @Autonomous(name = "Beacon Red", group = "Red")
 @Disabled
-public class BeaconRed extends PIDAutonomous {
+public class BeaconRed extends VelocityVortexPIDAutonomous {
 
     @Override
     public void run() throws InterruptedException {
