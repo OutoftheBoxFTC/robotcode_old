@@ -119,9 +119,9 @@ public class XDrive {
         this.lights = getOrNull(map.dcMotor, "lights");
 
         //Set the default direction for all the hardware and also initialize default positions
-        if (driveTopLeft != null) driveTopLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        if (driveTopLeft != null) driveTopLeft.setDirection(DcMotorSimple.Direction.FORWARD);
         if (driveTopRight != null) driveTopRight.setDirection(DcMotorSimple.Direction.FORWARD);
-        if (driveBottomLeft != null) driveBottomRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        if (driveBottomLeft != null) driveBottomRight.setDirection(DcMotorSimple.Direction.FORWARD);
         if (driveBottomRight != null) driveBottomLeft.setDirection(DcMotorSimple.Direction.FORWARD);
         if (launcher != null) launcher.setDirection(DcMotorSimple.Direction.REVERSE);
         if (beaconPusher != null) beaconPusher.setPosition(1);
