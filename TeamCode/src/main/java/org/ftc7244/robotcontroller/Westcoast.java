@@ -1,5 +1,31 @@
-package org.ftc7244.robotcontroller.hardware;
-//Legacy code
+package org.ftc7244.robotcontroller;
+
+/**
+ * Created by Eeshwar's Laptop on 10/18/2017.
+ */
+
+import android.graphics.Color;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
+import com.kauailabs.navx.ftc.AHRS;
+import com.qualcomm.hardware.hitechnic.HiTechnicNxtLightSensor;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.AnalogInput;
+import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.I2cDevice;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.RobotLog;
+
+import org.ftc7244.robotcontroller.autonomous.Status;
+import org.ftc7244.robotcontroller.hardware.Hardware;
+import org.ftc7244.robotcontroller.sensor.SickUltrasonic;
+
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -21,14 +47,14 @@ import com.qualcomm.robotcore.util.RobotLog;
 import org.ftc7244.robotcontroller.Debug;
 import org.ftc7244.robotcontroller.autonomous.Status;
 import org.ftc7244.robotcontroller.sensor.SickUltrasonic;
-@Deprecated
-public class Westcoast extends Hardware{
+
+public class Westcoast extends Hardware {
 
     public static final byte NAVX_DEVICE_UPDATE_RATE_HZ = (byte) 100;
     public static final double COUNTS_PER_INCH = 1120 / (Math.PI * 3);
 
     @Nullable
-    private DcMotor driveLeft, driveRight, launcher, intake, spoolerTop, spoolerBottom, lights;
+    private DcMotor driveBackLeft, driveFrontLeft, driveBackRight, driveFrontRight, launcher, intake, spoolerTop, spoolerBottom, lights;
     @Nullable
     private Servo launcherDoor, beaconPusher, carriageRelease;
     @Nullable
@@ -78,8 +104,10 @@ public class Westcoast extends Hardware{
     public void init() {
         //Initialize or nullify all hardware
         HardwareMap map = opMode.hardwareMap;
-        this.driveLeft = getOrNull(map.dcMotor, "drive_left");
-        this.driveRight = getOrNull(map.dcMotor, "drive_right");
+        this.driveBackLeft = getOrNull(map.dcMotor, "drive_back_left");
+        this.driveFrontLeft = getOrNull(map.dcMotor, "drive_front_left");
+        this.driveBackRight = getOrNull(map.dcMotor, "drive_back_right");
+        this.driveFrontRight = getOrNull(map.dcMotor, "drive_front_right");
         this.launcher = getOrNull(map.dcMotor, "launcher");
         this.launcherDoor = getOrNull(map.servo, "launcher_door");
         this.launcherLimit = getOrNull(map.analogInput, "launcher_limit");
@@ -97,11 +125,12 @@ public class Westcoast extends Hardware{
         this.lights = getOrNull(map.dcMotor, "lights");
 
         //Set the default direction for all the hardware and also initialize default positions
-        if (driveLeft != null) driveLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        if (driveFrontLeft != null) driveFrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        if (driveFrontRight != null) driveFrontRight.setDirection(DcMotorSimple.Direction.REVERSE);
         if (launcher != null) launcher.setDirection(DcMotorSimple.Direction.REVERSE);
         if (beaconPusher != null) beaconPusher.setPosition(1);
-        if (launcherDoor != null) setDoorState(DoorState.CLOSED);
-        if (carriageRelease != null) setCarriageState(CarriageState.CLOSED);
+//        if (launcherDoor != null) setDoorState(org.ftc7244.robotcontroller.hardware.Westcoast.DoorState.CLOSED);
+//        if (carriageRelease != null) setCarriageState(org.ftc7244.robotcontroller.hardware.Westcoast.CarriageState.CLOSED);
         if (spoolerTop != null) spoolerTop.setDirection(DcMotorSimple.Direction.REVERSE);
         if (spoolerTop != null && spoolerBottom != null) resetMotors(spoolerBottom, spoolerTop);
         if (beaconSensor != null) {
@@ -114,7 +143,7 @@ public class Westcoast extends Hardware{
     }
 
     /**
-     * Uses the {@link Westcoast#shoot(long)} function to shoot a specified amount of balls. The
+     * Uses the {@link org.ftc7244.robotcontroller.hardware.Westcoast#shoot(long)} function to shoot a specified amount of balls. The
      * only time it will end before shooting is if the code is manually stopped; otherwise, it will
      * continue to the specified amount.
      *
@@ -122,13 +151,13 @@ public class Westcoast extends Hardware{
      * @param delay the time in milliseconds to wait before each shoot
      * @throws InterruptedException if the code fails to terminate before stop requested
      */
-    public void shootLoop(int count, long delay) throws InterruptedException {
+/*    public void shootLoop(int count, long delay) throws InterruptedException {
         for (int i = 0; i < count; i++) {
             if (Status.isStopRequested()) break;
             this.shoot(delay);
         }
     }
-
+*/
     /**
      * A tuned tool to shoot a ball from the robot with many fail-safes integrated to prevent the
      * shooting from not completing. First it will spin no more than 1000 milliseconds or until the
@@ -139,7 +168,7 @@ public class Westcoast extends Hardware{
      * @param delay the time in milliseconds to wait before each shot
      * @throws InterruptedException if the code fails to terminate before stop requested
      */
-    public void shoot(long delay) throws InterruptedException {
+/*    public void shoot(long delay) throws InterruptedException {
         sleep(delay);
 
         ElapsedTime timer = new ElapsedTime();
@@ -159,15 +188,15 @@ public class Westcoast extends Hardware{
                 if (timer.milliseconds() > 200) launcher.setPower(0);
 
                 //lift the arm
-                setDoorState(DoorState.OPEN);
+                setDoorState(org.ftc7244.robotcontroller.hardware.Westcoast.DoorState.OPEN);
             }
             //reset the arm to staring position
-            setDoorState(DoorState.CLOSED);
+            setDoorState(org.ftc7244.robotcontroller.hardware.Westcoast.DoorState.CLOSED);
         } else {
             launcher.setPower(0);
         }
     }
-
+*/
     /**
      * Depending on the color specified ${@link Color#BLUE} or ${@link Color#RED} the robot will do
      * a simple greater than comparison to see if the color specified is greater than the other.
@@ -203,23 +232,23 @@ public class Westcoast extends Hardware{
     }
 
     /**
-     * Use ${@link DoorState} to either raise the arm to allow a ball in or set it to the zero
+     * Use ${@link org.ftc7244.robotcontroller.hardware.Westcoast.DoorState} to either raise the arm to allow a ball in or set it to the zero
      * position to prevent balls to go into the robot.
      *
      * @param state the position of the door
      */
-    public void setDoorState(@NonNull DoorState state) {
-        launcherDoor.setPosition(state.position);
-    }
+//    public void setDoorState(@NonNull org.ftc7244.robotcontroller.hardware.Westcoast.DoorState state) {
+//        launcherDoor.setPosition(state.position);
+//    }
 
     /**
-     * Uses the ${@link CarriageState} to release the lift or lock the lift.
+     * Uses the ${@link org.ftc7244.robotcontroller.hardware.Westcoast.CarriageState} to release the lift or lock the lift.
      *
-     * @param state of the lock on the robot
+//     * @param state of the lock on the robot
      */
-    public void setCarriageState(@NonNull CarriageState state) {
-        carriageRelease.setPosition(state.position);
-    }
+//    public void setCarriageState(@NonNull org.ftc7244.robotcontroller.hardware.Westcoast.CarriageState state) {
+//        carriageRelease.setPosition(state.position);
+//    }
 
     public void setSpoolerPower(double power) {
         spoolerTop.setPower(power);
@@ -232,13 +261,23 @@ public class Westcoast extends Hardware{
 
 
     @Nullable
-    public DcMotor getDriveLeft() {
-        return this.driveLeft;
+    public DcMotor getDriveFrontLeft() {
+        return this.driveFrontLeft;
     }
 
     @Nullable
-    public DcMotor getDriveRight() {
-        return this.driveRight;
+    public DcMotor getDriveBackLeft() {
+        return this.driveBackLeft;
+    }
+
+    @Nullable
+    public DcMotor getDriveFrontRight() {
+        return this.driveFrontRight;
+    }
+
+    @Nullable
+    public DcMotor getDriveBackRight() {
+        return this.driveBackRight;
     }
 
     @Nullable
