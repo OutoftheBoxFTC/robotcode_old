@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.hardware.LightSensor;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftc7244.robotcontroller.Debug;
-import org.ftc7244.robotcontroller.hardware.Westcoast;
+import org.ftc7244.robotcontroller.hardware.VelocityVortexWestcoast;
 
 /**
  * Controls how far after the robot should drive if it passes the line and when to trigger that.
@@ -32,9 +32,9 @@ public class LineTerminator extends Terminator {
     private double driveAfterDistance, offset, encoderError;
     private LightSensor sensor;
     private double white;
-    private Westcoast robot;
+    private VelocityVortexWestcoast robot;
 
-    public LineTerminator(Sensor mode, Westcoast robot, double encoderError, double driveAfterDistance) {
+    public LineTerminator(Sensor mode, VelocityVortexWestcoast robot, double encoderError, double driveAfterDistance) {
         this.sensor = mode == Sensor.Trailing ? robot.getTrailingLight() : robot.getLeadingLight();
         this.driveAfterDistance = driveAfterDistance;
         this.white = mode.white;

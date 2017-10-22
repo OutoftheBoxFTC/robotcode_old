@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.hardware.LightSensor;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftc7244.robotcontroller.Debug;
-import org.ftc7244.robotcontroller.hardware.Westcoast;
+import org.ftc7244.robotcontroller.hardware.VelocityVortexWestcoast;
 import org.ftc7244.robotcontroller.autonomous.controllers.PIDControllerBuilder;
 import org.ftc7244.robotcontroller.autonomous.controllers.PIDDriveControl;
 import org.ftc7244.robotcontroller.autonomous.terminators.ConditionalTerminator;
@@ -30,7 +30,7 @@ public class GyroscopeDrive extends PIDDriveControl {
      * @param robot        access to motors on the robot
      * @param gyroProvider base way to read gyroscope values
      */
-    public GyroscopeDrive(Westcoast robot, GyroscopeProvider gyroProvider) {
+    public GyroscopeDrive(VelocityVortexWestcoast robot, GyroscopeProvider gyroProvider) {
         super(new PIDControllerBuilder()
                         .setProportional(0.02)
                         .setIntegral(0.00004)
@@ -62,8 +62,8 @@ public class GyroscopeDrive extends PIDDriveControl {
      * @throws InterruptedException if code fails to terminate on stop requested
      */
     public void drive(double power, double inches, double target) throws InterruptedException {
-        final double ticks = inches * Westcoast.COUNTS_PER_INCH;
-        Westcoast.resetMotors(robot.getDriveLeft(), robot.getDriveRight());
+        final double ticks = inches * VelocityVortexWestcoast.COUNTS_PER_INCH;
+        VelocityVortexWestcoast.resetMotors(robot.getDriveLeft(), robot.getDriveRight());
         if (inches <= 0) RobotLog.e("Invalid distances!");
         final int offset = getEncoderAverage();
         control(target, power, new Terminator() {
@@ -115,11 +115,11 @@ public class GyroscopeDrive extends PIDDriveControl {
      * @throws InterruptedException if code fails to terminate on stop requested
      */
     public void driveUntilLine(double power, Sensor mode, double offsetDistance, final double minDistance, final double maxDistance) throws InterruptedException {
-        Westcoast.resetMotors(robot.getDriveLeft(), robot.getDriveRight());
+        VelocityVortexWestcoast.resetMotors(robot.getDriveLeft(), robot.getDriveRight());
         if (offsetDistance <= 0) RobotLog.e("Invalid distances!");
-        final double ticks = offsetDistance * Westcoast.COUNTS_PER_INCH,
-                maxTicks = maxDistance * Westcoast.COUNTS_PER_INCH,
-                minTicks = minDistance * Westcoast.COUNTS_PER_INCH;
+        final double ticks = offsetDistance * VelocityVortexWestcoast.COUNTS_PER_INCH,
+                maxTicks = maxDistance * VelocityVortexWestcoast.COUNTS_PER_INCH,
+                minTicks = minDistance * VelocityVortexWestcoast.COUNTS_PER_INCH;
         final int encoderError = getEncoderAverage();
 
         control(0, power, new ConditionalTerminator(

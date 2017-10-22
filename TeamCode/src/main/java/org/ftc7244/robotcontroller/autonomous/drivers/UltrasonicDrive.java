@@ -1,6 +1,6 @@
 package org.ftc7244.robotcontroller.autonomous.drivers;
 
-import org.ftc7244.robotcontroller.hardware.Westcoast;
+import org.ftc7244.robotcontroller.hardware.VelocityVortexWestcoast;
 import org.ftc7244.robotcontroller.autonomous.controllers.PIDControllerBuilder;
 import org.ftc7244.robotcontroller.autonomous.controllers.PIDDriveControl;
 import org.ftc7244.robotcontroller.autonomous.terminators.ConditionalTerminator;
@@ -20,9 +20,9 @@ public class UltrasonicDrive extends PIDDriveControl {
      * it has deadbands for the integral and a limit for the PID output. It is fairly simple and
      * uses the ultrasonic sensors from the robot class.
      *
-     * @param robot access to the ${@link Westcoast#getLeadingUltrasonic()} and ${@link Westcoast#getTrailingUltrasonic()} ()}
+     * @param robot access to the ${@link VelocityVortexWestcoast#getLeadingUltrasonic()} and ${@link VelocityVortexWestcoast#getTrailingUltrasonic()} ()}
      */
-    public UltrasonicDrive(Westcoast robot) {
+    public UltrasonicDrive(VelocityVortexWestcoast robot) {
         super(new PIDControllerBuilder()
                         .setProportional(0.18)
                         .setIntegral(0.0005)

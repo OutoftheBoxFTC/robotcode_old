@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 
-import org.ftc7244.robotcontroller.hardware.Westcoast;
+import org.ftc7244.robotcontroller.hardware.VelocityVortexWestcoast;
 
 /**
  * Created by Stargamer285 on 10/6/17.
@@ -14,7 +14,7 @@ public class ServoTests extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException{
         double position = 1;
-        Westcoast robot = new Westcoast(this);
+        VelocityVortexWestcoast robot = new VelocityVortexWestcoast(this);
         CRServo servo = hardwareMap.crservo.get("Servo");
         waitForStart();
         while (opModeIsActive()){

@@ -3,7 +3,7 @@ package org.ftc7244.robotcontroller.autonomous.drivers;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.RobotLog;
 
-import org.ftc7244.robotcontroller.hardware.Westcoast;
+import org.ftc7244.robotcontroller.hardware.VelocityVortexWestcoast;
 
 /**
  * Created by FTC 7244 on 3/19/2017.
@@ -14,9 +14,9 @@ public class EncoderDrive {
     public final static double COUNTS_PER_INCH = 1120 / (Math.PI * 3);
     private final static int ENCODER_THRESHOLD = 100;
 
-    private Westcoast robot;
+    private VelocityVortexWestcoast robot;
 
-    public EncoderDrive(Westcoast robot) {
+    public EncoderDrive(VelocityVortexWestcoast robot) {
         this.robot = robot;
     }
 
@@ -31,7 +31,7 @@ public class EncoderDrive {
     public void drive(double power, double leftInches, double rightInches) throws InterruptedException {
         //Initialize values
         DcMotor left = robot.getDriveLeft(), right = robot.getDriveRight();
-        Westcoast.resetMotors(right, left);
+        VelocityVortexWestcoast.resetMotors(right, left);
 
         int targetLeft = initEncoderMotor(left, leftInches, power);
         int targetRight = initEncoderMotor(right, rightInches, power);
@@ -54,8 +54,8 @@ public class EncoderDrive {
         right.setPower(0);
 
         // Turn off RUN_TO_POSITION
-        Westcoast.resetMotors(left, right);
-        Westcoast.sleep(500);
+        VelocityVortexWestcoast.resetMotors(left, right);
+        VelocityVortexWestcoast.sleep(500);
     }
 
     /**

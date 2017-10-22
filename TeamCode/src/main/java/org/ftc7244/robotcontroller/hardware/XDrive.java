@@ -1,5 +1,5 @@
 package org.ftc7244.robotcontroller.hardware;
-//Legacy code
+
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,27 +12,32 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
+import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.I2cDevice;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftc7244.robotcontroller.Debug;
 import org.ftc7244.robotcontroller.autonomous.Status;
 import org.ftc7244.robotcontroller.sensor.SickUltrasonic;
-@Deprecated
-public class Westcoast extends Hardware{
 
+import java.util.Map;
+/**
+ * Created by Stargamer285 on 10/9/2017.
+ */
+
+public class XDrive {
+    public static boolean stopIntake = false;
     public static final byte NAVX_DEVICE_UPDATE_RATE_HZ = (byte) 100;
     public static final double COUNTS_PER_INCH = 1120 / (Math.PI * 3);
 
     @Nullable
-    private DcMotor driveLeft, driveRight, launcher, intake, spoolerTop, spoolerBottom, lights;
+    private DcMotor driveTopLeft, driveTopRight, driveBottomLeft, driveBottomRight, launcher, btm_intake_left, btm_intake_right, raising_intake_motor, top_intake_left, top_intake_right, spoolerTop, spoolerBottom, lights;
     @Nullable
     private Servo launcherDoor, beaconPusher, carriageRelease;
     @Nullable
-    private AnalogInput launcherLimit;
+    private AnalogInput lower_input_limit, top_input_limit;
     private OpMode opMode;
     @Nullable
     private ColorSensor beaconSensor;
@@ -45,8 +50,8 @@ public class Westcoast extends Hardware{
     @Nullable
     private I2cDevice navx;
 
-    public Westcoast(OpMode opMode) {
-        super(opMode);
+    public XDrive(OpMode opMode) {
+        this.opMode = opMode;
     }
 
     /**
@@ -71,19 +76,37 @@ public class Westcoast extends Hardware{
     }
 
     /**
+     * This is the codes own way of pausing. This has the the capability of stopping the wait if
+     * stop is requested and passing up an exception if it fails as well
+     *
+     * @param ms the duration to sleep in milliseconds
+     * @throws InterruptedException if the code fails to terminate before stop requested
+     */
+    public static void sleep(long ms) throws InterruptedException {
+        long target = System.currentTimeMillis() + ms;
+        while (target > System.currentTimeMillis() && !Status.isStopRequested()) Thread.sleep(1);
+    }
+
+    /**
      * Identify hardware and then set it up with different objects. Other initialization properties are
      * set to ensure that everything is in the default position or correct mode for the robot.
      */
-    @Override
     public void init() {
         //Initialize or nullify all hardware
         HardwareMap map = opMode.hardwareMap;
-        this.driveLeft = getOrNull(map.dcMotor, "drive_left");
-        this.driveRight = getOrNull(map.dcMotor, "drive_right");
+        this.driveTopLeft = getOrNull(map.dcMotor, "drive_top_left");
+        this.driveTopRight = getOrNull(map.dcMotor, "drive_top_right");
+        this.driveBottomLeft = getOrNull(map.dcMotor, "drive_bottom_left");
+        this.driveBottomRight = getOrNull(map.dcMotor, "drive_bottom_right");
         this.launcher = getOrNull(map.dcMotor, "launcher");
         this.launcherDoor = getOrNull(map.servo, "launcher_door");
-        this.launcherLimit = getOrNull(map.analogInput, "launcher_limit");
-        this.intake = getOrNull(map.dcMotor, "intake");
+        this.lower_input_limit = getOrNull(map.analogInput, "lower_input_limit");
+        this.top_input_limit = getOrNull(map.analogInput, "top_input_limit");
+        this.btm_intake_left = getOrNull(map.dcMotor, "btm_intake_left");
+        this.btm_intake_right = getOrNull(map.dcMotor, "btm_intake_right");
+        this.raising_intake_motor = getOrNull(map.dcMotor, "raising_intake_motor");
+        this.top_intake_left = getOrNull(map.dcMotor, "top_intake_left");
+        this.top_intake_right = getOrNull(map.dcMotor, "top_intake_right");
         this.beaconSensor = getOrNull(map.colorSensor, "beacon_sensor");
         this.beaconPusher = getOrNull(map.servo, "beacon_pusher");
         this.spoolerTop = getOrNull(map.dcMotor, "spoolerTop");
@@ -97,11 +120,14 @@ public class Westcoast extends Hardware{
         this.lights = getOrNull(map.dcMotor, "lights");
 
         //Set the default direction for all the hardware and also initialize default positions
-        if (driveLeft != null) driveLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        if (driveTopLeft != null) driveTopLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        if (driveTopRight != null) driveTopRight.setDirection(DcMotorSimple.Direction.FORWARD);
+        if (driveBottomLeft != null) driveBottomRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        if (driveBottomRight != null) driveBottomLeft.setDirection(DcMotorSimple.Direction.FORWARD);
         if (launcher != null) launcher.setDirection(DcMotorSimple.Direction.REVERSE);
         if (beaconPusher != null) beaconPusher.setPosition(1);
-        if (launcherDoor != null) setDoorState(DoorState.CLOSED);
-        if (carriageRelease != null) setCarriageState(CarriageState.CLOSED);
+        if (launcherDoor != null) setDoorState(VelocityVortexWestcoast.DoorState.CLOSED);
+        if (carriageRelease != null) setCarriageState(VelocityVortexWestcoast.CarriageState.CLOSED);
         if (spoolerTop != null) spoolerTop.setDirection(DcMotorSimple.Direction.REVERSE);
         if (spoolerTop != null && spoolerBottom != null) resetMotors(spoolerBottom, spoolerTop);
         if (beaconSensor != null) {
@@ -114,7 +140,27 @@ public class Westcoast extends Hardware{
     }
 
     /**
-     * Uses the {@link Westcoast#shoot(long)} function to shoot a specified amount of balls. The
+     * Get the value associated with an id and instead of raising an error return null and log it
+     *
+     * @param map  the hardware map from the HardwareMap
+     * @param name The ID in the hardware map
+     * @param <T>  the type of hardware map
+     * @return the hardware device associated with the name
+     */
+    private <T extends HardwareDevice> T getOrNull(@NonNull HardwareMap.DeviceMapping<T> map, String name) {
+        for (Map.Entry<String, T> item : map.entrySet()) {
+            if (!item.getKey().equalsIgnoreCase(name)) {
+                continue;
+            }
+            return item.getValue();
+        }
+        opMode.telemetry.addLine("ERROR: " + name + " not found!");
+        RobotLog.e("ERROR: " + name + " not found!");
+        return null;
+    }
+
+    /**
+     * Uses the {@link VelocityVortexWestcoast#shoot(long)} function to shoot a specified amount of balls. The
      * only time it will end before shooting is if the code is manually stopped; otherwise, it will
      * continue to the specified amount.
      *
@@ -122,13 +168,13 @@ public class Westcoast extends Hardware{
      * @param delay the time in milliseconds to wait before each shoot
      * @throws InterruptedException if the code fails to terminate before stop requested
      */
-    public void shootLoop(int count, long delay) throws InterruptedException {
+/*    public void shootLoop(int count, long delay) throws InterruptedException {
         for (int i = 0; i < count; i++) {
             if (Status.isStopRequested()) break;
             this.shoot(delay);
         }
     }
-
+*/
     /**
      * A tuned tool to shoot a ball from the robot with many fail-safes integrated to prevent the
      * shooting from not completing. First it will spin no more than 1000 milliseconds or until the
@@ -139,7 +185,7 @@ public class Westcoast extends Hardware{
      * @param delay the time in milliseconds to wait before each shot
      * @throws InterruptedException if the code fails to terminate before stop requested
      */
-    public void shoot(long delay) throws InterruptedException {
+/*    public void shoot(long delay) throws InterruptedException {
         sleep(delay);
 
         ElapsedTime timer = new ElapsedTime();
@@ -159,13 +205,73 @@ public class Westcoast extends Hardware{
                 if (timer.milliseconds() > 200) launcher.setPower(0);
 
                 //lift the arm
-                setDoorState(DoorState.OPEN);
+                setDoorState(VelocityVortexWestcoast.DoorState.OPEN);
             }
             //reset the arm to staring position
-            setDoorState(DoorState.CLOSED);
+            setDoorState(VelocityVortexWestcoast.DoorState.CLOSED);
         } else {
             launcher.setPower(0);
         }
+    }
+*/
+
+    /**
+     * System for intake on the robot.
+     * The system spins the intake motors until the limit switch is pressed, then stops the intake
+     * motors and spins the raising motors. When the limit switch on the top is pressed, the
+     * raising motor stops. When the method is called again, the cube is intaked, but does not
+     * raise to prevent hitting the top block
+     */
+    public void intakeBlock(long delay) throws InterruptedException{
+        stopIntake = false;
+        sleep(delay);
+
+        while(Math.round(lower_input_limit.getVoltage()) == 0 && stopIntake == false){
+            btm_intake_left.setPower(1);
+            btm_intake_right.setPower(1);
+        }
+        btm_intake_left.setPower(0);
+        btm_intake_right.setPower(0);
+        if(Math.round(top_input_limit.getVoltage()) == 0 && stopIntake == false){
+            while (Math.round(top_input_limit.getVoltage()) == 0){
+                raising_intake_motor.setPower(1);
+            }
+            raising_intake_motor.setPower(0);
+        }
+
+    }
+    /**
+     * Class that can be called to cancel IntakeBlock
+     */
+    public void stopIntake() throws InterruptedException{
+        stopIntake = true;
+    }
+    /**
+     * Code to raise the linear slide and expel the block
+     */
+    public void expelBlock(long delay, boolean top) throws InterruptedException{
+        if(top){
+            top_intake_left.setDirection(DcMotorSimple.Direction.REVERSE);
+            top_intake_right.setDirection(DcMotorSimple.Direction.REVERSE);
+            top_intake_left.setPower(1);
+            top_intake_right.setPower(1);
+            sleep(500);
+            top_intake_left.setPower(0);
+            top_intake_right.setPower(0);
+        }else if(!top) {
+            btm_intake_left.setDirection(DcMotorSimple.Direction.REVERSE);
+            btm_intake_right.setDirection(DcMotorSimple.Direction.REVERSE);
+            btm_intake_left.setPower(1);
+            btm_intake_right.setPower(1);
+            sleep(500);
+            btm_intake_left.setPower(0);
+            btm_intake_right.setPower(0);
+        }
+        top_intake_left.setDirection(DcMotorSimple.Direction.FORWARD);
+        top_intake_right.setDirection(DcMotorSimple.Direction.FORWARD);
+        btm_intake_left.setDirection(DcMotorSimple.Direction.FORWARD);
+        btm_intake_right.setDirection(DcMotorSimple.Direction.FORWARD);
+
     }
 
     /**
@@ -203,21 +309,21 @@ public class Westcoast extends Hardware{
     }
 
     /**
-     * Use ${@link DoorState} to either raise the arm to allow a ball in or set it to the zero
+     * Use ${@link VelocityVortexWestcoast.DoorState} to either raise the arm to allow a ball in or set it to the zero
      * position to prevent balls to go into the robot.
      *
      * @param state the position of the door
      */
-    public void setDoorState(@NonNull DoorState state) {
+    public void setDoorState(@NonNull VelocityVortexWestcoast.DoorState state) {
         launcherDoor.setPosition(state.position);
     }
 
     /**
-     * Uses the ${@link CarriageState} to release the lift or lock the lift.
+     * Uses the ${@link VelocityVortexWestcoast.CarriageState} to release the lift or lock the lift.
      *
      * @param state of the lock on the robot
      */
-    public void setCarriageState(@NonNull CarriageState state) {
+    public void setCarriageState(@NonNull VelocityVortexWestcoast.CarriageState state) {
         carriageRelease.setPosition(state.position);
     }
 
@@ -232,13 +338,22 @@ public class Westcoast extends Hardware{
 
 
     @Nullable
-    public DcMotor getDriveLeft() {
-        return this.driveLeft;
+    public DcMotor getDriveBottomLeft() {
+        return this.driveBottomLeft;
+    }
+    @Nullable
+    public DcMotor getDriveTopLeft() {
+        return this.driveTopLeft;
     }
 
     @Nullable
-    public DcMotor getDriveRight() {
-        return this.driveRight;
+    public DcMotor getDriveTopRight() {
+        return this.driveTopRight;
+    }
+
+    @Nullable
+    public DcMotor getDriveBottomRight() {
+        return this.driveBottomRight;
     }
 
     @Nullable
@@ -246,10 +361,13 @@ public class Westcoast extends Hardware{
         return this.launcher;
     }
 
+
+
     @Nullable
-    public DcMotor getIntake() {
-        return this.intake;
-    }
+    public AnalogInput getLower_input_limit(){return this.lower_input_limit;}
+
+    @Nullable
+    public AnalogInput getTop_input_limit(){return this.top_input_limit;}
 
     @Nullable
     public DcMotor getSpoolerBottom() {
@@ -274,11 +392,6 @@ public class Westcoast extends Hardware{
     @Nullable
     public Servo getCarriageRelease() {
         return this.carriageRelease;
-    }
-
-    @Nullable
-    public AnalogInput getLauncherLimit() {
-        return this.launcherLimit;
     }
 
     @Nullable
@@ -350,5 +463,9 @@ public class Westcoast extends Hardware{
         CarriageState(double position) {
             this.position = position;
         }
+    }
+
+    public enum PosAxis{
+        X,Y,Z
     }
 }

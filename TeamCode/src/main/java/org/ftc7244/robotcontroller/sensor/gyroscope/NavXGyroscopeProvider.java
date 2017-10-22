@@ -6,7 +6,7 @@ import com.kauailabs.navx.ftc.AHRS;
 import com.kauailabs.navx.ftc.IDataArrivalSubscriber;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.ftc7244.robotcontroller.hardware.Westcoast;
+import org.ftc7244.robotcontroller.hardware.VelocityVortexWestcoast;
 
 /**
  * Utilizes the NavX-Micro to get an orientatio and prevents code from executing until it
@@ -18,8 +18,8 @@ public class NavXGyroscopeProvider extends GyroscopeProvider implements IDataArr
     @Nullable
     private AHRS navxDevice;
     private boolean calibrating;
-    private Westcoast robot;
-    public NavXGyroscopeProvider(Westcoast robot){
+    private VelocityVortexWestcoast robot;
+    public NavXGyroscopeProvider(VelocityVortexWestcoast robot){
         this.robot = robot;
     }
 

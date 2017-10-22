@@ -7,7 +7,7 @@ import com.kauailabs.navx.ftc.AHRS;
 import com.kauailabs.navx.ftc.IDataArrivalSubscriber;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.ftc7244.robotcontroller.hardware.Westcoast;
+import org.ftc7244.robotcontroller.hardware.VelocityVortexWestcoast;
 
 /**
  * Uses the NavX-Micro and depends on the navx to determine if the robot is moved or rotated. The
@@ -18,8 +18,8 @@ public class NavXAccelerometerProvider extends AccelerometerProvider implements 
     @Nullable
     private AHRS navxDevice;
     private boolean moving;
-    private Westcoast robot;
-    public NavXAccelerometerProvider(Westcoast robot){
+    private VelocityVortexWestcoast robot;
+    public NavXAccelerometerProvider(VelocityVortexWestcoast robot){
         this.robot = robot;
     }
 

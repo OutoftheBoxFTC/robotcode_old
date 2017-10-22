@@ -3,7 +3,7 @@ package org.ftc7244.robotcontroller.programs.teleop;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.ftc7244.robotcontroller.hardware.Westcoast;
+import org.ftc7244.robotcontroller.hardware.VelocityVortexWestcoast;
 import org.ftc7244.robotcontroller.input.Button;
 import org.ftc7244.robotcontroller.input.ButtonType;
 
@@ -14,14 +14,14 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @TeleOp
 public class Presentation extends OpMode {
 
-    private Westcoast robot;
+    private VelocityVortexWestcoast robot;
     private Button a;
     private ExecutorService service;
     private AtomicBoolean waving;
 
     @Override
     public void init() {
-        robot = new Westcoast(this);
+        robot = new VelocityVortexWestcoast(this);
         a = new Button(gamepad1, ButtonType.A);
         waving = new AtomicBoolean(false);
         service = Executors.newCachedThreadPool();

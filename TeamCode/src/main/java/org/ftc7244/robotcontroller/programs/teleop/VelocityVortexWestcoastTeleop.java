@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.RobotLog;
 
-import org.ftc7244.robotcontroller.hardware.Westcoast;
+import org.ftc7244.robotcontroller.hardware.VelocityVortexWestcoast;
 import org.ftc7244.robotcontroller.input.Button;
 import org.ftc7244.robotcontroller.input.ButtonType;
 import org.ftc7244.robotcontroller.input.PressButton;
@@ -14,12 +14,12 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-@TeleOp(name = "Westcoast Drive")
-public class WestcoastTeleop extends OpMode {
+@TeleOp(name = "VelocityVortexWestcoast Drive")
+public class VelocityVortexWestcoastTeleop extends OpMode {
 
     private static final double LIFT_DRIVE_COEFFICIENT = 0.4;
 
-    private Westcoast robot;
+    private VelocityVortexWestcoast robot;
     private Button aButton, triggerL, triggerR, xButton, yButton, bButton;
     private Button driverBButton, driverYButton;
     private AtomicBoolean runningLauncher, flicker;
@@ -27,7 +27,7 @@ public class WestcoastTeleop extends OpMode {
 
     @Override
     public void init() {
-        robot = new Westcoast(this);
+        robot = new VelocityVortexWestcoast(this);
         aButton = new Button(gamepad2, ButtonType.A);
         triggerL = new Button(gamepad2, ButtonType.LEFT_TRIGGER);
         triggerR = new Button(gamepad2, ButtonType.RIGHT_TRIGGER);
@@ -62,7 +62,7 @@ public class WestcoastTeleop extends OpMode {
         //If we are not in running launcher mode then allow for manual
         if (!runningLauncher.get()) {
             robot.getLauncher().setPower(xButton.isPressed() ? 1 : 0);
-            robot.setDoorState(yButton.isPressed() ? Westcoast.DoorState.OPEN : Westcoast.DoorState.CLOSED);
+            robot.setDoorState(yButton.isPressed() ? VelocityVortexWestcoast.DoorState.OPEN : VelocityVortexWestcoast.DoorState.CLOSED);
         }
 
         //Run the automatic shoot system
@@ -73,7 +73,7 @@ public class WestcoastTeleop extends OpMode {
                 public void run() {
                     try {
                         robot.shoot(0);
-                        Westcoast.sleep(200);
+                        VelocityVortexWestcoast.sleep(200);
                     } catch (InterruptedException e) {
                         RobotLog.e("Shooting was stopped early");
                     }
@@ -82,7 +82,7 @@ public class WestcoastTeleop extends OpMode {
             });
         }
 
-        robot.setCarriageState(driverBButton.isPressed() ? Westcoast.CarriageState.OPEN : Westcoast.CarriageState.CLOSED);
+        robot.setCarriageState(driverBButton.isPressed() ? VelocityVortexWestcoast.CarriageState.OPEN : VelocityVortexWestcoast.CarriageState.CLOSED);
 
         //Spool with a minimum power
         float spoolerPower = gamepad1.right_trigger - gamepad1.left_trigger;
