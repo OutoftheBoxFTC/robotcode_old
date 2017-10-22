@@ -18,8 +18,10 @@ import java.util.Map;
 
 public abstract class Hardware {
     protected OpMode opMode;
-    public Hardware(OpMode opMode){
+    protected double countsPerInch;
+    public Hardware(OpMode opMode, double countsPerInch){
         this.opMode = opMode;
+        this.countsPerInch = countsPerInch;
     }
 
     /**
@@ -54,5 +56,36 @@ public abstract class Hardware {
         return null;
     }
 
+    /**
+     * Waits for all the motors to have zero position and if it is not zero tell it to reset
+     *
+     * @param motors all the motors to reset
+     */
+    public static void resetMotors(@NonNull DcMotor... motors) {
+        boolean notReset = true;
+        while (notReset) {
+            boolean allReset = true;
+            for (DcMotor motor : motors) {
+                if (motor.getCurrentPosition() == 0) {
+                    continue;
+                }
+                allReset = false;
+                motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            }
+            notReset = !allReset;
+        }
+        for (DcMotor motor : motors) motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+
     public abstract void init();
+
+    public abstract void drive(double leftPower, double rightPower);
+
+    public abstract void resetDriveMotors();
+
+    public double getCountsPerInch() {
+        return countsPerInch;
+    }
+
+    public abstract int getDriveEncoderAverage();
 }

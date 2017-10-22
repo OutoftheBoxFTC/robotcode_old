@@ -45,7 +45,7 @@ public class VelocityVortexWestcoast extends Hardware{
     private I2cDevice navx;
 
     public VelocityVortexWestcoast(OpMode opMode) {
-        super(opMode);
+        super(opMode, COUNTS_PER_INCH);
     }
 
     /**
@@ -110,6 +110,22 @@ public class VelocityVortexWestcoast extends Hardware{
             redOffset = 0;
             blueOffset = 0;
         }
+    }
+
+    @Override
+    public void drive(double leftPower, double rightPower) {
+        driveLeft.setPower(leftPower);
+        driveRight.setPower(rightPower);
+    }
+
+    @Override
+    public void resetDriveMotors() {
+        resetMotors(driveLeft, driveRight);
+    }
+
+    @Override
+    public int getDriveEncoderAverage() {
+        return (driveLeft.getCurrentPosition()+driveRight.getCurrentPosition())/2;
     }
 
     /**
