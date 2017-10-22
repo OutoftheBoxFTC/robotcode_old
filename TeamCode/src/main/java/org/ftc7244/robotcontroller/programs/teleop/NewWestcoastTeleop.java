@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.robot.Robot;
 
 import org.ftc7244.robotcontroller.Westcoast;
-import org.ftc7244.robotcontroller.XDrive;
+import org.ftc7244.robotcontroller.hardware.XDrive;
 
 /**
  * Created by Eeshwar Laptop on 10/18/2017.

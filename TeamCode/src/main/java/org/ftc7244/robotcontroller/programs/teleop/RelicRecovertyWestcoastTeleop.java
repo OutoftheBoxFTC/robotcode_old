@@ -11,17 +11,18 @@ import org.ftc7244.robotcontroller.hardware.RelicRecoveryWestcoast;
 
 @TeleOp(name = "Relic Recovery Westcoast")
 public class RelicRecovertyWestcoastTeleop extends OpMode {
-    private RelicRecoveryWestcoast robot;
-    @Override
-    public void init() {
+    RelicRecoveryWestcoast robot;
+    public void init(){
         robot = new RelicRecoveryWestcoast(this);
         robot.init();
+        telemetry.addLine("Westcoast started");
+        telemetry.update();
     }
     @Override
-    public void loop() {
-        robot.getLeft1().setPower(-gamepad1.left_stick_y);
-        robot.getLeft2().setPower(-gamepad1.left_stick_y);
-        robot.getRight1().setPower(-gamepad1.right_stick_y);
-        robot.getRight2().setPower(-gamepad1.right_stick_y);
+    public void loop(){
+        robot.getDriveBackLeft().setPower(gamepad1.left_stick_y);
+        robot.getDriveFrontLeft().setPower(gamepad1.left_stick_y);
+        robot.getDriveBackRight().setPower(-gamepad1.right_stick_y);
+        robot.getDriveFrontRight().setPower(-gamepad1.right_stick_y);
     }
 }
