@@ -34,7 +34,6 @@ public class RelicRecoveryWestcoast extends Hardware{
     private Servo launcherDoor, beaconPusher, carriageRelease;
     @Nullable
     private AnalogInput launcherLimit;
-    private OpMode opMode;
     @Nullable
     private ColorSensor beaconSensor;
     @Nullable
@@ -79,10 +78,10 @@ public class RelicRecoveryWestcoast extends Hardware{
     public void init() {
         //Initialize or nullify all hardware
         HardwareMap map = opMode.hardwareMap;
-        this.driveBackLeft = getOrNull(map.dcMotor, "drive_back_left");
-        this.driveFrontLeft = getOrNull(map.dcMotor, "drive_front_left");
-        this.driveBackRight = getOrNull(map.dcMotor, "drive_back_right");
-        this.driveFrontRight = getOrNull(map.dcMotor, "drive_front_right");
+        this.driveBackLeft = getOrNull(map.dcMotor, "driveBackLeft");
+        this.driveFrontLeft = getOrNull(map.dcMotor, "driveFrontLeft");
+        this.driveBackRight = getOrNull(map.dcMotor, "driveBackRight");
+        this.driveFrontRight = getOrNull(map.dcMotor, "driveFrontRight");
         this.launcher = getOrNull(map.dcMotor, "launcher");
         this.launcherDoor = getOrNull(map.servo, "launcher_door");
         this.launcherLimit = getOrNull(map.analogInput, "launcher_limit");
