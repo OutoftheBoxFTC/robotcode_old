@@ -27,7 +27,6 @@ public abstract class VelocityVortexPIDAutonomous extends PIDAutonamous {
     protected final EncoderDrive encoder;
 
     protected final GyroscopeProvider gyroProvider;
-    protected final ImageTransformProvider imageProvider;
 
     protected VelocityVortexWestcoast robot;
 
@@ -42,7 +41,6 @@ public abstract class VelocityVortexPIDAutonomous extends PIDAutonamous {
         gyroscope = new GyroscopeDrive(robot, gyroProvider);
         ultrasonic = new UltrasonicDrive(robot);
         encoder = new EncoderDrive(robot);
-        imageProvider = new ImageTransformProvider();
         calibratedMsg = false;
     }
 
@@ -68,7 +66,6 @@ public abstract class VelocityVortexPIDAutonomous extends PIDAutonamous {
     protected void startProviders() {
         robot.init();
         gyroProvider.start(hardwareMap);
-        imageProvider.start(hardwareMap);
     }
 
     @Override

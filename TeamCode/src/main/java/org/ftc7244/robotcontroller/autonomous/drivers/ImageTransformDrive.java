@@ -1,5 +1,6 @@
 package org.ftc7244.robotcontroller.autonomous.drivers;
 
+import org.ftc7244.robotcontroller.hardware.Hardware;
 import org.ftc7244.robotcontroller.hardware.VelocityVortexWestcoast;
 import org.ftc7244.robotcontroller.autonomous.controllers.PIDControllerBuilder;
 import org.ftc7244.robotcontroller.autonomous.controllers.PIDDriveControl;
@@ -8,9 +9,9 @@ import org.ftc7244.robotcontroller.autonomous.terminators.SensitivityTerminator;
 import org.ftc7244.robotcontroller.autonomous.terminators.TimerTerminator;
 import org.ftc7244.robotcontroller.sensor.vuforia.ImageTransformProvider;
 
-public class ImageTranformDrive extends PIDDriveControl{
+public class ImageTransformDrive extends PIDDriveControl{
     private ImageTransformProvider imageProvider;
-    public ImageTranformDrive(VelocityVortexWestcoast robot, ImageTransformProvider imageProvider) {
+    public ImageTransformDrive(Hardware robot, ImageTransformProvider imageProvider) {
         super(new PIDControllerBuilder().setProportional(0)
                 .setIntegral(0)
                 .setDerivative(0)

@@ -13,8 +13,7 @@ import org.ftc7244.robotcontroller.hardware.VelocityVortexWestcoast;
  * has been fully calibrated.
  */
 public class NavXGyroscopeProvider extends GyroscopeProvider implements IDataArrivalSubscriber {
-
-
+    public static final byte NAVX_DEVICE_UPDATE_RATE_HZ = (byte) 100;
     @Nullable
     private AHRS navxDevice;
     private boolean calibrating;

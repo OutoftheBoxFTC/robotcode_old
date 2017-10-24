@@ -14,6 +14,7 @@ import org.ftc7244.robotcontroller.autonomous.terminators.TimerTerminator;
 public class UltrasonicDrive extends PIDDriveControl {
 
     private static final double OFFSET_LEADING = 0.0407, OFFSET_TRAILING = 0;
+    private VelocityVortexWestcoast robot;
 
     /**
      * Incorporates the default PID tunings but allows for debugging within the code. Additionally,
@@ -32,6 +33,7 @@ public class UltrasonicDrive extends PIDDriveControl {
                         .setOutputRange(.22)
                         .createController(),
                 robot);
+        this.robot = robot;
     }
 
     @Override

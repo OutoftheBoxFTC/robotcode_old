@@ -22,6 +22,7 @@ import org.ftc7244.robotcontroller.sensor.gyroscope.GyroscopeProvider;
 public class GyroscopeDrive extends PIDDriveControl {
 
     private GyroscopeProvider gyroProvider;
+    private VelocityVortexWestcoast robot;
 
     /**
      * Same as the parent constructor but passes a debug as fault by default since most users will
@@ -41,6 +42,7 @@ public class GyroscopeDrive extends PIDDriveControl {
                         .createController(),
                 robot);
         this.gyroProvider = gyroProvider;
+        this.robot = robot;
     }
 
     @Override

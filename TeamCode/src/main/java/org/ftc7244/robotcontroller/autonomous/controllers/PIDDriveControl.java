@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftc7244.robotcontroller.Debug;
+import org.ftc7244.robotcontroller.hardware.Hardware;
 import org.ftc7244.robotcontroller.hardware.VelocityVortexWestcoast;
 import org.ftc7244.robotcontroller.autonomous.Status;
 import org.ftc7244.robotcontroller.autonomous.terminators.Terminator;
@@ -17,9 +18,9 @@ import org.ftc7244.robotcontroller.autonomous.terminators.Terminator;
 public abstract class PIDDriveControl {
 
     protected PIDController controller;
-    protected VelocityVortexWestcoast robot;
+    protected Hardware robot;
 
-    public PIDDriveControl(PIDController controller, VelocityVortexWestcoast robot) {
+    public PIDDriveControl(PIDController controller, Hardware robot) {
         this.controller = controller;
         this.robot = robot;
     }
@@ -60,14 +61,12 @@ public abstract class PIDDriveControl {
                 RobotLog.ii("PID", "|" + controller.getProportional() + "|" + controller.getIntegral() + "|" + controller.getDerivative() + "|" + pid + "|" + getReading());
 
             //take the PID and provide poweroffset if the robot wants to drive while using PID
-            robot.getDriveLeft().setPower(powerOffset + pid);
-            robot.getDriveRight().setPower(powerOffset - pid);
+            robot.drive(powerOffset+pid, powerOffset-pid);
             //check if the robot should stop driving
         } while (!terminator.shouldTerminate() && !Status.isStopRequested());
         terminator.terminated(true);
 
         //kill motors just in case
-        robot.getDriveLeft().setPower(0);
-        robot.getDriveRight().setPower(0);
+        robot.drive(0, 0);
     }
 }
