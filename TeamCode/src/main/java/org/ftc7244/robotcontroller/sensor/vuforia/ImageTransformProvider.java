@@ -26,7 +26,6 @@ public class ImageTransformProvider extends SensorProvider implements Runnable {
     private VuforiaTrackable template;
 
     private boolean vuforiaInitialized, running, imageSeen;
-    private static final double MM_TO_INCHES = 25.4;
     private static final long UPDATE_INTERVAL = 1;
 
     private DataFilter xTrans, yTrans, zTrans, xRot, yRot, zRot;
@@ -35,12 +34,12 @@ public class ImageTransformProvider extends SensorProvider implements Runnable {
 
     public ImageTransformProvider(){
         vuforiaInitialized = false;
-        xTrans = new DataFilter(10);
-        yTrans = new DataFilter(10);
-        zTrans = new DataFilter(10);
-        xRot = new DataFilter(10);
-        yRot = new DataFilter(10);
-        zRot = new DataFilter(10);
+        xTrans = new DataFilter(100);
+        yTrans = new DataFilter(100);
+        zTrans = new DataFilter(100);
+        xRot = new DataFilter(100);
+        yRot = new DataFilter(100);
+        zRot = new DataFilter(100);
         thread = new Thread(this);
     }
     @Override
@@ -66,7 +65,7 @@ public class ImageTransformProvider extends SensorProvider implements Runnable {
         return RelicRecoveryVuMark.from(template);
     }
 
-    public double getImageDistance(Axis axis){
+    public double getImageDistance(TranslationAxis axis){
         if(imageSeen){
             switch (axis){
                 case X:
@@ -80,14 +79,14 @@ public class ImageTransformProvider extends SensorProvider implements Runnable {
         return -1;
     }
 
-    public double getImageRotation(Axis axis){
+    public double getImageRotation(RotationAxis axis){
         if(imageSeen){
             switch (axis){
-                case X:
+                case YAW:
                     return xRot.getReading();
-                case Y:
+                case PITCH:
                     return yRot.getReading();
-                case Z:
+                case ROLL:
                     return zRot.getReading();
             }
         }
@@ -100,11 +99,9 @@ public class ImageTransformProvider extends SensorProvider implements Runnable {
         Orientation rotation = null;
         while (running){
             if(!RelicRecoveryVuMark.from(template).equals(RelicRecoveryVuMark.UNKNOWN)){
-                if(!imageSeen) {
-                    OpenGLMatrix transform = ((VuforiaTrackableDefaultListener)template.getListener()).getPose();
-                    translation = transform.getTranslation();
-                    rotation = Orientation.getOrientation(transform, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
-                }
+                OpenGLMatrix transform = ((VuforiaTrackableDefaultListener)template.getListener()).getPose();
+                translation = transform.getTranslation();
+                rotation = Orientation.getOrientation(transform, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
                 xTrans.update(translation.get(0));
                 yTrans.update(translation.get(1));
                 zTrans.update(translation.get(2));
@@ -112,12 +109,9 @@ public class ImageTransformProvider extends SensorProvider implements Runnable {
                 yRot.update(rotation.secondAngle);
                 zRot.update(rotation.thirdAngle);
                 imageSeen = true;
+                System.out.println(translation.get(0));
             }
-            else {
-                translation = null;
-                rotation = null;
-                imageSeen = false;
-            }
+            else imageSeen = false;
             try {
                 Thread.sleep(UPDATE_INTERVAL);
             } catch (InterruptedException e) {
@@ -129,9 +123,14 @@ public class ImageTransformProvider extends SensorProvider implements Runnable {
     @Override
     public void stop() {
         running = false;
+        thread.stop();
     }
 
-    public enum Axis {
+    public enum TranslationAxis {
         X,Y,Z
+    }
+
+    public enum RotationAxis{
+        PITCH, YAW, ROLL;
     }
 }

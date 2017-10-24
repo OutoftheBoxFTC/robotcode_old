@@ -25,7 +25,8 @@ public abstract class PIDAutonamous extends LinearOpMode {
         }
         catch (Throwable t){
             String err = t.getMessage();
-            RobotLog.e(err);
+            //RobotLog.e(err);
+            t.printStackTrace();
             isError = true;
         }
         finally {
