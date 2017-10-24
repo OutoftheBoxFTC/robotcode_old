@@ -30,7 +30,7 @@ import java.util.Map;
 public class XDrive {
     public static boolean stopIntake = false;
     public static final byte NAVX_DEVICE_UPDATE_RATE_HZ = (byte) 100;
-    public static final double COUNTS_PER_INCH = 1120 / (Math.PI * 3);
+    public static final double speed = 1.82170543;
 
     @Nullable
     private DcMotor driveTopLeft, driveTopRight, driveBottomLeft, driveBottomRight, launcher, btm_intake_left, btm_intake_right, raising_intake_motor, top_intake_left, top_intake_right, spoolerTop, spoolerBottom, lights;
@@ -120,9 +120,9 @@ public class XDrive {
         this.lights = getOrNull(map.dcMotor, "lights");
 
         //Set the default direction for all the hardware and also initialize default positions
-        if (driveTopLeft != null) driveTopLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        if (driveTopLeft != null) driveTopLeft.setDirection(DcMotorSimple.Direction.FORWARD);
         if (driveTopRight != null) driveTopRight.setDirection(DcMotorSimple.Direction.FORWARD);
-        if (driveBottomLeft != null) driveBottomRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        if (driveBottomLeft != null) driveBottomRight.setDirection(DcMotorSimple.Direction.FORWARD);
         if (driveBottomRight != null) driveBottomLeft.setDirection(DcMotorSimple.Direction.FORWARD);
         if (launcher != null) launcher.setDirection(DcMotorSimple.Direction.REVERSE);
         if (beaconPusher != null) beaconPusher.setPosition(1);
@@ -418,6 +418,9 @@ public class XDrive {
     public SickUltrasonic getTrailingUltrasonic() {
         return this.trailingUltrasonic;
     }
+
+    @Nullable
+    public Double getSpeed(){return this.speed;}
 
     @Nullable
     public DcMotor getLights() {
