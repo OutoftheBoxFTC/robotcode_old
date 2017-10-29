@@ -1,18 +1,15 @@
 package org.ftc7244.robotcontroller;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import org.ftc7244.robotcontroller.autonomous.drivers.UltrasonicDrive;
-import org.ftc7244.robotcontroller.hardware.RelicRecoveryWestcoast;
 import org.ftc7244.robotcontroller.hardware.XDrive;
 import org.ftc7244.robotcontroller.sensor.gyroscope.PhoneGyroscopeProvider;
 
 /**
  * Created by Eeshwar Laptop on 10/23/2017.
  */
+
 @Autonomous(name="2017 Test")
 public class XDRIVEAutonomousTest extends LinearOpMode {
     private XDrive robot = new XDrive(this);
@@ -31,8 +28,15 @@ public class XDRIVEAutonomousTest extends LinearOpMode {
         robot.getDriveTopLeft().setPower(-1);
         sleepTimeD = (long)3.83333 * robot.getSpeed();
         sleepTime = (long) sleepTimeD;
-        sleep(sleepTime);
+        try {
+            Thread.sleep(sleepTime * 1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         rotTarget = startRot  - 90;
+        telemetry.addData("Rot:", gyro.getZ());
+        telemetry.addData("Target:", rotTarget);
+        telemetry.update();
         robot.getDriveBottomRight().setPower(0);
         robot.getDriveTopLeft().setPower(0);
         robot.getDriveBottomRight().setPower(1);

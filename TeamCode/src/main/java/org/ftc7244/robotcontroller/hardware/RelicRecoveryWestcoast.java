@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 
 import com.kauailabs.navx.ftc.AHRS;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
@@ -21,10 +22,11 @@ public class RelicRecoveryWestcoast extends Hardware{
     public static final double COUNTS_PER_INCH = 1;
 
     @Nullable
-    private DcMotor driveBackLeft, driveFrontLeft, driveBackRight, driveFrontRight, launcher, intake, spoolerTop, spoolerBottom;
+    private DcMotor driveBackLeft, driveFrontLeft, driveBackRight, driveFrontRight, launcher, intakeBtmLf, intakeBtmRt, spoolerTop, spoolerBottom;
     @Nullable
     private I2cDevice navx;
-
+    @Nullable
+    private AnalogInput pixyCam;
     public RelicRecoveryWestcoast(OpMode opMode) {
         super(opMode, COUNTS_PER_INCH);
     }
@@ -58,12 +60,14 @@ public class RelicRecoveryWestcoast extends Hardware{
     public void init() {
         //Initialize or nullify all hardware
         HardwareMap map = opMode.hardwareMap;
+        this.pixyCam = getOrNull(map.analogInput, "PixyCam");
         this.driveBackLeft = getOrNull(map.dcMotor, "driveBackLeft");
         this.driveFrontLeft = getOrNull(map.dcMotor, "driveFrontLeft");
         this.driveBackRight = getOrNull(map.dcMotor, "driveBackRight");
         this.driveFrontRight = getOrNull(map.dcMotor, "driveFrontRight");
         this.launcher = getOrNull(map.dcMotor, "launcher");
-        this.intake = getOrNull(map.dcMotor, "intake");
+        this.intakeBtmLf = getOrNull(map.dcMotor, "intakeBtmLf");
+        this.intakeBtmRt = getOrNull(map.dcMotor, "intakeBtmRt");
         this.spoolerTop = getOrNull(map.dcMotor, "spoolerTop");
         this.spoolerBottom = getOrNull(map.dcMotor, "spoolerBottom");
         this.navx = getOrNull(map.i2cDevice, "navx");
@@ -71,6 +75,8 @@ public class RelicRecoveryWestcoast extends Hardware{
         //Set the default direction for all the hardware and also initialize default positions
         if (driveFrontLeft != null) driveFrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         if (driveFrontRight != null) driveFrontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        if (intakeBtmLf != null) intakeBtmLf.setDirection(DcMotorSimple.Direction.FORWARD);
+        if (intakeBtmRt != null) intakeBtmRt.setDirection(DcMotorSimple.Direction.REVERSE);
         if (launcher != null) launcher.setDirection(DcMotorSimple.Direction.REVERSE);
         if (spoolerTop != null) spoolerTop.setDirection(DcMotorSimple.Direction.REVERSE);
         if (spoolerTop != null && spoolerBottom != null) resetMotors(spoolerBottom, spoolerTop);
@@ -108,7 +114,10 @@ public class RelicRecoveryWestcoast extends Hardware{
     public DcMotor getDriveFrontLeft() {
         return this.driveFrontLeft;
     }
-
+    @Nullable
+    public AnalogInput getPixyCam(){
+        return this.pixyCam;
+    }
     @Nullable
     public DcMotor getDriveBackLeft() {
         return this.driveBackLeft;
@@ -130,8 +139,13 @@ public class RelicRecoveryWestcoast extends Hardware{
     }
 
     @Nullable
-    public DcMotor getIntake() {
-        return this.intake;
+    public DcMotor getIntakeBtmLf() {
+        return this.intakeBtmLf;
+    }
+
+    @Nullable
+    public DcMotor getIntakeBtmRt() {
+        return this.intakeBtmRt;
     }
 
     @Nullable
