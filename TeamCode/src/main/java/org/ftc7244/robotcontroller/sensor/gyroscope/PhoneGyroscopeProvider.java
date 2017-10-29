@@ -107,7 +107,7 @@ public class PhoneGyroscopeProvider extends GyroscopeProvider implements SensorE
             // after computing it from the gyro sample data.
         } else if (getTimestamp() != 0) {
             final float dT = (event.timestamp - getTimestamp()) * NS2S;
-            // Axis of the rotation sample, not normalized yet.
+            // TranslationAxis of the rotation sample, not normalized yet.
             axisX = axisX + (axisX > 0 ? -errorX : errorX);
             axisY = axisY + (axisY > 0 ? -errorY : errorY);
             axisZ = axisZ + (axisZ > 0 ? -errorZ : errorZ);

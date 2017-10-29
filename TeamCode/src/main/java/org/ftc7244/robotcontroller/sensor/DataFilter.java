@@ -9,6 +9,7 @@ given length ago.
 public class DataFilter{
     private ArrayList<Double> data;
     private int length;
+    private double reading;
     /**
      *
      * @param length Determines how many data points the filter remembers
@@ -23,13 +24,7 @@ public class DataFilter{
      * @return average of all remembered data points
      */
     public double getReading(){
-        double total = 0;
-        ArrayList<Double> clone = new ArrayList<>();
-
-        for(double num : clone){
-            total += num;
-        }
-        return total/length;
+        return reading;
     }
 
     /**
@@ -42,5 +37,10 @@ public class DataFilter{
             data.remove(0);
         }
         data.add(num);
+        double total = 0;
+        for(double point : data){
+            total += point;
+        }
+        reading = total/length;
     }
 }

@@ -1,7 +1,6 @@
 package org.ftc7244.robotcontroller.autonomous.drivers;
 
 import org.ftc7244.robotcontroller.hardware.Hardware;
-import org.ftc7244.robotcontroller.hardware.VelocityVortexWestcoast;
 import org.ftc7244.robotcontroller.autonomous.controllers.PIDControllerBuilder;
 import org.ftc7244.robotcontroller.autonomous.controllers.PIDDriveControl;
 import org.ftc7244.robotcontroller.autonomous.terminators.ConditionalTerminator;
@@ -23,11 +22,11 @@ public class ImageTransformDrive extends PIDDriveControl{
 
     @Override
     public double getReading() {
-        return this.imageProvider.getImageRotation(ImageTransformProvider.Axis.Z);
+        return this.imageProvider.getImageRotation(ImageTransformProvider.RotationAxis.YAW);
     }
 
     public void allignToImage() throws InterruptedException {
-        double offset = imageProvider.getImageRotation(ImageTransformProvider.Axis.Z),
+        double offset = imageProvider.getImageRotation(ImageTransformProvider.RotationAxis.YAW),
         degrees = -offset;
         control(0, 0, new ConditionalTerminator(new SensitivityTerminator(this, degrees, 1, 300), new TimerTerminator(2000)));
     }
