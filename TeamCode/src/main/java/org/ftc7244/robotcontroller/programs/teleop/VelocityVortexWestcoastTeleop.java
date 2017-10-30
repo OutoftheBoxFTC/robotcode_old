@@ -49,12 +49,10 @@ public class VelocityVortexWestcoastTeleop extends OpMode {
         //DRIVE
         //Allow for full power of the robot
         if (!driverYButton.isPressed()) {
-            robot.getDriveRight().setPower(-gamepad1.right_stick_y);
-            robot.getDriveLeft().setPower(-gamepad1.left_stick_y);
+            robot.drive(-gamepad1.right_stick_y, -gamepad1.left_stick_y);
             //Invert power and ramp down control
         } else {
-            robot.getDriveRight().setPower(LIFT_DRIVE_COEFFICIENT * gamepad1.left_stick_y);
-            robot.getDriveLeft().setPower(LIFT_DRIVE_COEFFICIENT * gamepad1.right_stick_y);
+            robot.drive(-gamepad1.right_stick_y*LIFT_DRIVE_COEFFICIENT, -gamepad1.left_stick_y*LIFT_DRIVE_COEFFICIENT);
         }
 
         robot.getBeaconPusher().setPosition(bButton.isPressed() ? 0 : 1);

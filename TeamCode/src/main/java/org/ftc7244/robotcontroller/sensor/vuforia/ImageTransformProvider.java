@@ -95,8 +95,8 @@ public class ImageTransformProvider extends SensorProvider implements Runnable {
 
     @Override
     public void run() {
-        VectorF translation = null;
-        Orientation rotation = null;
+        VectorF translation;
+        Orientation rotation;
         while (running){
             if(!RelicRecoveryVuMark.from(template).equals(RelicRecoveryVuMark.UNKNOWN)){
                 OpenGLMatrix transform = ((VuforiaTrackableDefaultListener)template.getListener()).getPose();

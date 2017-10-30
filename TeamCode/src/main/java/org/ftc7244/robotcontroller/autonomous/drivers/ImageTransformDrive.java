@@ -12,9 +12,9 @@ public class ImageTransformDrive extends PIDDriveControl{
     private ImageTransformProvider imageProvider;
     public ImageTransformDrive(Hardware robot, ImageTransformProvider imageProvider) {
         super(new PIDControllerBuilder().setProportional(0)
-                .setIntegral(0)
-                .setDerivative(0)
-                .setDelay(0)
+                .setIntegral(0.02)
+                .setDerivative(0.00004)
+                .setDelay(3.5)
                 .setOutputRange(1)
                 .createController(), robot);
         this.imageProvider = imageProvider;

@@ -4,33 +4,22 @@ import org.ftc7244.robotcontroller.Debug;
 
 import java.io.IOException;
 import java.io.PrintStream;
-import java.net.InetAddress;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Objects;
-import java.util.Set;
-
-import javax.annotation.processing.AbstractProcessor;
-import javax.annotation.processing.RoundEnvironment;
-import javax.lang.model.element.Element;
-import javax.lang.model.element.TypeElement;
-import javax.lang.model.element.VariableElement;
-import javax.lang.model.util.ElementFilter;
 
 /**
  * Created by BeaverDuck on 10/8/17.
  */
 
-public class Logger extends AbstractProcessor implements Runnable{
+public class Logger implements Runnable{
     /**
      * Logger sends sets of data from the used android device to a computer on the receiving port
-     * hosting the logger program.
+     * hosting the serverSocket program.
      */
     private static final Logger instance = new Logger();
-
-    private static final String INET_ADDRESS = "";
 
     private static final int PORT = 0, FIGURES_AFTER_DECIMAL = 4;
 
@@ -40,7 +29,7 @@ public class Logger extends AbstractProcessor implements Runnable{
 
     private Thread thread;
 
-    private Socket logger;
+    private ServerSocket serverSocket;
 
     private PrintStream out;
 
@@ -53,33 +42,10 @@ public class Logger extends AbstractProcessor implements Runnable{
     private Logger() {
         if(Debug.STATUS) {
             running = true;
-
-            data = new HashMap<>();
-
-            try {
-                logger = new Socket(InetAddress.getByName(INET_ADDRESS), PORT);
-                out = new PrintStream(logger.getOutputStream());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
             thread = new Thread(this);
             thread.start();
+            data = new HashMap<>();
         }
-    }
-
-    /**
-     * @param set A set of all elements in the project with an annotation
-     * @param roundEnvironment idk
-     * @return processing successful
-     */
-    @Override
-    public boolean process(Set<? extends TypeElement> set, RoundEnvironment roundEnvironment) {
-        for(VariableElement e : ElementFilter.fieldsIn(roundEnvironment.getElementsAnnotatedWith(Logged.class))){
-            Object variable = e.getConstantValue();
-            if(variable instanceof Number) addData(e.getAnnotation(Logged.class).name(), (Number)variable);
-        }
-        return true;
     }
 
     /**
@@ -91,19 +57,27 @@ public class Logger extends AbstractProcessor implements Runnable{
      */
 
     public void addData(String tag, Number data) {
-        if(this.data.containsKey(tag)) {
-            this.data.get(tag).add(data);
-        }
-        else {
-            if(tag.contains(":")){
-                throw new InvalidCharacterException("Tag cannot contain \":\"");
+        if(running) {
+            if (this.data.containsKey(tag)) {
+                this.data.get(tag).add(data);
+            } else {
+                if (tag.contains(":")) {
+                    throw new InvalidCharacterException("Tag cannot contain \":\"");
+                }
+                this.data.put(tag, new ArrayList<>(Collections.singletonList(data)));
             }
-            this.data.put(tag, new ArrayList<>(Collections.singletonList(data)));
         }
     }
 
     @Override
     public void run() {
+        try {
+            serverSocket = new ServerSocket(PORT);
+            Socket client = serverSocket.accept();
+            out = new PrintStream(client.getOutputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         while (running){
             try {
                 Thread.sleep(SEND_INTERVAL_MS);
@@ -113,6 +87,7 @@ public class Logger extends AbstractProcessor implements Runnable{
             for(String key : data.keySet()){
                 out.print(generateOutput(key));
             }
+            data.clear();
         }
     }
 

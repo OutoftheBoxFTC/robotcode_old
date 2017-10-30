@@ -38,7 +38,7 @@ public abstract class RelicRecoveryPIDAutonamous extends PIDAutonamous {
 
     @Override
     protected void onEnd(boolean err) {
-
+        imageProvider.stop();
     }
 
     @Override
