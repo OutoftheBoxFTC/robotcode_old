@@ -85,12 +85,16 @@ public class RelicRecoveryWestcoast extends Hardware{
 
     @Override
     public void drive(double leftPower, double rightPower) {
-        driveFrontLeft.setPower(leftPower);
-        driveBackLeft.setPower(leftPower);
+        driveFrontLeft.setPower(-leftPower);
+        driveBackLeft.setPower(-leftPower);
         driveFrontRight.setPower(rightPower);
         driveBackRight.setPower(rightPower);
     }
 
+    @Override
+    public void getPixyData(){
+
+    }
     @Override
     public void resetDriveMotors() {
         resetMotors(driveBackLeft, driveBackRight, driveFrontLeft, driveFrontRight);
@@ -120,8 +124,8 @@ public class RelicRecoveryWestcoast extends Hardware{
         return this.pixyCam;
     }
     @Nullable
-    public AnalogInput getPixyCam(){
-        return this.pixyCam;
+    public AnalogInput getPixyCamStatus(){
+        return this.pixyCamStatus;
     }
     @Nullable
     public DcMotor getDriveBackLeft() {
