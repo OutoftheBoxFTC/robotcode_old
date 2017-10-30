@@ -30,17 +30,23 @@ public class RelicRecoveryWestcoastTeleop extends OpMode {
     @Override
     public void loop(){
         if(left_trigger.isPressed()){
-            robot.drive(-gamepad1.left_stick_y, -gamepad1.right_stick_y);
+            robot.getIntakeBtmLf().setPower(1);
+            robot.getIntakeBtmLf().setPower(1);
         }
         else if(right_trigger.isPressed()){
-            robot.drive(-gamepad1.left_stick_y* SLOW_DRIVE_COEFFICIENT,
-                    -gamepad1.right_stick_y* SLOW_DRIVE_COEFFICIENT);
-        }
-        if(a_button.isPressed()){
-
+            robot.getIntakeBtmLf().setPower(-1);
+            robot.getIntakeBtmLf().setPower(-1);
         }
         else {
-
+            robot.getIntakeBtmLf().setPower(0);
+            robot.getIntakeBtmLf().setPower(0);
+        }
+        if(a_button.isPressed()){
+            robot.drive(-gamepad1.left_stick_y, -gamepad1.right_stick_y);
+        }
+        else {
+            robot.drive(-gamepad1.left_stick_y* SLOW_DRIVE_COEFFICIENT,
+                    -gamepad1.right_stick_y* SLOW_DRIVE_COEFFICIENT);
         }
     }
 }
