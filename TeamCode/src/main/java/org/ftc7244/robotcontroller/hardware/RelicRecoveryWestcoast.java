@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import com.kauailabs.navx.ftc.AHRS;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
@@ -25,6 +26,8 @@ public class RelicRecoveryWestcoast extends Hardware{
     private DcMotor driveBackLeft, driveFrontLeft, driveBackRight, driveFrontRight, launcher, intakeBtmLf, intakeBtmRt, spoolerTop, spoolerBottom;
     @Nullable
     private I2cDevice navx;
+    @Nullable
+    private CRServo servoName;
     @Nullable
     private AnalogInput pixyCam, pixyCamStatus;
     public RelicRecoveryWestcoast(OpMode opMode) {
@@ -61,6 +64,7 @@ public class RelicRecoveryWestcoast extends Hardware{
         //Initialize or nullify all hardware
         HardwareMap map = opMode.hardwareMap;
         this.pixyCam = getOrNull(map.analogInput, "PixyCam");
+        this.servoName = getOrNull(map.crservo,"name");
         this.pixyCamStatus = getOrNull(map.analogInput, "PixyCamStatus");
         this.driveBackLeft = getOrNull(map.dcMotor, "driveBackLeft");
         this.driveFrontLeft = getOrNull(map.dcMotor, "driveFrontLeft");
@@ -91,10 +95,13 @@ public class RelicRecoveryWestcoast extends Hardware{
         driveBackRight.setPower(rightPower);
     }
 
-    @Override
-    public void getPixyData(){
-
+    public double getPixyData(){
+        if(pixyCamStatus.getVoltage() > 0){
+           return pixyCam.getVoltage() * 30.3030303;
+        }
+        return 404;
     }
+
     @Override
     public void resetDriveMotors() {
         resetMotors(driveBackLeft, driveBackRight, driveFrontLeft, driveFrontRight);
