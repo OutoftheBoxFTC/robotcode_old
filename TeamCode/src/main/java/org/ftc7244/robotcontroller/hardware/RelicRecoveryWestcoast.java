@@ -26,7 +26,7 @@ public class RelicRecoveryWestcoast extends Hardware{
     @Nullable
     private I2cDevice navx;
     @Nullable
-    private AnalogInput pixyCam;
+    private AnalogInput pixyCam, pixyCamStatus;
     public RelicRecoveryWestcoast(OpMode opMode) {
         super(opMode, COUNTS_PER_INCH);
     }
@@ -61,6 +61,7 @@ public class RelicRecoveryWestcoast extends Hardware{
         //Initialize or nullify all hardware
         HardwareMap map = opMode.hardwareMap;
         this.pixyCam = getOrNull(map.analogInput, "PixyCam");
+        this.pixyCamStatus = getOrNull(map.analogInput, "PixyCamStatus");
         this.driveBackLeft = getOrNull(map.dcMotor, "driveBackLeft");
         this.driveFrontLeft = getOrNull(map.dcMotor, "driveFrontLeft");
         this.driveBackRight = getOrNull(map.dcMotor, "driveBackRight");
@@ -113,6 +114,10 @@ public class RelicRecoveryWestcoast extends Hardware{
     @Nullable
     public DcMotor getDriveFrontLeft() {
         return this.driveFrontLeft;
+    }
+    @Nullable
+    public AnalogInput getPixyCam(){
+        return this.pixyCam;
     }
     @Nullable
     public AnalogInput getPixyCam(){

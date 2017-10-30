@@ -15,12 +15,8 @@ public class XDrive_Headless extends OpMode {
     double y;
     double rot;
     double direction;
-    double dir;
     double newx;
     double newy;
-    double dirtime;
-    boolean wasRunning;
-    double nanotosec = 1000000000;
     XDrive robot = new XDrive(this);
     PhoneGyroscopeProvider gyro = new PhoneGyroscopeProvider();
     public void init(){
@@ -32,28 +28,15 @@ public class XDrive_Headless extends OpMode {
         x = gamepad1.right_stick_x;
         y = gamepad1.right_stick_y;
         rot = gamepad1.left_stick_x;
-        direction = Math.atan2(x, y) + direction;
+        gyro.calibrate();
+        direction = Math.atan2(x, y) + gyro.getZ();
         newx = Math.cos(direction);
         newy = Math.sin(direction);
-        telemetry.addData("RotZ", direction);
-        robot.getDriveBottomLeft().setPower(-newx + gamepad1.left_stick_x);
-        robot.getDriveBottomRight().setPower(newy + gamepad1.left_stick_x);
-        robot.getDriveTopLeft().setPower(-newy + gamepad1.left_stick_x);
-        robot.getDriveTopRight().setPower(newx + gamepad1.left_stick_x);
-        telemetry.addData("NewX", newx);
-        telemetry.addData("NewY", newy);
-        gyro.calibrate();
-        telemetry.update();
-        if(gamepad1.left_stick_x != 0 && !wasRunning){
-            wasRunning = true;
-            dirtime = System.nanoTime();
-        }
-        if(gamepad1.left_stick_x >= 0 && wasRunning){
-            direction += (((System.nanoTime() - dirtime) / nanotosec) / 1.988) * 360;
-        }
-        if(gamepad1.left_stick_x <= 0 && wasRunning){
-            direction += (((System.nanoTime() - dirtime) / nanotosec) / 1.988) * 360;
-        }
-
+        newx = Math.round(newx);
+        newx = Math.round(newx);
+        robot.getDriveBottomLeft().setPower(-newx + rot);
+        robot.getDriveBottomRight().setPower(newy + rot);
+        robot.getDriveTopLeft().setPower(-newy + rot);
+        robot.getDriveTopRight().setPower(newx + rot);
     }
 }
