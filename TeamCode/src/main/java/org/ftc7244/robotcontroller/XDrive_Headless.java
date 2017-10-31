@@ -34,9 +34,9 @@ public class XDrive_Headless extends OpMode {
         newy = Math.sin(direction);
         newx = Math.round(newx);
         newx = Math.round(newx);
-        robot.getDriveBottomLeft().setPower(-newx + rot);
-        robot.getDriveBottomRight().setPower(newy + rot);
-        robot.getDriveTopLeft().setPower(-newy + rot);
-        robot.getDriveTopRight().setPower(newx + rot);
+        robot.getDriveBottomLeft().setPower(-newx - rot);
+        robot.getDriveBottomRight().setPower(newy - rot);
+        robot.getDriveTopLeft().setPower(-newy - rot);
+        robot.getDriveTopRight().setPower(newx - rot);
     }
 }

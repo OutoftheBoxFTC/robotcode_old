@@ -20,7 +20,7 @@ import org.ftc7244.robotcontroller.sensor.gyroscope.NavXGyroscopeProvider;
  */
 
 public class RelicRecoveryWestcoast extends Hardware{
-    public static final double COUNTS_PER_INCH = 1;
+    public static final double COUNTS_PER_INCH = 1, PIXY_TRANSLATE_MULTIPLE = 100 / 3.3;
 
     @Nullable
     private DcMotor driveBackLeft, driveFrontLeft, driveBackRight, driveFrontRight, launcher, intakeBtmLf, intakeBtmRt, spoolerTop, spoolerBottom;
@@ -97,9 +97,9 @@ public class RelicRecoveryWestcoast extends Hardware{
 
     public double getPixyData(){
         if(pixyCamStatus.getVoltage() > 0){
-           return pixyCam.getVoltage() * 30.3030303;
+           return pixyCam.getVoltage() * PIXY_TRANSLATE_MULTIPLE;
         }
-        return 404;
+        return 150;
     }
 
     @Override
