@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.I2cDevice;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.ftc7244.robotcontroller.sensor.gyroscope.NavXGyroscopeProvider;
 
@@ -23,13 +24,14 @@ public class RelicRecoveryWestcoast extends Hardware{
     public static final double COUNTS_PER_INCH = 1, PIXY_TRANSLATE_MULTIPLE = 100 / 3.3;
 
     @Nullable
-    private DcMotor driveBackLeft, driveFrontLeft, driveBackRight, driveFrontRight, launcher, intakeBtmLf, intakeBtmRt, spoolerTop, spoolerBottom;
+    private DcMotor driveBackLeft, driveFrontLeft, driveBackRight, driveFrontRight;
     @Nullable
     private I2cDevice navx;
     @Nullable
-    private CRServo servoName;
+    private CRServo intakeLeft, intakeMiddle, intakeRight;
     @Nullable
     private AnalogInput pixyCam, pixyCamStatus;
+
     public RelicRecoveryWestcoast(OpMode opMode) {
         super(opMode, COUNTS_PER_INCH);
     }
@@ -64,27 +66,25 @@ public class RelicRecoveryWestcoast extends Hardware{
         //Initialize or nullify all hardware
         HardwareMap map = opMode.hardwareMap;
         this.pixyCam = getOrNull(map.analogInput, "PixyCam");
-        this.servoName = getOrNull(map.crservo,"name");
+
+        this.intakeLeft = getOrNull(map.crservo, "intake_left");
+        this.intakeMiddle = getOrNull(map.crservo, "intake_left");
+        this.intakeRight = getOrNull(map.crservo, "intake_left");
+
         this.pixyCamStatus = getOrNull(map.analogInput, "PixyCamStatus");
         this.driveBackLeft = getOrNull(map.dcMotor, "driveBackLeft");
         this.driveFrontLeft = getOrNull(map.dcMotor, "driveFrontLeft");
         this.driveBackRight = getOrNull(map.dcMotor, "driveBackRight");
         this.driveFrontRight = getOrNull(map.dcMotor, "driveFrontRight");
-        this.launcher = getOrNull(map.dcMotor, "launcher");
-        this.intakeBtmLf = getOrNull(map.dcMotor, "intakeBtmLf");
-        this.intakeBtmRt = getOrNull(map.dcMotor, "intakeBtmRt");
-        this.spoolerTop = getOrNull(map.dcMotor, "spoolerTop");
-        this.spoolerBottom = getOrNull(map.dcMotor, "spoolerBottom");
         this.navx = getOrNull(map.i2cDevice, "navx");
 
         //Set the default direction for all the hardware and also initialize default positions
         if (driveFrontLeft != null) driveFrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         if (driveFrontRight != null) driveFrontRight.setDirection(DcMotorSimple.Direction.REVERSE);
-        if (intakeBtmLf != null) intakeBtmLf.setDirection(DcMotorSimple.Direction.FORWARD);
-        if (intakeBtmRt != null) intakeBtmRt.setDirection(DcMotorSimple.Direction.REVERSE);
-        if (launcher != null) launcher.setDirection(DcMotorSimple.Direction.REVERSE);
-        if (spoolerTop != null) spoolerTop.setDirection(DcMotorSimple.Direction.REVERSE);
-        if (spoolerTop != null && spoolerBottom != null) resetMotors(spoolerBottom, spoolerTop);
+
+        if(intakeLeft != null)intakeLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        if(intakeMiddle != null)intakeMiddle.setDirection(DcMotorSimple.Direction.REVERSE);
+        if(intakeRight != null)intakeRight.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
     @Override
@@ -110,15 +110,6 @@ public class RelicRecoveryWestcoast extends Hardware{
     @Override
     public int getDriveEncoderAverage() {
         return (driveBackLeft.getCurrentPosition()+driveBackRight.getCurrentPosition()+driveFrontLeft.getCurrentPosition()+driveFrontRight.getCurrentPosition())/4;
-    }
-
-    public void setSpoolerPower(double power) {
-        spoolerTop.setPower(power);
-        spoolerBottom.setPower(power);
-    }
-
-    public int getSpoolerTicks() {
-        return (spoolerBottom.getCurrentPosition() + spoolerTop.getCurrentPosition()) / 2;
     }
 
 
@@ -150,28 +141,18 @@ public class RelicRecoveryWestcoast extends Hardware{
     }
 
     @Nullable
-    public DcMotor getLauncher() {
-        return this.launcher;
+    public CRServo getIntakeLeft() {
+        return intakeLeft;
     }
 
     @Nullable
-    public DcMotor getIntakeBtmLf() {
-        return this.intakeBtmLf;
+    public CRServo getIntakeMiddle() {
+        return intakeMiddle;
     }
 
     @Nullable
-    public DcMotor getIntakeBtmRt() {
-        return this.intakeBtmRt;
-    }
-
-    @Nullable
-    public DcMotor getSpoolerBottom() {
-        return spoolerBottom;
-    }
-
-    @Nullable
-    public DcMotor getSpoolerTop() {
-        return spoolerTop;
+    public CRServo getIntakeRight() {
+        return intakeRight;
     }
 
     /**
