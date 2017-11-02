@@ -41,74 +41,6 @@ public class VelocityVortexGyroscope extends GyroscopeDrive{
             this.encoderError = encoderError;
         }
 
-        /**
-         * Both {@link #driveUntilLine(double, Sensor)} and {@link #driveUntilLine(double, Sensor, double)}
-         * feet into this function but the main difference is that this will only execute parts of the
-         * code if the paramters are within a certain range value range.
-         *
-         * @param power          offset of the PID from -1 to 1
-         * @param mode           which sensor to use {@link Sensor#Leading} or {@link Sensor#Trailing}
-         * @param offsetDistance distance after line to travel in inches
-         * @param minDistance    minimum distance before searching for line to prevent early triggering in inches
-         * @param maxDistance    maximum distance for searching to prevent overshoot in inches
-         * @throws InterruptedException if code fails to terminate on stop requested
-         */
-        public void driveUntilLine(double power, Sensor mode, double offsetDistance, final double minDistance, final double maxDistance) throws InterruptedException {
-            robot.resetDriveMotors();
-            if (offsetDistance <= 0) RobotLog.e("Invalid distances!");
-            final double ticks = offsetDistance * VelocityVortexWestcoast.COUNTS_PER_INCH,
-                    maxTicks = maxDistance * VelocityVortexWestcoast.COUNTS_PER_INCH,
-                    minTicks = minDistance * VelocityVortexWestcoast.COUNTS_PER_INCH;
-            final int encoderError = robot.getDriveEncoderAverage();
-
-            control(0, power, new ConditionalTerminator(
-                            new Terminator() {
-                                @Override
-                                public boolean shouldTerminate() {
-                                    return Math.abs(robot.getDriveEncoderAverage() - encoderError) >= maxTicks && maxTicks > 0;
-                                }
-                            },
-                            new ConditionalTerminator(TerminationMode.AND,
-                                    new LineTerminator(mode, encoderError, ticks),
-                                    new Terminator() {
-                                        @Override
-                                        public boolean shouldTerminate() {
-                                            return Math.abs(robot.getDriveEncoderAverage() - encoderError) > minTicks || minTicks <= 0;
-                                        }
-                                    }
-                            )
-                    )
-            );
-        }
-
-        /**
-         * This is similar to the ${@link #drive(double, double)} but is different because it has different
-         * termination requirements. This method only takes power and which sensor to read for to know
-         * when to terminate driving.
-         *
-         * @param power offset of the PID from -1 to 1
-         * @param mode  which sensor to use {@link Sensor#Leading} or {@link Sensor#Trailing}
-         * @throws InterruptedException if code fails to terminate on stop requested
-         */
-        public void driveUntilLine(double power, Sensor mode) throws InterruptedException {
-            driveUntilLine(power, mode, 0);
-        }
-
-        /**
-         * This is similar to ${@link #driveUntilLine(double, Sensor)} but allows for one more parameter
-         * allowing for more flexible control. The offset will only be triggered once the line is seen
-         * and after that the robot will travel that set distance. There is a slight offset because of
-         * sensor lag.
-         *
-         * @param power          offset of the PID from -1 to 1
-         * @param mode           which sensor to use {@link Sensor#Leading} or {@link Sensor#Trailing}
-         * @param offsetDistance distance after line to travel in inches
-         * @throws InterruptedException if code fails to terminate on stop requested
-         */
-        public void driveUntilLine(double power, Sensor mode, double offsetDistance) throws InterruptedException {
-            driveUntilLine(power, mode, offsetDistance, 0, 0);
-        }
-
         @Override
         public boolean shouldTerminate() {
             if (Debug.STATUS) RobotLog.ii("Light", sensor.getLightDetected() + "");
@@ -131,6 +63,71 @@ public class VelocityVortexGyroscope extends GyroscopeDrive{
         }
     }
 
+    /**
+     * Both {@link #driveUntilLine(double, Sensor)} and {@link #driveUntilLine(double, Sensor, double)}
+     * feet into this function but the main difference is that this will only execute parts of the
+     * code if the paramters are within a certain range value range.
+     *
+     * @param power          offset of the PID from -1 to 1
+     * @param mode           which sensor to use {@link Sensor#Leading} or {@link Sensor#Trailing}
+     * @param offsetDistance distance after line to travel in inches
+     * @param minDistance    minimum distance before searching for line to prevent early triggering in inches
+     * @param maxDistance    maximum distance for searching to prevent overshoot in inches
+     * @throws InterruptedException if code fails to terminate on stop requested
+     */
+    public void driveUntilLine(double power, Sensor mode, double offsetDistance, final double minDistance, final double maxDistance) throws InterruptedException {
+        robot.resetDriveMotors();
+        if (offsetDistance <= 0) RobotLog.e("Invalid distances!");
+        final double ticks = offsetDistance * VelocityVortexWestcoast.COUNTS_PER_INCH,
+                maxTicks = maxDistance * VelocityVortexWestcoast.COUNTS_PER_INCH,
+                minTicks = minDistance * VelocityVortexWestcoast.COUNTS_PER_INCH;
+        final int encoderError = robot.getDriveEncoderAverage();
 
+        control(0, power, new ConditionalTerminator(
+                        new Terminator() {
+                            @Override
+                            public boolean shouldTerminate() {
+                                return Math.abs(robot.getDriveEncoderAverage() - encoderError) >= maxTicks && maxTicks > 0;
+                            }
+                        },
+                        new ConditionalTerminator(TerminationMode.AND,
+                                new LineTerminator(mode, encoderError, ticks),
+                                new Terminator() {
+                                    @Override
+                                    public boolean shouldTerminate() {
+                                        return Math.abs(robot.getDriveEncoderAverage() - encoderError) > minTicks || minTicks <= 0;
+                                    }
+                                }
+                        )
+                )
+        );
+    }
 
+    /**
+     * This is similar to the ${@link #drive(double, double)} but is different because it has different
+     * termination requirements. This method only takes power and which sensor to read for to know
+     * when to terminate driving.
+     *
+     * @param power offset of the PID from -1 to 1
+     * @param mode  which sensor to use {@link Sensor#Leading} or {@link Sensor#Trailing}
+     * @throws InterruptedException if code fails to terminate on stop requested
+     */
+    public void driveUntilLine(double power, Sensor mode) throws InterruptedException {
+        driveUntilLine(power, mode, 0);
+    }
+
+    /**
+     * This is similar to ${@link #driveUntilLine(double, Sensor)} but allows for one more parameter
+     * allowing for more flexible control. The offset will only be triggered once the line is seen
+     * and after that the robot will travel that set distance. There is a slight offset because of
+     * sensor lag.
+     *
+     * @param power          offset of the PID from -1 to 1
+     * @param mode           which sensor to use {@link Sensor#Leading} or {@link Sensor#Trailing}
+     * @param offsetDistance distance after line to travel in inches
+     * @throws InterruptedException if code fails to terminate on stop requested
+     */
+    public void driveUntilLine(double power, Sensor mode, double offsetDistance) throws InterruptedException {
+        driveUntilLine(power, mode, offsetDistance, 0, 0);
+    }
 }

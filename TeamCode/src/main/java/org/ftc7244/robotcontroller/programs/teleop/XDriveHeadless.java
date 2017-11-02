@@ -1,4 +1,4 @@
-package org.ftc7244.robotcontroller;
+package org.ftc7244.robotcontroller.programs.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -10,7 +10,7 @@ import org.ftc7244.robotcontroller.sensor.gyroscope.PhoneGyroscopeProvider;
  * Created by Eeshwar Laptop on 10/27/2017.
  */
 @TeleOp(name="XDrive Teleop Headless")
-public class XDrive_Headless extends OpMode {
+public class XDriveHeadless extends OpMode {
     double x;
     double y;
     double rot;
