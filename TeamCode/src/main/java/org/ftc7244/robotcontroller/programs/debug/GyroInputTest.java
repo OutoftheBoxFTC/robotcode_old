@@ -1,4 +1,4 @@
-package org.ftc7244.robotcontroller;
+package org.ftc7244.robotcontroller.programs.debug;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -9,7 +9,7 @@ import org.ftc7244.robotcontroller.sensor.gyroscope.PhoneGyroscopeProvider;
  * Created by Eeshwar Laptop on 10/27/2017.
  */
 @Autonomous(name="gyro")
-public class gyrotest extends LinearOpMode {
+public class GyroInputTest extends LinearOpMode {
     public void runOpMode(){
         PhoneGyroscopeProvider gyro = new PhoneGyroscopeProvider();
         gyro.calibrate();

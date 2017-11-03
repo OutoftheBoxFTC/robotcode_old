@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import org.ftc7244.robotcontroller.autonomous.drivers.EncoderDrive;
 import org.ftc7244.robotcontroller.autonomous.drivers.GyroscopeDrive;
 import org.ftc7244.robotcontroller.autonomous.drivers.UltrasonicDrive;
+import org.ftc7244.robotcontroller.autonomous.drivers.VelocityVortexGyroscope;
 import org.ftc7244.robotcontroller.hardware.VelocityVortexWestcoast;
 import org.ftc7244.robotcontroller.sensor.gyroscope.GyroscopeProvider;
 import org.ftc7244.robotcontroller.sensor.gyroscope.NavXGyroscopeProvider;
@@ -20,7 +21,7 @@ import org.ftc7244.robotcontroller.sensor.vuforia.ImageTransformProvider;
 public abstract class VelocityVortexPIDAutonomous extends PIDAutonamous {
 
     @NonNull
-    protected final GyroscopeDrive gyroscope;
+    protected final VelocityVortexGyroscope gyroscope;
     @NonNull
     protected final UltrasonicDrive ultrasonic;
 
@@ -38,7 +39,7 @@ public abstract class VelocityVortexPIDAutonomous extends PIDAutonamous {
     protected VelocityVortexPIDAutonomous() {
         robot = new VelocityVortexWestcoast(this);
         gyroProvider = new NavXGyroscopeProvider(robot);
-        gyroscope = new GyroscopeDrive(robot, gyroProvider);
+        gyroscope = new VelocityVortexGyroscope(robot, gyroProvider);
         ultrasonic = new UltrasonicDrive(robot);
         encoder = new EncoderDrive(robot);
         calibratedMsg = false;
