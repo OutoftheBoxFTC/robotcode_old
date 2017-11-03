@@ -11,7 +11,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.I2cAddr;
 import com.qualcomm.robotcore.hardware.I2cDevice;
+import com.qualcomm.robotcore.hardware.I2cDeviceSynch;
 
 import org.ftc7244.robotcontroller.sensor.gyroscope.NavXGyroscopeProvider;
 
@@ -23,13 +25,13 @@ public class RelicRecoveryWestcoast extends Hardware{
     public static final double COUNTS_PER_INCH = 1, PIXY_TRANSLATE_MULTIPLE = 100 / 3.3;
 
     @Nullable
-    private DcMotor driveBackLeft, driveFrontLeft, driveBackRight, driveFrontRight, launcher, intakeBtmLf, intakeBtmRt, spoolerTop, spoolerBottom;
+    private DcMotor driveBackLeft, driveFrontLeft, driveBackRight, driveFrontRight, launcher, intakeBtmLf, intakeBtmRt, spoolerTop, spoolerBottom, intake;
     @Nullable
     private I2cDevice navx;
     @Nullable
-    private CRServo servoName;
+    private I2cDeviceSynch pixycam;
     @Nullable
-    private AnalogInput pixyCam, pixyCamStatus;
+    private CRServo spring;
     public RelicRecoveryWestcoast(OpMode opMode) {
         super(opMode, COUNTS_PER_INCH);
     }
@@ -63,9 +65,7 @@ public class RelicRecoveryWestcoast extends Hardware{
     public void init() {
         //Initialize or nullify all hardware
         HardwareMap map = opMode.hardwareMap;
-        this.pixyCam = getOrNull(map.analogInput, "PixyCam");
-        this.servoName = getOrNull(map.crservo,"name");
-        this.pixyCamStatus = getOrNull(map.analogInput, "PixyCamStatus");
+        this.spring = getOrNull(map.crservo,"spring");
         this.driveBackLeft = getOrNull(map.dcMotor, "driveBackLeft");
         this.driveFrontLeft = getOrNull(map.dcMotor, "driveFrontLeft");
         this.driveBackRight = getOrNull(map.dcMotor, "driveBackRight");
@@ -75,7 +75,9 @@ public class RelicRecoveryWestcoast extends Hardware{
         this.intakeBtmRt = getOrNull(map.dcMotor, "intakeBtmRt");
         this.spoolerTop = getOrNull(map.dcMotor, "spoolerTop");
         this.spoolerBottom = getOrNull(map.dcMotor, "spoolerBottom");
+        this.intake = getOrNull(map.dcMotor, "intake");
         this.navx = getOrNull(map.i2cDevice, "navx");
+        this.pixycam = getOrNull(map.i2cDeviceSynch, "pixycam");
 
         //Set the default direction for all the hardware and also initialize default positions
         if (driveFrontLeft != null) driveFrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -89,18 +91,13 @@ public class RelicRecoveryWestcoast extends Hardware{
 
     @Override
     public void drive(double leftPower, double rightPower) {
-        driveFrontLeft.setPower(-leftPower);
-        driveBackLeft.setPower(-leftPower);
-        driveFrontRight.setPower(rightPower);
-        driveBackRight.setPower(rightPower);
+        driveFrontLeft.setPower(leftPower);
+        driveBackLeft.setPower(leftPower);
+        driveFrontRight.setPower(-rightPower);
+        driveBackRight.setPower(-rightPower);
     }
 
-    public double getPixyData(){
-        if(pixyCamStatus.getVoltage() > 0){
-           return pixyCam.getVoltage() * PIXY_TRANSLATE_MULTIPLE;
-        }
-        return 150;
-    }
+
 
     @Override
     public void resetDriveMotors() {
@@ -126,18 +123,14 @@ public class RelicRecoveryWestcoast extends Hardware{
     public DcMotor getDriveFrontLeft() {
         return this.driveFrontLeft;
     }
-    @Nullable
-    public AnalogInput getPixyCam(){
-        return this.pixyCam;
-    }
-    @Nullable
-    public AnalogInput getPixyCamStatus(){
-        return this.pixyCamStatus;
-    }
+
     @Nullable
     public DcMotor getDriveBackLeft() {
         return this.driveBackLeft;
     }
+
+    @Nullable
+    public I2cDeviceSynch getPixycam(){return this.pixycam;}
 
     @Nullable
     public DcMotor getDriveFrontRight() {
@@ -173,6 +166,12 @@ public class RelicRecoveryWestcoast extends Hardware{
     public DcMotor getSpoolerTop() {
         return spoolerTop;
     }
+
+    @Nullable
+    public DcMotor getIntake(){return intake;}
+
+    @Nullable
+    public CRServo getSpring(){return spring;}
 
     /**
      * Uses reflection to obtain all the information to properly setup the navx sensor
