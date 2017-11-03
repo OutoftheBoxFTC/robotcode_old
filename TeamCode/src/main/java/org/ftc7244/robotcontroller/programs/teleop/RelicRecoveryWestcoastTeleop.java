@@ -39,26 +39,26 @@ public class RelicRecoveryWestcoastTeleop extends OpMode {
         }
 
         if(dPadLeft.isPressed()){
-            robot.getIntakeMiddle().setPower(1);
+            robot.getIntake().setPower(1);
         }
         else if(dPadRight.isPressed()){
-            robot.getIntakeMiddle().setPower(-1);
+            robot.getIntake().setPower(-1);
         }
         else {
-            robot.getIntakeMiddle().setPower(0);
+            robot.getIntake().setPower(0);
         }
 
         if(dPadUp.isPressed()){
-            robot.getIntakeLeft().setPower(1);
-            robot.getIntakeRight().setPower(1);
+            robot.getIntakeBtmLf().setPower(1);
+            robot.getIntakeBtmRt().setPower(1);
         }
         else if(dPadDown.isPressed()){
-            robot.getIntakeLeft().setPower(-1);
-            robot.getIntakeRight().setPower(-1);
+            robot.getIntakeBtmLf().setPower(-1);
+            robot.getIntakeBtmRt().setPower(-1);
         }
         else {
-            robot.getIntakeLeft().setPower(0);
-            robot.getIntakeRight().setPower(0);
+            robot.getIntakeBtmLf().setPower(0);
+            robot.getIntakeBtmRt().setPower(0);
         }
     }
 }
