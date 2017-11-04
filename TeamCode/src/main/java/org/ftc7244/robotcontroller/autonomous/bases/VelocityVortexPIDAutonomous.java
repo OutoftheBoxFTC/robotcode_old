@@ -18,7 +18,7 @@ import org.ftc7244.robotcontroller.sensor.vuforia.ImageTransformProvider;
  * automatically handles wait for startImageReading since most of the setup is completed and only driving
  * instructions are needed.
  */
-public abstract class VelocityVortexPIDAutonomous extends PIDAutonamous {
+public abstract class VelocityVortexPIDAutonomous extends PIDAutonomous {
 
     @NonNull
     protected final VelocityVortexGyroscope gyroscope;

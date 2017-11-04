@@ -1,36 +1,33 @@
 package org.ftc7244.datalogger;
 
-import android.os.AsyncTask;
-
 import org.ftc7244.robotcontroller.Debug;
 
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.HashMap;
 
 /**
  * Created by BeaverDuck on 10/8/17.
  */
 
-public class Logger implements Runnable {
+public class Logger implements Runnable{
     /**
      * Logger sends sets of data from the used android device to a computer on the receiving port
      * hosting the serverSocket program.
      */
-    private static Logger instance;
+    private static final Logger instance = new Logger();
 
-    private static final int PORT = 8709;
+    private static final int PORT = 0, FIGURES_AFTER_DECIMAL = 4;
 
     private static final long SEND_INTERVAL_MS = 100;
 
-    private ConcurrentHashMap<String, List<Number>> data;
+    private HashMap<String, ArrayList<Number>> data;
+
+    private Thread thread;
 
     private ServerSocket serverSocket;
 
@@ -39,37 +36,35 @@ public class Logger implements Runnable {
     private boolean running;
 
     public static Logger getInstance() {
-        if (instance == null) {
-            instance = new Logger();
-        }
         return instance;
     }
 
     private Logger() {
-        System.out.println("Working");
-        if (Debug.STATUS) {
-            data = new ConcurrentHashMap<>();
+        if(Debug.STATUS) {
             running = true;
-            AsyncTask.execute(this);
+            thread = new Thread(this);
+            thread.start();
+            data = new HashMap<>();
         }
     }
 
     /**
-     * @param tag  identifier for the data
+     *
+     * @param tag identifier for the data
      * @param data data point being added
      * @throws InvalidCharacterException if tag contains ":", which is used for parsing on the
-     *                                   receiving end
+     * receiving end
      */
 
     public void addData(String tag, Number data) {
-        if (running) {
+        if(running) {
             if (this.data.containsKey(tag)) {
                 this.data.get(tag).add(data);
             } else {
-                if (tag.contains(":"))
+                if (tag.contains(":")) {
                     throw new InvalidCharacterException("Tag cannot contain \":\"");
-                this.data.put(tag, Collections.synchronizedList(new ArrayList<Number>()));
-                addData(tag, data);
+                }
+                this.data.put(tag, new ArrayList<>(Collections.singletonList(data)));
             }
         }
     }
@@ -77,41 +72,46 @@ public class Logger implements Runnable {
     @Override
     public void run() {
         try {
+            serverSocket = new ServerSocket(PORT);
+            Socket client = serverSocket.accept();
+            out = new PrintStream(client.getOutputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        while (running){
             try {
-                serverSocket = new ServerSocket(PORT);
-                Socket client = serverSocket.accept();
-                System.out.println(serverSocket.isClosed());
-                out = new PrintStream(client.getOutputStream());
-            } catch (IOException e) {
+                Thread.sleep(SEND_INTERVAL_MS);
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            while (running) {
-                System.out.println("Working");
-                for (String key : data.keySet()) {
-                    out.print(generateOutput(key));
-                }
-                out.flush();
-                data.clear();
+            for(String key : data.keySet()){
+                out.print(generateOutput(key));
             }
-        } finally {
-            try {
-                serverSocket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            data.clear();
         }
     }
 
     /**
+     *
      * @param key data identifier to reference when generating string
      * @return string containing identifier key and corresponding data points
      */
-    private String generateOutput(String key) {
+    private String generateOutput(String key){
         String out = key + ":";
-        for (Number num : data.get(key)) {
-            DecimalFormat formatter = new DecimalFormat("#.##");
-            out += formatter.format(num) + ":";
+        for(Number num : data.get(key)){
+            out += truncate(num + "") + ":";
         }
         return out;
+    }
+
+    /**
+     * shortens length of sent data string to avoid long messages due to floating point inaccuracy
+     * @param raw the raw, unshortened data
+     * @return shortened data string
+     */
+
+    private String truncate(String raw){
+        if(raw.contains(".")) return raw.substring(0, raw.indexOf('.')+FIGURES_AFTER_DECIMAL);
+        return raw;
     }
 }
