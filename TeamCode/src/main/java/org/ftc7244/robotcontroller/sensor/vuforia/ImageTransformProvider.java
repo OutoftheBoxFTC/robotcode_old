@@ -123,7 +123,6 @@ public class ImageTransformProvider extends SensorProvider implements Runnable {
     @Override
     public void stop() {
         running = false;
-        thread.stop();
     }
 
     public enum TranslationAxis {

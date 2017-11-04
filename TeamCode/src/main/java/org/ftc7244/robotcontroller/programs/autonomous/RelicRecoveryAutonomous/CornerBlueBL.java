@@ -8,7 +8,7 @@ import org.ftc7244.robotcontroller.autonomous.bases.RelicRecoveryPIDAutonamous;
 /**
  * Created by Eeshwar Laptop on 10/29/2017.
  */
-@Autonomous(name="CornerRedBL")
+@Autonomous(name="CornerBlueBL")
 public class CornerBlueBL extends RelicRecoveryPIDAutonamous {
     public void run(){
         waitForStart();
