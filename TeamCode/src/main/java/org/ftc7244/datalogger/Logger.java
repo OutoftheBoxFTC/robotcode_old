@@ -30,7 +30,7 @@ public class Logger implements Runnable{
     private Thread thread;
 
     private ServerSocket serverSocket;
-
+//
     private PrintStream out;
 
     private boolean running;
