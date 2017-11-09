@@ -12,7 +12,7 @@ import org.ftc7244.robotcontroller.autonomous.bases.RelicRecoveryPIDAutonamous;
 public class TestAutonamous extends RelicRecoveryPIDAutonamous{
     @Override
     public void run() throws InterruptedException {
-        while(opModeIsActive()) {
+        for(int i = 0; i < 10; i++){
             Logger.getInstance().addData("Test", Math.random());
         }
     }

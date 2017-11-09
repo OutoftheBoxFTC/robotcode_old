@@ -19,9 +19,9 @@ public class Logger implements Runnable{
      * Logger sends sets of data from the used android device to a computer on the receiving port
      * hosting the serverSocket program.
      */
-    private static final Logger instance = new Logger();
+    private static Logger instance = new Logger();
 
-    private static final int PORT = 0, FIGURES_AFTER_DECIMAL = 4;
+    private static final int PORT = 8709, FIGURES_AFTER_DECIMAL = 4;
 
     private static final long SEND_INTERVAL_MS = 100;
 
@@ -36,6 +36,7 @@ public class Logger implements Runnable{
     private boolean running;
 
     public static Logger getInstance() {
+        if(instance==null)instance = new Logger();
         return instance;
     }
 
@@ -84,10 +85,11 @@ public class Logger implements Runnable{
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            HashMap<String, Number> data = (HashMap)this.data.clone();
             for(String key : data.keySet()){
-                out.print(generateOutput(key));
+                out.println(generateOutput(key));
             }
-            data.clear();
+            this.data.clear();
         }
     }
 
