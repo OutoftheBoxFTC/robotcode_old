@@ -8,24 +8,25 @@ import org.ftc7244.robotcontroller.autonomous.bases.RelicRecoveryPIDAutonamous;
 /**
  * Created by Eeshwar Laptop on 10/29/2017.
  */
-@Autonomous(name="CornerBlueBL")
-public class CornerBlueBL extends RelicRecoveryPIDAutonamous {
+@Autonomous(name="CornerBlueBR")
+public class CornerBlueBR extends RelicRecoveryPIDAutonamous {
     public void run(){
-        double countsPerInch = 134.4 / (4 * Math.PI);
         robot.getSpring().resetDeviceConfigurationForOpMode();
         waitForStart();
         robot.getSpring().setDirection(DcMotorSimple.Direction.FORWARD);
         sleep(1500);
-        robot.drive(0.3, 0.3);
-        sleep(850);
-        robot.drive(0, 0);
-        sleep(1500);
         robot.drive(-0.3, 0.3);
+        sleep(500);
+        robot.drive(0.3, 0.3);
         sleep(1000);
         robot.drive(0, 0);
         sleep(1000);
+        robot.drive(-0.3, 0.3);
+        sleep(700);
+        robot.drive(0, 0);
+        sleep(1000);
         robot.drive(0.3, 0.3);
-        sleep(1250);
+        sleep(700);
         robot.drive(0, 0);
         sleep(1500);
         robot.getIntake().setPower(1);
@@ -41,6 +42,9 @@ public class CornerBlueBL extends RelicRecoveryPIDAutonamous {
         sleep(150);
         robot.drive(0, 0);
         sleep(500);
+        robot.drive(-0.3, 0.3);
+        sleep(300);
+        robot.drive(0, 0);
         while(opModeIsActive()){
             telemetry.addData("Done", true);
             telemetry.update();

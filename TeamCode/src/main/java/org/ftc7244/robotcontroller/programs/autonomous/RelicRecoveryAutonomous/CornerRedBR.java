@@ -1,31 +1,32 @@
 package org.ftc7244.robotcontroller.programs.autonomous.RelicRecoveryAutonomous;
 
+import android.media.MediaPlayer;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.ftc7244.robotcontroller.autonomous.bases.RelicRecoveryPIDAutonamous;
+import org.ftc7244.robotcontroller.sensor.vuforia.ImageTransformProvider;
 
 /**
  * Created by Eeshwar Laptop on 10/29/2017.
  */
-@Autonomous(name="CornerBlueBL")
-public class CornerBlueBL extends RelicRecoveryPIDAutonamous {
+@Autonomous(name="CornerRedBR")
+public class CornerRedBR extends RelicRecoveryPIDAutonamous {
     public void run(){
-        double countsPerInch = 134.4 / (4 * Math.PI);
         robot.getSpring().resetDeviceConfigurationForOpMode();
         waitForStart();
-        robot.getSpring().setDirection(DcMotorSimple.Direction.FORWARD);
         sleep(1500);
         robot.drive(0.3, 0.3);
         sleep(850);
         robot.drive(0, 0);
         sleep(1500);
-        robot.drive(-0.3, 0.3);
-        sleep(1000);
+        robot.drive(0.3, -0.3);
+        sleep(1100);
         robot.drive(0, 0);
         sleep(1000);
         robot.drive(0.3, 0.3);
-        sleep(1250);
+        sleep(1300);
         robot.drive(0, 0);
         sleep(1500);
         robot.getIntake().setPower(1);

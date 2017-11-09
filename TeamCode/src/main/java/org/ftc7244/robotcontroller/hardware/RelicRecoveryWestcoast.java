@@ -14,6 +14,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.I2cAddr;
 import com.qualcomm.robotcore.hardware.I2cDevice;
 import com.qualcomm.robotcore.hardware.I2cDeviceSynch;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.ftc7244.robotcontroller.sensor.gyroscope.NavXGyroscopeProvider;
 
@@ -22,16 +23,18 @@ import org.ftc7244.robotcontroller.sensor.gyroscope.NavXGyroscopeProvider;
  */
 
 public class RelicRecoveryWestcoast extends Hardware{
-    public static final double COUNTS_PER_INCH = 1, PIXY_TRANSLATE_MULTIPLE = 100 / 3.3;
+    public static final double COUNTS_PER_INCH = (3.2 * Math.PI)/ 134.4, PIXY_TRANSLATE_MULTIPLE = 100 / 3.3, NANO_TO_SECONDS = 1000000000;
 
     @Nullable
-    private DcMotor driveBackLeft, driveFrontLeft, driveBackRight, driveFrontRight, launcher, intakeBtmLf, intakeBtmRt, spoolerTop, spoolerBottom, intake;
+    private DcMotor driveBackLeft, driveFrontLeft, driveBackRight, driveFrontRight, launcher, spoolerTop, spoolerBottom, intake;
     @Nullable
     private I2cDevice navx;
     @Nullable
     private I2cDeviceSynch pixycam;
     @Nullable
     private CRServo spring;
+    @Nullable
+    private Servo intakeBtmLf, intakeBtmRt;
     public RelicRecoveryWestcoast(OpMode opMode) {
         super(opMode, COUNTS_PER_INCH);
     }
@@ -71,8 +74,8 @@ public class RelicRecoveryWestcoast extends Hardware{
         this.driveBackRight = getOrNull(map.dcMotor, "driveBackRight");
         this.driveFrontRight = getOrNull(map.dcMotor, "driveFrontRight");
         this.launcher = getOrNull(map.dcMotor, "launcher");
-        this.intakeBtmLf = getOrNull(map.dcMotor, "intakeBtmLf");
-        this.intakeBtmRt = getOrNull(map.dcMotor, "intakeBtmRt");
+        this.intakeBtmLf = getOrNull(map.servo, "intakeBtmLf");
+        this.intakeBtmRt = getOrNull(map.servo, "intakeBtmRt");
         this.spoolerTop = getOrNull(map.dcMotor, "spoolerTop");
         this.spoolerBottom = getOrNull(map.dcMotor, "spoolerBottom");
         this.intake = getOrNull(map.dcMotor, "intake");
@@ -82,8 +85,8 @@ public class RelicRecoveryWestcoast extends Hardware{
         //Set the default direction for all the hardware and also initialize default positions
         if (driveFrontLeft != null) driveFrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         if (driveFrontRight != null) driveFrontRight.setDirection(DcMotorSimple.Direction.REVERSE);
-        if (intakeBtmLf != null) intakeBtmLf.setDirection(DcMotorSimple.Direction.FORWARD);
-        if (intakeBtmRt != null) intakeBtmRt.setDirection(DcMotorSimple.Direction.REVERSE);
+        if (intakeBtmLf != null) intakeBtmLf.setDirection(Servo.Direction.FORWARD);
+        if (intakeBtmRt != null) intakeBtmRt.setDirection(Servo.Direction.REVERSE);
         if (launcher != null) launcher.setDirection(DcMotorSimple.Direction.REVERSE);
         if (spoolerTop != null) spoolerTop.setDirection(DcMotorSimple.Direction.REVERSE);
         if (spoolerTop != null && spoolerBottom != null) resetMotors(spoolerBottom, spoolerTop);
@@ -97,7 +100,37 @@ public class RelicRecoveryWestcoast extends Hardware{
         driveBackRight.setPower(-rightPower);
     }
 
+    public void resetEncoders(){
+        driveFrontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        driveFrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        driveBackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        driveBackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
 
+    public void driveUsingEncoders(int leftEncoder, int rightEncoder){
+        long systemStartTime = System.nanoTime();
+        driveFrontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        driveFrontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        driveBackLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        driveBackRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        driveFrontLeft.setPower(0.4);
+        driveBackLeft.setPower(0.4);
+        driveFrontRight.setPower(0.4);
+        driveBackRight.setPower(0.4);
+        driveFrontLeft.setTargetPosition(leftEncoder);
+        driveBackLeft.setTargetPosition(leftEncoder);
+        driveFrontRight.setTargetPosition(-rightEncoder);
+        driveBackRight.setTargetPosition(-rightEncoder);
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        driveFrontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        driveFrontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        driveBackLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        driveBackRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
 
     @Override
     public void resetDriveMotors() {
@@ -106,7 +139,7 @@ public class RelicRecoveryWestcoast extends Hardware{
 
     @Override
     public int getDriveEncoderAverage() {
-        return (driveBackLeft.getCurrentPosition()+driveBackRight.getCurrentPosition()+driveFrontLeft.getCurrentPosition()+driveFrontRight.getCurrentPosition())/4;
+        return (int) ((driveBackLeft.getCurrentPosition()+driveBackRight.getCurrentPosition()+driveFrontLeft.getCurrentPosition()+driveFrontRight.getCurrentPosition())/4/COUNTS_PER_INCH);
     }
 
     public void setSpoolerPower(double power) {
@@ -148,12 +181,12 @@ public class RelicRecoveryWestcoast extends Hardware{
     }
 
     @Nullable
-    public DcMotor getIntakeBtmLf() {
+    public Servo getIntakeBtmLf() {
         return this.intakeBtmLf;
     }
 
     @Nullable
-    public DcMotor getIntakeBtmRt() {
+    public Servo getIntakeBtmRt() {
         return this.intakeBtmRt;
     }
 

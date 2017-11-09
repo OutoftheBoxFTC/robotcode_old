@@ -12,53 +12,37 @@ import org.ftc7244.robotcontroller.input.PressButton;
  * Created by Eeshwar Laptop on 10/16/2017.
  */
 
+
 @TeleOp(name = "Relic Recovery Westcoast")
 public class RelicRecoveryWestcoastTeleop extends OpMode {
     RelicRecoveryWestcoast robot;
-    private Button dPadUp, dPadDown, dPadLeft, dPadRight;
-    private PressButton a_button;
+    private Button dPadUp, dPadDown, left_trigger, right_trigger;
+    private PressButton right_trigger_slow;
     private static final double SLOW_DRIVE_COEFFICIENT = 0.5;
     public void init(){
         robot = new RelicRecoveryWestcoast(this);
         robot.init();
 
-        a_button = new PressButton(gamepad1, ButtonType.A);
-        dPadUp = new Button(gamepad2, ButtonType.D_PAD_UP);
-        dPadDown = new Button(gamepad2, ButtonType.D_PAD_DOWN);
-        dPadLeft = new Button(gamepad2, ButtonType.D_PAD_LEFT);
-        dPadRight = new Button(gamepad2, ButtonType.D_PAD_RIGHT);
+        right_trigger_slow = new PressButton(gamepad1, ButtonType.A);
+        left_trigger = new Button(gamepad2, ButtonType.D_PAD_LEFT);
+        right_trigger = new Button(gamepad2, ButtonType.D_PAD_RIGHT);
     }
     @Override
     public void loop(){
-        if(a_button.isPressed()){
+        if(right_trigger_slow.isPressed()){
             robot.drive(-gamepad1.left_stick_y, -gamepad1.right_stick_y);
         }
         else {
-            robot.drive(-gamepad1.left_stick_y* SLOW_DRIVE_COEFFICIENT,
-                    -gamepad1.right_stick_y* SLOW_DRIVE_COEFFICIENT);
+            robot.drive(-gamepad1.left_stick_y* SLOW_DRIVE_COEFFICIENT, -gamepad1.right_stick_y* SLOW_DRIVE_COEFFICIENT);
         }
-
-        if(dPadLeft.isPressed()){
-            robot.getIntakeMiddle().setPower(1);
+        if(left_trigger.isPressed()){
+            robot.getIntake().setPower(1);
         }
-        else if(dPadRight.isPressed()){
-            robot.getIntakeMiddle().setPower(-1);
+        else if(right_trigger.isPressed()){
+            robot.getIntake().setPower(-1);
         }
         else {
-            robot.getIntakeMiddle().setPower(0);
-        }
-
-        if(dPadUp.isPressed()){
-            robot.getIntakeLeft().setPower(1);
-            robot.getIntakeRight().setPower(1);
-        }
-        else if(dPadDown.isPressed()){
-            robot.getIntakeLeft().setPower(-1);
-            robot.getIntakeRight().setPower(-1);
-        }
-        else {
-            robot.getIntakeLeft().setPower(0);
-            robot.getIntakeRight().setPower(0);
+            robot.getIntake().setPower(0);
         }
     }
 }
