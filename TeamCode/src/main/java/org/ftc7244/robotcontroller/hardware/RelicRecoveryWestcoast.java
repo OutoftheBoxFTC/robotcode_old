@@ -32,9 +32,7 @@ public class RelicRecoveryWestcoast extends Hardware{
     @Nullable
     private I2cDeviceSynch pixycam;
     @Nullable
-    private CRServo spring;
-    @Nullable
-    private Servo intakeBtmLf, intakeBtmRt;
+    private CRServo spring, intakebleft, intakebright;
     public RelicRecoveryWestcoast(OpMode opMode) {
         super(opMode, COUNTS_PER_INCH);
     }
@@ -74,8 +72,8 @@ public class RelicRecoveryWestcoast extends Hardware{
         this.driveBackRight = getOrNull(map.dcMotor, "driveBackRight");
         this.driveFrontRight = getOrNull(map.dcMotor, "driveFrontRight");
         this.launcher = getOrNull(map.dcMotor, "launcher");
-        this.intakeBtmLf = getOrNull(map.servo, "intakeBtmLeft");
-        this.intakeBtmRt = getOrNull(map.servo, "intakeBtmRight");
+        this.intakebleft = getOrNull(map.crservo, "intakebleft");
+        this.intakebright = getOrNull(map.crservo, "intakebright");
         this.spoolerTop = getOrNull(map.dcMotor, "spoolerTop");
         this.spoolerBottom = getOrNull(map.dcMotor, "spoolerBottom");
         this.intake = getOrNull(map.dcMotor, "intake");
@@ -85,8 +83,7 @@ public class RelicRecoveryWestcoast extends Hardware{
         //Set the default direction for all the hardware and also initialize default positions
         if (driveFrontLeft != null) driveFrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         if (driveFrontRight != null) driveFrontRight.setDirection(DcMotorSimple.Direction.REVERSE);
-        if (intakeBtmLf != null) intakeBtmLf.setDirection(Servo.Direction.FORWARD);
-        if (intakeBtmRt != null) intakeBtmRt.setDirection(Servo.Direction.REVERSE);
+        if (intakebleft != null) intakebright.setDirection(DcMotorSimple.Direction.REVERSE);
         if (launcher != null) launcher.setDirection(DcMotorSimple.Direction.REVERSE);
         if (spoolerTop != null) spoolerTop.setDirection(DcMotorSimple.Direction.REVERSE);
         if (spoolerTop != null && spoolerBottom != null) resetMotors(spoolerBottom, spoolerTop);
@@ -150,13 +147,13 @@ public class RelicRecoveryWestcoast extends Hardware{
     }
 
     @Nullable
-    public Servo getIntakeBtmLf() {
-        return this.intakeBtmLf;
+    public CRServo getIntakeBtmLf() {
+        return this.intakebleft;
     }
 
     @Nullable
-    public Servo getIntakeBtmRt() {
-        return this.intakeBtmRt;
+    public CRServo getIntakeBtmRt() {
+        return this.intakebright;
     }
 
     @Nullable

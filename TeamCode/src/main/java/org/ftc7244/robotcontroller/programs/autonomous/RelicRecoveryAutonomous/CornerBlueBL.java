@@ -12,7 +12,6 @@ import org.ftc7244.robotcontroller.autonomous.bases.RelicRecoveryPIDAutonamous;
 public class CornerBlueBL extends RelicRecoveryPIDAutonamous {
     public void run(){
         double countsPerInch = 134.4 / (4 * Math.PI);
-        robot.getSpring().resetDeviceConfigurationForOpMode();
         waitForStart();
         robot.getSpring().setDirection(DcMotorSimple.Direction.FORWARD);
         sleep(1500);
