@@ -22,7 +22,7 @@ public class encoderTest extends RelicRecoveryPIDAutonamous {
         telemetry.addData("encoderCount:", encoderCountInt);
         telemetry.addData("difference from estimation:", 1123 - encoderCountInt);
         telemetry.update();
-        robot.resetEncoders();
+        //robot.resetEncoders();
         robot.getDriveFrontLeft().setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.getDriveBackLeft().setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.getDriveFrontRight().setMode(DcMotor.RunMode.RUN_TO_POSITION);

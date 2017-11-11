@@ -4,6 +4,7 @@ import org.ftc7244.robotcontroller.autonomous.drivers.ImageTransformDrive;
 import org.ftc7244.robotcontroller.autonomous.drivers.RelicRecoveryGyroscope;
 import org.ftc7244.robotcontroller.hardware.RelicRecoveryWestcoast;
 import org.ftc7244.robotcontroller.sensor.gyroscope.GyroscopeProvider;
+import org.ftc7244.robotcontroller.sensor.gyroscope.NavXGyroscopeProvider;
 import org.ftc7244.robotcontroller.sensor.gyroscope.PhoneGyroscopeProvider;
 import org.ftc7244.robotcontroller.sensor.vuforia.ImageTransformProvider;
 
@@ -36,13 +37,22 @@ public abstract class RelicRecoveryPIDAutonamous extends PIDAutonamous {
 
     @Override
     protected void whileNotStarted() {
-
+        if (!calibratedMsg && gyroProvider.isCalibrated()) {
+            telemetry.addLine("Gyroscope calibrated!");
+            telemetry.update();
+            calibratedMsg = true;
+        } else if (calibratedMsg && !gyroProvider.isCalibrated()) {
+            telemetry.addLine("LOST CONNECTION");
+            telemetry.update();
+            calibratedMsg = false;
+        }
     }
 
     @Override
     protected void startProviders() {
         robot.init();
         imageProvider.start(hardwareMap);
+        gyroProvider.start(hardwareMap);
     }
 
     @Override
@@ -52,6 +62,6 @@ public abstract class RelicRecoveryPIDAutonamous extends PIDAutonamous {
 
     @Override
     protected void beforeStart() throws InterruptedException {
-
+        gyroProvider.calibrate();
     }
 }

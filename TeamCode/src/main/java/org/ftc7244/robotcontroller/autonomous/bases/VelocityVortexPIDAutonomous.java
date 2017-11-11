@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import org.ftc7244.robotcontroller.autonomous.drivers.EncoderDrive;
 import org.ftc7244.robotcontroller.autonomous.drivers.GyroscopeDrive;
 import org.ftc7244.robotcontroller.autonomous.drivers.UltrasonicDrive;
-import org.ftc7244.robotcontroller.autonomous.drivers.VelocityVortexGyroscope;
 import org.ftc7244.robotcontroller.hardware.VelocityVortexWestcoast;
 import org.ftc7244.robotcontroller.sensor.gyroscope.GyroscopeProvider;
 import org.ftc7244.robotcontroller.sensor.gyroscope.NavXGyroscopeProvider;
@@ -20,14 +19,14 @@ import org.ftc7244.robotcontroller.sensor.vuforia.ImageTransformProvider;
  */
 public abstract class VelocityVortexPIDAutonomous extends PIDAutonomous {
 
-    @NonNull
-    protected final VelocityVortexGyroscope gyroscope;
+    //@NonNull
+    //protected final VelocityVortexGyroscope gyroscope;
     @NonNull
     protected final UltrasonicDrive ultrasonic;
 
     protected final EncoderDrive encoder;
 
-    protected final GyroscopeProvider gyroProvider;
+    //protected final GyroscopeProvider gyroProvider;
 
     protected VelocityVortexWestcoast robot;
 
@@ -38,8 +37,8 @@ public abstract class VelocityVortexPIDAutonomous extends PIDAutonomous {
      */
     protected VelocityVortexPIDAutonomous() {
         robot = new VelocityVortexWestcoast(this);
-        gyroProvider = new NavXGyroscopeProvider(robot);
-        gyroscope = new VelocityVortexGyroscope(robot, gyroProvider);
+        //gyroProvider = new NavXGyroscopeProvider(robot);
+        //gyroscope = new VelocityVortexGyroscope(robot, gyroProvider);
         ultrasonic = new UltrasonicDrive(robot);
         encoder = new EncoderDrive(robot);
         calibratedMsg = false;
@@ -47,12 +46,12 @@ public abstract class VelocityVortexPIDAutonomous extends PIDAutonomous {
 
     @Override
     protected void onEnd(boolean err) {
-        gyroProvider.stop();
+        //gyroProvider.stop();
     }
 
     @Override
     protected void whileNotStarted() {
-        if (!calibratedMsg && gyroProvider.isCalibrated()) {
+        /*if (!calibratedMsg && gyroProvider.isCalibrated()) {
             telemetry.addLine("Gyroscope calibrated!");
             telemetry.update();
             calibratedMsg = true;
@@ -60,18 +59,18 @@ public abstract class VelocityVortexPIDAutonomous extends PIDAutonomous {
             telemetry.addLine("LOST CONNECTION");
             telemetry.update();
             calibratedMsg = false;
-        }
+        }*/
     }
 
     @Override
     protected void startProviders() {
         robot.init();
-        gyroProvider.start(hardwareMap);
+        //gyroProvider.start(hardwareMap);
     }
 
     @Override
     protected void beforeStart() throws InterruptedException{
-        gyroscope.resetOrientation();
+        //gyroscope.resetOrientation();
     }
 
     public abstract void run() throws InterruptedException;

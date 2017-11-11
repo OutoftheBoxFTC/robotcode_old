@@ -74,8 +74,8 @@ public class RelicRecoveryWestcoast extends Hardware{
         this.driveBackRight = getOrNull(map.dcMotor, "driveBackRight");
         this.driveFrontRight = getOrNull(map.dcMotor, "driveFrontRight");
         this.launcher = getOrNull(map.dcMotor, "launcher");
-        this.intakeBtmLf = getOrNull(map.servo, "intakeBtmLf");
-        this.intakeBtmRt = getOrNull(map.servo, "intakeBtmRt");
+        this.intakeBtmLf = getOrNull(map.servo, "intakeBtmLeft");
+        this.intakeBtmRt = getOrNull(map.servo, "intakeBtmRight");
         this.spoolerTop = getOrNull(map.dcMotor, "spoolerTop");
         this.spoolerBottom = getOrNull(map.dcMotor, "spoolerBottom");
         this.intake = getOrNull(map.dcMotor, "intake");
@@ -100,37 +100,6 @@ public class RelicRecoveryWestcoast extends Hardware{
         driveBackRight.setPower(-rightPower);
     }
 
-    public void resetEncoders(){
-        driveFrontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        driveFrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        driveBackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        driveBackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-    }
-
-    public void driveUsingEncoders(int leftEncoder, int rightEncoder){
-        long systemStartTime = System.nanoTime();
-        driveFrontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        driveFrontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        driveBackLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        driveBackRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        driveFrontLeft.setPower(0.4);
-        driveBackLeft.setPower(0.4);
-        driveFrontRight.setPower(0.4);
-        driveBackRight.setPower(0.4);
-        driveFrontLeft.setTargetPosition(leftEncoder);
-        driveBackLeft.setTargetPosition(leftEncoder);
-        driveFrontRight.setTargetPosition(-rightEncoder);
-        driveBackRight.setTargetPosition(-rightEncoder);
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        driveFrontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        driveFrontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        driveBackLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        driveBackRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-    }
 
     @Override
     public void resetDriveMotors() {
