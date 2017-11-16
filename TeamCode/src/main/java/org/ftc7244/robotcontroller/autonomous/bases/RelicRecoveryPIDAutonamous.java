@@ -6,6 +6,7 @@ import org.ftc7244.robotcontroller.hardware.RelicRecoveryWestcoast;
 import org.ftc7244.robotcontroller.sensor.gyroscope.GyroscopeProvider;
 import org.ftc7244.robotcontroller.sensor.gyroscope.NavXGyroscopeProvider;
 import org.ftc7244.robotcontroller.sensor.gyroscope.PhoneGyroscopeProvider;
+import org.ftc7244.robotcontroller.sensor.gyroscope.RevIMUGyroscopeProvider;
 import org.ftc7244.robotcontroller.sensor.vuforia.ImageTransformProvider;
 
 /**
@@ -28,7 +29,7 @@ public abstract class RelicRecoveryPIDAutonamous extends PIDAutonamous {
         robot = new RelicRecoveryWestcoast(this);
         imageProvider = new ImageTransformProvider();
         imageDrive = new ImageTransformDrive(robot, imageProvider);
-        gyroProvider = new PhoneGyroscopeProvider();
+        gyroProvider = new RevIMUGyroscopeProvider();
         gyroscope = new RelicRecoveryGyroscope(robot, gyroProvider);
         calibratedMsg = false;
     }

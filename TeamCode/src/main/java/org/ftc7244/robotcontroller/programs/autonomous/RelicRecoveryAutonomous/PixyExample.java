@@ -1,6 +1,7 @@
 package org.ftc7244.robotcontroller.programs.autonomous.RelicRecoveryAutonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.I2cAddr;
 import com.qualcomm.robotcore.hardware.I2cDeviceSynch;
 
@@ -11,22 +12,29 @@ import org.ftc7244.robotcontroller.hardware.RelicRecoveryWestcoast;
  * Created by Eeshwar Laptop on 11/1/2017.
  */
 @Autonomous(name="PixyCam test")
-public class PixyCameraTestAutonomous extends RelicRecoveryPIDAutonamous {
-
-
+public class PixyExample extends LinearOpMode {
+    I2cDeviceSynch pixy;
+    //our Pixy device
     @Override
-    public void run() throws InterruptedException {
-        RelicRecoveryWestcoast robot = new RelicRecoveryWestcoast(this);
-        I2cDeviceSynch pixy = robot.getPixycam();
+    public void runOpMode() throws InterruptedException {
+        //setting up Pixy to the hardware map
+        pixy = hardwareMap.i2cDeviceSynch.get("pixycam");
+
         //setting Pixy's I2C Address
         pixy.setI2cAddress(I2cAddr.create7bit(0x54));
-        //setting Pixy's read window. You'll want these exact parameters, and you can reference the SDK Documentation to learn more
-        I2cDeviceSynch.ReadWindow readWindow = new I2cDeviceSynch.ReadWindow (1, 26, I2cDeviceSynch.ReadMode.REPEAT);
+
+        //setting Pixy's read window. You'll want these exact parameters, and you can reference the
+        I2cDeviceSynch.ReadWindow readWindow = new I2cDeviceSynch.ReadWindow (1, 26,
+                I2cDeviceSynch.ReadMode.REPEAT);
         pixy.setReadWindow(readWindow);
+
         //required to "turn on" the device
         pixy.engage();
+
         waitForStart();
+
         while(opModeIsActive()) {
+            //send every byte of data that we can to the phone screen
             telemetry.addData("Byte 0", pixy.read8(0));
             telemetry.addData("Byte 1", pixy.read8(1));
             telemetry.addData("Byte 2", pixy.read8(2));
@@ -44,5 +52,4 @@ public class PixyCameraTestAutonomous extends RelicRecoveryPIDAutonamous {
             telemetry.update();
         }
     }
-
 }

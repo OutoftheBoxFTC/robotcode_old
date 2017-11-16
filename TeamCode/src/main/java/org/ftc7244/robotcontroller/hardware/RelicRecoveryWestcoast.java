@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.kauailabs.navx.ftc.AHRS;
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -17,6 +18,7 @@ import com.qualcomm.robotcore.hardware.I2cDeviceSynch;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.ftc7244.robotcontroller.sensor.gyroscope.NavXGyroscopeProvider;
+import org.ftc7244.robotcontroller.sensor.gyroscope.RevIMUGyroscopeProvider;
 
 /**
  * Created by Eeshwar Laptop on 10/16/2017.
@@ -26,13 +28,19 @@ public class RelicRecoveryWestcoast extends Hardware{
     public static final double COUNTS_PER_INCH = (3.2 * Math.PI)/ 134.4, PIXY_TRANSLATE_MULTIPLE = 100 / 3.3, NANO_TO_SECONDS = 1000000000;
 
     @Nullable
-    private DcMotor driveBackLeft, driveFrontLeft, driveBackRight, driveFrontRight, launcher, spoolerTop, spoolerBottom, intake;
+    private DcMotor driveBackLeft, driveFrontLeft, driveBackRight, driveFrontRight, launcher, spoolerTop, spoolerBottom, intake, intakeVerticle;
     @Nullable
     private I2cDevice navx;
     @Nullable
     private I2cDeviceSynch pixycam;
     @Nullable
     private CRServo spring, intakebleft, intakebright;
+    @Nullable
+    private AnalogInput vertLimit;
+    @Nullable
+    private BNO055IMU imu;
+    @Nullable
+    private RevIMUGyroscopeProvider rev;
     public RelicRecoveryWestcoast(OpMode opMode) {
         super(opMode, COUNTS_PER_INCH);
     }
@@ -66,7 +74,9 @@ public class RelicRecoveryWestcoast extends Hardware{
     public void init() {
         //Initialize or nullify all hardware
         HardwareMap map = opMode.hardwareMap;
-        this.spring = getOrNull(map.crservo,"spring");
+        this.imu = map.get(BNO055IMU.class, "imu");
+        this.spring = getOrNull(map.crservo, "spring");
+        this.intakeVerticle = getOrNull(map.dcMotor, "vertical");
         this.driveBackLeft = getOrNull(map.dcMotor, "driveBackLeft");
         this.driveFrontLeft = getOrNull(map.dcMotor, "driveFrontLeft");
         this.driveBackRight = getOrNull(map.dcMotor, "driveBackRight");
@@ -79,14 +89,12 @@ public class RelicRecoveryWestcoast extends Hardware{
         this.intake = getOrNull(map.dcMotor, "intake");
         this.navx = getOrNull(map.i2cDevice, "navx");
         this.pixycam = getOrNull(map.i2cDeviceSynch, "pixycam");
+        this.vertLimit = getOrNull(map.analogInput, "vertLimit");
 
         //Set the default direction for all the hardware and also initialize default positions
         if (driveFrontLeft != null) driveFrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         if (driveFrontRight != null) driveFrontRight.setDirection(DcMotorSimple.Direction.REVERSE);
-        if (intakebleft != null) intakebright.setDirection(DcMotorSimple.Direction.REVERSE);
-        if (launcher != null) launcher.setDirection(DcMotorSimple.Direction.REVERSE);
-        if (spoolerTop != null) spoolerTop.setDirection(DcMotorSimple.Direction.REVERSE);
-        if (spoolerTop != null && spoolerBottom != null) resetMotors(spoolerBottom, spoolerTop);
+//        if (intakebright != null) intakebright.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
     @Override
@@ -132,6 +140,9 @@ public class RelicRecoveryWestcoast extends Hardware{
     public I2cDeviceSynch getPixycam(){return this.pixycam;}
 
     @Nullable
+    public DcMotor getIntakeVerticle(){return this.intakeVerticle;}
+
+    @Nullable
     public DcMotor getDriveFrontRight() {
         return this.driveFrontRight;
     }
@@ -170,8 +181,13 @@ public class RelicRecoveryWestcoast extends Hardware{
     public DcMotor getIntake(){return intake;}
 
     @Nullable
-    public CRServo getSpring(){return spring;}
+    public CRServo getSpring(){return this.spring;}
 
+    @Nullable
+    public AnalogInput getVertLimit(){return vertLimit;}
+
+    @Nullable
+    public BNO055IMU getImu(){return this.imu;}
     /**
      * Uses reflection to obtain all the information to properly setup the navx sensor
      *
