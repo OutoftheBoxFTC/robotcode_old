@@ -13,7 +13,7 @@ import org.ftc7244.robotcontroller.sensor.vuforia.ImageTransformProvider;
  * Created by FTC 7244 on 10/22/2017.
  */
 
-public abstract class RelicRecoveryPIDAutonamous extends PIDAutonamous {
+public abstract class RelicRecoveryPIDAutonamous extends PIDAutonomous {
 
     protected final ImageTransformProvider imageProvider;
 
@@ -59,6 +59,7 @@ public abstract class RelicRecoveryPIDAutonamous extends PIDAutonamous {
     @Override
     protected void onEnd(boolean err) {
         imageProvider.stop();
+        gyroProvider.stop();
     }
 
     @Override

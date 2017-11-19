@@ -55,9 +55,7 @@ public abstract class PIDDriveControl {
             terminator.terminated(false);
             //get PID correction value
             double pid = controller.update(getReading());
-            robot.getOpMode().telemetry.addData("Pid", pid);
-            robot.getOpMode().telemetry.addData("power", powerOffset);
-            robot.getOpMode().telemetry.update();
+            RobotLog.i(getReading() + ":" + pid);
             //debug if wanted
             if (Debug.STATUS)
                 RobotLog.ii("PID", "|" + controller.getProportional() + "|" + controller.getIntegral() + "|" + controller.getDerivative() + "|" + pid + "|" + getReading());

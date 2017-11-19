@@ -23,7 +23,7 @@ import java.util.Locale;
 /**
  * Created by FTC 7244 on 10/29/2017.
  */
-@Autonomous(name = "Test")
+@Autonomous(name = "Test90")
 public class TestAutonamous extends RelicRecoveryPIDAutonamous{
     RevIMUGyroscopeProvider imu = new RevIMUGyroscopeProvider();
     @Override

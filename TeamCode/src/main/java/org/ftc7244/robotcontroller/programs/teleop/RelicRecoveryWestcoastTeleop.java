@@ -15,13 +15,13 @@ import org.ftc7244.robotcontroller.input.ButtonType;
 @TeleOp(name = "Relic Recovery Westcoast")
 public class RelicRecoveryWestcoastTeleop extends OpMode {
     RelicRecoveryWestcoast robot;
-    private Button dPadUp, dPadDown, dPadLeft, dPadRight, leftTrigger, rightTrigger, springButton, intakeRight, intakeLeft, aButton, bButton, slow_button, xButton, yButton;
+    private Button dPadUp, dPadDown, dPadLeft, dPadRight, leftTrigger, rightTrigger, springButton, intakeRight, intakeLeft, aButton, bButton, slowButton, xButton, yButton;
     private static final double SLOW_DRIVE_COEFFICIENT = 0.5;
     private boolean vertLimit = true;
     public void init(){
         robot = new RelicRecoveryWestcoast(this);
         robot.init();
-        slow_button = new Button(gamepad1, ButtonType.LEFT_TRIGGER);
+        slowButton = new Button(gamepad1, ButtonType.LEFT_TRIGGER);
         aButton = new Button(gamepad2, ButtonType.A);
         bButton = new Button(gamepad2, ButtonType.B);
         yButton = new Button(gamepad2, ButtonType.Y);
@@ -38,7 +38,7 @@ public class RelicRecoveryWestcoastTeleop extends OpMode {
     }
     @Override
     public void loop(){
-        if(slow_button.isPressed()){
+        if(slowButton.isPressed()){
             robot.drive(-gamepad1.left_stick_y* SLOW_DRIVE_COEFFICIENT,
                     -gamepad1.right_stick_y* SLOW_DRIVE_COEFFICIENT);
         }
@@ -93,9 +93,9 @@ public class RelicRecoveryWestcoastTeleop extends OpMode {
         }else if(yButton.isPressed()){
             //top intake vex motors down here
         }
-        if(dPadUp.isPressed()){
+        if(dPadDown.isPressed()){
             robot.getIntakeVerticle().setPower(0.8);
-        }else if(dPadDown.isPressed()){
+        }else if(dPadUp.isPressed()){
             robot.getIntakeVerticle().setPower(-0.8);
         }else{
             robot.getIntakeVerticle().setPower(-0.1);

@@ -1,5 +1,6 @@
 package org.ftc7244.robotcontroller.hardware;
 
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -8,6 +9,7 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
@@ -16,7 +18,9 @@ import com.qualcomm.robotcore.hardware.I2cAddr;
 import com.qualcomm.robotcore.hardware.I2cDevice;
 import com.qualcomm.robotcore.hardware.I2cDeviceSynch;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.RobotLog;
 
+import org.ftc7244.robotcontroller.Debug;
 import org.ftc7244.robotcontroller.sensor.gyroscope.NavXGyroscopeProvider;
 import org.ftc7244.robotcontroller.sensor.gyroscope.RevIMUGyroscopeProvider;
 
@@ -41,10 +45,12 @@ public class RelicRecoveryWestcoast extends Hardware{
     private BNO055IMU imu;
     @Nullable
     private RevIMUGyroscopeProvider rev;
+    @Nullable
+    private ColorSensor jewelSensor;
     public RelicRecoveryWestcoast(OpMode opMode) {
         super(opMode, COUNTS_PER_INCH);
     }
-
+    private int blueOffset, redOffset;
     /**
      * Waits for all the motors to have zero position and if it is not zero tell it to reset
      *
@@ -75,6 +81,7 @@ public class RelicRecoveryWestcoast extends Hardware{
         //Initialize or nullify all hardware
         HardwareMap map = opMode.hardwareMap;
         this.imu = map.get(BNO055IMU.class, "imu");
+        this.jewelSensor = getOrNull(map.colorSensor, "jewelsensor");
         this.intakeTop = getOrNull(map.dcMotor, "intaketop");
         this.spring = getOrNull(map.crservo, "spring");
         this.intakeVerticle = getOrNull(map.dcMotor, "vertical");
@@ -93,6 +100,13 @@ public class RelicRecoveryWestcoast extends Hardware{
         if (driveFrontLeft != null) driveFrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         if (driveFrontRight != null) driveFrontRight.setDirection(DcMotorSimple.Direction.REVERSE);
 //        if (intakebright != null) intakebright.setDirection(DcMotorSimple.Direction.REVERSE);
+        if (jewelSensor != null) {
+            redOffset = jewelSensor.red();
+            blueOffset = jewelSensor.blue();
+        } else {
+            redOffset = 0;
+            blueOffset = 0;
+        }
     }
 
     @Override
@@ -123,7 +137,20 @@ public class RelicRecoveryWestcoast extends Hardware{
         return (spoolerBottom.getCurrentPosition() + spoolerTop.getCurrentPosition()) / 2;
     }
 
-
+    public boolean isColor(int color) {
+        int blue = jewelSensor.blue() - blueOffset, red = jewelSensor.red() - redOffset;
+        if (Debug.STATUS)
+            RobotLog.ii("COLOR", blue + "(" + blueOffset + ")" + ":" + red + "(" + redOffset + ")");
+        switch (color) {
+            case Color.BLUE:
+                return blue > red;
+            case Color.RED:
+                return blue < red;
+            default:
+                RobotLog.e("Color does not exist!");
+                return false;
+        }
+    }
     @Nullable
     public DcMotor getDriveFrontLeft() {
         return this.driveFrontLeft;
