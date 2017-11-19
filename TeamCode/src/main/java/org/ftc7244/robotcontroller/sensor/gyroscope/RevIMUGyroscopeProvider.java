@@ -19,18 +19,19 @@ import java.util.Locale;
  * Created by Eeshwar Laptop on 11/15/2017.
  */
 
-public class RevIMUGyroscopeProvider extends GyroscopeProvider  {
+public class RevIMUGyroscopeProvider extends GyroscopeProvider {
     private boolean calibrating;
     private BNO055IMU imu;
     Orientation angles;
     Acceleration gravity;
+
     @Override
     public void start(HardwareMap map) {
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-        parameters.loggingEnabled      = true;
-        parameters.loggingTag          = "IMU";
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.loggingEnabled = true;
+        parameters.loggingTag = "IMU";
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
 
         // Retrieve and initialize the IMU. We expect the IMU to be attached to an I2C port
@@ -47,29 +48,13 @@ public class RevIMUGyroscopeProvider extends GyroscopeProvider  {
 
     @Override
     public void calibrate() {
-        angles   = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-        gravity  = imu.getGravity();
+        angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        gravity = imu.getGravity();
         setX(angles.thirdAngle);
         setY(angles.secondAngle);
         setZ(angles.firstAngle);
     }
-    /*
-                .addData("heading", new Func<String>() {
-                @Override public String value() {
-                    return formatAngle(angles.angleUnit, angles.firstAngle);
-                    }
-                })
-            .addData("roll", new Func<String>() {
-                @Override public String value() {
-                    return formatAngle(angles.angleUnit, angles.secondAngle);
-                    }
-                })
-            .addData("pitch", new Func<String>() {
-                @Override public String value() {
-                    return formatAngle(angles.angleUnit, angles.thirdAngle);
-                    }
-                });
-     */
+
     @Override
     public boolean isCalibrated() {
         return false;
@@ -80,11 +65,11 @@ public class RevIMUGyroscopeProvider extends GyroscopeProvider  {
 
     }
 
-    String formatAngle(AngleUnit angleUnit, double angle) {
+    public String formatAngle(AngleUnit angleUnit, double angle) {
         return formatDegrees(AngleUnit.DEGREES.fromUnit(angleUnit, angle));
     }
 
-    String formatDegrees(double degrees){
+    public String formatDegrees(double degrees) {
         return String.format(Locale.getDefault(), "%.1f", AngleUnit.DEGREES.normalize(degrees));
     }
 }

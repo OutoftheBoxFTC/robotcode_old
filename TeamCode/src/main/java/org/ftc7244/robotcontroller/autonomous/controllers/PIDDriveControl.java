@@ -1,12 +1,12 @@
 package org.ftc7244.robotcontroller.autonomous.controllers;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftc7244.robotcontroller.Debug;
 import org.ftc7244.robotcontroller.hardware.Hardware;
-import org.ftc7244.robotcontroller.hardware.VelocityVortexWestcoast;
 import org.ftc7244.robotcontroller.autonomous.Status;
 import org.ftc7244.robotcontroller.autonomous.terminators.Terminator;
 
@@ -65,6 +65,7 @@ public abstract class PIDDriveControl {
             //take the PID and provide poweroffset if the robot wants to drive while using PID
             robot.drive(powerOffset+pid, powerOffset-pid);
             //check if the robot should stop driving
+
         } while (!terminator.shouldTerminate() && !Status.isStopRequested());
         terminator.terminated(true);
 
