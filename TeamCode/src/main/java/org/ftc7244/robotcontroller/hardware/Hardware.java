@@ -88,4 +88,8 @@ public abstract class Hardware {
     }
 
     public abstract int getDriveEncoderAverage();
+
+    public OpMode getOpMode() {
+        return opMode;
+    }
 }

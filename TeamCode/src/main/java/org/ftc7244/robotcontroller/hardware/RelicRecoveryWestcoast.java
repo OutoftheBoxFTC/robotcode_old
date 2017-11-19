@@ -28,7 +28,7 @@ public class RelicRecoveryWestcoast extends Hardware{
     public static final double COUNTS_PER_INCH = (3.2 * Math.PI)/ 134.4, PIXY_TRANSLATE_MULTIPLE = 100 / 3.3, NANO_TO_SECONDS = 1000000000;
 
     @Nullable
-    private DcMotor driveBackLeft, driveFrontLeft, driveBackRight, driveFrontRight, launcher, spoolerTop, spoolerBottom, intake, intakeVerticle;
+    private DcMotor driveBackLeft, driveFrontLeft, driveBackRight, driveFrontRight, launcher, spoolerTop, spoolerBottom, intake, intakeVerticle, intakeTop;
     @Nullable
     private I2cDevice navx;
     @Nullable
@@ -75,17 +75,15 @@ public class RelicRecoveryWestcoast extends Hardware{
         //Initialize or nullify all hardware
         HardwareMap map = opMode.hardwareMap;
         this.imu = map.get(BNO055IMU.class, "imu");
+        this.intakeTop = getOrNull(map.dcMotor, "intaketop");
         this.spring = getOrNull(map.crservo, "spring");
         this.intakeVerticle = getOrNull(map.dcMotor, "vertical");
         this.driveBackLeft = getOrNull(map.dcMotor, "driveBackLeft");
         this.driveFrontLeft = getOrNull(map.dcMotor, "driveFrontLeft");
         this.driveBackRight = getOrNull(map.dcMotor, "driveBackRight");
         this.driveFrontRight = getOrNull(map.dcMotor, "driveFrontRight");
-        this.launcher = getOrNull(map.dcMotor, "launcher");
         this.intakebleft = getOrNull(map.crservo, "intakebleft");
         this.intakebright = getOrNull(map.crservo, "intakebright");
-        this.spoolerTop = getOrNull(map.dcMotor, "spoolerTop");
-        this.spoolerBottom = getOrNull(map.dcMotor, "spoolerBottom");
         this.intake = getOrNull(map.dcMotor, "intake");
         this.navx = getOrNull(map.i2cDevice, "navx");
         this.pixycam = getOrNull(map.i2cDeviceSynch, "pixycam");
@@ -169,7 +167,7 @@ public class RelicRecoveryWestcoast extends Hardware{
 
     @Nullable
     public DcMotor getSpoolerBottom() {
-        return spoolerBottom;
+        return this.spoolerBottom;
     }
 
     @Nullable
@@ -178,7 +176,10 @@ public class RelicRecoveryWestcoast extends Hardware{
     }
 
     @Nullable
-    public DcMotor getIntake(){return intake;}
+    public DcMotor getIntake(){return this.intake;}
+
+    @Nullable
+    public DcMotor getIntakeTop(){return this.intakeTop;}
 
     @Nullable
     public CRServo getSpring(){return this.spring;}

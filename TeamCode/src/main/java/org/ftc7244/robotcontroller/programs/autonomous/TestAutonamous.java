@@ -33,8 +33,6 @@ public class TestAutonamous extends RelicRecoveryPIDAutonamous{
         gyroscope.rotate(90);
         while(opModeIsActive()) {
             imu.calibrate();
-            telemetry.addData("X", imu.getX());
-            telemetry.addData("Y", imu.getY());
             telemetry.addData("Z", imu.getZ());
             telemetry.update();
         }
