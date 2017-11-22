@@ -20,19 +20,15 @@ import org.ftc7244.robotcontroller.hardware.Westcoast;
  * has been fully calibrated.
  */
 public class NavXGyroscopeProvider extends GyroscopeProvider implements Runnable{
+
     @Nullable
     private NavxMicroNavigationSensor navxDevice;
-    private Westcoast robot;
     private Thread thread;
     private static final long WAIT_INTERVAL_MS = 30;
-    private boolean running;
-    public NavXGyroscopeProvider(Westcoast robot){
-        this.robot = robot;
-    }
 
     @Override
     public void start(HardwareMap map) {
-        navxDevice = robot.getNavX();
+        navxDevice = map.get(NavxMicroNavigationSensor.class, "navx");
         thread = new Thread(this);
     }
 
@@ -55,7 +51,7 @@ public class NavXGyroscopeProvider extends GyroscopeProvider implements Runnable
 
     @Override
     public void run() {
-        while (running) {
+        while (true) {
             if (System.currentTimeMillis() - getTimestamp() >= WAIT_INTERVAL_MS) {
                 super.setTimestamp(System.currentTimeMillis());
                 Orientation angles = navxDevice.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
