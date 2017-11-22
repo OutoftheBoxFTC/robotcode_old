@@ -4,50 +4,38 @@ import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.kauailabs.navx.ftc.AHRS;
-import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.kauailabs.NavxMicroNavigationSensor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.I2cAddr;
-import com.qualcomm.robotcore.hardware.I2cDevice;
-import com.qualcomm.robotcore.hardware.I2cDeviceSynch;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftc7244.robotcontroller.Debug;
-import org.ftc7244.robotcontroller.sensor.gyroscope.NavXGyroscopeProvider;
-import org.ftc7244.robotcontroller.sensor.gyroscope.RevIMUGyroscopeProvider;
+import org.ftc7244.robotcontroller.sensor.gyroscope.NavxRobot;
 
 /**
  * Created by Eeshwar Laptop on 10/16/2017.
  */
 
-public class RelicRecoveryWestcoast extends Hardware{
-    public static final double COUNTS_PER_INCH = (3.2 * Math.PI)/ 134.4, PIXY_TRANSLATE_MULTIPLE = 100 / 3.3, NANO_TO_SECONDS = 1000000000;
+public class Westcoast extends Hardware implements NavxRobot{
+    public static final double COUNTS_PER_INCH = (3.2 * Math.PI)/ 134.4;
 
     @Nullable
-    private DcMotor driveBackLeft, driveFrontLeft, driveBackRight, driveFrontRight, launcher, spoolerTop, spoolerBottom, intake, intakeVerticle, intakeTop;
+    private DcMotor driveBackLeft, driveFrontLeft, driveBackRight, driveFrontRight, intakeVertical, intakeTop, intakeBottom;
     @Nullable
-    private I2cDevice navx;
-    @Nullable
-    private I2cDeviceSynch pixycam;
-    @Nullable
-    private CRServo spring, intakebleft, intakebright;
+    private CRServo spring, intakeBottomLeft, intakeBottomRight, intakeTopLeft, intakeTopRight;
     @Nullable
     private AnalogInput vertLimit;
     @Nullable
-    private BNO055IMU imu;
-    @Nullable
-    private RevIMUGyroscopeProvider rev;
-    @Nullable
     private ColorSensor jewelSensor;
-    public RelicRecoveryWestcoast(OpMode opMode) {
+    @Nullable
+    private NavxMicroNavigationSensor navX;
+
+    public Westcoast(OpMode opMode) {
         super(opMode, COUNTS_PER_INCH);
     }
     private int blueOffset, redOffset;
@@ -80,26 +68,30 @@ public class RelicRecoveryWestcoast extends Hardware{
     public void init() {
         //Initialize or nullify all hardware
         HardwareMap map = opMode.hardwareMap;
-        this.imu = map.get(BNO055IMU.class, "imu");
         this.jewelSensor = getOrNull(map.colorSensor, "jewelsensor");
-        this.intakeTop = getOrNull(map.dcMotor, "intaketop");
         this.spring = getOrNull(map.crservo, "spring");
-        this.intakeVerticle = getOrNull(map.dcMotor, "vertical");
+
+        this.intakeVertical = getOrNull(map.dcMotor, "vertical");
+
         this.driveBackLeft = getOrNull(map.dcMotor, "driveBackLeft");
         this.driveFrontLeft = getOrNull(map.dcMotor, "driveFrontLeft");
         this.driveBackRight = getOrNull(map.dcMotor, "driveBackRight");
         this.driveFrontRight = getOrNull(map.dcMotor, "driveFrontRight");
-        this.intakebleft = getOrNull(map.crservo, "intakebleft");
-        this.intakebright = getOrNull(map.crservo, "intakebright");
-        this.intake = getOrNull(map.dcMotor, "intake");
-        this.navx = getOrNull(map.i2cDevice, "navx");
-        this.pixycam = getOrNull(map.i2cDeviceSynch, "pixycam");
-        this.vertLimit = getOrNull(map.analogInput, "vertLimit");
+
+        this.intakeBottomLeft = getOrNull(map.crservo, "intakeBLeft");
+        this.intakeBottomRight = getOrNull(map.crservo, "intakeBRight");
+        this.intakeTopLeft = getOrNull(map.crservo, "intakeTLeft");
+        this.intakeTopRight = getOrNull(map.crservo, "intakeTRight");
+
+        this.intakeTop = getOrNull(map.dcMotor, "intakeT");
+        this.intakeBottom = getOrNull(map.dcMotor, "intakeB");
+
+        this.navX = opMode.hardwareMap.get(NavxMicroNavigationSensor.class, "navx");
 
         //Set the default direction for all the hardware and also initialize default positions
         if (driveFrontLeft != null) driveFrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         if (driveFrontRight != null) driveFrontRight.setDirection(DcMotorSimple.Direction.REVERSE);
-//        if (intakebright != null) intakebright.setDirection(DcMotorSimple.Direction.REVERSE);
+//        if (intakeBottomRight != null) intakeBottomRight.setDirection(DcMotorSimple.Direction.REVERSE);
         if (jewelSensor != null) {
             redOffset = jewelSensor.red();
             blueOffset = jewelSensor.blue();
@@ -107,6 +99,8 @@ public class RelicRecoveryWestcoast extends Hardware{
             redOffset = 0;
             blueOffset = 0;
         }
+        intakeTopRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        intakeBottomRight.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
     @Override
@@ -126,15 +120,6 @@ public class RelicRecoveryWestcoast extends Hardware{
     @Override
     public int getDriveEncoderAverage() {
         return (int) ((driveBackLeft.getCurrentPosition()+driveBackRight.getCurrentPosition()+driveFrontLeft.getCurrentPosition()+driveFrontRight.getCurrentPosition())/4/COUNTS_PER_INCH);
-    }
-
-    public void setSpoolerPower(double power) {
-        spoolerTop.setPower(power);
-        spoolerBottom.setPower(power);
-    }
-
-    public int getSpoolerTicks() {
-        return (spoolerBottom.getCurrentPosition() + spoolerTop.getCurrentPosition()) / 2;
     }
 
     public boolean isColor(int color) {
@@ -162,10 +147,7 @@ public class RelicRecoveryWestcoast extends Hardware{
     }
 
     @Nullable
-    public I2cDeviceSynch getPixycam(){return this.pixycam;}
-
-    @Nullable
-    public DcMotor getIntakeVerticle(){return this.intakeVerticle;}
+    public DcMotor getIntakeVertical(){return this.intakeVertical;}
 
     @Nullable
     public DcMotor getDriveFrontRight() {
@@ -178,35 +160,33 @@ public class RelicRecoveryWestcoast extends Hardware{
     }
 
     @Nullable
-    public DcMotor getLauncher() {
-        return this.launcher;
+    public CRServo getIntakeBottomLeft() {
+        return this.intakeBottomLeft;
     }
 
     @Nullable
-    public CRServo getIntakeBtmLf() {
-        return this.intakebleft;
+    public CRServo getIntakeBottomRight() {
+        return this.intakeBottomRight;
+    }
+    @Nullable
+    public CRServo getIntakeTopLeft(){
+        return this.intakeTopLeft;
     }
 
     @Nullable
-    public CRServo getIntakeBtmRt() {
-        return this.intakebright;
+    public DcMotor getIntakeBottom() {
+        return intakeBottom;
     }
 
     @Nullable
-    public DcMotor getSpoolerBottom() {
-        return this.spoolerBottom;
+    public DcMotor getIntakeTop() {
+        return intakeTop;
     }
 
     @Nullable
-    public DcMotor getSpoolerTop() {
-        return spoolerTop;
+    public CRServo getIntakeTopRight() {
+        return intakeTopRight;
     }
-
-    @Nullable
-    public DcMotor getIntake(){return this.intake;}
-
-    @Nullable
-    public DcMotor getIntakeTop(){return this.intakeTop;}
 
     @Nullable
     public CRServo getSpring(){return this.spring;}
@@ -215,15 +195,7 @@ public class RelicRecoveryWestcoast extends Hardware{
     public AnalogInput getVertLimit(){return vertLimit;}
 
     @Nullable
-    public BNO055IMU getImu(){return this.imu;}
-    /**
-     * Uses reflection to obtain all the information to properly setup the navx sensor
-     *
-     * @return setup navx sensor
-     */
-    @Nullable
-    public AHRS getNavX(){
-        if(navx==null)return null;
-        return AHRS.getInstance((DeviceInterfaceModule) navx.getController(), navx.getPort(), AHRS.DeviceDataType.kProcessedData, NavXGyroscopeProvider.NAVX_DEVICE_UPDATE_RATE_HZ);
+    public NavxMicroNavigationSensor getNavX(){
+        return navX;
     }
 }

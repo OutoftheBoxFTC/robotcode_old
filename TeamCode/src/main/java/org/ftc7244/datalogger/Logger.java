@@ -23,9 +23,10 @@ public class Logger implements Runnable{
 
     private static final int PORT = 8709, FIGURES_AFTER_DECIMAL = 4;
 
-    private static final long SEND_INTERVAL_MS = 100;
+    private static final long SEND_INTERVAL_MS = 100, ADD_INTERVAL_MS = 10;
 
     private HashMap<String, ArrayList<Number>> data;
+    private ArrayList<Long> timeStamps;
 
     private Thread thread;
 
@@ -46,6 +47,7 @@ public class Logger implements Runnable{
             thread = new Thread(this);
             thread.start();
             data = new HashMap<>();
+            timeStamps = new ArrayList<>();
         }
     }
 
@@ -60,7 +62,9 @@ public class Logger implements Runnable{
     public void addData(String tag, Number data) {
         if(running) {
             if (this.data.containsKey(tag)) {
-                this.data.get(tag).add(data);
+                if(System.currentTimeMillis()-timeStamps.get(new ArrayList<>(this.data.keySet()).indexOf(tag)) >= ADD_INTERVAL_MS) {
+                    this.data.get(tag).add(data);
+                }
             } else {
                 if (tag.contains(":")) {
                     throw new InvalidCharacterException("Tag cannot contain \":\"");

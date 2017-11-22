@@ -1,18 +1,14 @@
 package org.ftc7244.robotcontroller.autonomous.drivers;
 
-import com.qualcomm.robotcore.hardware.LightSensor;
 import com.qualcomm.robotcore.util.RobotLog;
 
-import org.ftc7244.robotcontroller.Debug;
-import org.ftc7244.robotcontroller.hardware.Hardware;
-import org.ftc7244.robotcontroller.hardware.VelocityVortexWestcoast;
 import org.ftc7244.robotcontroller.autonomous.controllers.PIDControllerBuilder;
 import org.ftc7244.robotcontroller.autonomous.controllers.PIDDriveControl;
 import org.ftc7244.robotcontroller.autonomous.terminators.ConditionalTerminator;
 import org.ftc7244.robotcontroller.autonomous.terminators.SensitivityTerminator;
-import org.ftc7244.robotcontroller.autonomous.terminators.TerminationMode;
 import org.ftc7244.robotcontroller.autonomous.terminators.Terminator;
-import org.ftc7244.robotcontroller.autonomous.terminators.TimerTerminator;
+import org.ftc7244.robotcontroller.hardware.Hardware;
+import org.ftc7244.robotcontroller.hardware.Westcoast;
 import org.ftc7244.robotcontroller.sensor.gyroscope.GyroscopeProvider;
 
 /**
@@ -34,7 +30,7 @@ public class GyroscopeDrive extends PIDDriveControl {
      */
     public GyroscopeDrive(Hardware robot, GyroscopeProvider gyroProvider) {
         super(new PIDControllerBuilder()
-                        .setProportional(0.00375)
+                        .setProportional(-0.005)
                         .setDelay(30)
                         .setOutputRange(0.8)
                         .createController(),
@@ -62,7 +58,7 @@ public class GyroscopeDrive extends PIDDriveControl {
      * @throws InterruptedException if code fails to terminate on stop requested
      */
     public void drive(double power, double inches, double target) throws InterruptedException {
-        final double ticks = inches * VelocityVortexWestcoast.COUNTS_PER_INCH;
+        final double ticks = inches * Westcoast.COUNTS_PER_INCH;
         robot.resetDriveMotors();
         if (inches <= 0) RobotLog.e("Invalid distances!");
         final int offset = robot.getDriveEncoderAverage();

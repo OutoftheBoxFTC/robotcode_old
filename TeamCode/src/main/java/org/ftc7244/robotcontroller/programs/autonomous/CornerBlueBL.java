@@ -1,11 +1,9 @@
-package org.ftc7244.robotcontroller.programs.autonomous.RelicRecoveryAutonomous;
+package org.ftc7244.robotcontroller.programs.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.ftc7244.robotcontroller.autonomous.bases.RelicRecoveryPIDAutonamous;
-import org.ftc7244.robotcontroller.hardware.RelicRecoveryWestcoast;
 
 /**
  * Created by Eeshwar Laptop on 10/29/2017.
@@ -16,7 +14,7 @@ public class CornerBlueBL extends RelicRecoveryPIDAutonamous {
     public void run(){
         double countsPerInch = 134.4 / (4 * Math.PI);
         robot.init();
-        image = imageProvider.getImageReading().name();
+        //image = imageProvider.getImageReading().name();
         waitForStart();
         sleep(1500);
         robot.drive(0.3, 0.3);
@@ -42,9 +40,9 @@ public class CornerBlueBL extends RelicRecoveryPIDAutonamous {
         sleep(1300);
         robot.drive(0, 0);
         sleep(1500);
-        robot.getIntake().setPower(1);
+        robot.getIntakeTopLeft().setPower(1);
         sleep(2000);
-        robot.getIntake().setPower(0);
+        robot.getIntakeTopLeft().setPower(0);
         sleep(1500);
         robot.getSpring().setDirection(DcMotorSimple.Direction.REVERSE);
         robot.getSpring().setPower(1);

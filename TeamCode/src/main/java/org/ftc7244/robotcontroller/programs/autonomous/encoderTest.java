@@ -1,4 +1,4 @@
-package org.ftc7244.robotcontroller.programs.autonomous.RelicRecoveryAutonomous;
+package org.ftc7244.robotcontroller.programs.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;

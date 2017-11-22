@@ -51,7 +51,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 @Autonomous(name = "Sensor: KL navX Micro", group = "Sensor")
-@Disabled
 public class SensorKLNavxMicro extends LinearOpMode {
 
     /** In this sample, for illustration purposes we use two interfaces on the one gyro object.
@@ -92,7 +91,7 @@ public class SensorKLNavxMicro extends LinearOpMode {
         waitForStart();
         telemetry.log().clear();
 
-        while (opModeIsActive()) {
+        while (!isStopRequested()) {
 
             // Read dimensionalized data from the gyro. This gyro can report angular velocities
             // about all three axes. Additionally, it internally integrates the Z axis to

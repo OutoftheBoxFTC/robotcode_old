@@ -1,8 +1,10 @@
 package org.ftc7244.robotcontroller.programs.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.ftc7244.robotcontroller.autonomous.bases.RelicRecoveryPIDAutonamous;
+import org.ftc7244.robotcontroller.hardware.Westcoast;
 import org.ftc7244.robotcontroller.sensor.gyroscope.RevIMUGyroscopeProvider;
 
 /**
@@ -10,16 +12,9 @@ import org.ftc7244.robotcontroller.sensor.gyroscope.RevIMUGyroscopeProvider;
  */
 @Autonomous(name = "Test45")
 public class TestAutonamous45degree extends RelicRecoveryPIDAutonamous{
-    RevIMUGyroscopeProvider imu = new RevIMUGyroscopeProvider();
+
     @Override
     public void run() throws InterruptedException {
-        imu.start(hardwareMap);
-        waitForStart();
         gyroscope.rotate(45);
-        while(opModeIsActive()) {
-            imu.calibrate();
-            telemetry.addData("Z", imu.getZ());
-            telemetry.update();
-        }
     }
 }
