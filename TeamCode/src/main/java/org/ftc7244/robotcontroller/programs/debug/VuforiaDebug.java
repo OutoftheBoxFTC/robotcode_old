@@ -11,7 +11,7 @@ import org.ftc7244.robotcontroller.autonomous.bases.RelicRecoveryPIDAutonamous;
 public class VuforiaDebug extends RelicRecoveryPIDAutonamous {
     @Override
     public void run() throws InterruptedException {
-        imageDrive.allignToImage();
+        //imageDrive.allignToImage();
         while (opModeIsActive());
     }
 }

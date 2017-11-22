@@ -1,12 +1,9 @@
-package org.ftc7244.robotcontroller.programs.autonomous.RelicRecoveryAutonomous;
+package org.ftc7244.robotcontroller.programs.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.I2cAddr;
 import com.qualcomm.robotcore.hardware.I2cDeviceSynch;
-
-import org.ftc7244.robotcontroller.autonomous.bases.RelicRecoveryPIDAutonamous;
-import org.ftc7244.robotcontroller.hardware.RelicRecoveryWestcoast;
 
 /**
  * Created by Eeshwar Laptop on 11/1/2017.

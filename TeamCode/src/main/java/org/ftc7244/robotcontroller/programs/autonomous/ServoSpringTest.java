@@ -1,11 +1,10 @@
-package org.ftc7244.robotcontroller.programs.autonomous.RelicRecoveryAutonomous;
+package org.ftc7244.robotcontroller.programs.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-import org.ftc7244.robotcontroller.autonomous.bases.RelicRecoveryPIDAutonamous;
-import org.ftc7244.robotcontroller.hardware.RelicRecoveryWestcoast;
+import org.ftc7244.robotcontroller.hardware.Westcoast;
 
 /**
  * Created by Eeshwar Laptop on 11/3/2017.
@@ -13,7 +12,7 @@ import org.ftc7244.robotcontroller.hardware.RelicRecoveryWestcoast;
 @Autonomous(name="SpringTest")
 public class ServoSpringTest extends LinearOpMode{
     public void runOpMode(){
-        RelicRecoveryWestcoast robot = new RelicRecoveryWestcoast(this);
+        Westcoast robot = new Westcoast(this);
         robot.init();
         waitForStart();
         robot.getSpring().setDirection(DcMotorSimple.Direction.FORWARD);

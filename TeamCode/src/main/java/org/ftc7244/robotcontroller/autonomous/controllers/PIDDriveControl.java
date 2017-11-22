@@ -1,14 +1,15 @@
 package org.ftc7244.robotcontroller.autonomous.controllers;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.qualcomm.robotcore.util.RobotLog;
 
+import org.ftc7244.datalogger.Logger;
 import org.ftc7244.robotcontroller.Debug;
-import org.ftc7244.robotcontroller.hardware.Hardware;
 import org.ftc7244.robotcontroller.autonomous.Status;
 import org.ftc7244.robotcontroller.autonomous.terminators.Terminator;
+import org.ftc7244.robotcontroller.hardware.Hardware;
+
 
 /**
  * Abstract tool that handles a majority of the PID when driving and handles when the PID should
@@ -59,7 +60,11 @@ public abstract class PIDDriveControl {
             //debug if wanted
             if (Debug.STATUS)
                 RobotLog.ii("PID", "|" + controller.getProportional() + "|" + controller.getIntegral() + "|" + controller.getDerivative() + "|" + pid + "|" + getReading());
-
+            /*Logger.getInstance().addData("Proportional", controller.getProportional());
+            Logger.getInstance().addData("Integral", controller.getIntegral());
+            Logger.getInstance().addData("Derivitive", controller.getDerivative());*/
+            robot.getOpMode().telemetry.addData("Gyro", getReading());
+            robot.getOpMode().telemetry.update();
             //take the PID and provide poweroffset if the robot wants to drive while using PID
             robot.drive(powerOffset+pid, powerOffset-pid);
             //check if the robot should stop driving

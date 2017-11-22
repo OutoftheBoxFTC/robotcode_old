@@ -1,18 +1,17 @@
-package org.ftc7244.robotcontroller.programs.autonomous.RelicRecoveryAutonomous;
+package org.ftc7244.robotcontroller.programs.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-import org.ftc7244.robotcontroller.autonomous.bases.RelicRecoveryPIDAutonamous;
-import org.ftc7244.robotcontroller.hardware.RelicRecoveryWestcoast;
+import org.ftc7244.robotcontroller.hardware.Westcoast;
 
 /**
  * Created by Eeshwar Laptop on 10/29/2017.
  */
 @Autonomous(name="CornerBlueBR")
 public class CornerBlueBR extends LinearOpMode {
-    RelicRecoveryWestcoast robot = new RelicRecoveryWestcoast(this);
+    Westcoast robot = new Westcoast(this);
     public void runOpMode(){
         robot.init();
         robot.getSpring().resetDeviceConfigurationForOpMode();
@@ -33,9 +32,9 @@ public class CornerBlueBR extends LinearOpMode {
         sleep(350);
         robot.drive(0, 0);
         sleep(1500);
-        robot.getIntake().setPower(1);
+        robot.getIntakeTopLeft().setPower(1);
         sleep(2000);
-        robot.getIntake().setPower(0);
+        robot.getIntakeTopLeft().setPower(0);
         sleep(1500);
         robot.getSpring().setDirection(DcMotorSimple.Direction.REVERSE);
         robot.getSpring().setPower(1);

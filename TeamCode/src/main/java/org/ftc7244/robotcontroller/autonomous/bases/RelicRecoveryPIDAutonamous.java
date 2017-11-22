@@ -1,11 +1,10 @@
 package org.ftc7244.robotcontroller.autonomous.bases;
 
+import org.ftc7244.robotcontroller.autonomous.drivers.GyroscopeDrive;
 import org.ftc7244.robotcontroller.autonomous.drivers.ImageTransformDrive;
-import org.ftc7244.robotcontroller.autonomous.drivers.RelicRecoveryGyroscope;
-import org.ftc7244.robotcontroller.hardware.RelicRecoveryWestcoast;
+import org.ftc7244.robotcontroller.hardware.Westcoast;
 import org.ftc7244.robotcontroller.sensor.gyroscope.GyroscopeProvider;
 import org.ftc7244.robotcontroller.sensor.gyroscope.NavXGyroscopeProvider;
-import org.ftc7244.robotcontroller.sensor.gyroscope.PhoneGyroscopeProvider;
 import org.ftc7244.robotcontroller.sensor.gyroscope.RevIMUGyroscopeProvider;
 import org.ftc7244.robotcontroller.sensor.vuforia.ImageTransformProvider;
 
@@ -15,22 +14,22 @@ import org.ftc7244.robotcontroller.sensor.vuforia.ImageTransformProvider;
 
 public abstract class RelicRecoveryPIDAutonamous extends PIDAutonomous {
 
-    protected final ImageTransformProvider imageProvider;
+    //protected final ImageTransformProvider imageProvider;
 
-    protected final ImageTransformDrive imageDrive;
+    //protected final ImageTransformDrive imageDrive;
 
     protected final GyroscopeProvider gyroProvider;
 
-    protected final RelicRecoveryGyroscope gyroscope;
+    protected final GyroscopeDrive gyroscope;
 
-    protected RelicRecoveryWestcoast robot;
+    protected Westcoast robot;
 
     public RelicRecoveryPIDAutonamous(){
-        robot = new RelicRecoveryWestcoast(this);
-        imageProvider = new ImageTransformProvider();
-        imageDrive = new ImageTransformDrive(robot, imageProvider);
-        gyroProvider = new RevIMUGyroscopeProvider();
-        gyroscope = new RelicRecoveryGyroscope(robot, gyroProvider);
+        robot = new Westcoast(this);
+        //imageProvider = new ImageTransformProvider();
+        //imageDrive = new ImageTransformDrive(robot, imageProvider);
+        gyroProvider = new NavXGyroscopeProvider(robot);
+        gyroscope = new GyroscopeDrive(robot, gyroProvider);
         calibratedMsg = false;
     }
 
@@ -52,13 +51,13 @@ public abstract class RelicRecoveryPIDAutonamous extends PIDAutonomous {
     @Override
     protected void startProviders() {
         robot.init();
-        imageProvider.start(hardwareMap);
+        //imageProvider.start(hardwareMap);
         gyroProvider.start(hardwareMap);
     }
 
     @Override
     protected void onEnd(boolean err) {
-        imageProvider.stop();
+        //imageProvider.stop();
         gyroProvider.stop();
     }
 
