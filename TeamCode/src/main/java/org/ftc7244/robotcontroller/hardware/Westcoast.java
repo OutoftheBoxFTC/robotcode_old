@@ -86,6 +86,7 @@ public class Westcoast extends Hardware implements NavxRobot{
         this.intakeTop = getOrNull(map.dcMotor, "intakeT");
         this.intakeBottom = getOrNull(map.dcMotor, "intakeB");
 
+        this.navX = opMode.hardwareMap.get(NavxMicroNavigationSensor.class, "navx");
 
         //Set the default direction for all the hardware and also initialize default positions
         if (driveFrontLeft != null) driveFrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
