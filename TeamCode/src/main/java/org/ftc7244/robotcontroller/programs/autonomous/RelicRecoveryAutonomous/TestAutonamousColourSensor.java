@@ -23,6 +23,7 @@ public class TestAutonamousColourSensor extends RelicRecoveryPIDAutonamous{
             }else{
                 telemetry.addData("Colour", "Not Found");
             }
+            telemetry.update();
         }
     }
 }
