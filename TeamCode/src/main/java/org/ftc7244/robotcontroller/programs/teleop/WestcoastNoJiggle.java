@@ -16,8 +16,8 @@ import java.util.concurrent.Executors;
  * Created by Eeshwar Laptop on 10/16/2017.
  */
 
-@TeleOp(name = "Relic Recovery Westcoast: Jiggle")
-public class WestcoastTeleop extends OpMode {
+@TeleOp(name = "Relic Recovery Westcoast: No Jiggle")
+public class WestcoastNoJiggle extends OpMode {
     Westcoast robot;
     private Button leftTrigger1, dPadUp, dPadDown, rightTrigger, leftTrigger, rightBumper, leftBumper, aButton, bButton;
     private static final double SLOW_DRIVE_COEFFICIENT = 0.5, LIFT_VERTICAL_REST = 0.1, LIFT_RAISE = .8, HORIZONTAL_INTAKE_POWER = 1;
@@ -64,8 +64,8 @@ public class WestcoastTeleop extends OpMode {
         boolean horizontalRunning = false;
         if(rightTrigger.isPressed()){
             horizontalRunning = true;
-            robot.getIntakeTopLeft().setPower(0.5 * VERTICLE_INTAKE_MULTIPLIER);
-            robot.getIntakeTopRight().setPower(0.5 * VERTICLE_INTAKE_MULTIPLIER);
+//            robot.getIntakeTopLeft().setPower(0.5 * VERTICLE_INTAKE_MULTIPLIER);
+//            robot.getIntakeTopRight().setPower(0.5 * VERTICLE_INTAKE_MULTIPLIER);
             if(elapsedTime.milliseconds() >= JIGGLE_INTERVAL_MS){
                 VERTICLE_INTAKE_MULTIPLIER = VERTICLE_INTAKE_MULTIPLIER * -1;
                 elapsedTime.reset();
