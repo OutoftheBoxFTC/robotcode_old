@@ -9,7 +9,7 @@ import org.ftc7244.datalogger.Logger;
  * Created by BeaverDuck on 11/19/17.
  */
 @Autonomous(name = "Logger Debug")
-public class LoggerDebug extends LinearOpMode{
+public class LoggerDebug extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         waitForStart();

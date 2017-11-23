@@ -22,7 +22,7 @@ public class WestcoastTeleop extends OpMode {
     private static final long JIGGLE_INTERVAL_MS = 500;
     private ExecutorService service;
 
-    public void init(){
+    public void init() {
         robot = new Westcoast(this);
         leftTrigger1 = new Button(gamepad1, ButtonType.LEFT_TRIGGER);
         dPadUp = new Button(gamepad2, ButtonType.D_PAD_UP);
@@ -36,6 +36,7 @@ public class WestcoastTeleop extends OpMode {
         service = Executors.newCachedThreadPool();
         robot.init();
     }
+
     /*
     Driver:
     Left Joystick: Drive Left
@@ -54,19 +55,19 @@ public class WestcoastTeleop extends OpMode {
     B: Intake Down
      */
     @Override
-    public void loop(){
-        double coefficient = leftTrigger1.isPressed()?SLOW_DRIVE_COEFFICIENT:1;
-        robot.drive(-gamepad1.left_stick_y*coefficient, -gamepad1.right_stick_y*coefficient);
+    public void loop() {
+        double coefficient = leftTrigger1.isPressed() ? SLOW_DRIVE_COEFFICIENT : 1;
+        robot.drive(-gamepad1.left_stick_y * coefficient, -gamepad1.right_stick_y * coefficient);
         //Drive Code
         boolean horizontalRunning = false;
-        if(leftTrigger.isPressed()){
+        if (leftTrigger.isPressed()) {
             horizontalRunning = true;
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    while (leftTrigger.isPressed()){
-                        robot.getIntakeBottomLeft().setPower(HORIZONTAL_INTAKE_POWER*(System.currentTimeMillis()%JIGGLE_INTERVAL_MS>JIGGLE_INTERVAL_MS/2?-.5:.5));
-                        robot.getIntakeBottomRight().setPower(HORIZONTAL_INTAKE_POWER*(System.currentTimeMillis()%JIGGLE_INTERVAL_MS>JIGGLE_INTERVAL_MS/2?-.5:.5));
+                    while (leftTrigger.isPressed()) {
+                        robot.getIntakeBottomLeft().setPower(HORIZONTAL_INTAKE_POWER * (System.currentTimeMillis() % JIGGLE_INTERVAL_MS > JIGGLE_INTERVAL_MS / 2 ? -.5 : .5));
+                        robot.getIntakeBottomRight().setPower(HORIZONTAL_INTAKE_POWER * (System.currentTimeMillis() % JIGGLE_INTERVAL_MS > JIGGLE_INTERVAL_MS / 2 ? -.5 : .5));
 
                     }
                     robot.getIntakeBottomLeft().setPower(0);
@@ -74,50 +75,44 @@ public class WestcoastTeleop extends OpMode {
                 }
             }).start();
             robot.getIntakeBottom().setPower(1);
-        }
-        else if(rightTrigger.isPressed()){
+        } else if (rightTrigger.isPressed()) {
             horizontalRunning = true;
             robot.getIntakeBottom().setPower(-1);
-        }
-        else {
+        } else {
             robot.getIntakeBottom().setPower(0);
         }
-        if(leftBumper.isPressed()){
+        if (leftBumper.isPressed()) {
             horizontalRunning = true;
             service.execute(new Runnable() {
                 @Override
                 public void run() {
-                    while (leftBumper.isPressed()){
-                        robot.getIntakeBottomLeft().setPower(HORIZONTAL_INTAKE_POWER*(System.currentTimeMillis()%JIGGLE_INTERVAL_MS>JIGGLE_INTERVAL_MS/2?-.5:.5));
-                        robot.getIntakeBottomRight().setPower(HORIZONTAL_INTAKE_POWER*(System.currentTimeMillis()%JIGGLE_INTERVAL_MS>JIGGLE_INTERVAL_MS/2?-.5:.5));
+                    while (leftBumper.isPressed()) {
+                        robot.getIntakeBottomLeft().setPower(HORIZONTAL_INTAKE_POWER * (System.currentTimeMillis() % JIGGLE_INTERVAL_MS > JIGGLE_INTERVAL_MS / 2 ? -.5 : .5));
+                        robot.getIntakeBottomRight().setPower(HORIZONTAL_INTAKE_POWER * (System.currentTimeMillis() % JIGGLE_INTERVAL_MS > JIGGLE_INTERVAL_MS / 2 ? -.5 : .5));
                     }
                     robot.getIntakeBottomLeft().setPower(0);
                     robot.getIntakeBottomRight().setPower(0);
                 }
             });
             robot.getIntakeTop().setPower(1);
-        }
-        else if(rightBumper.isPressed()){
+        } else if (rightBumper.isPressed()) {
             horizontalRunning = true;
             robot.getIntakeTop().setPower(-1);
-        }
-        else {
+        } else {
             robot.getIntakeTop().setPower(0);
         }
-        if(!horizontalRunning){
-            if(aButton.isPressed()){
+        if (!horizontalRunning) {
+            if (aButton.isPressed()) {
                 robot.getIntakeBottomRight().setPower(.5);
                 robot.getIntakeTopRight().setPower(.5);
                 robot.getIntakeBottomLeft().setPower(.5);
                 robot.getIntakeTopLeft().setPower(.5);
-            }
-            else if(bButton.isPressed()){
+            } else if (bButton.isPressed()) {
                 robot.getIntakeBottomRight().setPower(-.5);
                 robot.getIntakeTopRight().setPower(-.5);
                 robot.getIntakeBottomLeft().setPower(-.5);
                 robot.getIntakeTopLeft().setPower(-.5);
-            }
-            else {
+            } else {
                 robot.getIntakeBottomRight().setPower(0);
                 robot.getIntakeTopRight().setPower(0);
                 robot.getIntakeBottomLeft().setPower(0);
@@ -125,13 +120,11 @@ public class WestcoastTeleop extends OpMode {
             }
         }
 
-        if(dPadUp.isPressed()){
+        if (dPadUp.isPressed()) {
             robot.getIntakeVertical().setPower(LIFT_RAISE);
-        }
-        else if(dPadDown.isPressed()){
+        } else if (dPadDown.isPressed()) {
             robot.getIntakeVertical().setPower(-LIFT_RAISE);
-        }
-        else {
+        } else {
             robot.getIntakeVertical().setPower(LIFT_VERTICAL_REST);
         }
     }

@@ -6,41 +6,39 @@ import java.util.ArrayList;
 This filter acts to remove noise in sensor input by giving an average of the previous inputs to a
 given length ago.
  */
-public class DataFilter{
+public class DataFilter {
     private ArrayList<Double> data;
     private int length;
     private double reading;
+
     /**
-     *
      * @param length Determines how many data points the filter remembers
      */
-    public DataFilter(int length){
+    public DataFilter(int length) {
         this.length = length;
         data = new ArrayList<>();
     }
 
     /**
-     *
      * @return average of all remembered data points
      */
-    public double getReading(){
+    public double getReading() {
         return reading;
     }
 
     /**
-     *
      * @param num raw input directly from the sensor
      */
 
     public void update(double num) {
-        if(data.size() >= length){
+        if (data.size() >= length) {
             data.remove(0);
         }
         data.add(num);
         double total = 0;
-        for(double point : data){
+        for (double point : data) {
             total += point;
         }
-        reading = total/length;
+        reading = total / length;
     }
 }

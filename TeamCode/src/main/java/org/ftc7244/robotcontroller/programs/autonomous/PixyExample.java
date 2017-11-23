@@ -8,9 +8,10 @@ import com.qualcomm.robotcore.hardware.I2cDeviceSynch;
 /**
  * Created by Eeshwar Laptop on 11/1/2017.
  */
-@Autonomous(name="PixyCam test")
+@Autonomous(name = "PixyCam test")
 public class PixyExample extends LinearOpMode {
     I2cDeviceSynch pixy;
+
     //our Pixy device
     @Override
     public void runOpMode() throws InterruptedException {
@@ -21,7 +22,7 @@ public class PixyExample extends LinearOpMode {
         pixy.setI2cAddress(I2cAddr.create7bit(0x54));
 
         //setting Pixy's read window. You'll want these exact parameters, and you can reference the
-        I2cDeviceSynch.ReadWindow readWindow = new I2cDeviceSynch.ReadWindow (1, 26,
+        I2cDeviceSynch.ReadWindow readWindow = new I2cDeviceSynch.ReadWindow(1, 26,
                 I2cDeviceSynch.ReadMode.REPEAT);
         pixy.setReadWindow(readWindow);
 
@@ -30,7 +31,7 @@ public class PixyExample extends LinearOpMode {
 
         waitForStart();
 
-        while(opModeIsActive()) {
+        while (opModeIsActive()) {
             //send every byte of data that we can to the phone screen
             telemetry.addData("Byte 0", pixy.read8(0));
             telemetry.addData("Byte 1", pixy.read8(1));

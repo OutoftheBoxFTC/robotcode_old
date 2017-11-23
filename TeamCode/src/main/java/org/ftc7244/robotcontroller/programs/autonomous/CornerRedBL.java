@@ -9,10 +9,11 @@ import org.ftc7244.robotcontroller.hardware.Westcoast;
 /**
  * Created by Eeshwar Laptop on 10/29/2017.
  */
-@Autonomous(name="CornerRedBL")
+@Autonomous(name = "CornerRedBL")
 public class CornerRedBL extends LinearOpMode {
     Westcoast robot = new Westcoast(this);
-    public void runOpMode(){
+
+    public void runOpMode() {
         robot.init();
         robot.getSpring().resetDeviceConfigurationForOpMode();
         waitForStart();
@@ -48,7 +49,7 @@ public class CornerRedBL extends LinearOpMode {
         robot.drive(-0.3, 0.3);
         sleep(300);
         robot.drive(0, 0);
-        while(opModeIsActive()){
+        while (opModeIsActive()) {
             //Loop to prevent crash
         }
     }

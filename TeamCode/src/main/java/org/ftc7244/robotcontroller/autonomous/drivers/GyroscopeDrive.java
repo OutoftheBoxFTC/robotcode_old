@@ -30,7 +30,7 @@ public class GyroscopeDrive extends PIDDriveControl {
      */
     public GyroscopeDrive(Hardware robot, GyroscopeProvider gyroProvider) {
         super(new PIDControllerBuilder()
-                        .setProportional(-0.005)
+                        .setProportional(-0.008)
                         .setDelay(30)
                         .setOutputRange(0.8)
                         .createController(),
@@ -71,8 +71,6 @@ public class GyroscopeDrive extends PIDDriveControl {
     }
 
 
-
-
     /**
      * This will rotate the robot until it is within 2 degrees for 300 milliseconds. It will also
      * manually terminate if the rotate takes longer than two seconds. This is important because
@@ -83,7 +81,7 @@ public class GyroscopeDrive extends PIDDriveControl {
      */
     public void rotate(double degrees) throws InterruptedException {
         double target = degrees + gyroProvider.getZ();
-        control(target, 0, new ConditionalTerminator(new SensitivityTerminator(this, degrees, 1, 300)));
+        control(target, 0, new SensitivityTerminator(this, degrees, 1, 300));
         resetOrientation();
     }
 

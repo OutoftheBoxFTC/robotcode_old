@@ -19,7 +19,8 @@ import java.util.Map;
 public abstract class Hardware {
     protected OpMode opMode;
     protected double countsPerInch;
-    public Hardware(OpMode opMode, double countsPerInch){
+
+    public Hardware(OpMode opMode, double countsPerInch) {
         this.opMode = opMode;
         this.countsPerInch = countsPerInch;
     }
@@ -44,7 +45,7 @@ public abstract class Hardware {
      * @param <T>  the type of hardware map
      * @return the hardware device associated with the name
      */
-    protected  <T extends HardwareDevice> T getOrNull(@NonNull HardwareMap.DeviceMapping<T> map, String name) {
+    protected <T extends HardwareDevice> T getOrNull(@NonNull HardwareMap.DeviceMapping<T> map, String name) {
         for (Map.Entry<String, T> item : map.entrySet()) {
             if (!item.getKey().equalsIgnoreCase(name)) {
                 continue;

@@ -9,9 +9,9 @@ import org.ftc7244.robotcontroller.hardware.Westcoast;
 /**
  * Created by Eeshwar Laptop on 11/3/2017.
  */
-@Autonomous(name="SpringTest")
-public class ServoSpringTest extends LinearOpMode{
-    public void runOpMode(){
+@Autonomous(name = "SpringTest")
+public class ServoSpringTest extends LinearOpMode {
+    public void runOpMode() {
         Westcoast robot = new Westcoast(this);
         robot.init();
         waitForStart();

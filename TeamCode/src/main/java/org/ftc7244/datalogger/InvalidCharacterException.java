@@ -5,7 +5,7 @@ package org.ftc7244.datalogger;
  */
 
 public class InvalidCharacterException extends IllegalArgumentException {
-    public InvalidCharacterException(String details){
+    public InvalidCharacterException(String details) {
         super(details);
     }
 }
