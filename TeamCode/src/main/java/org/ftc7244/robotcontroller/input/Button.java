@@ -49,16 +49,16 @@ public class Button {
                 if (gamepad.right_bumper) return true;
                 break;
             case D_PAD_DOWN:
-                if(gamepad.dpad_down)return true;
+                if (gamepad.dpad_down) return true;
                 break;
             case D_PAD_LEFT:
-                if(gamepad.dpad_left)return true;
+                if (gamepad.dpad_left) return true;
                 break;
             case D_PAD_RIGHT:
-                if(gamepad.dpad_right)return true;
+                if (gamepad.dpad_right) return true;
                 break;
             case D_PAD_UP:
-                if(gamepad.dpad_up)return true;
+                if (gamepad.dpad_up) return true;
                 break;
             default:
                 return false;

@@ -3,15 +3,17 @@ package org.ftc7244.robotcontroller.programs.autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-import org.ftc7244.robotcontroller.autonomous.bases.RelicRecoveryPIDAutonamous;
+import org.ftc7244.robotcontroller.autonomous.PIDAutonomous;
+
 
 /**
  * Created by Eeshwar Laptop on 10/29/2017.
  */
-@Autonomous(name="CornerBlueBL")
-public class CornerBlueBL extends RelicRecoveryPIDAutonamous {
+@Autonomous(name = "CornerBlueBL")
+public class CornerBlueBL extends PIDAutonomous {
     private String image;
-    public void run(){
+
+    public void run() {
         double countsPerInch = 134.4 / (4 * Math.PI);
         robot.init();
         //image = imageProvider.getImageReading().name();
@@ -22,7 +24,7 @@ public class CornerBlueBL extends RelicRecoveryPIDAutonamous {
         robot.drive(0, 0);
         sleep(1500);
         robot.drive(-0.3, 0.3);
-        switch(image) {
+        switch (image) {
             case "R":
                 sleep(800);
                 break;
@@ -53,7 +55,7 @@ public class CornerBlueBL extends RelicRecoveryPIDAutonamous {
         sleep(200);
         robot.drive(0, 0);
         sleep(500);
-        while(opModeIsActive()){
+        while (opModeIsActive()) {
             //Loop to prevent crash
         }
     }

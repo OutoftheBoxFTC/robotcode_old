@@ -3,12 +3,9 @@ package org.ftc7244.robotcontroller.sensor.accerometer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.kauailabs.navx.ftc.AHRS;
-import com.kauailabs.navx.ftc.IDataArrivalSubscriber;
 import com.qualcomm.hardware.kauailabs.NavxMicroNavigationSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.ftc7244.robotcontroller.hardware.Hardware;
 import org.ftc7244.robotcontroller.sensor.gyroscope.NavxRobot;
 
 /**
@@ -21,7 +18,8 @@ public class NavXAccelerometerProvider extends AccelerometerProvider {
     private NavxMicroNavigationSensor navxDevice;
     private boolean moving;
     private NavxRobot robot;
-    public NavXAccelerometerProvider(NavxRobot robot){
+
+    public NavXAccelerometerProvider(NavxRobot robot) {
         this.robot = robot;
     }
 

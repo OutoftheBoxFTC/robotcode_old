@@ -3,15 +3,14 @@ package org.ftc7244.robotcontroller.programs.autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.ftc7244.robotcontroller.autonomous.bases.RelicRecoveryPIDAutonamous;
-import org.ftc7244.robotcontroller.sensor.gyroscope.NavXGyroscopeProvider;
+import org.ftc7244.robotcontroller.autonomous.PIDAutonomous;
 
 /**
  * Created by Eeshwar Laptop on 11/6/2017.
  */
-@Autonomous(name="encoderTest")
-public class encoderTest extends RelicRecoveryPIDAutonamous {
-    public void run(){
+@Autonomous(name = "encoderTest")
+public class encoderTest extends PIDAutonomous {
+    public void run() {
         double countsPerInch = (134.4 / (4 * Math.PI)) * (1.765 / 4);
 /*        robot.getDriveFrontRight().setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.getDriveFrontRight().setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -31,7 +30,7 @@ public class encoderTest extends RelicRecoveryPIDAutonamous {
         robot.getDriveBackLeft().setPower(0.4);
         robot.getDriveFrontRight().setPower(0.4);
         robot.getDriveFrontLeft().setPower(0.4);
-        while(opModeIsActive()){
+        while (opModeIsActive()) {
             robot.getDriveBackRight().setTargetPosition(1120);
             robot.getDriveBackLeft().setTargetPosition(1120);
             robot.getDriveFrontRight().setTargetPosition(-1120);

@@ -56,7 +56,7 @@ public class PIDControllerBuilder {
      * as timing is crucial when using any of the control methods. This sets the response rate and
      * thus the amount of time between recalculating the PID / export. The loop will run in an open
      * methods if the value is not set otherwise it is a closed loop.
-     *
+     * <p>
      * THIS SHOULD RARELY BE CHANGED BEYOND A VALUE OF 30
      *
      * @param delay the time between interval in milliseconds (30ms is recommended)

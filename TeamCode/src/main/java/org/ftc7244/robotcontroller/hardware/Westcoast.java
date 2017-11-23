@@ -21,8 +21,8 @@ import org.ftc7244.robotcontroller.sensor.gyroscope.NavxRobot;
  * Created by Eeshwar Laptop on 10/16/2017.
  */
 
-public class Westcoast extends Hardware implements NavxRobot{
-    public static final double COUNTS_PER_INCH = (3.2 * Math.PI)/ 134.4;
+public class Westcoast extends Hardware implements NavxRobot {
+    public static final double COUNTS_PER_INCH = (3.2 * Math.PI) / 134.4;
 
     @Nullable
     private DcMotor driveBackLeft, driveFrontLeft, driveBackRight, driveFrontRight, intakeVertical, intakeTop, intakeBottom;
@@ -38,7 +38,9 @@ public class Westcoast extends Hardware implements NavxRobot{
     public Westcoast(OpMode opMode) {
         super(opMode, COUNTS_PER_INCH);
     }
+
     private int blueOffset, redOffset;
+
     /**
      * Waits for all the motors to have zero position and if it is not zero tell it to reset
      *
@@ -86,7 +88,7 @@ public class Westcoast extends Hardware implements NavxRobot{
         this.intakeTop = getOrNull(map.dcMotor, "intakeT");
         this.intakeBottom = getOrNull(map.dcMotor, "intakeB");
 
-        this.navX = opMode.hardwareMap.get(NavxMicroNavigationSensor.class, "navx");
+        //this.navX = opMode.hardwareMap.get(NavxMicroNavigationSensor.class, "navx");
 
         //Set the default direction for all the hardware and also initialize default positions
         if (driveFrontLeft != null) driveFrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -119,7 +121,7 @@ public class Westcoast extends Hardware implements NavxRobot{
 
     @Override
     public int getDriveEncoderAverage() {
-        return (int) ((driveBackLeft.getCurrentPosition()+driveBackRight.getCurrentPosition()+driveFrontLeft.getCurrentPosition()+driveFrontRight.getCurrentPosition())/4/COUNTS_PER_INCH);
+        return (int) ((driveBackLeft.getCurrentPosition() + driveBackRight.getCurrentPosition() + driveFrontLeft.getCurrentPosition() + driveFrontRight.getCurrentPosition()) / 4 / COUNTS_PER_INCH);
     }
 
     public boolean isColor(int color) {
@@ -136,6 +138,7 @@ public class Westcoast extends Hardware implements NavxRobot{
                 return false;
         }
     }
+
     @Nullable
     public DcMotor getDriveFrontLeft() {
         return this.driveFrontLeft;
@@ -147,7 +150,9 @@ public class Westcoast extends Hardware implements NavxRobot{
     }
 
     @Nullable
-    public DcMotor getIntakeVertical(){return this.intakeVertical;}
+    public DcMotor getIntakeVertical() {
+        return this.intakeVertical;
+    }
 
     @Nullable
     public DcMotor getDriveFrontRight() {
@@ -168,8 +173,9 @@ public class Westcoast extends Hardware implements NavxRobot{
     public CRServo getIntakeBottomRight() {
         return this.intakeBottomRight;
     }
+
     @Nullable
-    public CRServo getIntakeTopLeft(){
+    public CRServo getIntakeTopLeft() {
         return this.intakeTopLeft;
     }
 
@@ -189,13 +195,17 @@ public class Westcoast extends Hardware implements NavxRobot{
     }
 
     @Nullable
-    public CRServo getSpring(){return this.spring;}
+    public CRServo getSpring() {
+        return this.spring;
+    }
 
     @Nullable
-    public AnalogInput getVertLimit(){return vertLimit;}
+    public AnalogInput getVertLimit() {
+        return vertLimit;
+    }
 
     @Nullable
-    public NavxMicroNavigationSensor getNavX(){
+    public NavxMicroNavigationSensor getNavX() {
         return navX;
     }
 }

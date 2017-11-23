@@ -32,7 +32,7 @@ public class ImageTransformProvider extends SensorProvider implements Runnable {
 
     private Thread thread;
 
-    public ImageTransformProvider(){
+    public ImageTransformProvider() {
         vuforiaInitialized = false;
         xTrans = new DataFilter(100);
         yTrans = new DataFilter(100);
@@ -42,15 +42,16 @@ public class ImageTransformProvider extends SensorProvider implements Runnable {
         zRot = new DataFilter(100);
         thread = new Thread(this);
     }
+
     @Override
     public void start(HardwareMap map) {
-        if(!vuforiaInitialized)initializeVuforia(map);
+        if (!vuforiaInitialized) initializeVuforia(map);
         imageSeen = false;
         running = true;
         thread.start();
     }
 
-    private void initializeVuforia(HardwareMap  map){
+    private void initializeVuforia(HardwareMap map) {
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(map.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", map.appContext.getPackageName()));
         parameters.vuforiaLicenseKey = VUFORIA_LICENSE_KEY;
         parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
@@ -61,13 +62,13 @@ public class ImageTransformProvider extends SensorProvider implements Runnable {
         vuforiaInitialized = true;
     }
 
-    public RelicRecoveryVuMark getImageReading(){
+    public RelicRecoveryVuMark getImageReading() {
         return RelicRecoveryVuMark.from(template);
     }
 
-    public double getImageDistance(TranslationAxis axis){
-        if(imageSeen){
-            switch (axis){
+    public double getImageDistance(TranslationAxis axis) {
+        if (imageSeen) {
+            switch (axis) {
                 case X:
                     return xTrans.getReading();
                 case Y:
@@ -79,9 +80,9 @@ public class ImageTransformProvider extends SensorProvider implements Runnable {
         return -1;
     }
 
-    public double getImageRotation(RotationAxis axis){
-        if(imageSeen){
-            switch (axis){
+    public double getImageRotation(RotationAxis axis) {
+        if (imageSeen) {
+            switch (axis) {
                 case YAW:
                     return xRot.getReading();
                 case PITCH:
@@ -97,9 +98,9 @@ public class ImageTransformProvider extends SensorProvider implements Runnable {
     public void run() {
         VectorF translation;
         Orientation rotation;
-        while (running){
-            if(!RelicRecoveryVuMark.from(template).equals(RelicRecoveryVuMark.UNKNOWN)){
-                OpenGLMatrix transform = ((VuforiaTrackableDefaultListener)template.getListener()).getPose();
+        while (running) {
+            if (!RelicRecoveryVuMark.from(template).equals(RelicRecoveryVuMark.UNKNOWN)) {
+                OpenGLMatrix transform = ((VuforiaTrackableDefaultListener) template.getListener()).getPose();
                 translation = transform.getTranslation();
                 rotation = Orientation.getOrientation(transform, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
                 xTrans.update(translation.get(0));
@@ -110,8 +111,7 @@ public class ImageTransformProvider extends SensorProvider implements Runnable {
                 zRot.update(rotation.thirdAngle);
                 imageSeen = true;
                 System.out.println(translation.get(0));
-            }
-            else imageSeen = false;
+            } else imageSeen = false;
             try {
                 Thread.sleep(UPDATE_INTERVAL);
             } catch (InterruptedException e) {
@@ -126,10 +126,10 @@ public class ImageTransformProvider extends SensorProvider implements Runnable {
     }
 
     public enum TranslationAxis {
-        X,Y,Z
+        X, Y, Z
     }
 
-    public enum RotationAxis{
+    public enum RotationAxis {
         PITCH, YAW, ROLL;
     }
 }
