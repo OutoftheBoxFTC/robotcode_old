@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.qualcomm.robotcore.util.RobotLog;
 
+import org.ftc7244.datalogger.Logger;
 import org.ftc7244.robotcontroller.Debug;
 import org.ftc7244.robotcontroller.autonomous.Status;
 import org.ftc7244.robotcontroller.autonomous.terminators.Terminator;
@@ -57,8 +58,14 @@ public abstract class PIDDriveControl {
             double pid = controller.update(getReading());
             RobotLog.i(getReading() + ":" + pid);
             //debug if wanted
-            if (Debug.STATUS)
-                RobotLog.ii("PID", "|" + controller.getProportional() + "|" + controller.getIntegral() + "|" + controller.getDerivative() + "|" + pid + "|" + getReading());
+            if (Debug.STATUS) {
+                Logger.getInstance()
+                        .queueData("P", controller.getProportional())
+                        .queueData("I", controller.getIntegral())
+                        .queueData("D", controller.getDerivative())
+                        .queueData("Sum", pid)
+                        .queueData("Reading", getReading());
+            }
 
             robot.getOpMode().telemetry.addData("Gyro", getReading());
             robot.getOpMode().telemetry.update();

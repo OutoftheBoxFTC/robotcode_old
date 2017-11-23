@@ -13,8 +13,8 @@ public class LoggerDebug extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         waitForStart();
-        for (int i = 0; i < 100000; i++) {
-            Logger.getInstance().addData("Test", Math.random());
+        for (int i = 0; i < 100; i++) {
+            Logger.getInstance().queueData("Test5", Math.tan(i));
         }
     }
 }
