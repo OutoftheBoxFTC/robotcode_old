@@ -11,7 +11,9 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftc7244.robotcontroller.Debug;
@@ -22,16 +24,20 @@ import org.ftc7244.robotcontroller.sensor.gyroscope.NavxRobot;
  */
 
 public class Westcoast extends Hardware implements NavxRobot{
-    public static final double COUNTS_PER_INCH = (3.2 * Math.PI)/ 134.4;
+    public static final double COUNTS_PER_INCH = 134.4 / (3.95 * Math.PI);
 
     @Nullable
     private DcMotor driveBackLeft, driveFrontLeft, driveBackRight, driveFrontRight, intakeVertical, intakeTop, intakeBottom;
     @Nullable
-    private CRServo spring, intakeBottomLeft, intakeBottomRight, intakeTopLeft, intakeTopRight, jewelVerticle, jewelHorizontal;
+    private CRServo spring, intakeBottomLeft, intakeBottomRight, intakeTopLeft, intakeTopRight;
+    @Nullable
+    private Servo jewelVerticle, jewelHorizontal;
     @Nullable
     private AnalogInput vertLimit;
     @Nullable
     private ColorSensor jewelSensor;
+    @Nullable
+    private DistanceSensor jewelDistance;
     @Nullable
     private NavxMicroNavigationSensor navX;
 
@@ -69,6 +75,7 @@ public class Westcoast extends Hardware implements NavxRobot{
         //Initialize or nullify all hardware
         HardwareMap map = opMode.hardwareMap;
         this.jewelSensor = getOrNull(map.colorSensor, "jewelsensor");
+        this.jewelDistance = map.get(DistanceSensor.class, "jewelsensor");
         this.spring = getOrNull(map.crservo, "spring");
 
         this.intakeVertical = getOrNull(map.dcMotor, "vertical");
@@ -86,8 +93,8 @@ public class Westcoast extends Hardware implements NavxRobot{
         this.intakeTop = getOrNull(map.dcMotor, "intakeT");
         this.intakeBottom = getOrNull(map.dcMotor, "intakeB");
 
-        this.jewelVerticle = getOrNull(map.crservo, "jewelverticle");
-        this.jewelHorizontal = getOrNull(map.crservo, "jewelhorizontal");
+        this.jewelVerticle = getOrNull(map.servo, "jewelverticle");
+        this.jewelHorizontal = getOrNull(map.servo, "jewelhorizontal");
 
 //        this.navX = opMode.hardwareMap.get(NavxMicroNavigationSensor.class, "navx");
 
@@ -122,7 +129,7 @@ public class Westcoast extends Hardware implements NavxRobot{
 
     @Override
     public int getDriveEncoderAverage() {
-        return (int) ((driveBackLeft.getCurrentPosition()+driveBackRight.getCurrentPosition()+driveFrontLeft.getCurrentPosition()+driveFrontRight.getCurrentPosition())/4/COUNTS_PER_INCH);
+        return (int) ((driveBackLeft.getCurrentPosition()+driveBackRight.getCurrentPosition()+driveFrontLeft.getCurrentPosition()+driveFrontRight.getCurrentPosition())/4);
     }
 
     public boolean isColor(int color) {
@@ -195,13 +202,19 @@ public class Westcoast extends Hardware implements NavxRobot{
     public CRServo getSpring(){return this.spring;}
 
     @Nullable
-    public CRServo getJewelVerticle(){return this.jewelVerticle;}
+    public Servo getJewelVerticle(){return this.jewelVerticle;}
 
     @Nullable
-    public CRServo getJewelHorizontal(){return this.jewelHorizontal;}
+    public Servo getJewelHorizontal(){return this.jewelHorizontal;}
 
     @Nullable
     public AnalogInput getVertLimit(){return vertLimit;}
+
+    @Nullable
+    public ColorSensor getJewelSensor(){return jewelSensor;}
+
+    @Nullable
+    public DistanceSensor getJewelDistance(){return jewelDistance;}
 
     @Nullable
     public NavxMicroNavigationSensor getNavX(){

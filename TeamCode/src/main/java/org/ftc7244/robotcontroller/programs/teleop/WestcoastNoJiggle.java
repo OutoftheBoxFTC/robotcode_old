@@ -1,5 +1,6 @@
 package org.ftc7244.robotcontroller.programs.teleop;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -15,7 +16,7 @@ import java.util.concurrent.Executors;
 /**
  * Created by Eeshwar Laptop on 10/16/2017.
  */
-
+@Disabled
 @TeleOp(name = "Relic Recovery Westcoast: No Jiggle")
 public class WestcoastNoJiggle extends OpMode {
     Westcoast robot;

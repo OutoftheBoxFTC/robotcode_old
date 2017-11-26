@@ -36,7 +36,15 @@ public class RevIMUGyroscopeProvider extends GyroscopeProvider {
 
     @Override
     public void calibrate() {
-        //ignore
+        if (getTimestamp() + 10e7 > System.nanoTime() || getTimestamp() == 0) {
+            Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+            if (angles.acquisitionTime != getTimestamp()) {
+                setX(angles.thirdAngle);
+                setY(angles.secondAngle);
+                setZ(angles.firstAngle);
+                setTimestamp(angles.acquisitionTime);
+            }
+        }
     }
 
     @Override

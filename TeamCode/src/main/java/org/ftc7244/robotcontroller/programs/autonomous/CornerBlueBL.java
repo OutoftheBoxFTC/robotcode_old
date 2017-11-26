@@ -13,10 +13,19 @@ import org.ftc7244.robotcontroller.autonomous.PIDAutonomous;
 public class CornerBlueBL extends PIDAutonomous {
 
     public void run() throws InterruptedException{
-        gyroscope.drive(0.5, 30);
-        gyroscope.rotate(-155);
-        gyroscope.drive(0.5, 38.5);
-        gyroscope.rotate(-30);
-
+        gyroscope.drive(.15, 30);
+        sleep(500);
+        gyroProvider.calibrate();
+        gyroscope.rotate(80);
+  //      gyroscope.drive(0.5, 38.5);
+  //      gyroscope.rotate(-30);
+   //     robot.getIntakeBottom().setPower(1);
+   //     sleep(2000);
+  //      robot.getIntakeBottom().setPower(0);
+  //      sleep(1500);
+  //      robot.getSpring().setDirection(DcMotorSimple.Direction.REVERSE);
+  //      robot.getSpring().setPower(1);
+  //      sleep(500);
+  //      robot.getSpring().setPower(0);
     }
 }

@@ -1,5 +1,6 @@
 package org.ftc7244.robotcontroller.autonomous;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.RobotLog;
 
@@ -76,4 +77,12 @@ public abstract class PIDAutonomous extends LinearOpMode {
     }
 
     public abstract void run() throws InterruptedException;
+
+    public void timerSleep(long millis){
+        long lastTime = System.currentTimeMillis();
+        long expectedTime = System.currentTimeMillis();
+        while (lastTime <= expectedTime){
+
+        }
+    }
 }

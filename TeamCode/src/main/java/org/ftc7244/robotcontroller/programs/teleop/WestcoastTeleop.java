@@ -73,8 +73,6 @@ public class WestcoastTeleop extends OpMode {
             robot.getIntakeTopLeft().setPower(0);
             robot.getIntakeTopRight().setPower(0);
             robot.getIntakeBottom().setPower(-1);
-            telemetry.addData("ElapsedTime", elapsedTime.milliseconds());
-            telemetry.update();
         }
         else if(leftTrigger.isPressed()){
             horizontalRunning = true;
@@ -130,6 +128,6 @@ public class WestcoastTeleop extends OpMode {
 
     @Override
     public void stop() {
-        //done
+        //stop
     }
 }

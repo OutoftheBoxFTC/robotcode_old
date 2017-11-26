@@ -5,6 +5,7 @@ import android.graphics.Color;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.ftc7244.robotcontroller.hardware.Westcoast;
 import org.ftc7244.robotcontroller.sensor.gyroscope.RevIMUGyroscopeProvider;
 
@@ -16,19 +17,28 @@ public class TestAutonamousColourSensor extends LinearOpMode{
     public void runOpMode() throws InterruptedException {
         Westcoast robot = new Westcoast(this);
         robot.init();
+        robot.getJewelVerticle().setPosition(0.5);
+        robot.getJewelHorizontal().setPosition(1);
         waitForStart();
-        robot.getJewelVerticle().setPower(-1);
-        sleep(750);
-        robot.getJewelVerticle().setPower(0);
-        boolean isRed = robot.isColor(Color.RED);
-        if(isRed){
-            robot.getJewelHorizontal().setPower(1);
-            sleep(500);
-            robot.getJewelHorizontal().setPower(0);
-        }else{
-            robot.getJewelHorizontal().setPower(-1);
-            sleep(500);
-            robot.getJewelHorizontal().setPower(0);
+        robot.getJewelHorizontal().setPosition(0);
+        robot.getJewelVerticle().setPosition(0);
+        sleep(1000);
+        while(opModeIsActive()) {
+            boolean isRed = robot.isColor(Color.RED);
+            boolean isBlue = robot.isColor(Color.BLUE);
+            if (isRed) {
+                robot.getJewelHorizontal().setPosition(1);
+                telemetry.addData("Colour", "Red");
+                telemetry.addData("Distance", robot.getJewelDistance().getDistance(DistanceUnit.INCH));
+            } else if (isBlue) {
+                robot.getJewelHorizontal().setPosition(-1);
+                telemetry.addData("Colour", "Blue");
+                telemetry.addData("Distance", robot.getJewelDistance().getDistance(DistanceUnit.INCH));
+            } else {
+                telemetry.addData("Colour", "Not Found");
+                telemetry.addData("Distance", robot.getJewelDistance().getDistance(DistanceUnit.INCH));
+            }
+            telemetry.update();
         }
     }
 }
