@@ -7,6 +7,7 @@ import org.ftc7244.robotcontroller.autonomous.drivers.GyroscopeDrive;
 import org.ftc7244.robotcontroller.hardware.Westcoast;
 import org.ftc7244.robotcontroller.sensor.gyroscope.GyroscopeProvider;
 import org.ftc7244.robotcontroller.sensor.gyroscope.RevIMUGyroscopeProvider;
+import org.ftc7244.robotcontroller.sensor.vuforia.ImageTransformProvider;
 
 /**
  * Contains all the code for different drive types including ${@link GyroscopeDrive}.
@@ -16,11 +17,13 @@ import org.ftc7244.robotcontroller.sensor.gyroscope.RevIMUGyroscopeProvider;
  */
 public abstract class PIDAutonomous extends LinearOpMode {
 
-    public final static long AUTON_DURATION = 30 * 1000;
+    private final static long AUTONOMOUS_DURATION = 30 * 1000;
 
     protected final GyroscopeProvider gyroProvider;
 
     protected final GyroscopeDrive gyroscope;
+
+    protected final ImageTransformProvider imageTransformProvider;
 
     protected Westcoast robot;
     private long end;
@@ -30,7 +33,10 @@ public abstract class PIDAutonomous extends LinearOpMode {
      */
     protected PIDAutonomous() {
         robot = new Westcoast(this);
+
         gyroProvider = new RevIMUGyroscopeProvider();
+        imageTransformProvider = new ImageTransformProvider();
+
         gyroscope = new GyroscopeDrive(robot, gyroProvider);
     }
 
@@ -41,7 +47,7 @@ public abstract class PIDAutonomous extends LinearOpMode {
 
         try {
             gyroProvider.start(hardwareMap);
-
+            imageTransformProvider.start(hardwareMap);
             while (!isStarted()) {
                 if (gyroProvider.isCalibrated()) {
                     telemetry.addLine("Gyroscope calibrated!");
@@ -54,7 +60,7 @@ public abstract class PIDAutonomous extends LinearOpMode {
             }
 
             gyroscope.resetOrientation();
-            end = System.currentTimeMillis() + AUTON_DURATION;
+            end = System.currentTimeMillis() + AUTONOMOUS_DURATION;
             run();
         } catch (Throwable t) {
             RobotLog.e(t.getMessage());
