@@ -5,6 +5,7 @@ public class PIDControllerBuilder {
     private double kI = 0;
     private double kD = 0;
     private double delay = -1;
+    private double inverted = 1;
     private double integralRange = 0;
     private double outputRange = 0;
     private boolean integralReset = false;
@@ -48,6 +49,28 @@ public class PIDControllerBuilder {
      */
     public PIDControllerBuilder setDerivative(double kD) {
         this.kD = kD;
+        return this;
+    }
+
+    /**
+     * Refer to {@link #invert(boolean)}
+     */
+    public PIDControllerBuilder invert() {
+        invert(true);
+        return this;
+    }
+
+    /**
+     * Determines whether all the values such as PID are inverted and will automatically multiply
+     * their values by negative one instead of requiring the user to invert them.
+     *
+     * Inverts the {@link #setProportional(double)}, {@link #setDerivative(double)}, and
+     * {@link #setIntegral(double)} values
+     *
+     * @param inverted whether the PID values are negative
+     */
+    public PIDControllerBuilder invert(boolean inverted) {
+        this.inverted = inverted ? -1 : 1;
         return this;
     }
 
@@ -108,6 +131,6 @@ public class PIDControllerBuilder {
     }
 
     public PIDController createController() {
-        return new PIDController(kP, kI, kD, delay, integralRange, outputRange, integralReset);
+        return new PIDController(kP * inverted, kI * inverted, kD * inverted, delay, integralRange, outputRange, integralReset);
     }
 }

@@ -61,8 +61,7 @@ public class Logger implements Runnable {
         if (running) {
             if (this.data.containsKey(tag)) {
                 this.data.get(tag).add(data);
-            }
-            else this.data.put(tag, new ArrayList<>(Collections.singletonList(data)));
+            } else this.data.put(tag, new ArrayList<>(Collections.singletonList(data)));
         }
         return this;
     }
@@ -83,17 +82,14 @@ public class Logger implements Runnable {
                 e.printStackTrace();
             }
             HashMap<String, Number> data = (HashMap) this.data.clone();
-            if(data.isEmpty()) {
-                this.out.println("PING");
-            }
-            else {
-                for (String key : data.keySet()) {
-                    for (String out : generateOutput(key)) {
-                        this.out.println(out);
-                    }
+            this.out.println("PING");
+            for (String key : data.keySet()) {
+                for (String out : generateOutput(key)) {
+                    this.out.println(out);
                 }
             }
             this.data.clear();
+            this.out.flush();
         }
     }
 
@@ -105,11 +101,11 @@ public class Logger implements Runnable {
         ArrayList<String> dataLists = new ArrayList<>();
         ArrayList<Number> data = this.data.get(key);
         int i = 0;
-        while (i < data.size()){
-            int max = i+100<data.size()?100:data.size()-i;
+        while (i < data.size()) {
+            int max = i + 100 < data.size() ? 100 : data.size() - i;
             String output = key + ":";
             for (int j = 0; j < max; j++) {
-                output += truncate(data.get(i+j)) + ":";
+                output += truncate(data.get(i + j)) + ":";
             }
             i += max;
             dataLists.add(output);
