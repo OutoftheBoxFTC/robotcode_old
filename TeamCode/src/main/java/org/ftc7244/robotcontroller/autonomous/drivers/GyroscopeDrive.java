@@ -32,12 +32,15 @@ public class GyroscopeDrive extends PIDDriveControl {
         super(new PIDControllerBuilder()
                         .invert()
                         .setProportional(0.012)
+                        .setIntegral(0.00015)
                         .setDerivative(1.65)
-                        .setIntegralRange(12)
-                        .setIntegral(0.00008)
+
+                        .setIntegralRange(15)
                         .setIntegralReset(true)
+
                         .setOutputRange(0.4)
                         .setDelay(20)
+
                         .createController(),
                 robot);
         this.gyroProvider = gyroProvider;

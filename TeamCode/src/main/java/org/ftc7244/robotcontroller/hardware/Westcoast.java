@@ -114,6 +114,20 @@ public class Westcoast extends Hardware implements NavxRobot{
     }
 
     @Override
+    public void drive(double leftPower, double rightPower, long timeMillis) throws InterruptedException{
+        driveFrontLeft.setPower(leftPower);
+        driveBackLeft.setPower(leftPower);
+        driveFrontRight.setPower(-rightPower);
+        driveBackRight.setPower(-rightPower);
+        sleep(timeMillis);
+        driveFrontLeft.setPower(0);
+        driveBackLeft.setPower(0);
+        driveFrontRight.setPower(0);
+        driveBackRight.setPower(0);
+
+    }
+
+    @Override
     public void drive(double leftPower, double rightPower) {
         driveFrontLeft.setPower(leftPower);
         driveBackLeft.setPower(leftPower);

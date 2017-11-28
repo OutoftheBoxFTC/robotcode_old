@@ -77,12 +77,4 @@ public abstract class PIDAutonomous extends LinearOpMode {
     }
 
     public abstract void run() throws InterruptedException;
-
-    public void timerSleep(long millis){
-        long lastTime = System.currentTimeMillis();
-        long expectedTime = System.currentTimeMillis();
-        while (lastTime <= expectedTime){
-
-        }
-    }
 }

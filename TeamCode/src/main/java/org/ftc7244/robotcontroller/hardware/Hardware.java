@@ -80,6 +80,7 @@ public abstract class Hardware {
 
     public abstract void init();
 
+    public abstract void drive(double leftPower, double rightPower, long timeMillis) throws InterruptedException;
     public abstract void drive(double leftPower, double rightPower);
 
     public abstract void resetDriveMotors();
