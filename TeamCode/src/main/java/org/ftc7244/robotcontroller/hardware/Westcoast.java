@@ -29,9 +29,9 @@ public class Westcoast extends Hardware implements NavxRobot{
     @Nullable
     private DcMotor driveBackLeft, driveFrontLeft, driveBackRight, driveFrontRight, intakeVertical, intakeTop, intakeBottom;
     @Nullable
-    private CRServo spring, intakeBottomLeft, intakeBottomRight, intakeTopLeft, intakeTopRight;
+    private CRServo intakeBottomLeft, intakeBottomRight, intakeTopLeft, intakeTopRight;
     @Nullable
-    private Servo jewelVerticle, jewelHorizontal;
+    private Servo jewelVerticle, jewelHorizontal, spring;
     @Nullable
     private AnalogInput vertLimit;
     @Nullable
@@ -76,7 +76,7 @@ public class Westcoast extends Hardware implements NavxRobot{
         HardwareMap map = opMode.hardwareMap;
         this.jewelSensor = getOrNull(map.colorSensor, "jewelsensor");
         this.jewelDistance = map.get(DistanceSensor.class, "jewelsensor");
-        this.spring = getOrNull(map.crservo, "spring");
+        this.spring = getOrNull(map.servo, "spring");
 
         this.intakeVertical = getOrNull(map.dcMotor, "vertical");
 
@@ -96,12 +96,9 @@ public class Westcoast extends Hardware implements NavxRobot{
         this.jewelVerticle = getOrNull(map.servo, "jewelverticle");
         this.jewelHorizontal = getOrNull(map.servo, "jewelhorizontal");
 
-//        this.navX = opMode.hardwareMap.get(NavxMicroNavigationSensor.class, "navx");
-
         //Set the default direction for all the hardware and also initialize default positions
         if (driveFrontLeft != null) driveFrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         if (driveFrontRight != null) driveFrontRight.setDirection(DcMotorSimple.Direction.REVERSE);
-//        if (intakeBottomRight != null) intakeBottomRight.setDirection(DcMotorSimple.Direction.REVERSE);
         if (jewelSensor != null) {
             redOffset = jewelSensor.red();
             blueOffset = jewelSensor.blue();
@@ -111,6 +108,10 @@ public class Westcoast extends Hardware implements NavxRobot{
         }
         if(intakeTopRight != null) intakeTopRight.setDirection(DcMotorSimple.Direction.REVERSE);
         if(intakeBottomRight != null) intakeBottomRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        //Init Servos
+        if(jewelVerticle != null) jewelVerticle.setPosition(0.55);
+        if(jewelHorizontal != null) jewelHorizontal.setPosition(0);
+        if(spring != null) spring.setPosition(1);
     }
 
     @Override
@@ -143,7 +144,7 @@ public class Westcoast extends Hardware implements NavxRobot{
 
     @Override
     public int getDriveEncoderAverage() {
-        return (int) ((driveBackLeft.getCurrentPosition()+driveBackRight.getCurrentPosition()+driveFrontLeft.getCurrentPosition()+driveFrontRight.getCurrentPosition())/4);
+        return (driveBackLeft.getCurrentPosition()+driveBackRight.getCurrentPosition()+driveFrontLeft.getCurrentPosition()+driveFrontRight.getCurrentPosition())/4;
     }
 
     public boolean isColor(int color) {
@@ -213,7 +214,7 @@ public class Westcoast extends Hardware implements NavxRobot{
     }
 
     @Nullable
-    public CRServo getSpring(){return this.spring;}
+    public Servo getSpring(){return this.spring;}
 
     @Nullable
     public Servo getJewelVerticle(){return this.jewelVerticle;}

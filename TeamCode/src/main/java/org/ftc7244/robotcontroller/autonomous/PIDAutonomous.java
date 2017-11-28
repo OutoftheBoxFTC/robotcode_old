@@ -2,6 +2,8 @@ package org.ftc7244.robotcontroller.autonomous;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftc7244.robotcontroller.autonomous.drivers.GyroscopeDrive;
@@ -45,7 +47,6 @@ public abstract class PIDAutonomous extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         robot.init();
         Status.setAutonomous(this);
-
         try {
             gyroProvider.start(hardwareMap);
             imageTransformProvider.start(hardwareMap);

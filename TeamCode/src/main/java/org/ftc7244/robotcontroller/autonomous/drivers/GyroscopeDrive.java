@@ -32,7 +32,7 @@ public class GyroscopeDrive extends PIDDriveControl {
         super(new PIDControllerBuilder()
                         .invert()
                         .setProportional(0.012)
-                        .setIntegral(0.00015)
+                        .setIntegral(0.000075)
                         .setDerivative(1.65)
 
                         .setIntegralRange(15)
@@ -89,7 +89,7 @@ public class GyroscopeDrive extends PIDDriveControl {
      */
     public void rotate(double degrees) throws InterruptedException {
         double target = degrees + gyroProvider.getZ();
-        control(target, 0, new SensitivityTerminator(this, degrees, 0.25, 300));
+        control(target, 0, new SensitivityTerminator(this, degrees, 0.75, 300));
         resetOrientation();
     }
 
