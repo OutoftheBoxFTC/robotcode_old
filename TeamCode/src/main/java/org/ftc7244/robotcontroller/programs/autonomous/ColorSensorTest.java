@@ -10,8 +10,8 @@ import org.ftc7244.robotcontroller.hardware.Westcoast;
 /**
  * Created by BeaverDuck on 11/27/17.
  */
-@Autonomous(name="PLZ WORK NOWWWWWWW")
-public class ColourSensorTest extends LinearOpMode {
+@Autonomous(name="Color Sensor Test")
+public class ColorSensorTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
