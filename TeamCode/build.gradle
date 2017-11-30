@@ -16,3 +16,6 @@ apply from: '../build.common.gradle'
 
 dependencies {
 }
+android {
+    buildToolsVersion '26.0.2'
+}
