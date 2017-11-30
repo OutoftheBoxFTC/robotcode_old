@@ -18,6 +18,6 @@ public class TestAutonamousColourSensor extends LinearOpMode{
         Westcoast robot = new Westcoast(this);
         robot.init();
         waitForStart();
-        robot.knockOverJewel();
+        robot.knockOverJewel(Color.RED);
     }
 }

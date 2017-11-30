@@ -3,7 +3,6 @@ package org.ftc7244.robotcontroller.programs.autonomous;
 import android.graphics.Color;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.ftc7244.robotcontroller.autonomous.PIDAutonomous;
 import org.ftc7244.robotcontroller.sensor.vuforia.ImageTransformProvider;
@@ -12,18 +11,18 @@ import org.ftc7244.robotcontroller.sensor.vuforia.ImageTransformProvider;
 /**
  * Created by Eeshwar Laptop on 10/29/2017.
  */
-@Autonomous(name = "Red Right")
-public class RedRight extends PIDAutonomous {
+@Autonomous(name = "Blue Left")
+public class BlueLeft extends PIDAutonomous {
 
     public void run() throws InterruptedException{
-        robot.knockOverJewel(Color.RED);
+        robot.knockOverJewel(Color.BLUE);
         robot.drive(.2, .2, 1400);
         sleep(1000);
         telemetry.addData("Gyro", imageTransformProvider.getImageReading());
         telemetry.addData("Image", imageTransformProvider.getImageRotation(ImageTransformProvider.RotationAxis.PITCH));
         sleep(250);
         telemetry.update();
-        gyroscope.rotate(-113);
+        gyroscope.rotate(113);
         gyroscope.drive(0.2, 35);
         robot.getSpring().setPosition(0);
         robot.getIntakeBottom().setPower(1);

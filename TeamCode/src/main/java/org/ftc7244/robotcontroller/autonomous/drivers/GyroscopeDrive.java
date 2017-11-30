@@ -7,6 +7,7 @@ import org.ftc7244.robotcontroller.autonomous.controllers.PIDDriveControl;
 import org.ftc7244.robotcontroller.autonomous.terminators.ConditionalTerminator;
 import org.ftc7244.robotcontroller.autonomous.terminators.SensitivityTerminator;
 import org.ftc7244.robotcontroller.autonomous.terminators.Terminator;
+import org.ftc7244.robotcontroller.autonomous.terminators.TimerTerminator;
 import org.ftc7244.robotcontroller.hardware.Hardware;
 import org.ftc7244.robotcontroller.hardware.Westcoast;
 import org.ftc7244.robotcontroller.sensor.gyroscope.GyroscopeProvider;
@@ -89,7 +90,7 @@ public class GyroscopeDrive extends PIDDriveControl {
      */
     public void rotate(double degrees) throws InterruptedException {
         double target = degrees + gyroProvider.getZ();
-        control(target, 0, new SensitivityTerminator(this, degrees, 0.75, 300));
+        control(target, 0, new ConditionalTerminator(new SensitivityTerminator(this, target, 0.5, 300), new TimerTerminator(4500)));
         resetOrientation();
     }
 

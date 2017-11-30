@@ -165,12 +165,13 @@ public class Westcoast extends Hardware implements NavxRobot{
         }
     }
 
-    public void knockOverJewel() throws InterruptedException {
-        getJewelHorizontal().setPosition(0.4);
-        getJewelVerticle().setPosition(.15);
-        sleep(500);
-
-        getJewelHorizontal().setPosition(isColor(Color.RED) ? 1 : 0);
+    public void knockOverJewel(int color) throws InterruptedException {
+        getJewelHorizontal().setPosition(0.5);
+        getJewelVerticle().setPosition(.175);
+        sleep(1500);
+        opMode.telemetry.addData("isRed", isColor(color));
+        opMode.telemetry.update();
+        getJewelHorizontal().setPosition(isColor(color) ? 1 : -1);
         sleep(500);
         getJewelHorizontal().setPosition(0.4);
         getJewelVerticle().setPosition(0.55);

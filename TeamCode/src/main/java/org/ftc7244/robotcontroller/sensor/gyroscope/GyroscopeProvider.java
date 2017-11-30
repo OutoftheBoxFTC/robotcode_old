@@ -130,7 +130,7 @@ public abstract class GyroscopeProvider extends SensorProvider {
      * Depends on the ${@link #setZOffset(double)} (double)} to set the current gyroscopic value to equal zero
      */
     public void setZToZero() {
-        setZOffset(this.z + zOffset);
+        setZOffset(getZ() + getZOffset());
     }
 
     protected double offsetNumber(double orientation, double offset) {
