@@ -16,32 +16,8 @@ import org.ftc7244.robotcontroller.sensor.gyroscope.RevIMUGyroscopeProvider;
 public class TestAutonamousColourSensor extends LinearOpMode{
     public void runOpMode() throws InterruptedException {
         Westcoast robot = new Westcoast(this);
-        boolean didKnock = false;
         robot.init();
         waitForStart();
-        robot.getJewelHorizontal().setPosition(0.4);
-        robot.getJewelVerticle().setPosition(.15);
-        sleep(3000);
-        while(opModeIsActive() && !didKnock) {
-            boolean isRed = robot.isColor(Color.RED);
-            boolean isBlue = robot.isColor(Color.BLUE);
-            if (isRed) {
-                robot.getJewelHorizontal().setPosition(1);
-                telemetry.addData("Colour", "Red");
-                telemetry.addData("Distance", robot.getJewelDistance().getDistance(DistanceUnit.INCH));
-                sleep(1000);
-                didKnock = true;
-            } else if (isBlue) {
-                robot.getJewelHorizontal().setPosition(0);
-                telemetry.addData("Colour", "Blue");
-                telemetry.addData("Distance", robot.getJewelDistance().getDistance(DistanceUnit.INCH));
-                sleep(1000);
-                didKnock = true;
-            } else {
-                telemetry.addData("Colour", "Not Found");
-                telemetry.addData("Distance", robot.getJewelDistance().getDistance(DistanceUnit.INCH));
-            }
-            telemetry.update();
-        }
+        robot.knockOverJewel();
     }
 }

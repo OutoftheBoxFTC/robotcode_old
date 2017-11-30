@@ -26,12 +26,14 @@ public class RedRight extends PIDAutonomous {
         robot.getSpring().setPosition(0.5);
         robot.getIntakeBottom().setPower(1);
         gyroscope.drive(-0.2, 10);
-        sleep(2000);
         robot.getIntakeBottom().setPower(0);
 
 
         gyroscope.drive(0.2, 6);
-        gyroscope.rotate(180);
+        gyroscope.rotate(90);
+        gyroscope.rotate(90);
+        robot.getJewelVerticle().setPosition(.15);
+
 
   //      robot.getSpring().setDirection(DcMotorSimple.Direction.REVERSE);
   //      robot.getSpring().setPower(1);

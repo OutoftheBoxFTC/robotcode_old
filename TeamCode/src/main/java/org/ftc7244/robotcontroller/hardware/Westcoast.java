@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.qualcomm.hardware.kauailabs.NavxMicroNavigationSensor;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -16,7 +17,9 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.RobotLog;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.ftc7244.robotcontroller.Debug;
+import org.ftc7244.robotcontroller.autonomous.Status;
 import org.ftc7244.robotcontroller.sensor.gyroscope.NavxRobot;
 
 /**
@@ -74,8 +77,8 @@ public class Westcoast extends Hardware implements NavxRobot{
     public void init() {
         //Initialize or nullify all hardware
         HardwareMap map = opMode.hardwareMap;
-        this.jewelSensor = getOrNull(map.colorSensor, "jewelsensor");
-        this.jewelDistance = map.get(DistanceSensor.class, "jewelsensor");
+        this.jewelSensor = getOrNull(map.colorSensor, "jewelSensor");
+        this.jewelDistance = map.get(DistanceSensor.class, "jewelSensor");
         this.spring = getOrNull(map.servo, "spring");
 
         this.intakeVertical = getOrNull(map.dcMotor, "vertical");
@@ -93,8 +96,8 @@ public class Westcoast extends Hardware implements NavxRobot{
         this.intakeTop = getOrNull(map.dcMotor, "intakeT");
         this.intakeBottom = getOrNull(map.dcMotor, "intakeB");
 
-        this.jewelVerticle = getOrNull(map.servo, "jewelverticle");
-        this.jewelHorizontal = getOrNull(map.servo, "jewelhorizontal");
+        this.jewelVerticle = getOrNull(map.servo, "jewelVerticle");
+        this.jewelHorizontal = getOrNull(map.servo, "jewelHorizontal");
 
         //Set the default direction for all the hardware and also initialize default positions
         if (driveFrontLeft != null) driveFrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -161,6 +164,19 @@ public class Westcoast extends Hardware implements NavxRobot{
                 return false;
         }
     }
+
+    public void knockOverJewel() throws InterruptedException {
+        getJewelHorizontal().setPosition(0.4);
+        getJewelVerticle().setPosition(.15);
+        sleep(500);
+
+        getJewelHorizontal().setPosition(isColor(Color.RED) ? 1 : 0);
+        sleep(500);
+        getJewelHorizontal().setPosition(0.4);
+        getJewelVerticle().setPosition(0.55);
+        sleep(500);
+    }
+
     @Nullable
     public DcMotor getDriveFrontLeft() {
         return this.driveFrontLeft;
