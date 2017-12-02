@@ -22,7 +22,7 @@ public class Logger implements Runnable {
      */
     private static Logger instance = new Logger();
 
-    private static final int PORT = 8709, FIGURES_AFTER_DECIMAL = 4;
+    private static final int PORT = 8709;
 
     private static final long SEND_INTERVAL_MS = 100;
 
