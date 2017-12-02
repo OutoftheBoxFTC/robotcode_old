@@ -147,7 +147,11 @@ public class Westcoast extends Hardware implements NavxRobot{
 
     @Override
     public int getDriveEncoderAverage() {
-        return (driveBackLeft.getCurrentPosition()+driveBackRight.getCurrentPosition()+driveFrontLeft.getCurrentPosition()+driveFrontRight.getCurrentPosition())/4;
+        RobotLog.ii("BackLeft", Integer.toString(driveBackLeft.getCurrentPosition()));
+        RobotLog.ii("BackRight", Integer.toString(driveBackRight.getCurrentPosition()));
+        RobotLog.ii("FrontLeft", Integer.toString(driveFrontLeft.getCurrentPosition()));
+        RobotLog.ii("FrontRight", Integer.toString(driveFrontRight.getCurrentPosition()));
+        return (driveBackLeft.getCurrentPosition()+driveBackRight.getCurrentPosition()-driveFrontLeft.getCurrentPosition()-driveFrontRight.getCurrentPosition())/4;
     }
 
     public boolean isColor(int color) {

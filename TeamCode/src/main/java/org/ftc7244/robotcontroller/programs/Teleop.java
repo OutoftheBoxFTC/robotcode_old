@@ -20,9 +20,9 @@ import java.util.concurrent.Executors;
 public class Teleop extends OpMode {
     Westcoast robot;
     private Button leftTrigger1, dPadUp, dPadDown, rightTrigger, leftTrigger, rightBumper, leftBumper, aButton, bButton;
-    private static final double SLOW_DRIVE_COEFFICIENT = 0.5, LIFT_VERTICAL_REST = 0.1, LIFT_RAISE = .8, HORIZONTAL_INTAKE_POWER = 1;
-    private double VERTICLE_INTAKE_MULTIPLIER = 1;
-    private static final long JIGGLE_INTERVAL_MS = 100;
+    private static final double SLOW_DRIVE_COEFFICIENT = 0.5, LIFT_VERTICAL_REST = 0.1, LIFT_RAISE = .8;
+    private double VERTICLE_INTAKE_MULTIPLIER = 1, VERTICLE_INTAKE_STOP = 1;
+    private static final long JIGGLE_INTERVAL_MS = 250, JIGGLE_INTERVAL_REST = 500;
     ElapsedTime elapsedTime = new ElapsedTime();
 
 
@@ -64,10 +64,14 @@ public class Teleop extends OpMode {
         boolean horizontalRunning = false;
         if(rightTrigger.isPressed()){
             horizontalRunning = true;
-            robot.getIntakeTopLeft().setPower(0.5 * VERTICLE_INTAKE_MULTIPLIER);
-            robot.getIntakeTopRight().setPower(0.5 * VERTICLE_INTAKE_MULTIPLIER);
+            robot.getIntakeTopLeft().setPower(0.5 * VERTICLE_INTAKE_MULTIPLIER * VERTICLE_INTAKE_STOP);
+            robot.getIntakeTopRight().setPower(0.5 * VERTICLE_INTAKE_MULTIPLIER * VERTICLE_INTAKE_STOP);
             if(elapsedTime.milliseconds() >= JIGGLE_INTERVAL_MS){
+                VERTICLE_INTAKE_STOP = 0;
+            }
+            if(elapsedTime.milliseconds() >= JIGGLE_INTERVAL_REST){
                 VERTICLE_INTAKE_MULTIPLIER = -VERTICLE_INTAKE_MULTIPLIER;
+                VERTICLE_INTAKE_STOP = 1;
                 elapsedTime.reset();
             }
             robot.getIntakeTopLeft().setPower(0);

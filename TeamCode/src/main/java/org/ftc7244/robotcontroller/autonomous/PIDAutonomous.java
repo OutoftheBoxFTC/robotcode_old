@@ -26,11 +26,11 @@ public abstract class PIDAutonomous extends LinearOpMode {
 
     protected final GyroscopeDrive gyroscope;
 
-    protected final ImageTransformProvider imageTransformProvider;
+//    protected final ImageTransformProvider imageTransformProvider;
 
     protected Westcoast robot;
     private long end;
-w
+
     /**
      * Set the classes up and allow for java
      */
@@ -38,7 +38,7 @@ w
         robot = new Westcoast(this);
 
         gyroProvider = new RevIMUGyroscopeProvider();
-        imageTransformProvider = new ImageTransformProvider();
+ //       imageTransformProvider = new ImageTransformProvider();
 
         gyroscope = new GyroscopeDrive(robot, gyroProvider);
     }
@@ -49,7 +49,7 @@ w
         Status.setAutonomous(this);
         try {
             gyroProvider.start(hardwareMap);
-            imageTransformProvider.start(hardwareMap);
+//            imageTransformProvider.start(hardwareMap);
             while (!isStarted()) {
                 if (gyroProvider.isCalibrated()) {
                     telemetry.addLine("Gyroscope calibrated!");

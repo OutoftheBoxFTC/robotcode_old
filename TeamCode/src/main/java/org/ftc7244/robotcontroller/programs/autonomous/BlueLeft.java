@@ -18,15 +18,15 @@ public class BlueLeft extends PIDAutonomous {
         robot.knockOverJewel(Color.BLUE);
         robot.drive(.2, .2, 1400);
         sleep(1000);
-        telemetry.addData("Gyro", imageTransformProvider.getImageReading());
-        telemetry.addData("Image", imageTransformProvider.getImageRotation(ImageTransformProvider.RotationAxis.PITCH));
+//        telemetry.addData("Gyro", imageTransformProvider.getImageReading());
+//        telemetry.addData("Image", imageTransformProvider.getImageRotation(ImageTransformProvider.RotationAxis.PITCH));
         sleep(250);
         telemetry.update();
-        gyroscope.rotate(113);
-        gyroscope.drive(0.2, 35);
+        gyroscope.rotate(127);
+        gyroscope.drive(0.2, 50);
         robot.getSpring().setPosition(0);
         robot.getIntakeBottom().setPower(1);
-        gyroscope.drive(-0.2, 10);
+        gyroscope.drive(-0.2, 15);
         robot.getIntakeBottom().setPower(0);
 
 
