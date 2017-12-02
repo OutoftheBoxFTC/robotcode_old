@@ -15,7 +15,7 @@ import org.ftc7244.robotcontroller.sensor.vuforia.ImageTransformProvider;
 public class BlueLeft extends PIDAutonomous {
 
     public void run() throws InterruptedException{
-        robot.knockOverJewel(false);//Check color sensor
+        robot.knockOverJewel(Color.RED);//Check color sensor
         robot.drive(.2, .2, 2000);//Drive off balancing stone
         sleep(1000);//Wait for gyro to calibrate
         gyroscope.rotate(85);//Rotate

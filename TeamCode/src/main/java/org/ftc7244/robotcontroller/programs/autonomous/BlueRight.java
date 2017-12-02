@@ -1,5 +1,7 @@
 package org.ftc7244.robotcontroller.programs.autonomous;
 
+import android.graphics.Color;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.ftc7244.robotcontroller.autonomous.PIDAutonomous;
@@ -11,6 +13,6 @@ import org.ftc7244.robotcontroller.autonomous.PIDAutonomous;
 public class BlueRight extends PIDAutonomous {
     @Override
     public void run() throws InterruptedException {
-        robot.knockOverJewel(true);
+        robot.knockOverJewel(Color.RED);
     }
 }
