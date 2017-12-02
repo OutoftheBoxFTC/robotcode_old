@@ -8,8 +8,8 @@ import org.ftc7244.robotcontroller.autonomous.PIDAutonomous;
 /**
  * Created by FTC 7244 on 10/29/2017.
  */
-@Autonomous(name = "Colour Sensor")
-public class TestAutonamousColourSensor extends PIDAutonomous{
+@Autonomous(name = "Encoder Test")
+public class EncoderTest extends PIDAutonomous{
     @Override
     public void run() throws InterruptedException {
         robot.drive(1, 1);

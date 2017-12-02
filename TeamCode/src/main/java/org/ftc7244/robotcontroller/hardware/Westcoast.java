@@ -115,7 +115,10 @@ public class Westcoast extends Hardware implements NavxRobot{
         //Init Servos
         if(jewelVerticle != null) jewelVerticle.setPosition(0.55);
         if(jewelHorizontal != null) jewelHorizontal.setPosition(0);
-        if(spring != null) spring.setPosition(1);
+        if(spring != null){
+            spring.setPosition(1);
+            spring.setDirection(Servo.Direction.FORWARD);
+        }
     }
 
     @Override
