@@ -60,12 +60,7 @@ public abstract class PIDDriveControl {
             RobotLog.i(getReading() + ":" + pid);
             //debug if wanted
             if (Debug.STATUS) {
-                Logger.getInstance()
-                        .queueData("P", controller.getProportional())
-                        .queueData("I", controller.getIntegral())
-                        .queueData("D", controller.getDerivative())
-                        .queueData("Sum", pid)
-                        .queueData("Reading", getReading());
+
             }
 
             robot.getOpMode().telemetry.addData("Gyro", getReading());

@@ -107,7 +107,7 @@ public class PIDControllerBuilder {
     }
 
     /**
-     * This enables the PID loop to have a maximum power value so that the robot does not exceed a
+     * This enables the PID loop to have a maximum power value so that the robot doeintes not exceed a
      * certain speed in which the sensor can no longer keep up. This is good for finding a balance
      * between speed and also overshoot.
      *

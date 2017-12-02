@@ -18,6 +18,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.ftc7244.datalogger.Logger;
 import org.ftc7244.robotcontroller.Debug;
 import org.ftc7244.robotcontroller.autonomous.Status;
 import org.ftc7244.robotcontroller.sensor.gyroscope.NavxRobot;
@@ -27,7 +28,7 @@ import org.ftc7244.robotcontroller.sensor.gyroscope.NavxRobot;
  */
 
 public class Westcoast extends Hardware implements NavxRobot{
-    public static final double COUNTS_PER_INCH = 134.4 / (3.95 * Math.PI);
+    public static final double COUNTS_PER_INCH = 150;
 
     @Nullable
     private DcMotor driveBackLeft, driveFrontLeft, driveBackRight, driveFrontRight, intakeVertical, intakeTop, intakeBottom;
@@ -147,11 +148,7 @@ public class Westcoast extends Hardware implements NavxRobot{
 
     @Override
     public int getDriveEncoderAverage() {
-        RobotLog.ii("BackLeft", Integer.toString(driveBackLeft.getCurrentPosition()));
-        RobotLog.ii("BackRight", Integer.toString(driveBackRight.getCurrentPosition()));
-        RobotLog.ii("FrontLeft", Integer.toString(driveFrontLeft.getCurrentPosition()));
-        RobotLog.ii("FrontRight", Integer.toString(driveFrontRight.getCurrentPosition()));
-        return (driveBackLeft.getCurrentPosition()+driveBackRight.getCurrentPosition()-driveFrontLeft.getCurrentPosition()-driveFrontRight.getCurrentPosition())/4;
+        return -(driveBackLeft.getCurrentPosition()+driveBackRight.getCurrentPosition()+driveFrontLeft.getCurrentPosition()+driveFrontRight.getCurrentPosition())/4;
     }
 
     public boolean isColor(int color) {
@@ -169,13 +166,18 @@ public class Westcoast extends Hardware implements NavxRobot{
         }
     }
 
-    public void knockOverJewel(int color) throws InterruptedException {
+    public void knockOverJewel(boolean knockRed) throws InterruptedException {
         getJewelHorizontal().setPosition(0.5);
         getJewelVerticle().setPosition(.175);
         sleep(1500);
-        opMode.telemetry.addData("isRed", isColor(color));
+        opMode.telemetry.addData("is color", isColor(Color.BLUE));
         opMode.telemetry.update();
-        getJewelHorizontal().setPosition(isColor(color) ? 1 : -1);
+        if(knockRed) {
+            getJewelHorizontal().setPosition(isColor(Color.RED) ? 1 : 0);
+        }else{
+            getJewelHorizontal().setPosition(isColor(Color.RED) ? 0 : 1);
+
+        }
         sleep(500);
         getJewelHorizontal().setPosition(0.4);
         getJewelVerticle().setPosition(0.55);
@@ -254,6 +256,6 @@ public class Westcoast extends Hardware implements NavxRobot{
 
     @Nullable
     public NavxMicroNavigationSensor getNavX(){
-        return navX; //(╯°□°)╯︵ ┻━┻
+        return navX;
     }
 }

@@ -12,34 +12,23 @@ import org.ftc7244.robotcontroller.sensor.vuforia.ImageTransformProvider;
 /**
  * Created by Eeshwar Laptop on 10/29/2017.
  */
-@Autonomous(name = "Red Right1")
+@Autonomous(name = "Red Right")
 public class RedRight extends PIDAutonomous {
 
     public void run() throws InterruptedException{
-        robot.knockOverJewel(Color.RED);
-        robot.drive(.2, .2, 6000);
-        sleep(1000);
-       // telemetry.addData("Gyro", imageTransformProvider.getImageReading());
-      //  telemetry.addData("Image", imageTransformProvider.getImageRotation(ImageTransformProvider.RotationAxis.YAW));
-        sleep(250);
-        telemetry.update();
-        gyroscope.rotate(-113);
-        gyroscope.drive(0.2, 25);
-        robot.getSpring().setPosition(0);
-        robot.getIntakeBottom().setPower(1);
-        gyroscope.drive(-0.2, 45);
-        robot.getIntakeBottom().setPower(0);
-
-
-        gyroscope.rotate(170);
-        gyroscope.drive(-0.3,6.5);
-        gyroscope.drive(0.3,12);
-        robot.getJewelVerticle().setPosition(.15);
-
-
-  //      robot.getSpring().setDirection(DcMotorSimple.Direction.REVERSE);
-  //      robot.getSpring().setPower(1);
-  //      sleep(500);
-  //      robot.getSpring().setPower(0);
+        robot.knockOverJewel(true);//Check color sensor
+        robot.drive(.2, .2, 2000);//Drive off balancing stone
+        sleep(1000);//Wait for gyro to calibrate
+        gyroscope.rotate(-120.5);//Rotate
+        gyroscope.drive(0.2, 11);//Drive to glyph box
+        robot.getSpring().setPosition(.5);//Spring out glyph
+        robot.getIntakeBottom().setPower(1);//activate outtake
+        gyroscope.drive(-0.2, 3);// Drive glyph into intake
+        robot.getIntakeBottom().setPower(0);//disable outtake
+        gyroscope.rotate(170);//Rotate so back faces glyph box
+        gyroscope.drive(-0.3, 3.5);//Drive glyph back into glyph box
+        gyroscope.drive(0.6,2);//Drive foreword
+        robot.getJewelVerticle().setPosition(.15);//Land jewel arm into parking zone
+        sleep(750);//wait for deceleration
     }
 }
