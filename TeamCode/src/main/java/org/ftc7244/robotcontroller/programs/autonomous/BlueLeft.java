@@ -16,7 +16,7 @@ public class BlueLeft extends PIDAutonomous {
 
     public void run() throws InterruptedException{
         robot.knockOverJewel(Color.BLUE);//Check color sensor
-        robot.drive(.2, .2, 1900);//Drive off balancing stone
+        robot.driveByInches(0.2, 12);
         sleep(1000);//Wait for gyro to calibrate
         gyroscope.rotate(90);//Rotate
         gyroscope.drive(0.2, 6.5);//Drive to glyph box

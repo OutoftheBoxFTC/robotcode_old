@@ -132,7 +132,6 @@ public class Westcoast extends Hardware implements NavxRobot{
         driveBackLeft.setPower(0);
         driveFrontRight.setPower(0);
         driveBackRight.setPower(0);
-
     }
 
     @Override
@@ -176,12 +175,23 @@ public class Westcoast extends Hardware implements NavxRobot{
         return -(driveBackLeft.getCurrentPosition()+driveBackRight.getCurrentPosition()+driveFrontLeft.getCurrentPosition()+driveFrontRight.getCurrentPosition())/4;
     }
 
+    @Override
+    public void driveByInches(double power, int inches) {
+        driveFrontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        driveBackRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        driveFrontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        driveBackLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        driveFrontRight.setTargetPosition((int) (driveFrontRight.getCurrentPosition()+inches*COUNTS_PER_INCH));
+        driveBackRight.setTargetPosition((int) (driveBackRight.getCurrentPosition()+inches*COUNTS_PER_INCH));
+        driveFrontLeft.setTargetPosition((int) (driveFrontLeft.getCurrentPosition()+inches*COUNTS_PER_INCH));
+        driveBackLeft.setTargetPosition((int) (driveBackLeft.getCurrentPosition()+inches*COUNTS_PER_INCH));
+        driveFrontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        driveBackRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        driveFrontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        driveBackLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+
     public boolean isColor(int color) {
-        try {
-            sleep(750);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         int blue = jewelSensor.blue() - blueOffset, red = jewelSensor.red() - redOffset;
         redOffset = jewelSensor.red();
         blueOffset = jewelSensor.blue();
@@ -201,7 +211,7 @@ public class Westcoast extends Hardware implements NavxRobot{
     public void knockOverJewel(int color) throws InterruptedException {
         getJewelHorizontal().setPosition(0.5);
         getJewelVerticle().setPosition(.175);
-        sleep(1500);
+        sleep(750);
         if(color==Color.RED) {
             getJewelHorizontal().setPosition(isColor(Color.RED) ? 1 : 0);
         }else if(color==Color.BLUE){
