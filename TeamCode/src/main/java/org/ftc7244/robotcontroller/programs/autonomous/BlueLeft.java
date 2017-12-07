@@ -11,22 +11,22 @@ import org.ftc7244.robotcontroller.sensor.vuforia.ImageTransformProvider;
 /**
  * Created by Eeshwar Laptop on 10/29/2017.
  */
-@Autonomous(name = "Blue Left")
+@Autonomous(name = "Blue Left1")
 public class BlueLeft extends PIDAutonomous {
 
     public void run() throws InterruptedException{
-        robot.knockOverJewel(Color.RED);//Check color sensor
-        robot.drive(.2, .2, 2000);//Drive off balancing stone
+        robot.knockOverJewel(Color.BLUE);//Check color sensor
+        robot.drive(.2, .2, 1900);//Drive off balancing stone
         sleep(1000);//Wait for gyro to calibrate
-        gyroscope.rotate(85);//Rotate
+        gyroscope.rotate(90);//Rotate
         gyroscope.drive(0.2, 6.5);//Drive to glyph box
         robot.getSpring().setPosition(.5);//Spring out glyph
         robot.getIntakeBottom().setPower(1);//activate outtake
         gyroscope.drive(-0.2, 3);// Drive glyph into intake
         robot.getIntakeBottom().setPower(0);//disable outtake
         gyroscope.rotate(-170);//Rotate so back faces glyph box
-        gyroscope.drive(-0.3, 3.5);//Drive glyph back into glyph box
-        gyroscope.drive(0.6,2);//Drive foreword
+        gyroscope.drive(-0.4, 3.5);//Drive glyph back into glyph box
+        gyroscope.drive(0.4,2);//Drive foreword
         robot.getJewelVerticle().setPosition(.15);//Land jewel arm into parking zone
         sleep(750);//wait for deceleration
     }

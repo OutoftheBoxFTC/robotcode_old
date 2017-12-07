@@ -12,7 +12,7 @@ import org.ftc7244.robotcontroller.autonomous.PIDAutonomous;
 public class EncoderTest extends PIDAutonomous{
     @Override
     public void run() throws InterruptedException {
-        robot.drive(1, 1);
+        robot.driveToInch(0.3, 36);
         while (!isStopRequested()){
             Logger.getInstance().queueData("AVERAGE", robot.getDriveEncoderAverage())
                     .queueData("Back Right", robot.getDriveBackRight().getCurrentPosition())

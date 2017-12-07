@@ -82,6 +82,7 @@ public abstract class Hardware {
 
     public abstract void drive(double leftPower, double rightPower, long timeMillis) throws InterruptedException;
     public abstract void drive(double leftPower, double rightPower);
+    public abstract void driveToInch(double power, double inches);
 
     public abstract void resetDriveMotors();
 

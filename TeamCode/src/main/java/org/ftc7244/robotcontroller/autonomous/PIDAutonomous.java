@@ -46,6 +46,7 @@ public abstract class PIDAutonomous extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         robot.init();
+        robot.initServos();
         Status.setAutonomous(this);
         try {
             gyroProvider.start(hardwareMap);

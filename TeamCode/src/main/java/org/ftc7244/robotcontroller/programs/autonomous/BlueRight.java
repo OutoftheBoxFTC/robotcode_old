@@ -16,10 +16,10 @@ public class BlueRight extends PIDAutonomous {
     @Override
     public void run() throws InterruptedException {
 //        robot.getSpring().resetDeviceConfigurationForOpMode();
-        robot.knockOverJewel(Color.RED);
+        robot.knockOverJewel(Color.BLUE);
         sleep(500);
         robot.drive(-0.3, 0.3);
-        sleep(500);
+        sleep(750);
         robot.drive(0.3, 0.3);
         sleep(1000);
         robot.drive(0, 0);
@@ -31,16 +31,10 @@ public class BlueRight extends PIDAutonomous {
         robot.drive(0.3, 0.3);
         sleep(700);
         robot.drive(0, 0);
-        sleep(1500);
-        robot.getIntakeBottomRight().setPower(1);
-        robot.getIntakeBottomLeft().setPower(1);
-        sleep(5000);
-        robot.getIntakeBottomRight().setPower(0);
-        robot.getIntakeBottomLeft().setPower(0);
-        sleep(1500);
+        sleep(500);
 //        robot.getIntakeBottomRight().setPower(1);
 //        robot.getIntakeBottomLeft().setPower(1);
-        robot.getSpring().setPosition(0.4);
+        robot.getSpring().setPosition(0.6);
         sleep(500);
 //        robot.getIntakeBottomRight().setPower(0);
 //        robot.getIntakeBottomLeft().setPower(0);

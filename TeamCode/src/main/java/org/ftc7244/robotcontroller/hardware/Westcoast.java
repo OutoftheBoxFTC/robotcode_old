@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.qualcomm.hardware.kauailabs.NavxMicroNavigationSensor;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -17,8 +16,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.RobotLog;
 
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.ftc7244.datalogger.Logger;
 import org.ftc7244.robotcontroller.Debug;
 import org.ftc7244.robotcontroller.autonomous.Status;
 import org.ftc7244.robotcontroller.sensor.gyroscope.NavxRobot;
@@ -28,7 +25,7 @@ import org.ftc7244.robotcontroller.sensor.gyroscope.NavxRobot;
  */
 
 public class Westcoast extends Hardware implements NavxRobot{
-    public static final double COUNTS_PER_INCH = 150;
+    public static final double COUNTS_PER_INCH = 134.4 / (3.9 * Math.PI);
 
     @Nullable
     private DcMotor driveBackLeft, driveFrontLeft, driveBackRight, driveFrontRight, intakeVertical, intakeTop, intakeBottom;
@@ -113,6 +110,9 @@ public class Westcoast extends Hardware implements NavxRobot{
         if(intakeTopRight != null) intakeTopRight.setDirection(DcMotorSimple.Direction.REVERSE);
         if(intakeBottomRight != null) intakeBottomRight.setDirection(DcMotorSimple.Direction.REVERSE);
         //Init Servos
+    }
+
+    public void initServos(){
         if(jewelVerticle != null) jewelVerticle.setPosition(0.55);
         if(jewelHorizontal != null) jewelHorizontal.setPosition(0);
         if(spring != null){
@@ -143,6 +143,28 @@ public class Westcoast extends Hardware implements NavxRobot{
         driveBackRight.setPower(-rightPower);
     }
 
+    @Override
+    public void driveToInch(double power, double inches){
+        resetDriveMotors();
+        double target = inches * COUNTS_PER_INCH;
+        driveFrontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        driveFrontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        driveBackRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        driveBackLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        driveFrontLeft.setPower(power);
+        driveBackLeft.setPower(power);
+        driveFrontRight.setPower(power);
+        driveBackRight.setPower(power);
+        driveFrontRight.setTargetPosition((int) target);
+        driveFrontLeft.setTargetPosition((int) target);
+        driveBackRight.setTargetPosition((int) target);
+        driveBackLeft.setTargetPosition((int) target);
+        while(!Status.isStopRequested() && getDriveEncoderAverage() <= target){}
+        driveBackRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        driveBackLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        driveFrontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        driveFrontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
 
     @Override
     public void resetDriveMotors() {
@@ -155,7 +177,14 @@ public class Westcoast extends Hardware implements NavxRobot{
     }
 
     public boolean isColor(int color) {
+        try {
+            sleep(750);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         int blue = jewelSensor.blue() - blueOffset, red = jewelSensor.red() - redOffset;
+        redOffset = jewelSensor.red();
+        blueOffset = jewelSensor.blue();
         if (Debug.STATUS)
             RobotLog.ii("COLOR", blue + "(" + blueOffset + ")" + ":" + red + "(" + redOffset + ")");
         switch (color) {
@@ -175,7 +204,7 @@ public class Westcoast extends Hardware implements NavxRobot{
         sleep(1500);
         if(color==Color.RED) {
             getJewelHorizontal().setPosition(isColor(Color.RED) ? 1 : 0);
-        }else{
+        }else if(color==Color.BLUE){
             getJewelHorizontal().setPosition(isColor(Color.RED) ? 0 : 1);
 
         }

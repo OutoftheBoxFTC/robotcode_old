@@ -18,9 +18,8 @@ public class ColorSensorTest extends LinearOpMode {
         Westcoast robot = new Westcoast(this);
         robot.init();
         waitForStart();
-        robot.getJewelHorizontal().setPosition(0.4);
-        robot.getJewelVerticle().setPosition(.15);
-        while(opModeIsActive()) {
+        robot.knockOverJewel(Color.RED);
+        while(!isStopRequested()) {
             telemetry.addData("Red", robot.isColor(Color.RED));
             telemetry.addData("Blue", robot.isColor(Color.BLUE));
             telemetry.update();

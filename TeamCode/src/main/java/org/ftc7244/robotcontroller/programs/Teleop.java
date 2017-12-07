@@ -23,6 +23,7 @@ public class Teleop extends OpMode {
     private static final double SLOW_DRIVE_COEFFICIENT = 0.5, LIFT_VERTICAL_REST = 0.1, LIFT_RAISE = .8;
     private double VERTICLE_INTAKE_MULTIPLIER = 1, VERTICLE_INTAKE_STOP = 1;
     private static final long JIGGLE_INTERVAL_MS = 250, JIGGLE_INTERVAL_REST = 500;
+    private boolean didInit = false;
     ElapsedTime elapsedTime = new ElapsedTime();
 
 
@@ -59,10 +60,14 @@ public class Teleop extends OpMode {
      */
     @Override
     public void loop(){
+        if(!didInit){
+            robot.initServos();
+            didInit = true;
+        }
         double coefficient = leftTrigger1.isPressed()?SLOW_DRIVE_COEFFICIENT:1;
         robot.drive(-gamepad1.left_stick_y*coefficient, -gamepad1.right_stick_y*coefficient);
         if(panicButton.isPressed()){
-            robot.getSpring().setPosition(0.4);
+            robot.getSpring().setPosition(0.6);
         }
         //Drive Code
         boolean horizontalRunning = false;
