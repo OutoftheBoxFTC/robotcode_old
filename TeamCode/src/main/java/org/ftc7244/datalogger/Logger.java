@@ -1,8 +1,11 @@
 package org.ftc7244.datalogger;
 
+import org.ftc7244.datalogger.file.FileInterface;
 import org.ftc7244.robotcontroller.Debug;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -35,6 +38,8 @@ public class Logger implements Runnable {
     private PrintStream out;
 
     private boolean running;
+
+    private FileInterface fileInterface;
 
     public static Logger getInstance() {
         if (instance == null) instance = new Logger();
@@ -72,9 +77,11 @@ public class Logger implements Runnable {
             serverSocket = new ServerSocket(PORT);
             Socket client = serverSocket.accept();
             out = new PrintStream(client.getOutputStream());
+            fileInterface = new FileInterface(new BufferedReader(new InputStreamReader(client.getInputStream())));
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         while (running) {
             try {
                 Thread.sleep(SEND_INTERVAL_MS);

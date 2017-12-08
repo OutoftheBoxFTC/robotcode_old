@@ -1,9 +1,6 @@
 package org.ftc7244.robotcontroller.autonomous;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftc7244.robotcontroller.autonomous.drivers.GyroscopeDrive;
@@ -26,7 +23,7 @@ public abstract class PIDAutonomous extends LinearOpMode {
 
     protected final GyroscopeDrive gyroscope;
 
-//    protected final ImageTransformProvider imageTransformProvider;
+    protected final ImageTransformProvider imageTransformProvider;
 
     protected Westcoast robot;
     private long end;
@@ -38,7 +35,7 @@ public abstract class PIDAutonomous extends LinearOpMode {
         robot = new Westcoast(this);
 
         gyroProvider = new RevIMUGyroscopeProvider();
- //       imageTransformProvider = new ImageTransformProvider();
+        imageTransformProvider = new ImageTransformProvider();
 
         gyroscope = new GyroscopeDrive(robot, gyroProvider);
     }
@@ -50,7 +47,7 @@ public abstract class PIDAutonomous extends LinearOpMode {
         Status.setAutonomous(this);
         try {
             gyroProvider.start(hardwareMap);
-//            imageTransformProvider.start(hardwareMap);
+            imageTransformProvider.start(hardwareMap);
             while (!isStarted()) {
                 if (gyroProvider.isCalibrated()) {
                     telemetry.addLine("Gyroscope calibrated!");
