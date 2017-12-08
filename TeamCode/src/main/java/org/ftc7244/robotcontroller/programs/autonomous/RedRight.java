@@ -18,7 +18,7 @@ public class RedRight extends PIDAutonomous {
 
     public void run() throws InterruptedException{
         robot.knockOverJewel(Color.BLUE);//Check color sensor
-        robot.driveByInches(.2, 12);//Drive off balancing stone
+        robot.driveToInch(.2, 12);//Drive off balancing stone
         sleep(1000);//Wait for gyro to calibrate
         gyroscope.rotate(-120.5);//Rotate
         gyroscope.drive(0.2, 11);//Drive to glyph box

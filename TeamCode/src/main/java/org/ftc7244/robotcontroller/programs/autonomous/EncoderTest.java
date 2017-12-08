@@ -5,6 +5,11 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.ftc7244.datalogger.Logger;
 import org.ftc7244.robotcontroller.autonomous.PIDAutonomous;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
 /**
  * Created by FTC 7244 on 10/29/2017.
  */

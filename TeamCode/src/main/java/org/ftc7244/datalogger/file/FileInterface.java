@@ -1,7 +1,5 @@
 package org.ftc7244.datalogger.file;
 
-import org.firstinspires.ftc.teamcode.R;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;

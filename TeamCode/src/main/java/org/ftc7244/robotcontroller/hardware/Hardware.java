@@ -96,5 +96,4 @@ public abstract class Hardware {
         return opMode;
     }
 
-    public abstract void driveByInches(double power, int inches);
 }

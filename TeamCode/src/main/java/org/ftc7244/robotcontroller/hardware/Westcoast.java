@@ -146,23 +146,19 @@ public class Westcoast extends Hardware implements NavxRobot{
     public void driveToInch(double power, double inches){
         resetDriveMotors();
         double target = inches * COUNTS_PER_INCH;
-        driveFrontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        driveFrontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        driveBackRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        driveBackLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         driveFrontLeft.setPower(power);
         driveBackLeft.setPower(power);
-        driveFrontRight.setPower(power);
-        driveBackRight.setPower(power);
-        driveFrontRight.setTargetPosition((int) target);
-        driveFrontLeft.setTargetPosition((int) target);
-        driveBackRight.setTargetPosition((int) target);
-        driveBackLeft.setTargetPosition((int) target);
-        while(!Status.isStopRequested() && getDriveEncoderAverage() <= target){}
-        driveBackRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        driveBackLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        driveFrontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        driveFrontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        driveFrontRight.setPower(-power);
+        driveBackRight.setPower(-power);
+        while(!Status.isStopRequested() && getDriveEncoderAverage() <= target){
+            opMode.telemetry.addData("Target", target);
+            opMode.telemetry.addData("Encoder Average", getDriveEncoderAverage());
+            opMode.telemetry.update();
+        }
+        driveFrontLeft.setPower(0);
+        driveBackLeft.setPower(0);
+        driveFrontRight.setPower(0);
+        driveBackRight.setPower(0);
     }
 
     @Override
@@ -173,22 +169,6 @@ public class Westcoast extends Hardware implements NavxRobot{
     @Override
     public int getDriveEncoderAverage() {
         return -(driveBackLeft.getCurrentPosition()+driveBackRight.getCurrentPosition()+driveFrontLeft.getCurrentPosition()+driveFrontRight.getCurrentPosition())/4;
-    }
-
-    @Override
-    public void driveByInches(double power, int inches) {
-        driveFrontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        driveBackRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        driveFrontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        driveBackLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        driveFrontRight.setTargetPosition((int) (driveFrontRight.getCurrentPosition()+inches*COUNTS_PER_INCH));
-        driveBackRight.setTargetPosition((int) (driveBackRight.getCurrentPosition()+inches*COUNTS_PER_INCH));
-        driveFrontLeft.setTargetPosition((int) (driveFrontLeft.getCurrentPosition()+inches*COUNTS_PER_INCH));
-        driveBackLeft.setTargetPosition((int) (driveBackLeft.getCurrentPosition()+inches*COUNTS_PER_INCH));
-        driveFrontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        driveBackRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        driveFrontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        driveBackLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     public boolean isColor(int color) {
@@ -213,9 +193,9 @@ public class Westcoast extends Hardware implements NavxRobot{
         getJewelVerticle().setPosition(.175);
         sleep(750);
         if(color==Color.RED) {
-            getJewelHorizontal().setPosition(isColor(Color.RED) ? 1 : 0);
-        }else if(color==Color.BLUE){
             getJewelHorizontal().setPosition(isColor(Color.RED) ? 0 : 1);
+        }else if(color==Color.BLUE){
+            getJewelHorizontal().setPosition(isColor(Color.RED) ? 1 : 0);
 
         }
         sleep(500);
