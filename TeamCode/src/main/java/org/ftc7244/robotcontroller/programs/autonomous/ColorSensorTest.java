@@ -19,7 +19,7 @@ public class ColorSensorTest extends LinearOpMode {
         robot.init();
         waitForStart();
         DataFilter filter = new DataFilter(10);
-        while(opModeIsActive()) {
+        while(isStarted()) {
             filter.update(robot.getJewelSensor().red());
             Logger.getInstance().queueData("Filtered", filter.getReading());
             Logger.getInstance().queueData("Unfiltered", robot.getJewelSensor().red());

@@ -1,5 +1,7 @@
 package org.ftc7244.datalogger;
 
+import android.content.Context;
+
 import org.ftc7244.datalogger.file.FileInterface;
 import org.ftc7244.robotcontroller.Debug;
 
@@ -23,7 +25,7 @@ public class Logger implements Runnable {
      * Logger sends sets of data from the used android device to a computer on the receiving port
      * hosting the serverSocket program.
      */
-    private static Logger instance = new Logger();
+    private static Logger instance;
 
     private static final int PORT = 8709;
 
@@ -42,17 +44,18 @@ public class Logger implements Runnable {
     private FileInterface fileInterface;
 
     public static Logger getInstance() {
-        if (instance == null) instance = new Logger();
         return instance;
     }
 
+    public static void init(){
+        if(instance == null&&Debug.STATUS)instance = new Logger();
+    }
+
     private Logger() {
-        if (Debug.STATUS) {
-            running = true;
-            thread = new Thread(this);
-            thread.start();
-            data = new HashMap<>();
-        }
+        running = true;
+        thread = new Thread(this);
+        thread.start();
+        data = new HashMap<>();
     }
 
     /**
@@ -77,7 +80,7 @@ public class Logger implements Runnable {
             serverSocket = new ServerSocket(PORT);
             Socket client = serverSocket.accept();
             out = new PrintStream(client.getOutputStream());
-            fileInterface = new FileInterface(new BufferedReader(new InputStreamReader(client.getInputStream())));
+            //fileInterface = new FileInterface(new BufferedReader(new InputStreamReader(client.getInputStream())));
         } catch (IOException e) {
             e.printStackTrace();
         }

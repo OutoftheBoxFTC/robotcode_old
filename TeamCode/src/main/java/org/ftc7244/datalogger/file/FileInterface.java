@@ -1,56 +1,69 @@
 package org.ftc7244.datalogger.file;
 
+import android.content.Context;
+
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  * Created by BeaverDuck on 12/6/17.
  */
 
 public class FileInterface implements Runnable {
+    private static FileInterface instance;
     private BufferedReader in;
     private boolean running;
     private Thread thread;
+    private Context context;
     private ArrayList<String> valueOrder = new ArrayList<>();
 
-    public FileInterface(BufferedReader in){
-        this.in = in;
-        running = true;
+    private FileInterface(Context context){
+        this.context = context;
+    }
 
+    void start(BufferedReader in){
+        this.in = in;
+        thread = new Thread(this);
+        running = true;
         thread.start();
     }
 
-    public static ArrayList<String> readLines(String path){
-        File file = new File(path);
+    public static FileInterface getInstance() {
+        return instance;
+    }
+
+    public static void init(Context context){
+        if(instance==null) instance = new FileInterface(context);
+    }
+
+    public ArrayList<String> readLines(String path){
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-            String line = reader.readLine();
+            Scanner input = new Scanner(context.openFileInput(path));
             ArrayList<String> lines = new ArrayList<>();
-            while (line != null){
-                lines.add(line);
+            while (input.hasNextLine()){
+                lines.add(input.nextLine());
             }
             return lines;
-        } catch (IOException e) {
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public static void writeToFile(String path, boolean overwrite, ArrayList<String> lines){
+    public void writeToFile(String path, boolean overwrite, ArrayList<String> lines){
         try {
-            File file = new File(path);
-            if(file.exists()&&overwrite)file.delete();
-            else file.createNewFile();
-            FileWriter writer = new FileWriter(file);
+            if(overwrite)
+                new File(path).createNewFile();
+
+            FileOutputStream stream = context.openFileOutput(path, Context.MODE_PRIVATE);
             for(String line : lines){
-                writer.write(line);
+                stream.write((line + System.getProperty("line.separator")).getBytes());
             }
-            writer.flush();
-            writer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

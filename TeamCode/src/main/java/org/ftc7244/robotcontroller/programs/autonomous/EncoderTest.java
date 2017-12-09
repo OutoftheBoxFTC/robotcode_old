@@ -22,7 +22,8 @@ public class EncoderTest extends PIDAutonomous{
             Logger.getInstance().queueData("AVERAGE", robot.getDriveEncoderAverage())
                     .queueData("Back Right", robot.getDriveBackRight().getCurrentPosition())
                     .queueData("Front Left", robot.getDriveFrontLeft().getCurrentPosition())
-                    .queueData("Front Right", robot.getDriveFrontRight().getCurrentPosition());
+                    .queueData("Front Right", robot.getDriveFrontRight().getCurrentPosition())
+                    .queueData("Back Left", robot.getDriveBackLeft().getCurrentPosition());
         }
     }
 }

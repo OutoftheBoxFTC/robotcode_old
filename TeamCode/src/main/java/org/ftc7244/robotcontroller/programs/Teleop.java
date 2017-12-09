@@ -1,16 +1,14 @@
 package org.ftc7244.robotcontroller.programs;
 
+import android.media.MediaPlayer;
+
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.ftc7244.robotcontroller.hardware.Westcoast;
 import org.ftc7244.robotcontroller.input.Button;
 import org.ftc7244.robotcontroller.input.ButtonType;
-
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * Created by Eeshwar Laptop on 10/16/2017.
@@ -25,9 +23,11 @@ public class Teleop extends OpMode {
     private static final long JIGGLE_INTERVAL_MS = 250, JIGGLE_INTERVAL_REST = 500;
     private boolean didInit = false;
     ElapsedTime elapsedTime = new ElapsedTime();
+    private MediaPlayer sound;
 
 
     public void init(){
+        //sound = MediaPlayer.create(hardwareMap.appContext)
         robot = new Westcoast(this);
         panicButton = new Button(gamepad1, ButtonType.LEFT_BUMPER);
         leftTrigger1 = new Button(gamepad1, ButtonType.LEFT_TRIGGER);

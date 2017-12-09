@@ -3,11 +3,12 @@ package org.ftc7244.robotcontroller.autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.RobotLog;
 
+import org.ftc7244.datalogger.Logger;
+import org.ftc7244.datalogger.file.FileInterface;
 import org.ftc7244.robotcontroller.autonomous.drivers.GyroscopeDrive;
 import org.ftc7244.robotcontroller.hardware.Westcoast;
 import org.ftc7244.robotcontroller.sensor.gyroscope.GyroscopeProvider;
 import org.ftc7244.robotcontroller.sensor.gyroscope.RevIMUGyroscopeProvider;
-import org.ftc7244.robotcontroller.sensor.vuforia.ImageTransformProvider;
 
 /**
  * Contains all the code for different drive types including ${@link GyroscopeDrive}.
@@ -23,8 +24,6 @@ public abstract class PIDAutonomous extends LinearOpMode {
 
     protected final GyroscopeDrive gyroscope;
 
-    protected final ImageTransformProvider imageTransformProvider;
-
     protected Westcoast robot;
     private long end;
 
@@ -35,19 +34,20 @@ public abstract class PIDAutonomous extends LinearOpMode {
         robot = new Westcoast(this);
 
         gyroProvider = new RevIMUGyroscopeProvider();
-        imageTransformProvider = new ImageTransformProvider();
 
         gyroscope = new GyroscopeDrive(robot, gyroProvider);
     }
 
     @Override
     public void runOpMode() throws InterruptedException {
+        FileInterface.init(hardwareMap.appContext);
+        Logger.init();
+
         robot.init();
         robot.initServos();
         Status.setAutonomous(this);
         try {
             gyroProvider.start(hardwareMap);
-            imageTransformProvider.start(hardwareMap);
             while (!isStarted()) {
                 if (gyroProvider.isCalibrated()) {
                     telemetry.addLine("Gyroscope calibrated!");

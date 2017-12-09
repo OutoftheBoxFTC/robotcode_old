@@ -16,7 +16,7 @@ import java.util.Arrays;
 public class FileWriterTest extends PIDAutonomous {
     @Override
     public void run() throws InterruptedException {
-        Logger.getInstance().queueData("Output", FileInterface.readLines("Test.txt")==null?1:0);
-        FileInterface.writeToFile("Test.txt", false, new ArrayList<>(Arrays.asList("Test")));
+        Logger.getInstance().queueData("Output", FileInterface.getInstance().readLines("Test.txt")==null?1:0);
+        FileInterface.getInstance().writeToFile("Test.txt", false, new ArrayList<>(Arrays.asList("Test")));
     }
 }
