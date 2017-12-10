@@ -24,6 +24,8 @@ public class FileInterface implements Runnable {
 
     private FileInterface(Context context){
         this.context = context;
+        valueOrder = new ArrayList<>();
+
     }
 
     void start(BufferedReader in){
