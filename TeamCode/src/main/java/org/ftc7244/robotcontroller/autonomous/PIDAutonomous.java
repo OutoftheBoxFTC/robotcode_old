@@ -1,12 +1,15 @@
 package org.ftc7244.robotcontroller.autonomous;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftc7244.datalogger.Logger;
+import org.ftc7244.datalogger.file.DataStorage;
 import org.ftc7244.datalogger.file.FileInterface;
 import org.ftc7244.robotcontroller.autonomous.drivers.GyroscopeDrive;
 import org.ftc7244.robotcontroller.hardware.Westcoast;
+import org.ftc7244.robotcontroller.programs.autonomous.RedRight;
 import org.ftc7244.robotcontroller.sensor.gyroscope.GyroscopeProvider;
 import org.ftc7244.robotcontroller.sensor.gyroscope.RevIMUGyroscopeProvider;
 
@@ -61,7 +64,9 @@ public abstract class PIDAutonomous extends LinearOpMode {
 
             gyroscope.resetOrientation();
             end = System.currentTimeMillis() + AUTONOMOUS_DURATION;
-            run();
+            DataStorage storage = new DataStorage(FileInterface.getInstance().readLines(
+                    "saved_values/" + this.getClass().getAnnotation(Autonomous.class).name() + ".txt").get(0));
+            run(storage);
         } catch (Throwable t) {
             RobotLog.e(t.getMessage());
             t.printStackTrace();
@@ -75,5 +80,7 @@ public abstract class PIDAutonomous extends LinearOpMode {
         return end;
     }
 
-    public abstract void run() throws InterruptedException;
+    public abstract void run(DataStorage storage) throws InterruptedException;
+
+    protected abstract Class<? extends PIDAutonomous> getChildClass();
 }
