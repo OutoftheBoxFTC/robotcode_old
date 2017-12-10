@@ -18,7 +18,7 @@ import java.util.Arrays;
  * Created by Eeshwar Laptop on 10/16/2017.
  */
 
-@TeleOp(name = "Relic Recovery Westcoast: Jiggle")
+@TeleOp(name = "Teleop")
 public class Teleop extends LinearOpMode {
     private Westcoast robot;
     private Button leftTrigger1, dPadUp, dPadDown, rightTrigger, leftTrigger, rightBumper, leftBumper, aButton, bButton, panicButton, driverAButton, driverBButton, driverXButton;
@@ -26,7 +26,6 @@ public class Teleop extends LinearOpMode {
     private double VERTICAL_INTAKE_MULTIPLIER = 1, VERTICAL_INTAKE_STOP = 1;
     private static final long JIGGLE_INTERVAL_MS = 250, JIGGLE_INTERVAL_REST = 500;
     ElapsedTime elapsedTime = new ElapsedTime();
-    private int currentSound;
     private ArrayList<MediaPlayer> sounds;
 
     /*
@@ -53,7 +52,6 @@ public class Teleop extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         sounds = new ArrayList<>(Arrays.asList(MediaPlayer.create(hardwareMap.appContext, R.raw.nfltheme), MediaPlayer.create(hardwareMap.appContext, R.raw.sadviolin)));
-        currentSound = 0;
         robot = new Westcoast(this);
         driverAButton = new Button(gamepad1, ButtonType.A);
         driverBButton = new Button(gamepad1, ButtonType.B);
@@ -70,9 +68,8 @@ public class Teleop extends LinearOpMode {
         bButton = new Button(gamepad2, ButtonType.B);
         robot.init();
         waitForStart();
-
         robot.initServos();
-        sounds.get(currentSound).start();
+
         while (opModeIsActive()) {
             double coefficient = leftTrigger1.isPressed() ? SLOW_DRIVE_COEFFICIENT : 1;
             robot.drive(-gamepad1.left_stick_y * coefficient, -gamepad1.right_stick_y * coefficient);
@@ -139,13 +136,14 @@ public class Teleop extends LinearOpMode {
             } else {
                 robot.getIntakeVertical().setPower(LIFT_VERTICAL_REST);
             }
-            if (driverAButton.isPressed() && !sounds.get(0).isPlaying()) {
+
+            if (driverAButton.isPressed() && driverAButton.isUpdated()) {
                 sounds.get(0).start();
                 sounds.get(1).stop();
-            } else if (driverBButton.isPressed() && !sounds.get(1).isPlaying()) {
+            } else if (driverBButton.isPressed() && driverBButton.isUpdated()) {
                 sounds.get(0).stop();
                 sounds.get(1).start();
-            } else if (driverXButton.isPressed()) {
+            } else if (driverXButton.isPressed() && driverXButton.isUpdated()) {
                 sounds.get(0).stop();
                 sounds.get(1).stop();
             }

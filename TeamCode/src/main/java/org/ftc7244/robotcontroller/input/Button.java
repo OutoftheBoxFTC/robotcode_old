@@ -10,10 +10,12 @@ public class Button {
 
     private Gamepad gamepad;
     private ButtonType type;
+    private boolean previousState;
 
     public Button(Gamepad gamepad, ButtonType type) {
         this.gamepad = gamepad;
         this.type = type;
+        previousState = false;
     }
 
     /**
@@ -64,5 +66,11 @@ public class Button {
                 return false;
         }
         return false;
+    }
+
+    public boolean isUpdated(){
+        boolean pressed = isPressed(), returnVal = pressed==previousState;
+        previousState = pressed;
+        return returnVal;
     }
 }

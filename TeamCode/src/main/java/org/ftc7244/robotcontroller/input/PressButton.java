@@ -8,12 +8,13 @@ import com.qualcomm.robotcore.hardware.Gamepad;
  */
 public class PressButton extends Button {
 
-    private boolean active, pressed;
+    private boolean active, pressed, previousState;
 
     public PressButton(Gamepad gamepad, ButtonType type) {
         super(gamepad, type);
         active = false;
         pressed = false;
+        previousState = false;
     }
 
     @Override
@@ -31,5 +32,11 @@ public class PressButton extends Button {
         }
         //if nothing has changed returned the current status
         return active;
+    }
+
+    public boolean isUpdated(){
+        boolean state = isPressed(), returnVal = state!=previousState;
+        previousState = state;
+        return returnVal;
     }
 }
