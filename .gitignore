@@ -26,3 +26,4 @@ build/
 
 *ASUS_PC_01*
 
+/TeamCode/src/main/java/org/ftc7244/robotcontroller/autonomous/PIDAutonomous.java

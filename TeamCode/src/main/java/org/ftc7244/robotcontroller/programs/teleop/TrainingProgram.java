@@ -1,4 +1,4 @@
-package org.ftc7244.robotcontroller.programs;
+package org.ftc7244.robotcontroller.programs.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;

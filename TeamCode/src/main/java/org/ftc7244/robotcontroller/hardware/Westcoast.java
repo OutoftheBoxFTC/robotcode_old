@@ -32,7 +32,7 @@ public class Westcoast extends Hardware implements NavxRobot{
     @Nullable
     private CRServo intakeBottomLeft, intakeBottomRight, intakeTopLeft, intakeTopRight;
     @Nullable
-    private Servo jewelVerticle, jewelHorizontal, spring;
+    private Servo jewelVerticle, jewelHorizontal, spring, intakeServo;
     @Nullable
     private AnalogInput vertLimit;
     @Nullable
@@ -90,6 +90,7 @@ public class Westcoast extends Hardware implements NavxRobot{
         this.intakeBottomRight = getOrNull(map.crservo, "intakeBRight");
         this.intakeTopLeft = getOrNull(map.crservo, "intakeTLeft");
         this.intakeTopRight = getOrNull(map.crservo, "intakeTRight");
+        this.intakeServo = getOrNull(map.servo, "intakeServo");
 
         this.intakeTop = getOrNull(map.dcMotor, "intakeT");
         this.intakeBottom = getOrNull(map.dcMotor, "intakeB");
@@ -277,5 +278,10 @@ public class Westcoast extends Hardware implements NavxRobot{
     @Nullable
     public NavxMicroNavigationSensor getNavX(){
         return navX;
+    }
+
+    @Nullable
+    public Servo getIntakeServo() {
+        return intakeServo;
     }
 }

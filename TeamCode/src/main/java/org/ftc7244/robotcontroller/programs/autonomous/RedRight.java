@@ -3,13 +3,8 @@ package org.ftc7244.robotcontroller.programs.autonomous;
 import android.graphics.Color;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-import org.ftc7244.datalogger.file.DataStorage;
-import org.ftc7244.datalogger.file.FileInterface;
 import org.ftc7244.robotcontroller.autonomous.PIDAutonomous;
-import org.ftc7244.robotcontroller.sensor.vuforia.ImageTransformProvider;
 
 
 /**
@@ -18,7 +13,7 @@ import org.ftc7244.robotcontroller.sensor.vuforia.ImageTransformProvider;
 @Autonomous(name = "Red Right")
 public class RedRight extends PIDAutonomous {
 
-    public void run(DataStorage storage) throws InterruptedException{
+    public void run() throws InterruptedException{
         robot.knockOverJewel(Color.BLUE);//Check color sensor
         robot.driveToInch(.2, 12);//Drive off balancing stone
         sleep(1000);//Wait for gyro to calibrate
@@ -33,10 +28,5 @@ public class RedRight extends PIDAutonomous {
         gyroscope.drive(0.6,2);//Drive foreword
         robot.getJewelVerticle().setPosition(.15);//Land jewel arm into parking zone
         sleep(750);//wait for deceleration
-    }
-
-    @Override
-    protected Class<? extends PIDAutonomous> getChildClass() {
-        return getClass();
     }
 }

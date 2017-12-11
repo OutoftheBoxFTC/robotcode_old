@@ -1,13 +1,8 @@
 package org.ftc7244.datalogger;
 
-import android.content.Context;
-
-import org.ftc7244.datalogger.file.FileInterface;
 import org.ftc7244.robotcontroller.Debug;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -40,8 +35,6 @@ public class Logger implements Runnable {
     private PrintStream out;
 
     private boolean running;
-
-    private FileInterface fileInterface;
 
     public static Logger getInstance() {
         return instance;
