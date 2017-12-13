@@ -1,6 +1,7 @@
 package org.ftc7244.robotcontroller.hardware;
 
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -16,8 +17,11 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.RobotLog;
 
+import org.firstinspires.ftc.teamcode.R;
 import org.ftc7244.robotcontroller.Debug;
 import org.ftc7244.robotcontroller.autonomous.Status;
+import org.ftc7244.robotcontroller.autonomous.drivers.GyroscopeDrive;
+import org.ftc7244.robotcontroller.sensor.gyroscope.GyroscopeProvider;
 import org.ftc7244.robotcontroller.sensor.gyroscope.NavxRobot;
 
 /**
@@ -25,7 +29,7 @@ import org.ftc7244.robotcontroller.sensor.gyroscope.NavxRobot;
  */
 
 public class Westcoast extends Hardware implements NavxRobot{
-    public static final double COUNTS_PER_INCH = 134.4 / (3.9 * Math.PI);
+    public static final double COUNTS_PER_INCH = 403.2 / (3.9 * Math.PI);
 
     @Nullable
     private DcMotor driveBackLeft, driveFrontLeft, driveBackRight, driveFrontRight, intakeVertical, intakeTop, intakeBottom;
@@ -41,6 +45,7 @@ public class Westcoast extends Hardware implements NavxRobot{
     private DistanceSensor jewelDistance;
     @Nullable
     private NavxMicroNavigationSensor navX;
+    MediaPlayer player, nfl_player;
 
     public Westcoast(OpMode opMode) {
         super(opMode, COUNTS_PER_INCH);
@@ -78,7 +83,7 @@ public class Westcoast extends Hardware implements NavxRobot{
         this.jewelSensor = getOrNull(map.colorSensor, "jewelSensor");
         this.jewelDistance = map.get(DistanceSensor.class, "jewelSensor");
         this.spring = getOrNull(map.servo, "spring");
-
+        this.intakeServo = getOrNull(map.servo, "intakeServo");
         this.intakeVertical = getOrNull(map.dcMotor, "vertical");
 
         this.driveBackLeft = getOrNull(map.dcMotor, "driveBackLeft");
@@ -110,7 +115,10 @@ public class Westcoast extends Hardware implements NavxRobot{
         }
         if(intakeTopRight != null) intakeTopRight.setDirection(DcMotorSimple.Direction.REVERSE);
         if(intakeBottomRight != null) intakeBottomRight.setDirection(DcMotorSimple.Direction.REVERSE);
-        //Init Servos
+        //Init Servos34.4/12
+        player = MediaPlayer.create(map.appContext, R.raw.nfl_theme);
+        nfl_player = MediaPlayer.create(map.appContext, R.raw.nfl_theme);
+        player.setLooping(true);
     }
 
     public void initServos(){
@@ -143,6 +151,7 @@ public class Westcoast extends Hardware implements NavxRobot{
         driveBackRight.setPower(-rightPower);
     }
 
+
     @Override
     public void driveToInch(double power, double inches){
         resetDriveMotors();
@@ -155,6 +164,13 @@ public class Westcoast extends Hardware implements NavxRobot{
             opMode.telemetry.addData("Target", target);
             opMode.telemetry.addData("Encoder Average", getDriveEncoderAverage());
             opMode.telemetry.update();
+        }
+        driveFrontLeft.setPower(0.1);
+        driveBackLeft.setPower(0.1);
+        driveFrontRight.setPower(0.1);
+        driveBackRight.setPower(0.1);
+        while(!Status.isStopRequested() && getDriveEncoderAverage() >= target){
+
         }
         driveFrontLeft.setPower(0);
         driveBackLeft.setPower(0);
@@ -174,8 +190,6 @@ public class Westcoast extends Hardware implements NavxRobot{
 
     public boolean isColor(int color) {
         int blue = jewelSensor.blue() - blueOffset, red = jewelSensor.red() - redOffset;
-        redOffset = jewelSensor.red();
-        blueOffset = jewelSensor.blue();
         if (Debug.STATUS)
             RobotLog.ii("COLOR", blue + "(" + blueOffset + ")" + ":" + red + "(" + redOffset + ")");
         switch (color) {
@@ -192,7 +206,7 @@ public class Westcoast extends Hardware implements NavxRobot{
     public void knockOverJewel(int color) throws InterruptedException {
         getJewelHorizontal().setPosition(0.5);
         getJewelVerticle().setPosition(.175);
-        sleep(750);
+        sleep(1500);
         if(color==Color.RED) {
             getJewelHorizontal().setPosition(isColor(Color.RED) ? 0 : 1);
         }else if(color==Color.BLUE){
@@ -264,6 +278,8 @@ public class Westcoast extends Hardware implements NavxRobot{
     public Servo getJewelVerticle(){return this.jewelVerticle;}
 
     @Nullable
+    public MediaPlayer getPlayer(){return this.player;}
+    @Nullable
     public Servo getJewelHorizontal(){return this.jewelHorizontal;}
 
     @Nullable
@@ -271,6 +287,12 @@ public class Westcoast extends Hardware implements NavxRobot{
 
     @Nullable
     public ColorSensor getJewelSensor(){return jewelSensor;}
+
+    @Nullable
+    public Servo getIntakeServo(){return intakeServo;}
+
+    @Nullable
+    public MediaPlayer getNfl_player(){return nfl_player;}
 
     @Nullable
     public DistanceSensor getJewelDistance(){return jewelDistance;}

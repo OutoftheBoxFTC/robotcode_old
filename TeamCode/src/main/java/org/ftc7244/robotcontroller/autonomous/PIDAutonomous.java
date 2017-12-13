@@ -10,6 +10,8 @@ import org.ftc7244.robotcontroller.hardware.Westcoast;
 import org.ftc7244.robotcontroller.sensor.gyroscope.GyroscopeProvider;
 import org.ftc7244.robotcontroller.sensor.gyroscope.RevIMUGyroscopeProvider;
 
+import java.io.IOException;
+
 /**
  * Contains all the code for different drive types including ${@link GyroscopeDrive}.
  * Not much happens here beyond the essentials for each control method. It also

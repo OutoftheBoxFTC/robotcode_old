@@ -1,5 +1,7 @@
 package org.ftc7244.robotcontroller.programs.autonomous;
 
+import android.graphics.Color;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -18,11 +20,10 @@ public class ColorSensorTest extends LinearOpMode {
         Westcoast robot = new Westcoast(this);
         robot.init();
         waitForStart();
-        DataFilter filter = new DataFilter(10);
-        while(isStarted()) {
-            filter.update(robot.getJewelSensor().red());
-            Logger.getInstance().queueData("Filtered", filter.getReading());
-            Logger.getInstance().queueData("Unfiltered", robot.getJewelSensor().red());
+        while(opModeIsActive()){
+            telemetry.addData("RED", robot.isColor(Color.RED));
+            telemetry.addData("BLUE", robot.isColor(Color.BLUE));
+            telemetry.update();
         }
     }
 }

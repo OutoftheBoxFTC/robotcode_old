@@ -14,7 +14,7 @@ public class BlueRight extends PIDAutonomous {
     @Override
     public void run() throws InterruptedException {
         robot.knockOverJewel(Color.RED);//Knock off jewel
-        robot.driveToInch(0.2, 12);//Drive off balancing stone
+      //  robot.driveToInch(0.2, 12);//Drive off balancing stone
         sleep(1000);//Wait for gyro to calibrate
         gyroscope.rotate(-90);//Rotate parallel to wall
         gyroscope.drive(0.2, 24);//Drive in direction of cryptobox
