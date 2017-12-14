@@ -59,12 +59,8 @@ public abstract class PIDDriveControl {
             double pid = controller.update(getReading());
             RobotLog.i(getReading() + ":" + pid);
             //debug if wanted
-            if (Debug.STATUS) {
-
-            }
-
-            robot.getOpMode().telemetry.addData("Gyro", getReading());
-            robot.getOpMode().telemetry.update();
+            if (Debug.STATUS)
+                Logger.getInstance().queueData("PID", pid);
             //take the PID and provide poweroffset if the robot wants to drive while using PID
             robot.drive(powerOffset + pid, powerOffset - pid);
             //check if the robot should stop driving

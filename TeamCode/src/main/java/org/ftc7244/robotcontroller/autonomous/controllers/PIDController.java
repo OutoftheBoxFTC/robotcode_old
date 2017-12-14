@@ -2,6 +2,7 @@ package org.ftc7244.robotcontroller.autonomous.controllers;
 
 import com.qualcomm.robotcore.util.RobotLog;
 
+import org.ftc7244.datalogger.Logger;
 import org.ftc7244.robotcontroller.autonomous.Status;
 
 import static java.lang.Double.isInfinite;
@@ -118,7 +119,7 @@ public class PIDController {
             pause((long) (this.delay - (System.currentTimeMillis() - this.cycleTime)));
         dt = System.currentTimeMillis() - this.cycleTime;
         cycleTime = System.currentTimeMillis();
-
+        Logger.getInstance().queueData("P", proportional).queueData("I", integral).queueData("D", derivative);
         //calculate the PID result
         double result = proportional + integral + derivative;
         //limit the PID result if range is present

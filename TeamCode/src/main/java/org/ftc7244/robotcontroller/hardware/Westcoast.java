@@ -45,7 +45,6 @@ public class Westcoast extends Hardware implements NavxRobot{
     private DistanceSensor jewelDistance;
     @Nullable
     private NavxMicroNavigationSensor navX;
-    MediaPlayer player, nfl_player;
 
     public Westcoast(OpMode opMode) {
         super(opMode, COUNTS_PER_INCH);
@@ -116,9 +115,6 @@ public class Westcoast extends Hardware implements NavxRobot{
         if(intakeTopRight != null) intakeTopRight.setDirection(DcMotorSimple.Direction.REVERSE);
         if(intakeBottomRight != null) intakeBottomRight.setDirection(DcMotorSimple.Direction.REVERSE);
         //Init Servos34.4/12
-        player = MediaPlayer.create(map.appContext, R.raw.nfl_theme);
-        nfl_player = MediaPlayer.create(map.appContext, R.raw.nfl_theme);
-        player.setLooping(true);
     }
 
     public void initServos(){
@@ -278,8 +274,6 @@ public class Westcoast extends Hardware implements NavxRobot{
     public Servo getJewelVerticle(){return this.jewelVerticle;}
 
     @Nullable
-    public MediaPlayer getPlayer(){return this.player;}
-    @Nullable
     public Servo getJewelHorizontal(){return this.jewelHorizontal;}
 
     @Nullable
@@ -292,18 +286,10 @@ public class Westcoast extends Hardware implements NavxRobot{
     public Servo getIntakeServo(){return intakeServo;}
 
     @Nullable
-    public MediaPlayer getNfl_player(){return nfl_player;}
-
-    @Nullable
     public DistanceSensor getJewelDistance(){return jewelDistance;}
 
     @Nullable
     public NavxMicroNavigationSensor getNavX(){
         return navX;
-    }
-
-    @Nullable
-    public Servo getIntakeServo() {
-        return intakeServo;
     }
 }
