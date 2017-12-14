@@ -71,7 +71,6 @@ public class GyroscopeDrive extends PIDDriveControl {
         robot.resetDriveMotors();
         if (inches <= 0) RobotLog.e("Invalid distances!");
         final int offset = robot.getDriveEncoderAverage();
-        RobotLog.ii("SHIT", Integer.toString(robot.getDriveEncoderAverage()));
         control(target, power, new Terminator() {
             @Override
             public boolean shouldTerminate() {

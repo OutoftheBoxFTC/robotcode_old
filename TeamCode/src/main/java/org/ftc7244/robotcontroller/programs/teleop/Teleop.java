@@ -73,7 +73,7 @@ public class Teleop extends LinearOpMode {
         while (opModeIsActive()) {
             double coefficient = leftTrigger1.isPressed() ? SLOW_DRIVE_COEFFICIENT : 1;
             robot.drive(-gamepad1.left_stick_y * coefficient, -gamepad1.right_stick_y * coefficient);
-            robot.getIntakeServo().setPosition(yButton.isPressed()?1:0);
+            robot.getIntakeServo().setPosition(yButton.isPressed() ? 1 : 0.05);
             if (panicButton.isPressed()) {
                 robot.getSpring().setPosition(0.6);
             }
