@@ -126,6 +126,13 @@ public class Westcoast extends Hardware implements NavxRobot{
         }
     }
 
+    public void driveintakeVertical(double power){
+        intakeBottomLeft.setPower(power);
+        intakeBottomRight.setPower(power);
+        intakeTopLeft.setPower(power);
+        intakeTopRight.setPower(power);
+    }
+
     @Override
     public void drive(double leftPower, double rightPower, long timeMillis) throws InterruptedException{
         driveFrontLeft.setPower(leftPower);
@@ -201,7 +208,7 @@ public class Westcoast extends Hardware implements NavxRobot{
 
     public void knockOverJewel(int color) throws InterruptedException {
         getJewelHorizontal().setPosition(0.5);
-        getJewelVerticle().setPosition(.175);
+        getJewelVerticle().setPosition(0);
         sleep(1500);
         if(color==Color.RED) {
             getJewelHorizontal().setPosition(isColor(Color.RED) ? 0 : 1);

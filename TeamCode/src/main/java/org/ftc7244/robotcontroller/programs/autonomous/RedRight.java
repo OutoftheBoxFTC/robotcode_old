@@ -15,22 +15,20 @@ public class RedRight extends PIDAutonomous {
 
     public void run() throws InterruptedException{
         robot.knockOverJewel(Color.BLUE);//Check color sensor
-        robot.driveToInch(.2, 12);//Drive off balancing stone
+        robot.driveToInch(.2, 30);//Drive off balancing stone
         gyroscope.rotate(-gyroProvider.getZ());//Re-Center the robot
         gyroscope.rotate(45);//Rotate
-        robot.getIntakeTopLeft().setPower(0.5);
-        robot.getIntakeTopRight().setPower(0.5);
-        sleep(500);
-        robot.getIntakeTopLeft().setPower(0);
-        robot.getIntakeTopRight().setPower(0);
+        robot.driveintakeVertical(0.5);
+        sleep(1000);
+        robot.driveintakeVertical(0);
         gyroscope.drive(0.4, 11);//Drive to glyph pit
         robot.getIntakeServo().setPosition(0.5);
         robot.getSpring().setPosition(.5);//Spring out glyph
         robot.getIntakeBottom().setPower(-1);//activate Intake
-        gyroscope.drive(0.4, 3);// Drive into glyph pit
+        gyroscope.drive(0.2, 10);// Drive into glyph pit
         robot.getIntakeServo().setPosition(0);
         robot.getIntakeBottom().setPower(0);//disable outtake
-        gyroscope.rotate(170);//Rotate so back faces glyph pit
+        gyroscope.rotate(-170);//Rotate so back faces glyph pit
         gyroscope.drive(0.5, 11);//Drive glyph into the glyph box
         robot.getIntakeBottom().setPower(1);
         gyroscope.drive(-0.4, 2);//Drive foreword

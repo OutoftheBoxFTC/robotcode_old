@@ -119,7 +119,7 @@ public class PIDController {
             pause((long) (this.delay - (System.currentTimeMillis() - this.cycleTime)));
         dt = System.currentTimeMillis() - this.cycleTime;
         cycleTime = System.currentTimeMillis();
-        Logger.getInstance().queueData("P", proportional).queueData("I", integral).queueData("D", derivative);
+        Logger.getInstance().queueData("P", proportional).queueData("I", integral).queueData("D", derivative).queueData("Reading", measured);
         //calculate the PID result
         double result = proportional + integral + derivative;
         //limit the PID result if range is present
