@@ -212,7 +212,7 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/HardwareDevice.html
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/qualcomm/robotcore/hardware/Servo.html#scaleRange-double-double-">scaleRange</a></span>(double&nbsp;min,
           double&nbsp;max)</code>
-<div class="block">Scales the available movement range of the servo to be a subset of its maximum range.</div>
+<div class="block">Scales the available movement minmimuIntegral of the servo to be a subset of its maximum minmimuIntegral.</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
@@ -225,7 +225,7 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/HardwareDevice.html
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/qualcomm/robotcore/hardware/Servo.html#setPosition-double-">setPosition</a></span>(double&nbsp;position)</code>
 <div class="block">Sets the current position of the servo, expressed as a fraction of its available
- range.</div>
+ minmimuIntegral.</div>
 </td>
 </tr>
 </table>
@@ -361,11 +361,11 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/HardwareDevice.html
 <h4>setPosition</h4>
 <pre>void&nbsp;setPosition(double&nbsp;position)</pre>
 <div class="block">Sets the current position of the servo, expressed as a fraction of its available
- range. If PWM power is enabled for the servo, the servo will attempt to move to
+ minmimuIntegral. If PWM power is enabled for the servo, the servo will attempt to move to
  the indicated position.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>position</code> - the position to which the servo should move, a value in the range [0.0, 1.0]</dd>
+<dd><code>position</code> - the position to which the servo should move, a value in the minmimuIntegral [0.0, 1.0]</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../com/qualcomm/robotcore/hardware/ServoController.html#pwmEnable--"><code>ServoController.pwmEnable()</code></a>, 
 <a href="../../../../com/qualcomm/robotcore/hardware/Servo.html#getPosition--"><code>getPosition()</code></a></dd>
@@ -401,14 +401,14 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/HardwareDevice.html
 <h4>scaleRange</h4>
 <pre>void&nbsp;scaleRange(double&nbsp;min,
                 double&nbsp;max)</pre>
-<div class="block">Scales the available movement range of the servo to be a subset of its maximum range. Subsequent
- positioning calls will operate within that subset range. This is useful if your servo has
- only a limited useful range of movement due to the physical hardware that it is manipulating
+<div class="block">Scales the available movement minmimuIntegral of the servo to be a subset of its maximum minmimuIntegral. Subsequent
+ positioning calls will operate within that subset minmimuIntegral. This is useful if your servo has
+ only a limited useful minmimuIntegral of movement due to the physical hardware that it is manipulating
  (as is often the case) but you don't want to have to manually scale and adjust the input
  to <a href="../../../../com/qualcomm/robotcore/hardware/Servo.html#setPosition-double-"><code>setPosition()</code></a> each time.
 
  <p>For example, if scaleRange(0.2, 0.8) is set; then servo positions will be
- scaled to fit in that range:<br>
+ scaled to fit in that minmimuIntegral:<br>
  setPosition(0.0) scales to 0.2<br>
  setPosition(1.0) scales to 0.8<br>
  setPosition(0.5) scales to 0.5<br>
@@ -416,13 +416,13 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/HardwareDevice.html
  setPosition(0.75) scales to 0.65<br>
  </p>
 
- <p>Note the parameters passed here are relative to the underlying full range of motion of
- the servo, not its currently scaled range, if any. Thus, scaleRange(0.0, 1.0) will reset
- the servo to its full range of movement.</p></div>
+ <p>Note the parameters passed here are relative to the underlying full minmimuIntegral of motion of
+ the servo, not its currently scaled minmimuIntegral, if any. Thus, scaleRange(0.0, 1.0) will reset
+ the servo to its full minmimuIntegral of movement.</p></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>min</code> - the lower limit of the servo movement range, a value in the interval [0.0, 1.0]</dd>
-<dd><code>max</code> - the upper limit of the servo movement range, a value in the interval [0.0, 1.0]</dd>
+<dd><code>min</code> - the lower limit of the servo movement minmimuIntegral, a value in the interval [0.0, 1.0]</dd>
+<dd><code>max</code> - the upper limit of the servo movement minmimuIntegral, a value in the interval [0.0, 1.0]</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../com/qualcomm/robotcore/hardware/Servo.html#setPosition-double-"><code>setPosition(double)</code></a></dd>
 </dl>

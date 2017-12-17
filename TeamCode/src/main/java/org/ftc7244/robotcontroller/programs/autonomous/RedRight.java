@@ -15,21 +15,24 @@ public class RedRight extends PIDAutonomous {
 
     public void run() throws InterruptedException{
         robot.knockOverJewel(Color.BLUE);//Check color sensor
-        robot.driveToInch(.2, 30);//Drive off balancing stone
+        robot.driveToInch(.25, 25);//Drive off balancing stone
         gyroscope.rotate(-gyroProvider.getZ());//Re-Center the robot
         gyroscope.rotate(45);//Rotate
-        robot.driveintakeVertical(0.5);
-        sleep(1000);
-        robot.driveintakeVertical(0);
-        gyroscope.drive(0.4, 11);//Drive to glyph pit
-        robot.getIntakeServo().setPosition(0.5);
         robot.getSpring().setPosition(.5);//Spring out glyph
-        robot.getIntakeBottom().setPower(-1);//activate Intake
-        gyroscope.drive(0.2, 10);// Drive into glyph pit
-        robot.getIntakeServo().setPosition(0);
-        robot.getIntakeBottom().setPower(0);//disable outtake
-        gyroscope.rotate(-170);//Rotate so back faces glyph pit
-        gyroscope.drive(0.5, 11);//Drive glyph into the glyph box
+        robot.driveintakeVertical(.5);
+        sleep(750);
+        robot.driveintakeVertical(0);
+
+        robot.jiggleBottomVertical(250, 5000);
+        robot.getIntakeBottom().setPower(-1);
+        robot.getIntakeServo().setPosition(0.5);//activate intake
+        gyroscope.drive(0.4, 15);//Drive to glyph pit
+        robot.getIntakeServo().setPosition(0);//Close intake
+
+        gyroscope.drive(-0.4, 5);
+        gyroscope.rotate(160);//Rotate so back faces glyph pit
+        robot.getIntakeBottom().setPower(0);//disable intake
+        gyroscope.drive(0.5, 50);//Drive glyph into the glyph box
         robot.getIntakeBottom().setPower(1);
         gyroscope.drive(-0.4, 2);//Drive foreword
         robot.getIntakeBottom().setPower(0);

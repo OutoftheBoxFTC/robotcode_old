@@ -15,6 +15,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.R;
@@ -159,26 +160,13 @@ public class Westcoast extends Hardware implements NavxRobot{
     public void driveToInch(double power, double inches){
         resetDriveMotors();
         double target = inches * COUNTS_PER_INCH;
-        driveFrontLeft.setPower(power);
-        driveBackLeft.setPower(power);
-        driveFrontRight.setPower(-power);
-        driveBackRight.setPower(-power);
+        drive(power, power);
         while(!Status.isStopRequested() && getDriveEncoderAverage() <= target){
             opMode.telemetry.addData("Target", target);
             opMode.telemetry.addData("Encoder Average", getDriveEncoderAverage());
             opMode.telemetry.update();
         }
-        driveFrontLeft.setPower(0.1);
-        driveBackLeft.setPower(0.1);
-        driveFrontRight.setPower(0.1);
-        driveBackRight.setPower(0.1);
-        while(!Status.isStopRequested() && getDriveEncoderAverage() >= target){
-
-        }
-        driveFrontLeft.setPower(0);
-        driveBackLeft.setPower(0);
-        driveFrontRight.setPower(0);
-        driveBackRight.setPower(0);
+        drive(0, 0);
     }
 
     @Override
@@ -208,12 +196,12 @@ public class Westcoast extends Hardware implements NavxRobot{
 
     public void knockOverJewel(int color) throws InterruptedException {
         getJewelHorizontal().setPosition(0.5);
-        getJewelVerticle().setPosition(0);
+        getJewelVerticle().setPosition(0.1);
         sleep(1500);
         if(color==Color.RED) {
-            getJewelHorizontal().setPosition(isColor(Color.RED) ? 0 : 1);
+            getJewelHorizontal().setPosition(isColor(Color.RED) ? 0 : 0.7);
         }else if(color==Color.BLUE){
-            getJewelHorizontal().setPosition(isColor(Color.RED) ? 1 : 0);
+            getJewelHorizontal().setPosition(isColor(Color.RED) ? 0.7 : 0);
 
         }
         sleep(500);
@@ -298,5 +286,25 @@ public class Westcoast extends Hardware implements NavxRobot{
     @Nullable
     public NavxMicroNavigationSensor getNavX(){
         return navX;
+    }
+
+    public void jiggleBottomVertical(final long time, final long interval) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                ElapsedTime timer = new ElapsedTime(0);
+                double power = 0.5;
+                while (timer.milliseconds()<time){
+                    if (timer.milliseconds() >= interval) {
+                        power *=-1;
+                        timer.reset();
+                    }
+                    intakeTopLeft.setPower(power);
+                    intakeTopRight.setPower(power);
+                }
+                intakeTopLeft.setPower(0);
+                intakeTopRight.setPower(0);
+            }
+        });
     }
 }
