@@ -25,8 +25,10 @@ public class RedRight extends PIDAutonomous {
         robot.getIntakeServo().setPosition(0.5);
         robot.getSpring().setPosition(.5);//Spring out glyph
         robot.getIntakeBottom().setPower(-1);//activate Intake
-        gyroscope.drive(0.2, 10);// Drive into glyph pit
+        gyroscope.drive(0.3, 10);// Drive into glyph pit
         robot.getIntakeServo().setPosition(0);
+        sleep(3000);
+        gyroscope.drive(0.3, -5);
         robot.getIntakeBottom().setPower(0);//disable outtake
         gyroscope.rotate(-170);//Rotate so back faces glyph pit
         gyroscope.drive(0.5, 11);//Drive glyph into the glyph box
