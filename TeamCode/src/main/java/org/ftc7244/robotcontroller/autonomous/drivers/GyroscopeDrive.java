@@ -21,6 +21,7 @@ public class GyroscopeDrive extends PIDDriveControl {
 
     protected GyroscopeProvider gyroProvider;
     protected Hardware robot;
+    private double target;
 
     /**
      * Same as the parent constructor but passes a debug as fault by default since most users will
@@ -46,11 +47,18 @@ public class GyroscopeDrive extends PIDDriveControl {
                 robot);
         this.gyroProvider = gyroProvider;
         this.robot = robot;
+        this.target = 0;
     }
 
     @Override
     public double getReading() {
-        return this.gyroProvider.getZ();
+        double reading = this.gyroProvider.getZ();
+        if (target > 0 && reading < 0) {
+            return 180 - reading; 
+        } else if (target < 0 && reading > 0) {
+            return -180 - reading;
+        }
+        return target;
     }
 
     public void drive(double power, double inches) throws InterruptedException {
@@ -68,6 +76,7 @@ public class GyroscopeDrive extends PIDDriveControl {
      */
     public void drive(double power, double inches, double target) throws InterruptedException {
         final double ticks = inches * Westcoast.COUNTS_PER_INCH;
+        this.target = 0;
         robot.resetDriveMotors();
         if (inches <= 0) RobotLog.e("Invalid distances!");
         final int offset = robot.getDriveEncoderAverage();
@@ -91,6 +100,7 @@ public class GyroscopeDrive extends PIDDriveControl {
      */
     public void rotate(double degrees) throws InterruptedException {
         double target = degrees + gyroProvider.getZ();
+        this.target = 0; 
         control(target, 0, new ConditionalTerminator(new SensitivityTerminator(this, target, 0.5, 300), new TimerTerminator(4500)));
         resetOrientation();
     }
