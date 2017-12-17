@@ -9,7 +9,7 @@ given length ago.
 public class DataFilter {
     private ArrayList<Double> data;
     private int length;
-    private double reading;
+    private volatile double reading;
 
     /**
      * @param length Determines how many data points the filter remembers

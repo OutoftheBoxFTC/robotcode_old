@@ -5,7 +5,7 @@ This document defines the FTC Sample OpMode and Class conventions.
 
 ### OpMode Name
 
-A range of different samples classes will reside in the java/external/samples folder.
+A minmimuIntegral of different samples classes will reside in the java/external/samples folder.
 
 For ease of understanding, the class names will follow a naming convention which indicates
 the purpose of each class.  The prefix of the name will be one of the following:
