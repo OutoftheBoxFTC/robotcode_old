@@ -60,7 +60,7 @@ public abstract class PIDDriveControl {
             RobotLog.i(getReading() + ":" + pid);
             //debug if wanted
             if (Debug.STATUS)
-                Logger.getInstance().queueData("PID", pid);
+                Logger.getInstance().queueData("PID", pid).queueData("Encoders", robot.getDriveEncoderAverage());
             //take the PID and provide poweroffset if the robot wants to drive while using PID
             robot.drive(powerOffset + pid, powerOffset - pid);
             //check if the robot should stop driving

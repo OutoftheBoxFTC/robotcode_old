@@ -8,6 +8,7 @@ import org.ftc7244.robotcontroller.autonomous.drivers.GyroscopeDrive;
 import org.ftc7244.robotcontroller.hardware.Westcoast;
 import org.ftc7244.robotcontroller.sensor.gyroscope.GyroscopeProvider;
 import org.ftc7244.robotcontroller.sensor.gyroscope.RevIMUGyroscopeProvider;
+import org.ftc7244.robotcontroller.sensor.vuforia.ImageTransformProvider;
 
 /**
  * Contains all the code for different drive types including ${@link GyroscopeDrive}.
@@ -23,6 +24,8 @@ public abstract class PIDAutonomous extends LinearOpMode {
 
     protected final GyroscopeDrive gyroscope;
 
+    protected final ImageTransformProvider imageProvider;
+
     protected Westcoast robot;
     private long end;
 
@@ -35,6 +38,8 @@ public abstract class PIDAutonomous extends LinearOpMode {
         gyroProvider = new RevIMUGyroscopeProvider();
 
         gyroscope = new GyroscopeDrive(robot, gyroProvider);
+
+        imageProvider = new ImageTransformProvider();
     }
 
     @Override
@@ -46,6 +51,7 @@ public abstract class PIDAutonomous extends LinearOpMode {
         Status.setAutonomous(this);
         try {
             gyroProvider.start(hardwareMap);
+            imageProvider.start(hardwareMap);
             while (!isStarted()) {
                 if (gyroProvider.isCalibrated()) {
                     telemetry.addLine("Gyroscope calibrated!");
@@ -66,6 +72,7 @@ public abstract class PIDAutonomous extends LinearOpMode {
             t.printStackTrace();
         } finally {
             gyroProvider.stop();
+            imageProvider.stop();
             Status.setAutonomous(null);
         }
     }
