@@ -19,7 +19,7 @@ import org.ftc7244.robotcontroller.hardware.Hardware;
  */
 public abstract class PIDDriveControl {
 
-    protected  PIDController controller;
+    protected PIDController controller;
     protected Hardware robot;
 
     public PIDDriveControl(PIDController controller, Hardware robot) {
