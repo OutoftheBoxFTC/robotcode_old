@@ -22,7 +22,7 @@ public class Teleop extends LinearOpMode {
     private Button leftTrigger1, dPadUp, dPadDown, rightTrigger, leftTrigger, rightBumper, leftBumper, aButton, bButton, yButton, panicButton, driverAButton, driverBButton, driverXButton;
     private static final double SLOW_DRIVE_COEFFICIENT = 0.5, LIFT_REST = 0.1, LIFT_RAISE = .8;
     private double VERTICAL_INTAKE_MULTIPLIER = 1, VERTICAL_INTAKE_STOP = 1;
-    private static final long JIGGLE_INTERVAL_MS = 250, JIGGLE_INTERVAL_REST = 500;
+    private static final long JIGGLE_INTERVAL_MS = 250, JIGGLE_INTERVAL_REST = 1000;
     ElapsedTime elapsedTime = new ElapsedTime();
     private ArrayList<MediaPlayer> sounds;
 
@@ -83,11 +83,12 @@ public class Teleop extends LinearOpMode {
                 horizontalRunning = true;
                 robot.getIntakeTopLeft().setPower(0.5 * VERTICAL_INTAKE_MULTIPLIER * VERTICAL_INTAKE_STOP);
                 robot.getIntakeTopRight().setPower(0.5 * VERTICAL_INTAKE_MULTIPLIER * VERTICAL_INTAKE_STOP);
+                robot.getIntakeBottomLeft().setPower(0.25 * VERTICAL_INTAKE_MULTIPLIER * VERTICAL_INTAKE_STOP);
+                robot.getIntakeBottomRight().setPower(0.25 * VERTICAL_INTAKE_MULTIPLIER * VERTICAL_INTAKE_STOP);
                 if (elapsedTime.milliseconds() >= JIGGLE_INTERVAL_MS) {
                     VERTICAL_INTAKE_STOP = 0;
                 }
                 if (elapsedTime.milliseconds() >= JIGGLE_INTERVAL_REST) {
-                    VERTICAL_INTAKE_MULTIPLIER = -VERTICAL_INTAKE_MULTIPLIER;
                     VERTICAL_INTAKE_STOP = 1;
                     elapsedTime.reset();
                 }
