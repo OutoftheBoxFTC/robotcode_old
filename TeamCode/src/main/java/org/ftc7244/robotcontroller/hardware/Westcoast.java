@@ -1,7 +1,6 @@
 package org.ftc7244.robotcontroller.hardware;
 
 import android.graphics.Color;
-import android.media.MediaPlayer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -15,14 +14,10 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.RobotLog;
 
-import org.firstinspires.ftc.teamcode.R;
 import org.ftc7244.robotcontroller.Debug;
 import org.ftc7244.robotcontroller.autonomous.Status;
-import org.ftc7244.robotcontroller.autonomous.drivers.GyroscopeDrive;
-import org.ftc7244.robotcontroller.sensor.gyroscope.GyroscopeProvider;
 import org.ftc7244.robotcontroller.sensor.gyroscope.NavxRobot;
 
 /**
@@ -33,11 +28,11 @@ public class Westcoast extends Hardware implements NavxRobot{
     public static final double COUNTS_PER_INCH = 403.2 / (3.9 * Math.PI);
 
     @Nullable
-    private DcMotor driveBackLeft, driveFrontLeft, driveBackRight, driveFrontRight, intakeVertical, intakeTop, intakeBottom;
+    private DcMotor driveBackLeft, driveFrontLeft, driveBackRight, driveFrontRight, intakeLift, intakeTop, intakeBottom;
     @Nullable
     private CRServo intakeBottomLeft, intakeBottomRight, intakeTopLeft, intakeTopRight;
     @Nullable
-    private Servo jewelVerticle, jewelHorizontal, spring, intakeServo;
+    private Servo jewelVertical, jewelHorizontal, spring, intakeServo;
     @Nullable
     private AnalogInput vertLimit;
     @Nullable
@@ -84,7 +79,7 @@ public class Westcoast extends Hardware implements NavxRobot{
         this.jewelDistance = map.get(DistanceSensor.class, "jewelSensor");
         this.spring = getOrNull(map.servo, "spring");
         this.intakeServo = getOrNull(map.servo, "intakeServo");
-        this.intakeVertical = getOrNull(map.dcMotor, "vertical");
+        this.intakeLift = getOrNull(map.dcMotor, "vertical");
 
         this.driveBackLeft = getOrNull(map.dcMotor, "driveBackLeft");
         this.driveFrontLeft = getOrNull(map.dcMotor, "driveFrontLeft");
@@ -100,7 +95,7 @@ public class Westcoast extends Hardware implements NavxRobot{
         this.intakeTop = getOrNull(map.dcMotor, "intakeT");
         this.intakeBottom = getOrNull(map.dcMotor, "intakeB");
 
-        this.jewelVerticle = getOrNull(map.servo, "jewelVerticle");
+        this.jewelVertical = getOrNull(map.servo, "jewelVertical");
         this.jewelHorizontal = getOrNull(map.servo, "jewelHorizontal");
 
         //Set the default direction for all the hardware and also initialize default positions
@@ -119,7 +114,7 @@ public class Westcoast extends Hardware implements NavxRobot{
     }
 
     public void initServos(){
-        if(jewelVerticle != null) jewelVerticle.setPosition(0.55);
+        if(jewelVertical != null) jewelVertical.setPosition(0.55);
         if(jewelHorizontal != null) jewelHorizontal.setPosition(0);
         if(spring != null){
             spring.setPosition(1);
@@ -127,7 +122,7 @@ public class Westcoast extends Hardware implements NavxRobot{
         }
     }
 
-    public void driveintakeVertical(double power){
+    public void driveIntakeVertical(double power){
         intakeBottomLeft.setPower(power);
         intakeBottomRight.setPower(power);
         intakeTopLeft.setPower(power);
@@ -196,7 +191,7 @@ public class Westcoast extends Hardware implements NavxRobot{
 
     public void knockOverJewel(int color) throws InterruptedException {
         getJewelHorizontal().setPosition(0.5);
-        getJewelVerticle().setPosition(0.1);
+        getJewelVertical().setPosition(0.1);
         sleep(1500);
         if(color==Color.RED) {
             getJewelHorizontal().setPosition(isColor(Color.RED) ? 0 : 0.7);
@@ -206,7 +201,7 @@ public class Westcoast extends Hardware implements NavxRobot{
         }
         sleep(500);
         getJewelHorizontal().setPosition(0.4);
-        getJewelVerticle().setPosition(0.55);
+        getJewelVertical().setPosition(0.55);
         sleep(500);
     }
 
@@ -221,7 +216,7 @@ public class Westcoast extends Hardware implements NavxRobot{
     }
 
     @Nullable
-    public DcMotor getIntakeVertical(){return this.intakeVertical;}
+    public DcMotor getIntakeLift(){return this.intakeLift;}
 
     @Nullable
     public DcMotor getDriveFrontRight() {
@@ -266,7 +261,7 @@ public class Westcoast extends Hardware implements NavxRobot{
     public Servo getSpring(){return this.spring;}
 
     @Nullable
-    public Servo getJewelVerticle(){return this.jewelVerticle;}
+    public Servo getJewelVertical(){return this.jewelVertical;}
 
     @Nullable
     public Servo getJewelHorizontal(){return this.jewelHorizontal;}
@@ -288,23 +283,4 @@ public class Westcoast extends Hardware implements NavxRobot{
         return navX;
     }
 
-    public void jiggleBottomVertical(final long time, final long interval) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                ElapsedTime timer = new ElapsedTime(0);
-                double power = 0.5;
-                while (timer.milliseconds()<time){
-                    if (timer.milliseconds() >= interval) {
-                        power *=-1;
-                        timer.reset();
-                    }
-                    intakeTopLeft.setPower(power);
-                    intakeTopRight.setPower(power);
-                }
-                intakeTopLeft.setPower(0);
-                intakeTopRight.setPower(0);
-            }
-        });
-    }
 }

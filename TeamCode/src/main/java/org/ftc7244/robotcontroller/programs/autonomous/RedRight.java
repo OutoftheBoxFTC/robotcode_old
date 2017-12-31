@@ -15,60 +15,71 @@ import org.ftc7244.robotcontroller.autonomous.PIDAutonomous;
 public class RedRight extends PIDAutonomous {
 
     public void run() throws InterruptedException{
-        robot.knockOverJewel(Color.BLUE);//Check color sensor
-        robot.driveToInch(.2, 30);//Drive off balancing stone
+        robot.getIntakeServo().setPosition(0);
+        //robot.knockOverJewel(Color.BLUE);//Check color sensor
+        robot.driveToInch(.2, 28);//Drive off balancing stone
         gyroscope.rotate(-gyroProvider.getZ());//Re-Center the robot
-        robot.getIntakeServo().setPosition(0.5);
-        robot.getSpring().setPosition(.5);//Spring out glyph
+        robot.getSpring().setPosition(1);//Spring out glyph
         RelicRecoveryVuMark image = imageProvider.getImageReading();
         telemetry.addData("Image", image);
         telemetry.update();
         sleep(1000);
-        gyroscope.rotate(45);//Rotate
-        robot.driveintakeVertical(0.5);
-        sleep(1000);
-        robot.driveintakeVertical(0);
+        gyroscope.rotate(45);//Rotate to face glyph pit
+        robot.driveIntakeVertical(0.5);
+        sleep(300);
+        robot.driveIntakeVertical(0);
         gyroscope.drive(0.4, 11);//Drive to glyph pit
         robot.getIntakeBottom().setPower(-1);//activate Intake
-        gyroscope.drive(0.3, 15);// Drive into glyph pit
+        gyroscope.drive(0.3, 12);// Drive into glyph pit
         robot.getIntakeServo().setPosition(0);
-        sleep(3000);
+        sleep(1500);
         gyroscope.drive(-0.3, 10);
-        robot.getIntakeBottom().setPower(0);//disable outtake
-        gyroscope.rotate(-160);//Rotate so back faces glyph pit
-        robot.driveintakeVertical(0.5);
-        sleep(100);
-        robot.driveintakeVertical(0);
-        gyroscope.drive(0.5, 38);//Drive glyph into the glyph box
-        gyroscope.rotate(-65);
-        double driveDistance = 0;
         switch(image){
             case LEFT:
-                gyroscope.rotate(80);
-                driveDistance = 0.3;
+                gyroscope.rotate(-153.5);
+                robot.driveIntakeVertical(0.5);
+                sleep(100);
+                robot.driveIntakeVertical(0);
+                robot.getIntakeBottom().setPower(0);//disable outtake
+                gyroscope.drive(0.5, 34);
+                robot.getIntakeBottom().setPower(1);
+                robot.getIntakeTop().setPower(1);
+                sleep(1500);
+                gyroscope.drive(0.4, 8);
+                gyroscope.drive(-0.4, 8);
                 break;
             case CENTER:
-                gyroscope.rotate(90);
-                driveDistance = 0.4;
+                gyroscope.rotate(-158);
+                robot.driveIntakeVertical(0.5);
+                sleep(100);
+                robot.driveIntakeVertical(0);
+                robot.getIntakeBottom().setPower(0);//disable outtake
+                gyroscope.drive(0.5, 38);
+                robot.getIntakeBottom().setPower(1);
+                robot.getIntakeTop().setPower(1);
+                sleep(1500);
+                gyroscope.drive(0.4, 8);
+                gyroscope.drive(-0.4, 8);
                 break;
             case RIGHT:
-                gyroscope.rotate(100);
-                driveDistance = 0.5;
+                gyroscope.rotate(-166);
+                robot.driveIntakeVertical(0.5);
+                sleep(100);
+                robot.driveIntakeVertical(0);
+                robot.getIntakeBottom().setPower(0);//disable outtake
+                gyroscope.drive(0.5, 31);
+                robot.getIntakeBottom().setPower(1);
+                robot.getIntakeTop().setPower(1);
+                sleep(1500);
+                gyroscope.drive(0.4, 8);
+                gyroscope.drive(-0.4, 8);
                 break;
             default:
                 gyroscope.rotate(180);
                 break;
         }
-        gyroscope.drive(driveDistance, 2);
         robot.getIntakeBottom().setPower(1);
         gyroscope.drive(-0.2, 2);
         robot.getIntakeBottom().setPower(0);
-        /*robot.getIntakeBottom().setPower(1);
-        gyroscope.drive(-0.4, 2);//Drive foreword
-        robot.getIntakeBottom().setPower(0);
-        gyroscope.rotate(170);
-        gyroscope.drive(0.4, 4);
-        robot.getJewelVerticle().setPosition(.15);//Land jewel arm into parking zone
-        sleep(750);//wait for deceleration
-    */}
+    }
 }

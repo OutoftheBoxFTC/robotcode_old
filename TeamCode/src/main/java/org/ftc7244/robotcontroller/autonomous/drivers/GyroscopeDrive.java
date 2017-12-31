@@ -34,7 +34,7 @@ public class GyroscopeDrive extends PIDDriveControl {
         super(new PIDControllerBuilder()
                         .invert()
                         .setProportional(0.012)
-                        .setIntegral(0.000075)
+                        .setIntegral(0.00007)
                         .setDerivative(1.65)
 
                         .setIntegralRange(15)
@@ -53,12 +53,12 @@ public class GyroscopeDrive extends PIDDriveControl {
     @Override
     public double getReading() {
         double reading = this.gyroProvider.getZ();
-        if (target > 0 && reading < 0) {
+/*        if (target > 0 && reading < 0) {
             return 180 - reading; 
         } else if (target < 0 && reading > 0) {
             return -180 - reading;
         }
-        return target;
+ */       return reading;
     }
 
     public void drive(double power, double inches) throws InterruptedException {
@@ -101,7 +101,7 @@ public class GyroscopeDrive extends PIDDriveControl {
     public void rotate(double degrees) throws InterruptedException {
         double target = degrees + gyroProvider.getZ();
         this.target = 0; 
-        control(target, 0, new ConditionalTerminator(new SensitivityTerminator(this, target, 0.5, 300), new TimerTerminator(4500)));
+        control(target, 0, new ConditionalTerminator(new SensitivityTerminator(this, target, 0.5, 300), new TimerTerminator(6000)));
         resetOrientation();
     }
 

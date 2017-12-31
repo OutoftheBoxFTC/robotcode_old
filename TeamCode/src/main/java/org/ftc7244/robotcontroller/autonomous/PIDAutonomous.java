@@ -56,7 +56,7 @@ public abstract class PIDAutonomous extends LinearOpMode {
                 if (gyroProvider.isCalibrated()) {
                     telemetry.addLine("Gyroscope calibrated!");
                     telemetry.update();
-                } else if (!gyroProvider.isCalibrated()) {
+                } else  {
                     telemetry.addLine("No Connection");
                     telemetry.update();
                 }
