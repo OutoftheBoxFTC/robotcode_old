@@ -56,8 +56,9 @@ public class Teleop extends LinearOpMode {
             //Driver
             double coefficient = leftTrigger1.isPressed() ? SLOW_DRIVE_COEFFICIENT : -1;
             robot.drive(gamepad1.left_stick_y * coefficient, gamepad1.right_stick_y * coefficient);
-            robot.getIntakeServo().setPosition(rightBumper.isPressed() ? 0.4 : 0.7);
-            if (panicButton.isPressed()) robot.getSpring().setPosition(0.6);
+            robot.getIntakeServo().setPosition(rightBumper.isPressed() ? 0.45 : 0.7);
+            if (panicButton.isPressed())
+                robot.getSpring().setPosition(0.6);
             //Operator
             if (rightTrigger.isPressed()) {
                 robot.getIntakeBottom().setPower(-1);

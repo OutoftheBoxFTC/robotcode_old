@@ -114,8 +114,8 @@ public class Westcoast extends Hardware implements NavxRobot{
     }
 
     public void initServos(){
-        if(jewelVertical != null) jewelVertical.setPosition(0.55);
-        if(jewelHorizontal != null) jewelHorizontal.setPosition(0);
+        if(jewelVertical != null) jewelVertical.setPosition(0.67);
+        if(jewelHorizontal != null) jewelHorizontal.setPosition(0.73);
         if(spring != null){
             spring.setPosition(1);
             spring.setDirection(Servo.Direction.FORWARD);
@@ -190,18 +190,19 @@ public class Westcoast extends Hardware implements NavxRobot{
     }
 
     public void knockOverJewel(int color) throws InterruptedException {
-        getJewelHorizontal().setPosition(0.5);
-        getJewelVertical().setPosition(0.1);
-        sleep(1500);
+        //color we want to get rid of
+        getJewelHorizontal().setPosition(0.45);
+        getJewelVertical().setPosition(0.26);
+        sleep(1700);
         if(color==Color.RED) {
-            getJewelHorizontal().setPosition(isColor(Color.RED) ? 0 : 0.7);
+            getJewelHorizontal().setPosition(isColor(Color.RED) ? 0.33 : 0.56);
         }else if(color==Color.BLUE){
-            getJewelHorizontal().setPosition(isColor(Color.RED) ? 0.7 : 0);
+            getJewelHorizontal().setPosition(isColor(Color.RED) ? 0.56 : 0.33);
 
         }
         sleep(500);
-        getJewelHorizontal().setPosition(0.4);
-        getJewelVertical().setPosition(0.55);
+        getJewelHorizontal().setPosition(0.73);
+        getJewelVertical().setPosition(0.67);
         sleep(500);
     }
 

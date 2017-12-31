@@ -15,63 +15,50 @@ import org.ftc7244.robotcontroller.autonomous.PIDAutonomous;
 public class RedRight extends PIDAutonomous {
 
     public void run() throws InterruptedException{
-        robot.getIntakeServo().setPosition(0);
-        //robot.knockOverJewel(Color.BLUE);//Check color sensor
+        robot.knockOverJewel(Color.BLUE);//Check color sensor
         robot.driveToInch(.2, 28);//Drive off balancing stone
         gyroscope.rotate(-gyroProvider.getZ());//Re-Center the robot
-        robot.getSpring().setPosition(1);//Spring out glyph
+        sleep(200);
+        robot.getSpring().setPosition(0.6);//Spring out glyph
+        sleep(200);
         RelicRecoveryVuMark image = imageProvider.getImageReading();
         telemetry.addData("Image", image);
         telemetry.update();
         sleep(1000);
+        robot.getIntakeServo().setPosition(0.45);
         gyroscope.rotate(45);//Rotate to face glyph pit
-        robot.driveIntakeVertical(0.5);
-        sleep(300);
-        robot.driveIntakeVertical(0);
+        robot.getIntakeBottom().setPower(-1);
         gyroscope.drive(0.4, 11);//Drive to glyph pit
-        robot.getIntakeBottom().setPower(-1);//activate Intake
         gyroscope.drive(0.3, 12);// Drive into glyph pit
-        robot.getIntakeServo().setPosition(0);
+        robot.getIntakeServo().setPosition(0.7);
         sleep(1500);
         gyroscope.drive(-0.3, 10);
         switch(image){
             case LEFT:
-                gyroscope.rotate(-153.5);
-                robot.driveIntakeVertical(0.5);
-                sleep(100);
-                robot.driveIntakeVertical(0);
+                gyroscope.rotate(-153.1);
                 robot.getIntakeBottom().setPower(0);//disable outtake
-                gyroscope.drive(0.5, 34);
+                gyroscope.drive(0.5, 36);
                 robot.getIntakeBottom().setPower(1);
                 robot.getIntakeTop().setPower(1);
                 sleep(1500);
-                gyroscope.drive(0.4, 8);
                 gyroscope.drive(-0.4, 8);
                 break;
             case CENTER:
                 gyroscope.rotate(-158);
-                robot.driveIntakeVertical(0.5);
-                sleep(100);
-                robot.driveIntakeVertical(0);
                 robot.getIntakeBottom().setPower(0);//disable outtake
                 gyroscope.drive(0.5, 38);
                 robot.getIntakeBottom().setPower(1);
                 robot.getIntakeTop().setPower(1);
                 sleep(1500);
-                gyroscope.drive(0.4, 8);
                 gyroscope.drive(-0.4, 8);
                 break;
             case RIGHT:
                 gyroscope.rotate(-166);
-                robot.driveIntakeVertical(0.5);
-                sleep(100);
-                robot.driveIntakeVertical(0);
                 robot.getIntakeBottom().setPower(0);//disable outtake
                 gyroscope.drive(0.5, 31);
                 robot.getIntakeBottom().setPower(1);
                 robot.getIntakeTop().setPower(1);
                 sleep(1500);
-                gyroscope.drive(0.4, 8);
                 gyroscope.drive(-0.4, 8);
                 break;
             default:
@@ -79,7 +66,9 @@ public class RedRight extends PIDAutonomous {
                 break;
         }
         robot.getIntakeBottom().setPower(1);
-        gyroscope.drive(-0.2, 2);
+        robot.getIntakeTop().setPower(1);
+        gyroscope.drive(0.5, 4);
+        gyroscope.drive(-0.5, 5);
         robot.getIntakeBottom().setPower(0);
     }
 }
