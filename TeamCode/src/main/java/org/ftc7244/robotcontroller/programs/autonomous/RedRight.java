@@ -16,6 +16,7 @@ public class RedRight extends PIDAutonomous {
 
     public void run() throws InterruptedException{
         robot.knockOverJewel(Color.BLUE);//Check color sensor
+        robot.getIntakeTop().setPower(-1);
         robot.driveToInch(.2, 28);//Drive off balancing stone
         gyroscope.rotate(-gyroProvider.getZ());//Re-Center the robot
         sleep(200);
@@ -37,38 +38,26 @@ public class RedRight extends PIDAutonomous {
             case LEFT:
                 gyroscope.rotate(-153.1);
                 robot.getIntakeBottom().setPower(0);//disable outtake
-                gyroscope.drive(0.5, 36);
-                robot.getIntakeBottom().setPower(1);
-                robot.getIntakeTop().setPower(1);
-                sleep(1500);
-                gyroscope.drive(-0.4, 8);
-                break;
-            case CENTER:
-                gyroscope.rotate(-158);
-                robot.getIntakeBottom().setPower(0);//disable outtake
-                gyroscope.drive(0.5, 38);
-                robot.getIntakeBottom().setPower(1);
-                robot.getIntakeTop().setPower(1);
-                sleep(1500);
-                gyroscope.drive(-0.4, 8);
+                gyroscope.drive(0.5, 34);
+
                 break;
             case RIGHT:
                 gyroscope.rotate(-166);
                 robot.getIntakeBottom().setPower(0);//disable outtake
-                gyroscope.drive(0.5, 31);
-                robot.getIntakeBottom().setPower(1);
-                robot.getIntakeTop().setPower(1);
-                sleep(1500);
-                gyroscope.drive(-0.4, 8);
+                gyroscope.drive(0.5, 29);
                 break;
+            case CENTER:
             default:
-                gyroscope.rotate(180);
-                break;
+                gyroscope.rotate(-158);
+                robot.getIntakeBottom().setPower(0);//disable outtake
+                gyroscope.drive(0.5, 36);
         }
         robot.getIntakeBottom().setPower(1);
         robot.getIntakeTop().setPower(1);
-        gyroscope.drive(0.5, 4);
+        gyroscope.drive(-0.2, 8);
+        gyroscope.drive(0.5, 6);
         gyroscope.drive(-0.5, 5);
         robot.getIntakeBottom().setPower(0);
+        robot.getIntakeTop().setPower(0);
     }
 }
