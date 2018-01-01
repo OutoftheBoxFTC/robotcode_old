@@ -67,7 +67,7 @@ public class Teleop extends LinearOpMode {
                 robot.getIntakeBottom().setPower(leftTrigger.isPressed()?1:0);
                 robot.getIntakeTop().setPower(leftBumper.isPressed()?1:0);
             }
-            robot.driveIntakeVertical(bButton.isPressed()?.5:aButton.isPressed()?-.5:0);
+            robot.driveIntakeVertical(aButton.isPressed()?.5:bButton.isPressed()?-.5:0);
             robot.getIntakeLift().setPower(dPadUp.isPressed()?LIFT_RAISE:dPadDown.isPressed()?-LIFT_RAISE:LIFT_REST);
         }
     }
