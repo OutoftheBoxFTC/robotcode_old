@@ -13,60 +13,47 @@ import org.ftc7244.robotcontroller.autonomous.PIDAutonomous;
  */
 @Autonomous(name = "Blue Left")
 public class BlueLeft extends PIDAutonomous {
-    public void run() throws InterruptedException{
 
-        robot.knockOverJewel(Color.BLUE);//Check color sensor
+    public void run() throws InterruptedException{
+        robot.knockOverJewel(Color.RED);//Check color sensor
+        robot.getIntakeTop().setPower(-1);
         robot.driveToInch(.2, 28);//Drive off balancing stone
         gyroscope.rotate(-gyroProvider.getZ());//Re-Center the robot
-        robot.getSpring().setPosition(.5);//Spring out glyph
+        sleep(200);
+        robot.getSpring().setPosition(0.6);//Spring out glyph
+        sleep(200);
         RelicRecoveryVuMark image = imageProvider.getImageReading();
         telemetry.addData("Image", image);
         telemetry.update();
         sleep(1000);
+        robot.getIntakeServo().setPosition(0.45);
         gyroscope.rotate(-45);//Rotate to face glyph pit
+        robot.getIntakeBottom().setPower(-1);
+        robot.driveIntakeVertical(0.5);
+        sleep(200);
+        robot.driveIntakeVertical(0);
         gyroscope.drive(0.4, 11);//Drive to glyph pit
-        robot.getIntakeBottom().setPower(-1);//activate Intake
         gyroscope.drive(0.3, 12);// Drive into glyph pit
         robot.getIntakeServo().setPosition(0.7);
         sleep(1500);
         gyroscope.drive(-0.3, 10);
         switch(image){
             case RIGHT:
-                gyroscope.rotate(153.5);
-                robot.getIntakeBottom().setPower(0);//disable outtake
-                gyroscope.drive(0.5, 34);
-                robot.getIntakeBottom().setPower(1);
-                robot.getIntakeTop().setPower(1);
-                sleep(1500);
-                gyroscope.drive(0.4, 8);
-                gyroscope.drive(-0.4, 8);
-                break;
-            case CENTER:
-                gyroscope.rotate(158);
-                robot.getIntakeBottom().setPower(0);//disable outtake
-                gyroscope.drive(0.5, 38);
-                robot.getIntakeBottom().setPower(1);
-                robot.getIntakeTop().setPower(1);
-                sleep(1500);
-                gyroscope.drive(0.4, 8);
-                gyroscope.drive(-0.4, 8);
+                gyroscope.rotate(154.1);
+                gyroscope.drive(0.5, 43);
                 break;
             case LEFT:
-                gyroscope.rotate(166);
-                robot.getIntakeBottom().setPower(0);//disable outtake
+                gyroscope.rotate(170);
                 gyroscope.drive(0.5, 33);
-                robot.getIntakeBottom().setPower(1);
-                robot.getIntakeTop().setPower(1);
-                sleep(1500);
-                gyroscope.drive(0.4, 8);
-                gyroscope.drive(-0.4, 8);
                 break;
             default:
-                gyroscope.rotate(180);
-                break;
+                gyroscope.rotate(161.3);
+                gyroscope.drive(0.5, 41);
         }
         robot.getIntakeBottom().setPower(1);
-        gyroscope.drive(-0.2, 2);
-        robot.getIntakeBottom().setPower(0);
+        robot.getIntakeTop().setPower(1);
+        gyroscope.drive(-0.2, 8);
+        gyroscope.drive(0.5, 6);
+        gyroscope.drive(-0.5, 5);
     }
 }

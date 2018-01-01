@@ -101,7 +101,7 @@ public class GyroscopeDrive extends PIDDriveControl {
     public void rotate(double degrees) throws InterruptedException {
         double target = degrees + gyroProvider.getZ();
         this.target = 0; 
-        control(target, 0, new ConditionalTerminator(new SensitivityTerminator(this, target, 0.5, 300), new TimerTerminator(6000)));
+        control(target, 0, new ConditionalTerminator(new SensitivityTerminator(this, target, 1, 300), new TimerTerminator(6000)));
         resetOrientation();
     }
 
