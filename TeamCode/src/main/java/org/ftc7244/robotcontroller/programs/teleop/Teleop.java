@@ -14,7 +14,7 @@ import org.ftc7244.robotcontroller.input.ButtonType;
 @TeleOp(name = "Teleop")
 public class Teleop extends LinearOpMode {
     private Westcoast robot;
-    private Button leftTrigger1, dPadUp, dPadDown, rightTrigger, leftTrigger, leftBumper, aButton, bButton, panicButton, rightBumper;
+    private Button leftTrigger1, dPadUp, dPadDown, rightTrigger, leftTrigger, leftBumper, bButton, yButton, panicButton, rightBumper;
     private static final double SLOW_DRIVE_COEFFICIENT = -0.5, LIFT_REST = 0.1, LIFT_RAISE = .8;
 
     /*
@@ -46,8 +46,8 @@ public class Teleop extends LinearOpMode {
         rightTrigger = new Button(gamepad2, ButtonType.RIGHT_TRIGGER);
         leftTrigger = new Button(gamepad2, ButtonType.LEFT_TRIGGER);
         leftBumper = new Button(gamepad2, ButtonType.LEFT_BUMPER);
-        aButton = new Button(gamepad2, ButtonType.A);
         bButton = new Button(gamepad2, ButtonType.B);
+        yButton = new Button(gamepad2, ButtonType.Y);
         rightBumper = new Button(gamepad2, ButtonType.RIGHT_BUMPER);
         robot.init();
         waitForStart();
@@ -56,7 +56,7 @@ public class Teleop extends LinearOpMode {
             //Driver
             double coefficient = leftTrigger1.isPressed() ? SLOW_DRIVE_COEFFICIENT : -1;
             robot.drive(gamepad1.left_stick_y * coefficient, gamepad1.right_stick_y * coefficient);
-            robot.getIntakeServo().setPosition(rightBumper.isPressed() ? 0.45 : 0.7);
+            robot.getIntakeServo().setPosition(rightBumper.isPressed() ? -.05 : 0.7);
             if (panicButton.isPressed())
                 robot.getSpring().setPosition(0.6);
             //Operator
@@ -67,7 +67,7 @@ public class Teleop extends LinearOpMode {
                 robot.getIntakeBottom().setPower(leftTrigger.isPressed()?1:0);
                 robot.getIntakeTop().setPower(leftBumper.isPressed()?1:0);
             }
-            robot.driveIntakeVertical(aButton.isPressed()?.5:bButton.isPressed()?-.5:0);
+            robot.driveIntakeVertical(bButton.isPressed()?.5:yButton.isPressed()?-.5:0);
             robot.getIntakeLift().setPower(dPadUp.isPressed()?LIFT_RAISE:dPadDown.isPressed()?-LIFT_RAISE:LIFT_REST);
         }
     }

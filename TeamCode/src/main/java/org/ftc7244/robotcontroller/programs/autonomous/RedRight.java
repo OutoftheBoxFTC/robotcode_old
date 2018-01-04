@@ -18,7 +18,7 @@ public class RedRight extends PIDAutonomous {
         robot.knockOverJewel(Color.BLUE);//Check color sensor
         robot.getIntakeTop().setPower(-1);
         robot.driveToInch(.2, 28);//Drive off balancing stone
-        gyroscope.rotate(-gyroProvider.getZ());//Re-Center the robot
+        gyroscope.rotate(0);//Re-Center the robot
         sleep(200);
         robot.getSpring().setPosition(0.6);//Spring out glyph
         sleep(200);
@@ -39,8 +39,8 @@ public class RedRight extends PIDAutonomous {
         gyroscope.drive(-0.3, 10);
         switch(image){
             case LEFT:
-                gyroscope.rotate(-153.1);
-                gyroscope.drive(0.5, 36);
+                gyroscope.rotate(-151.1);
+                gyroscope.drive(0.5, 38);
 
                 break;
             case RIGHT:

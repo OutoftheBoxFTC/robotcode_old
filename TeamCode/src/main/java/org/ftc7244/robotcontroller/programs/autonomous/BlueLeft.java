@@ -18,7 +18,7 @@ public class BlueLeft extends PIDAutonomous {
         robot.knockOverJewel(Color.RED);//Check color sensor
         robot.getIntakeTop().setPower(-1);
         robot.driveToInch(.2, 28);//Drive off balancing stone
-        gyroscope.rotate(-gyroProvider.getZ());//Re-Center the robot
+        gyroscope.rotate(0);//Re-Center the robot
         sleep(200);
         robot.getSpring().setPosition(0.6);//Spring out glyph
         sleep(200);
@@ -43,8 +43,8 @@ public class BlueLeft extends PIDAutonomous {
                 gyroscope.drive(0.5, 43);
                 break;
             case LEFT:
-                gyroscope.rotate(170);
-                gyroscope.drive(0.5, 33);
+                gyroscope.rotate(170.5);
+                gyroscope.drive(0.5, 35);
                 break;
             default:
                 gyroscope.rotate(161.3);
