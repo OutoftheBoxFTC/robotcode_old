@@ -67,6 +67,11 @@ public class Logger implements Runnable {
         return this;
     }
 
+    /**
+     * This method is run as an asynchronous task in order to send data in large bunches at a time
+     * interval as to not overload our desktop program. We also send it in bunches of 100 data
+     * points to prevent exceeding the size limit for each message
+     */
     @Override
     public void run() {
         try {
@@ -124,7 +129,6 @@ public class Logger implements Runnable {
      */
 
     private String truncate(Number raw) {
-        //todo un hardcode
         DecimalFormat format = new DecimalFormat("#.####");
         return format.format(raw);
     }

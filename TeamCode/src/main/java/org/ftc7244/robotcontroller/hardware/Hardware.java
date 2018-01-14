@@ -80,22 +80,50 @@ public abstract class Hardware {
         for (DcMotor motor : motors) motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
+    /**
+     * Loads all needed hardware into code
+     */
     public abstract void init();
 
+    /**
+     * Drives robot at a given power for a given amount of milliseconds
+     * @param leftPower Power to drive left side of robot
+     * @param rightPower Power to drive right side of robot
+     * @param timeMillis Time to drive robot for
+     * @throws InterruptedException of code fails to terminate on stop requested
+     */
     public abstract void drive(double leftPower, double rightPower, long timeMillis) throws InterruptedException;
+
+    /**
+     * Drives robot at a certain power for an indefinite amount of time
+     * @param leftPower Power to drive left side of robot
+     * @param rightPower Power to drive right side of robot
+     */
     public abstract void drive(double leftPower, double rightPower);
+
+    /**
+     * Drives robot at a given power to a given distance using encoders
+     * @param power Power to drive robot at
+     * @param inches Inches to drive robot
+     */
     public abstract void driveToInch(double power, double inches);
 
+    /**
+     * Resets the direction and encoder offsets of all the drive motors
+     */
     public abstract void resetDriveMotors();
 
     public double getCountsPerInch() {
         return countsPerInch;
     }
 
+    /**
+     *
+     * @return returns the average value of all drive motor encoders
+     */
     public abstract int getDriveEncoderAverage();
 
     public OpMode getOpMode() {
         return opMode;
     }
-
 }

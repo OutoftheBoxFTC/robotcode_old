@@ -47,6 +47,11 @@ public class GyroscopeDrive extends PIDDriveControl {
         this.target = 0;
     }
 
+    /**
+     * This expands the range of gyrosope input from [-180, 180], to [-540, 540]
+     * @return gyroscope input
+     */
+
     @Override
     public double getReading() {
         double reading = this.gyroProvider.getZ();

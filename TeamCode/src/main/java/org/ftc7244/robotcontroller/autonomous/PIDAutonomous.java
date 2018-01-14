@@ -30,7 +30,7 @@ public abstract class PIDAutonomous extends LinearOpMode {
     private long end;
 
     /**
-     * Set the classes up and allow for java
+     * Loads hardware, pid drives, and sensor providers
      */
     protected PIDAutonomous() {
         robot = new Westcoast(this);
@@ -49,6 +49,8 @@ public abstract class PIDAutonomous extends LinearOpMode {
         robot.init();
         robot.initServos();
         Status.setAutonomous(this);
+        //Initializes robot and debug features
+
         try {
             gyroProvider.start(hardwareMap);
             imageProvider.start(hardwareMap);
@@ -65,15 +67,17 @@ public abstract class PIDAutonomous extends LinearOpMode {
 
             gyroscope.resetOrientation();
             end = System.currentTimeMillis() + AUTONOMOUS_DURATION;
-
+            //Calibrates and starts providers
             run();
         } catch (Throwable t) {
             RobotLog.e(t.getMessage());
             t.printStackTrace();
+            //Logs unexpected errors to prevent app crashing
         } finally {
             gyroProvider.stop();
             imageProvider.stop();
             Status.setAutonomous(null);
+            //Stops all providers regardless of error
         }
     }
 
@@ -81,5 +85,9 @@ public abstract class PIDAutonomous extends LinearOpMode {
         return end;
     }
 
+    /**
+     * The custom autonomous procedure
+     * @throws InterruptedException if code fails to terminate on stop requested
+     */
     public abstract void run() throws InterruptedException;
 }
