@@ -35,14 +35,11 @@ public class GyroscopeDrive extends PIDDriveControl {
                         .invert()
                         .setProportional(0.012)
                         .setIntegral(0.00007)
-                        .setDerivative(1.65)
-
+                        .setDerivative(1.64)
                         .setIntegralRange(15)
                         .setIntegralReset(true)
-
                         .setOutputRange(0.4)
                         .setDelay(20)
-
                         .createController(),
                 robot);
         this.gyroProvider = gyroProvider;
@@ -50,15 +47,22 @@ public class GyroscopeDrive extends PIDDriveControl {
         this.target = 0;
     }
 
+    /**
+     * This expands the range of gyrosope input from [-180, 180], to [-540, 540]
+     * @return gyroscope input
+     */
+
     @Override
     public double getReading() {
         double reading = this.gyroProvider.getZ();
-/*        if (target > 0 && reading < 0) {
-            return 180 - reading; 
-        } else if (target < 0 && reading > 0) {
-            return -180 - reading;
+        if (Math.abs(target) > 160) {
+            if (target > 0 && reading < 0) {
+                return 360 + reading;
+            } else if (target < 0 && reading > 0) {
+                return -360 + reading;
+            }
         }
- */       return reading;
+       return reading;
     }
 
     public void drive(double power, double inches) throws InterruptedException {
@@ -86,7 +90,6 @@ public class GyroscopeDrive extends PIDDriveControl {
                 return Math.abs(robot.getDriveEncoderAverage() - offset) >= ticks;
             }
         });
-
     }
 
 
@@ -99,9 +102,8 @@ public class GyroscopeDrive extends PIDDriveControl {
      * @throws InterruptedException if code fails to terminate on stop requested
      */
     public void rotate(double degrees) throws InterruptedException {
-        double target = degrees + gyroProvider.getZ();
-        this.target = 0; 
-        control(target, 0, new ConditionalTerminator(new SensitivityTerminator(this, target, 0.5, 300), new TimerTerminator(6000)));
+        this.target = degrees;
+        control(degrees, 0, new ConditionalTerminator(new SensitivityTerminator(this, degrees, 1, 300), new TimerTerminator(6000)));
         resetOrientation();
     }
 

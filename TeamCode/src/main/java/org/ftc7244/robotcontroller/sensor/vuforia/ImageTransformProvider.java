@@ -17,6 +17,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.ftc7244.robotcontroller.sensor.DataFilter;
 import org.ftc7244.robotcontroller.sensor.SensorProvider;
 
+/**
+ * Uses Vuforia to determine pictograph type, relative rotation, and relative position
+ */
+
 public class ImageTransformProvider extends SensorProvider implements Runnable {
 
     private static final String VUFORIA_LICENSE_KEY = "AQ7YHUT/////AAAAGVOxmiN4SkHwqyEIEpsDKxo9Gpbkev2MCSd8RFB1jHcnH21ZDRyGXPK9hwVuWRRN4eiOU42jJhNeOiOlyh7yAdqsjfotKCW71TMFv7OiZr7uw6kS049r5LuvfMrxc9DyfDVCRh8aViWYNSuJVAGk6nF8D9dC9i5hy1FQFCRN3wxdQ49o/YqMfLeQNMgQIW/K3fqLi8ez+Ek9cF0mH1SGqBcv6dJrRavFqV/twq9F9fK+yW1rwcAQGunLKu2g6p0r1YXeSQe0qiMkfwumVwb2Sq0ZmEKQjHV4hwm14opyvtbXZzJwHppKOmBC0XXpkCBs7xLcYgoGbEiiGwEQv+N1xVnRha3NZXCmHH44JweTvmbh";
@@ -32,6 +36,9 @@ public class ImageTransformProvider extends SensorProvider implements Runnable {
 
     private Thread thread;
 
+    /**
+     * Initializes data filters
+     */
     public ImageTransformProvider() {
         vuforiaInitialized = false;
         xTrans = new DataFilter(100);
@@ -43,6 +50,10 @@ public class ImageTransformProvider extends SensorProvider implements Runnable {
         thread = new Thread(this);
     }
 
+    /**
+     * intializes vuforia and starts image reading asynchronous task
+     * @param map the hardware map to obtain access of the sensor
+     */
     @Override
     public void start(HardwareMap map) {
         if (!vuforiaInitialized) initializeVuforia(map);
@@ -51,6 +62,13 @@ public class ImageTransformProvider extends SensorProvider implements Runnable {
         thread.start();
     }
 
+    /**
+     * Initializes vuforia localizer, loads the vumarks of the pictographs, initializes a template
+     * for vuforia to base its search on, and adds the camera input as well as vuforia output to the
+     * main app activity.
+     *
+     * @param map the hardware map from the opmode
+     */
     private void initializeVuforia(HardwareMap map) {
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(map.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", map.appContext.getPackageName()));
         parameters.vuforiaLicenseKey = VUFORIA_LICENSE_KEY;
@@ -62,10 +80,19 @@ public class ImageTransformProvider extends SensorProvider implements Runnable {
         vuforiaInitialized = true;
     }
 
+    /**
+     *
+     * @return image reading from Vuforia
+     */
     public RelicRecoveryVuMark getImageReading() {
         return RelicRecoveryVuMark.from(template);
     }
 
+    /**
+     *
+     * @param axis the axis on which the reading will be drawn
+     * @return The estimated distance from the image on the given axis
+     */
     public double getImageDistance(TranslationAxis axis) {
         if (imageSeen) {
             switch (axis) {
@@ -80,6 +107,11 @@ public class ImageTransformProvider extends SensorProvider implements Runnable {
         return -1;
     }
 
+    /**
+     *
+     * @param axis the axis on which the reading will be drawn
+     * @return The estimated rotation from the image on the given axis
+     */
     public double getImageRotation(RotationAxis axis) {
         if (imageSeen) {
             switch (axis) {
@@ -94,6 +126,10 @@ public class ImageTransformProvider extends SensorProvider implements Runnable {
         return -1;
     }
 
+    /**
+     * Reads and records the pictograph type, relative distance, and relative rotation from the image
+     * As well as filtering it through a data filer
+     */
     @Override
     public void run() {
         VectorF translation;
@@ -120,16 +156,27 @@ public class ImageTransformProvider extends SensorProvider implements Runnable {
         }
     }
 
+    /**
+     * Terminates the image reading loop
+     */
     @Override
     public void stop() {
         running = false;
     }
 
+    /**
+     * The three axes of translation, x reffering to horizontal, y referring to vertical, and z referring
+     * to depth
+     */
     public enum TranslationAxis {
         X, Y, Z
     }
 
+    /**
+     * The three axes of rotation, pitch referring to the vertical rotation, yaw referring to the
+     * horizontal rotation, and roll referring to straight rotation
+     */
     public enum RotationAxis {
-        PITCH, YAW, ROLL;
+        PITCH, YAW, ROLL
     }
 }

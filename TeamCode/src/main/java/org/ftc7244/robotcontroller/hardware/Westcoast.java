@@ -75,6 +75,7 @@ public class Westcoast extends Hardware implements NavxRobot{
     public void init() {
         //Initialize or nullify all hardware
         HardwareMap map = opMode.hardwareMap;
+
         this.jewelSensor = getOrNull(map.colorSensor, "jewelSensor");
         this.jewelDistance = map.get(DistanceSensor.class, "jewelSensor");
         this.spring = getOrNull(map.servo, "spring");
@@ -174,6 +175,11 @@ public class Westcoast extends Hardware implements NavxRobot{
         return -(driveBackLeft.getCurrentPosition()+driveBackRight.getCurrentPosition()+driveFrontLeft.getCurrentPosition()+driveFrontRight.getCurrentPosition())/4;
     }
 
+    /**
+     *
+     * @param color the color to which the sensor input is to be determined
+     * @return whether the given color is equal to the sensor input
+     */
     public boolean isColor(int color) {
         int blue = jewelSensor.blue() - blueOffset, red = jewelSensor.red() - redOffset;
         if (Debug.STATUS)
@@ -189,6 +195,13 @@ public class Westcoast extends Hardware implements NavxRobot{
         }
     }
 
+    /**
+     * Lowers the vertical jewel arm, reads the jewel color on the right, and moves
+     * the horizontal jewel arm left or right depending on the given parameter
+     *
+     * @param color color jewel to be knocked off the pedestal
+     * @throws InterruptedException if code fails to terminate on stop requested
+     */
     public void knockOverJewel(int color) throws InterruptedException {
         //color we want to get rid of
         getJewelHorizontal().setPosition(0.45);
@@ -198,7 +211,6 @@ public class Westcoast extends Hardware implements NavxRobot{
             getJewelHorizontal().setPosition(isColor(Color.RED) ? 0.33 : 0.56);
         }else if(color==Color.BLUE){
             getJewelHorizontal().setPosition(isColor(Color.RED) ? 0.56 : 0.33);
-
         }
         sleep(500);
         getJewelHorizontal().setPosition(0.73);

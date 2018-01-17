@@ -1,5 +1,6 @@
 package org.ftc7244.robotcontroller.programs.teleop;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -14,9 +15,12 @@ import java.util.Random;
 
 /**
  * Created by BeaverDuck on 11/30/17.
+ *
+ * Used to train operator to respond to commands from coach in preparation for driver practice
+ * Disabled because deemed unnecessary
  */
 @TeleOp(name = "Training Program")
-
+@Disabled
 public class TrainingProgram extends OpMode{
     private HashMap<String, Button> inputs;
     private ArrayList<String> names;
