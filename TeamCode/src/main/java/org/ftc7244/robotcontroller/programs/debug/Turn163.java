@@ -12,6 +12,6 @@ public class Turn163 extends PIDAutonomous {
 
     @Override
     public void run() throws InterruptedException {
-        gyroscope.rotate(-163);
+        gyroscope.rotate(-170);
     }
 }
