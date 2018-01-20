@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.ftc7244.robotcontroller.hardware.Westcoast;
 import org.ftc7244.robotcontroller.input.Button;
 import org.ftc7244.robotcontroller.input.ButtonType;
+import org.ftc7244.robotcontroller.input.PressButton;
 
 /**
  * Created by Eeshwar Laptop on 10/16/2017.
@@ -15,6 +16,7 @@ import org.ftc7244.robotcontroller.input.ButtonType;
 public class Teleop extends LinearOpMode {
     private Westcoast robot;
     private Button leftTrigger1, dPadUp, dPadDown, rightTrigger, leftTrigger, leftBumper, bButton, yButton, driverLeftBumper, rightBumper;
+    private PressButton aButton;
     private static final double SLOW_DRIVE_COEFFICIENT = -0.5, LIFT_REST = 0.1, LIFT_RAISE = .8;
 
     /**
@@ -50,6 +52,7 @@ public class Teleop extends LinearOpMode {
         bButton = new Button(gamepad2, ButtonType.B);
         yButton = new Button(gamepad2, ButtonType.Y);
         rightBumper = new Button(gamepad2, ButtonType.RIGHT_BUMPER);
+        aButton = new PressButton(gamepad2, ButtonType.A);
         robot.init();
         waitForStart();
         robot.initServos();
@@ -57,7 +60,8 @@ public class Teleop extends LinearOpMode {
             //Driver
             double coefficient = leftTrigger1.isPressed() ? SLOW_DRIVE_COEFFICIENT : -1;
             robot.drive(gamepad1.left_stick_y * coefficient, gamepad1.right_stick_y * coefficient);
-            robot.getIntakeServo().setPosition(rightBumper.isPressed() ? -.05 : 0.7);
+            //robot.getIntakeServo().setPosition(rightBumper.isPressed() ? -.05 : 0.7);
+            robot.getIntakeServo().setPosition(rightBumper.isPressed() ? 0.5 : 0.9);
             if (driverLeftBumper.isPressed())
                 robot.getSpring().setPosition(0.6);
             //Operator
@@ -69,7 +73,10 @@ public class Teleop extends LinearOpMode {
                 robot.getIntakeTop().setPower(leftBumper.isPressed()?1:0);
             }
             robot.driveIntakeVertical(bButton.isPressed()?.5:yButton.isPressed()?-.5:0);
-            robot.getIntakeLift().setPower(dPadUp.isPressed()?LIFT_RAISE:dPadDown.isPressed()?-LIFT_RAISE:LIFT_REST);
+            robot.getIntakeLift().setPower(dPadUp.isPressed()?LIFT_RAISE:dPadDown.isPressed()?-LIFT_RAISE - LIFT_REST:LIFT_REST);
+            /*robot.getRelicSpool().setPower(gamepad2.left_stick_y<-0.1?-1:gamepad2.left_stick_y>0.1?1:0);
+            robot.getRelicArm().setPosition(gamepad2.right_stick_y<-0.1?0:gamepad2.right_stick_y>0.1?1:robot.getRelicArm().getPosition());
+            robot.getRelicClaw().setPosition(aButton.isPressed()?0:1);*/
         }
     }
 }

@@ -28,11 +28,11 @@ public class Westcoast extends Hardware implements NavxRobot{
     public static final double COUNTS_PER_INCH = 403.2 / (3.9 * Math.PI);
 
     @Nullable
-    private DcMotor driveBackLeft, driveFrontLeft, driveBackRight, driveFrontRight, intakeLift, intakeTop, intakeBottom;
+    private DcMotor driveBackLeft, driveFrontLeft, driveBackRight, driveFrontRight, intakeLift, intakeTop, intakeBottom, relicSpool;
     @Nullable
     private CRServo intakeBottomLeft, intakeBottomRight, intakeTopLeft, intakeTopRight;
     @Nullable
-    private Servo jewelVertical, jewelHorizontal, spring, intakeServo;
+    private Servo jewelVertical, jewelHorizontal, spring, intakeServo, relicArm, relicClaw;
     @Nullable
     private AnalogInput vertLimit;
     @Nullable
@@ -98,6 +98,11 @@ public class Westcoast extends Hardware implements NavxRobot{
 
         this.jewelVertical = getOrNull(map.servo, "jewelVertical");
         this.jewelHorizontal = getOrNull(map.servo, "jewelHorizontal");
+
+        /*this.relicSpool = getOrNull(map.dcMotor, "intakeSpool");
+        this.relicArm = getOrNull(map.servo, "relicArm");
+        this.relicClaw = getOrNull(map.servo, "relicClaw");*/
+
 
         //Set the default direction for all the hardware and also initialize default positions
         if (driveFrontLeft != null) driveFrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -204,8 +209,8 @@ public class Westcoast extends Hardware implements NavxRobot{
      */
     public void knockOverJewel(int color) throws InterruptedException {
         //color we want to get rid of
-        getJewelHorizontal().setPosition(0.45);
-        getJewelVertical().setPosition(0.26);
+
+        getJewelVertical().setPosition(0.26);getJewelHorizontal().setPosition(0.45);
         sleep(1700);
         if(color==Color.RED) {
             getJewelHorizontal().setPosition(isColor(Color.RED) ? 0.33 : 0.56);
@@ -296,4 +301,18 @@ public class Westcoast extends Hardware implements NavxRobot{
         return navX;
     }
 
+    @Nullable
+    public DcMotor getRelicSpool() {
+        return relicSpool;
+    }
+
+    @Nullable
+    public Servo getRelicArm() {
+        return relicArm;
+    }
+
+    @Nullable
+    public Servo getRelicClaw() {
+        return relicClaw;
+    }
 }
