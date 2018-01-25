@@ -99,8 +99,8 @@ public class Westcoast extends Hardware implements NavxRobot{
         this.jewelVertical = getOrNull(map.servo, "jewelVertical");
         this.jewelHorizontal = getOrNull(map.servo, "jewelHorizontal");
 
-        /*this.relicSpool = getOrNull(map.dcMotor, "intakeSpool");
-        this.relicArm = getOrNull(map.servo, "relicArm");
+        this.relicSpool = getOrNull(map.dcMotor, "spooler");
+        /*this.relicArm = getOrNull(map.servo, "relicArm");
         this.relicClaw = getOrNull(map.servo, "relicClaw");*/
 
 

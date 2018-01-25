@@ -74,8 +74,8 @@ public class Teleop extends LinearOpMode {
             }
             robot.driveIntakeVertical(bButton.isPressed()?.5:yButton.isPressed()?-.5:0);
             robot.getIntakeLift().setPower(dPadUp.isPressed()?LIFT_RAISE:dPadDown.isPressed()?-LIFT_RAISE - LIFT_REST:LIFT_REST);
-            /*robot.getRelicSpool().setPower(gamepad2.left_stick_y<-0.1?-1:gamepad2.left_stick_y>0.1?1:0);
-            robot.getRelicArm().setPosition(gamepad2.right_stick_y<-0.1?0:gamepad2.right_stick_y>0.1?1:robot.getRelicArm().getPosition());
+            robot.getRelicSpool().setPower(gamepad2.left_stick_y<-0.1?-1:gamepad2.left_stick_y>0.1?1:0);
+            /*robot.getRelicArm().setPosition(gamepad2.right_stick_y<-0.1?0:gamepad2.right_stick_y>0.1?1:robot.getRelicArm().getPosition());
             robot.getRelicClaw().setPosition(aButton.isPressed()?0:1);*/
         }
     }
