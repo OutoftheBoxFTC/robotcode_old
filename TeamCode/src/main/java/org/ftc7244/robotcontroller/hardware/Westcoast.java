@@ -100,8 +100,8 @@ public class Westcoast extends Hardware implements NavxRobot{
         this.jewelHorizontal = getOrNull(map.servo, "jewelHorizontal");
 
         this.relicSpool = getOrNull(map.dcMotor, "spooler");
-        /*this.relicArm = getOrNull(map.servo, "relicArm");
-        this.relicClaw = getOrNull(map.servo, "relicClaw");*/
+        this.relicArm = getOrNull(map.servo, "relicArm");
+        this.relicClaw = getOrNull(map.servo, "relicClaw");
 
 
         //Set the default direction for all the hardware and also initialize default positions
