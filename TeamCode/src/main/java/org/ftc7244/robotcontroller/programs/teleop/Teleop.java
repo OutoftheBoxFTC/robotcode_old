@@ -9,7 +9,7 @@ import org.ftc7244.robotcontroller.input.ButtonType;
 import org.ftc7244.robotcontroller.input.PressButton;
 
 /**
- * Created by Eeshwar Laptop on 10/16/2017.
+ * Created on 10/16/2017.
  */
 
 @TeleOp(name = "Teleop")
@@ -81,8 +81,8 @@ public class Teleop extends LinearOpMode {
             robot.getIntakeLift().setPower(dPadUp.isPressed()?LIFT_RAISE:dPadDown.isPressed()?-LIFT_RAISE - LIFT_REST:LIFT_REST);
 
             robot.getRelicSpool().setPower(gamepad2.left_stick_y);
-            robot.getRelicArm().setPosition(gamepad2.right_stick_y<-0.1?0:gamepad2.right_stick_y>0.1?1:robot.getRelicArm().getPosition());
-            robot.getRelicClaw().setPosition(aButton.isPressed()?0:1);
+            robot.getRelicArm().setPosition(gamepad2.right_stick_y<-0.1?0.9:gamepad2.right_stick_y>0.1?0.1:robot.getRelicArm().getPosition());
+            robot.getRelicClaw().setPosition(aButton.isPressed()?0.2:1);
         }
     }
 }
