@@ -25,7 +25,8 @@ import org.ftc7244.robotcontroller.sensor.gyroscope.NavxRobot;
  */
 
 public class Westcoast extends Hardware implements NavxRobot{
-    public static final double COUNTS_PER_INCH = 403.2 / (3.9 * Math.PI);
+    public static final double COUNTS_PER_INCH = 403.2 / (3.9 * Math.PI),
+                               RELIC_SPOOL_MIN = 0, RELIC_SPOOL_MAX = 100;
 
     @Nullable
     private DcMotor driveBackLeft, driveFrontLeft, driveBackRight, driveFrontRight, intakeLift, intakeTop, intakeBottom, relicSpool;
@@ -314,5 +315,9 @@ public class Westcoast extends Hardware implements NavxRobot{
     @Nullable
     public Servo getRelicClaw() {
         return relicClaw;
+    }
+
+    public boolean spoolInRange() {
+        return relicSpool != null && (relicSpool.getCurrentPosition() >= RELIC_SPOOL_MAX && relicSpool.getCurrentPosition() <= RELIC_SPOOL_MIN);
     }
 }

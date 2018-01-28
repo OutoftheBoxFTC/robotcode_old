@@ -38,6 +38,7 @@ public class Teleop extends LinearOpMode {
         A: Intake Down
         B: Intake Up
         Y: Intake Open
+
      */
 
     @Override
@@ -80,7 +81,7 @@ public class Teleop extends LinearOpMode {
             }
             robot.driveIntakeVertical(bButton.isPressed()?.5:yButton.isPressed()?-.5:0);
             robot.getIntakeLift().setPower(dPadUp.isPressed()?LIFT_RAISE:dPadDown.isPressed()?-LIFT_RAISE - LIFT_REST:LIFT_REST);
-            robot.getRelicSpool().setPower(gamepad2.left_stick_y);
+            robot.getRelicSpool().setPower(robot.spoolInRange()?gamepad2.left_stick_y:0);
             telemetry.addData("RelicSpool", robot.getRelicSpool().getCurrentPosition());
             telemetry.update();
             robot.getRelicArm().setPosition(gamepad2.right_stick_y<-0.1?0.9:gamepad2.right_stick_y>0.1?0.1:robot.getRelicArm().getPosition());

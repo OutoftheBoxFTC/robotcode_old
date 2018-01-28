@@ -35,7 +35,7 @@ public class GyroscopeDrive extends PIDDriveControl {
                         .invert()
                         .setProportional(0.012)
                         .setIntegral(0.00007)
-                        .setDerivative(1.64)
+                        .setDerivative(1.65)
                         .setIntegralRange(15)
                         .setIntegralReset(true)
                         .setOutputRange(0.4)

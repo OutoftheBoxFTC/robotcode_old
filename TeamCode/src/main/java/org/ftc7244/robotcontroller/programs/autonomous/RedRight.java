@@ -26,7 +26,7 @@ public class RedRight extends PIDAutonomous {
         telemetry.addData("Image", image);
         telemetry.update();
         sleep(1000);
-        robot.getIntakeServo().setPosition(.5);
+        robot.getIntakeServo().setPosition(.44);
         gyroscope.rotate(45);//Rotate to face glyph pit
         robot.getIntakeBottom().setPower(-1);
         robot.driveIntakeVertical(0.5);
@@ -34,21 +34,21 @@ public class RedRight extends PIDAutonomous {
         robot.driveIntakeVertical(0);
         gyroscope.drive(0.4, 11);//Drive to glyph pit
         gyroscope.drive(0.3, 12);// Drive into glyph pit
-        robot.getIntakeServo().setPosition(.9);
+        robot.getIntakeServo().setPosition(0.9);
         sleep(1500);
         gyroscope.drive(-0.3, 10);
         switch(image){
             case LEFT:
                 gyroscope.rotate(-151.1);
-                gyroscope.drive(0.5, 38);
+                gyroscope.drive(0.5, 40);
                 break;
             case RIGHT:
-                gyroscope.rotate(-165.5 );
-                gyroscope.drive(0.5, 31);
+                gyroscope.rotate(-166);
+                gyroscope.drive(0.5, 35);
                 break;
             default:
-                gyroscope.rotate(-158.5);
-                gyroscope.drive(0.5, 38);
+                gyroscope.rotate(-158);
+                gyroscope.drive(0.5, 42);
         }
         robot.getIntakeBottom().setPower(1);
         robot.getIntakeTop().setPower(1);
