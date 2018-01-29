@@ -3,14 +3,13 @@ package org.ftc7244.robotcontroller.programs.teleop;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.ftc7244.robotcontroller.Debug;
 import org.ftc7244.robotcontroller.hardware.Westcoast;
 import org.ftc7244.robotcontroller.input.Button;
 import org.ftc7244.robotcontroller.input.ButtonType;
 import org.ftc7244.robotcontroller.input.PressButton;
 
 /**
- * Created by Eeshwar Laptop on 10/16/2017.
+ * Created on 10/16/2017.
  */
 
 @TeleOp(name = "Teleop")
@@ -81,11 +80,14 @@ public class Teleop extends LinearOpMode {
             }
             robot.driveIntakeVertical(bButton.isPressed()?.5:yButton.isPressed()?-.5:0);
             robot.getIntakeLift().setPower(dPadUp.isPressed()?LIFT_RAISE:dPadDown.isPressed()?-LIFT_RAISE - LIFT_REST:LIFT_REST);
-            robot.getRelicSpool().setPower(robot.spoolInRange()?gamepad2.left_stick_y:0);
-            telemetry.addData("RelicSpool", robot.getRelicSpool().getCurrentPosition());
-            telemetry.update();
+            if(robot.getRelicSpool().getCurrentPosition() < -1857)
+                robot.getRelicSpool().setPower(gamepad2.left_stick_y < -0.1 ? 0 : gamepad2.left_stick_y);
+            else if(robot.getRelicSpool().getCurrentPosition() > 0)
+                robot.getRelicSpool().setPower(gamepad2.left_stick_y > 0.1 ? 0 : gamepad2.left_stick_y);
+            else
+                robot.getRelicSpool().setPower(gamepad2.left_stick_y);
             robot.getRelicArm().setPosition(gamepad2.right_stick_y<-0.1?0.9:gamepad2.right_stick_y>0.1?0.1:robot.getRelicArm().getPosition());
-            robot.getRelicClaw().setPosition(aButton.isPressed()?0.2:1);
+            robot.getRelicClaw().setPosition(aButton.isPressed()?0.2:0.8);
         }
     }
 }
