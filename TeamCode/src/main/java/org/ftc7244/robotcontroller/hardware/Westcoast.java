@@ -33,7 +33,7 @@ public class Westcoast extends Hardware implements NavxRobot{
     @Nullable
     private CRServo intakeBottomLeft, intakeBottomRight, intakeTopLeft, intakeTopRight;
     @Nullable
-    private Servo jewelVertical, jewelHorizontal, spring, intakeServo, relicArm, relicClaw;
+    private Servo jewelVertical, jewelHorizontal, spring, intakeServo, relicWrist, relicFinger;
     @Nullable
     private AnalogInput vertLimit;
     @Nullable
@@ -101,8 +101,8 @@ public class Westcoast extends Hardware implements NavxRobot{
         this.jewelHorizontal = getOrNull(map.servo, "jewelHorizontal");
 
         this.relicSpool = getOrNull(map.dcMotor, "spooler");
-        this.relicArm = getOrNull(map.servo, "relicArm");
-        this.relicClaw = getOrNull(map.servo, "relicClaw");
+        this.relicWrist = getOrNull(map.servo, "relicArm");
+        this.relicFinger = getOrNull(map.servo, "relicClaw");
 
 
         //Set the default direction for all the hardware and also initialize default positions
@@ -123,7 +123,7 @@ public class Westcoast extends Hardware implements NavxRobot{
     public void initServos(){
         if(jewelVertical != null) jewelVertical.setPosition(0.67);
         if(jewelHorizontal != null) jewelHorizontal.setPosition(0.73);
-        if(relicArm != null) relicArm.setPosition(0.1);
+        if(relicWrist != null) relicWrist.setPosition(0.1);
         if(spring != null){
             spring.setPosition(1);
             spring.setDirection(Servo.Direction.FORWARD);
@@ -309,13 +309,13 @@ public class Westcoast extends Hardware implements NavxRobot{
     }
 
     @Nullable
-    public Servo getRelicArm() {
-        return relicArm;
+    public Servo getRelicWrist() {
+        return relicWrist;
     }
 
     @Nullable
-    public Servo getRelicClaw() {
-        return relicClaw;
+    public Servo getRelicFinger() {
+        return relicFinger;
     }
 
     public boolean spoolInRange() {

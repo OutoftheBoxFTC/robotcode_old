@@ -2,6 +2,7 @@ package org.ftc7244.robotcontroller.programs.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.ftc7244.robotcontroller.hardware.Westcoast;
 import org.ftc7244.robotcontroller.input.Button;
@@ -15,8 +16,8 @@ import org.ftc7244.robotcontroller.input.PressButton;
 @TeleOp(name = "Teleop")
 public class Teleop extends LinearOpMode {
     private Westcoast robot;
-    private Button leftTrigger1, dPadUp, dPadDown, rightTrigger, leftTrigger, leftBumper, bButton, yButton, driverLeftBumper, rightBumper;
-    private PressButton aButton;
+    private Button driveLeftTrigger, dPadUp, dPadDown, rightTrigger, leftTrigger, leftBumper, bButton, yButton, driverLeftBumper, rightBumper;
+    private PressButton aButton, driveRightTrigger;
     private static final double SLOW_DRIVE_COEFFICIENT = -0.5, LIFT_REST = 0.1, LIFT_RAISE = .8;
     private Boolean intakeEjected = false;
 
@@ -45,7 +46,7 @@ public class Teleop extends LinearOpMode {
         robot = new Westcoast(this);
 
         driverLeftBumper = new Button(gamepad1, ButtonType.LEFT_BUMPER);
-        leftTrigger1 = new Button(gamepad1, ButtonType.LEFT_TRIGGER);
+        driveLeftTrigger = new Button(gamepad1, ButtonType.LEFT_TRIGGER);
         dPadUp = new Button(gamepad2, ButtonType.D_PAD_UP);
         dPadDown = new Button(gamepad2, ButtonType.D_PAD_DOWN);
         rightTrigger = new Button(gamepad2, ButtonType.RIGHT_TRIGGER);
@@ -55,21 +56,31 @@ public class Teleop extends LinearOpMode {
         yButton = new Button(gamepad2, ButtonType.Y);
         rightBumper = new Button(gamepad2, ButtonType.RIGHT_BUMPER);
         aButton = new PressButton(gamepad2, ButtonType.A);
+        driveRightTrigger = new PressButton(gamepad1, ButtonType.RIGHT_TRIGGER);
         robot.init();
         waitForStart();
         robot.initServos();
         while (opModeIsActive()) {
             //Driver
-            double coefficient = leftTrigger1.isPressed() ? SLOW_DRIVE_COEFFICIENT : -1;
-            robot.drive(gamepad1.left_stick_y * coefficient, gamepad1.right_stick_y * coefficient);
+            double coefficient = driveLeftTrigger.isPressed() ? SLOW_DRIVE_COEFFICIENT : -1;
+            double rightCoefficient = gamepad1.right_stick_y / Math.abs(gamepad1.right_stick_y);
+            double leftCoefficient = gamepad1.left_stick_y / Math.abs(gamepad1.left_stick_y);
+            if(!driveRightTrigger.isPressed()) {
+                robot.drive(gamepad1.left_stick_y * coefficient, gamepad1.right_stick_y * coefficient);
+                //robot.drive(gamepad1.left_stick_y * gamepad1.left_stick_y * coefficient * leftCoefficient, gamepad1.right_stick_y * gamepad1.right_stick_y * coefficient * rightCoefficient);
+            }
+            else {
+                robot.drive(gamepad1.right_stick_x * coefficient, gamepad1.left_stick_x * coefficient);
+                //robot.drive(gamepad1.right_stick_y * gamepad1.right_stick_y * coefficient * rightCoefficient, gamepad1.left_stick_y * gamepad1.left_stick_y * coefficient * leftCoefficient);
+            }
             //robot.getIntakeServo().setPosition(rightBumper.isPressed() ? -.05 : 0.7);
             if(intakeEjected)
-                robot.getIntakeServo().setPosition(rightBumper.isPressed() ? 0.4 : 0.9);
+                //lower lower number to open more, raise higher number to raise more
+                robot.getIntakeServo().setPosition(rightBumper.isPressed() ? 0.2: 0.75);
             if (driverLeftBumper.isPressed()) {
                 robot.getSpring().setPosition(0.6);
                 intakeEjected = true;
             }
-
             //Operator
             if (rightTrigger.isPressed()) {
                 robot.getIntakeBottom().setPower(-1);
@@ -80,14 +91,20 @@ public class Teleop extends LinearOpMode {
             }
             robot.driveIntakeVertical(bButton.isPressed()?.5:yButton.isPressed()?-.5:0);
             robot.getIntakeLift().setPower(dPadUp.isPressed()?LIFT_RAISE:dPadDown.isPressed()?-LIFT_RAISE - LIFT_REST:LIFT_REST);
-            if(robot.getRelicSpool().getCurrentPosition() < -1857)
+            if(robot.getRelicSpool().getCurrentPosition() < -1875)
                 robot.getRelicSpool().setPower(gamepad2.left_stick_y < -0.1 ? 0 : gamepad2.left_stick_y);
             else if(robot.getRelicSpool().getCurrentPosition() > 0)
                 robot.getRelicSpool().setPower(gamepad2.left_stick_y > 0.1 ? 0 : gamepad2.left_stick_y);
             else
                 robot.getRelicSpool().setPower(gamepad2.left_stick_y);
-            robot.getRelicArm().setPosition(gamepad2.right_stick_y<-0.1?0.9:gamepad2.right_stick_y>0.1?0.1:robot.getRelicArm().getPosition());
-            robot.getRelicClaw().setPosition(aButton.isPressed()?0.2:0.8);
+            //closer it is to 1, the higher it goes
+            robot.getRelicWrist().setPosition(gamepad2.right_stick_y<-0.1?0.6:gamepad2.right_stick_y>0.1?0.1:robot.getRelicWrist().getPosition());
+            //The closer you get to 0, the tighter it gets
+            robot.getRelicFinger().setPosition(aButton.isPressed()?0.375:0.7);
+            if(gamepad2.left_stick_y > -0.1 && gamepad2.left_stick_y < 0.1){
+                telemetry.addData("Spool", robot.getRelicSpool().getCurrentPosition());
+                telemetry.update();
+            }
         }
     }
 }
