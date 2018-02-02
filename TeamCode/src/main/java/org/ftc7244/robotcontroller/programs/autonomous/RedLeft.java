@@ -18,9 +18,9 @@ public class RedLeft extends PIDAutonomous {
         robot.knockOverJewel(Color.BLUE);//Check color sensor
         robot.getIntakeTop().setPower(-1);
         robot.driveToInch(.2, 28);//Drive off balancing stone
+        gyroscope.rotate(0);
         sleep(200);
         robot.getSpring().setPosition(0.6);//Spring out glyph
-        sleep(200);
         RelicRecoveryVuMark image = imageProvider.getImageReading();
         telemetry.addData("Image", image);
         telemetry.update();
@@ -35,23 +35,22 @@ public class RedLeft extends PIDAutonomous {
         gyroscope.drive(0.3, 17);// Drive into glyph pit
         //0.2: 0.75
         robot.getIntakeServo().setPosition(0.75);
-        gyroscope.drive(0.3, 3);
-        sleep(1500);
         switch(image) {
             case LEFT:
+                gyroscope.drive(0.3, 5);
                 break;
             case RIGHT:
-                gyroscope.rotate(-90);
-                gyroscope.drive(0.6, 21);
+                gyroscope.drive(-0.3, 0.5);
                 break;
             default:
                 break;
         }
-        gyroscope.drive(0.6, 21);
+        gyroscope.rotate(-90);
+        gyroscope.drive(0.6, 28);
         robot.getIntakeBottom().setPower(1);
         robot.getIntakeTop().setPower(1);
-        gyroscope.drive(-0.2, 8);
-        gyroscope.drive(0.5, 6);
+        gyroscope.drive(-0.2, 10);
+        gyroscope.drive(0.5, 4);
         gyroscope.drive(-0.5, 5);
     }
 }
