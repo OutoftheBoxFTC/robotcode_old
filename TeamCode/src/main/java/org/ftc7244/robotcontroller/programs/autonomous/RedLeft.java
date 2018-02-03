@@ -35,18 +35,21 @@ public class RedLeft extends PIDAutonomous {
         gyroscope.drive(0.3, 17);// Drive into glyph pit
         //0.2: 0.75
         robot.getIntakeServo().setPosition(0.75);
+        gyroscope.drive(-0.3, 0.6);
         switch(image) {
             case LEFT:
-                gyroscope.drive(0.3, 5);
+                gyroscope.rotate(-70);
+                gyroscope.drive(0.6, 40);
                 break;
             case RIGHT:
-                gyroscope.drive(-0.3, 0.5);
+                gyroscope.rotate(-90);
+                gyroscope.drive(0.6, 36);
                 break;
             default:
+                gyroscope.rotate(-80);
+                gyroscope.drive(0.6, 39);
                 break;
         }
-        gyroscope.rotate(-90);
-        gyroscope.drive(0.6, 28);
         robot.getIntakeBottom().setPower(1);
         robot.getIntakeTop().setPower(1);
         gyroscope.drive(-0.2, 10);
