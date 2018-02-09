@@ -19,7 +19,6 @@ public class Teleop extends LinearOpMode {
     private Button driveLeftTrigger, dPadUp, dPadDown, rightTrigger, leftTrigger, leftBumper, bButton, yButton, driverLeftBumper, rightBumper;
     private PressButton aButton, driveRightTrigger;
     private static final double SLOW_DRIVE_COEFFICIENT = -0.5, LIFT_REST = 0.1, LIFT_RAISE = .8;
-    private Boolean intakeEjected = false;
 
     /**
     Driver:
@@ -63,24 +62,15 @@ public class Teleop extends LinearOpMode {
         while (opModeIsActive()) {
             //Driver
             double coefficient = driveLeftTrigger.isPressed() ? SLOW_DRIVE_COEFFICIENT : -1;
-            double rightCoefficient = gamepad1.right_stick_y / Math.abs(gamepad1.right_stick_y);
-            double leftCoefficient = gamepad1.left_stick_y / Math.abs(gamepad1.left_stick_y);
-            if(!driveRightTrigger.isPressed()) {
-                robot.drive(gamepad1.left_stick_y * coefficient, gamepad1.right_stick_y * coefficient);
-                //robot.drive(gamepad1.left_stick_y * gamepad1.left_stick_y * coefficient * leftCoefficient, gamepad1.right_stick_y * gamepad1.right_stick_y * coefficient * rightCoefficient);
-            }
-            else {
+            if(driveRightTrigger.isPressed())
                 robot.drive(gamepad1.right_stick_x * coefficient, gamepad1.left_stick_x * coefficient);
-                //robot.drive(gamepad1.right_stick_y * gamepad1.right_stick_y * coefficient * rightCoefficient, gamepad1.left_stick_y * gamepad1.left_stick_y * coefficient * leftCoefficient);
-            }
-            //robot.getIntakeServo().setPosition(rightBumper.isPressed() ? -.05 : 0.7);
-            if(intakeEjected)
-                //lower lower number to open more, raise higher number to raise more
-                robot.getIntakeServo().setPosition(rightBumper.isPressed() ? 0.2: 0.75);
-            if (driverLeftBumper.isPressed()) {
-                robot.getSpring().setPosition(0.6);
-                intakeEjected = true;
-            }
+            else
+                robot.drive(gamepad1.left_stick_y * coefficient, gamepad1.right_stick_y * coefficient);
+
+            robot.getIntakeServo().setPosition(rightBumper.isPressed() ? 0.2: 0.75);
+            if (driverLeftBumper.isPressed())
+                robot.getSpring().setPosition(0.5);
+
             //Operator
             if (rightTrigger.isPressed()) {
                 robot.getIntakeBottom().setPower(-1);
@@ -89,11 +79,12 @@ public class Teleop extends LinearOpMode {
                 robot.getIntakeBottom().setPower(leftTrigger.isPressed()?1:0);
                 robot.getIntakeTop().setPower(leftBumper.isPressed()?1:0);
             }
+
             robot.driveIntakeVertical(bButton.isPressed()?.5:yButton.isPressed()?-.5:0);
             robot.getIntakeLift().setPower(dPadUp.isPressed()?LIFT_RAISE:dPadDown.isPressed()?-LIFT_RAISE - LIFT_REST:LIFT_REST);
             if(robot.getRelicSpool().getCurrentPosition() < -1875)
                 robot.getRelicSpool().setPower(gamepad2.left_stick_y < -0.1 ? 0 : gamepad2.left_stick_y);
-            else if(robot.getRelicSpool().getCurrentPosition() > 0)
+            else if(robot.getRelicSpool().getCurrentPosition() > 50)
                 robot.getRelicSpool().setPower(gamepad2.left_stick_y > 0.1 ? 0 : gamepad2.left_stick_y);
             else
                 robot.getRelicSpool().setPower(gamepad2.left_stick_y);

@@ -15,12 +15,12 @@ import org.ftc7244.robotcontroller.autonomous.PIDAutonomous;
 public class BlueLeft extends PIDAutonomous {
 
     public void run() throws InterruptedException{
-        robot.knockOverJewel(Color.RED);//Check color sensor
+        robot.knockOverJewel(Color.RED);//Check Colour Sensor
         robot.getIntakeTop().setPower(-1);
         robot.driveToInch(.2, 28);//Drive off balancing stone
         gyroscope.rotate(0);//Re-Center the robot
         sleep(200);
-        robot.getSpring().setPosition(0.6);//Spring out glyph
+        robot.getSpring().setPosition(0.5);//Spring out glyph
         sleep(200);
         RelicRecoveryVuMark image = imageProvider.getImageReading();
         telemetry.addData("Image", image);
@@ -47,7 +47,7 @@ public class BlueLeft extends PIDAutonomous {
                 gyroscope.drive(0.5, 37);
                 break;
             default:
-                gyroscope.rotate(159.3);
+                gyroscope.rotate(158.3);
                 gyroscope.drive(0.5, 43);
         }
         robot.getIntakeBottom().setPower(1);

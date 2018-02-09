@@ -20,7 +20,7 @@ public class RedLeft extends PIDAutonomous {
         robot.driveToInch(.2, 28);//Drive off balancing stone
         gyroscope.rotate(0);
         sleep(200);
-        robot.getSpring().setPosition(0.6);//Spring out glyph
+        robot.getSpring().setPosition(0.5);//Spring out glyph
         RelicRecoveryVuMark image = imageProvider.getImageReading();
         telemetry.addData("Image", image);
         telemetry.update();

@@ -20,7 +20,7 @@ public class RedRight extends PIDAutonomous {
         robot.driveToInch(.2, 28);//Drive off balancing stone
         gyroscope.rotate(0);//Re-Center the robot
         sleep(200);
-        robot.getSpring().setPosition(0.6);//Spring out glyph
+        robot.getSpring().setPosition(0.5);//Spring out glyph
         sleep(200);
         RelicRecoveryVuMark image = imageProvider.getImageReading();
         telemetry.addData("Image", image);
@@ -45,7 +45,7 @@ public class RedRight extends PIDAutonomous {
                 break;
             case RIGHT:
                 gyroscope.rotate(-166);
-                gyroscope.drive(0.5, 35);
+                gyroscope.drive(0.5, 37);
                 break;
             default:
                 gyroscope.rotate(-158);
