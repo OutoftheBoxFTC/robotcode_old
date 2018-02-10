@@ -1,6 +1,7 @@
 package org.ftc7244.robotcontroller.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftc7244.datalogger.Logger;
@@ -48,6 +49,10 @@ public abstract class PIDAutonomous extends LinearOpMode {
 
         robot.init();
         robot.initServos();
+        robot.getDriveBackLeft().setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        robot.getDriveBackRight().setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        robot.getDriveFrontLeft().setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        robot.getDriveFrontRight().setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         Status.setAutonomous(this);
         //Initializes robot and debug features
 

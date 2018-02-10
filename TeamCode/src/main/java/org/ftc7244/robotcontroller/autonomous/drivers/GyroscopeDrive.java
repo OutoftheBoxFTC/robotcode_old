@@ -33,12 +33,12 @@ public class GyroscopeDrive extends PIDDriveControl {
     public GyroscopeDrive(Hardware robot, GyroscopeProvider gyroProvider) {
         super(new PIDControllerBuilder()
                         .invert()
-                        .setProportional(0.012)
-                        .setIntegral(0.00007)
-                        .setDerivative(1.65)
-                        .setIntegralRange(15)
+                        .setProportional(0.0185)
+                        .setIntegral(0.000023)
+                        .setDerivative(3.2)
+                        .setIntegralRange(4)
                         .setIntegralReset(true)
-                        .setOutputRange(0.4)
+                        .setOutputRange(0.45)
                         .setDelay(20)
                         .createController(),
                 robot);
@@ -103,7 +103,7 @@ public class GyroscopeDrive extends PIDDriveControl {
      */
     public void rotate(double degrees) throws InterruptedException {
         this.target = degrees;
-        control(degrees, 0, new ConditionalTerminator(new SensitivityTerminator(this, degrees, 1, 300), new TimerTerminator(6000)));
+        control(degrees, 0, new ConditionalTerminator(new SensitivityTerminator(this, degrees, .3, 300), new TimerTerminator(6000)));
         resetOrientation();
     }
 

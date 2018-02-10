@@ -37,7 +37,6 @@ public class Teleop extends LinearOpMode {
         A: Intake Down
         B: Intake Up
         Y: Intake Open
-
      */
 
     @Override
