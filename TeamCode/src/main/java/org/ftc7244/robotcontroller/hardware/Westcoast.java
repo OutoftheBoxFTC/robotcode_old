@@ -46,7 +46,7 @@ public class Westcoast extends Hardware implements NavxRobot{
 
     /**
      * Identify hardware and then set it up with different objects. Other initialization properties are
-     * set to ensure that everything is in the default position or correct mode for the robot.
+     * mset to ensure that everything is in the default position or correct mode for the robot.
      */
     @Override
     public void init() {
