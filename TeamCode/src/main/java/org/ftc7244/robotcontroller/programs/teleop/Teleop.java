@@ -66,7 +66,7 @@ public class Teleop extends LinearOpMode {
             else
                 robot.drive(gamepad1.left_stick_y * coefficient, gamepad1.right_stick_y * coefficient);
 
-            robot.getIntakeServo().setPosition(rightBumper.isPressed() ? 0.2: 0.75);
+            robot.getIntakeServo().setPosition(rightBumper.isPressed() ? 0.8: .2);
             if (driverLeftBumper.isPressed())
                 robot.getSpring().setPosition(0.5);
 
