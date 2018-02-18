@@ -103,7 +103,7 @@ public class GyroscopeDrive extends PIDDriveControl {
      */
     public void rotate(double degrees) throws InterruptedException {
         this.target = degrees;
-        control(degrees, 0, new ConditionalTerminator(new SensitivityTerminator(this, degrees, .3, 300), new TimerTerminator(6000)));
+        control(degrees, 0, new ConditionalTerminator(new SensitivityTerminator(this, degrees, .7, 300), new TimerTerminator(6000)));
         resetOrientation();
     }
 
