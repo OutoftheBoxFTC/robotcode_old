@@ -19,7 +19,7 @@ import org.ftc7244.robotcontroller.sensor.vuforia.ImageTransformProvider;
  */
 public abstract class PIDAutonomous extends LinearOpMode {
 
-    private final static long AUTONOMOUS_DURATION = 30 * 1000;
+    public final static long AUTONOMOUS_DURATION = 30 * 1000;
 
     protected final GyroscopeProvider gyroProvider;
 
