@@ -23,7 +23,6 @@ public class BlueRight extends PIDAutonomous {
         RelicRecoveryVuMark image = imageProvider.getImageReading();
         telemetry.addData("Image", image);
         telemetry.update();
-        sleep(1000);
         robot.getIntakeServo().setPosition(0.2);
         gyroscope.rotate(90);//Rotate to face glyph pit
         robot.getIntakeBottom().setPower(-1);

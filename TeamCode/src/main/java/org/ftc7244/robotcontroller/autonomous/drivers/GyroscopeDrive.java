@@ -33,9 +33,9 @@ public class GyroscopeDrive extends PIDDriveControl {
     public GyroscopeDrive(Hardware robot, GyroscopeProvider gyroProvider) {
         super(new PIDControllerBuilder()
                         .invert()
-                        .setProportional(0.0185)
-                        .setIntegral(0.0000266)
-                        .setDerivative(2.8)
+                        .setProportional(0.01865)
+                        .setIntegral(0.0000289)
+                        .setDerivative(3)
                         .setIntegralRange(6)
                         .setIntegralReset(true)
                         .setOutputRange(0.45)

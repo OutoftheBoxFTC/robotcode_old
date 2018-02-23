@@ -140,11 +140,7 @@ public class Westcoast extends Hardware implements NavxRobot{
         resetDriveMotors();
         double target = inches * COUNTS_PER_INCH;
         drive(power, power);
-        while(!Status.isStopRequested() && getDriveEncoderAverage() <= target){
-            opMode.telemetry.addData("Target", target);
-            opMode.telemetry.addData("Encoder Average", getDriveEncoderAverage());
-            opMode.telemetry.update();
-        }
+        while(!Status.isStopRequested() && getDriveEncoderAverage() <= target);
         drive(0, 0);
     }
 
@@ -187,15 +183,13 @@ public class Westcoast extends Hardware implements NavxRobot{
      */
     public void knockOverJewel(int color) throws InterruptedException {
         //color we want to get rid of
-
         getJewelVertical().setPosition(0.26);getJewelHorizontal().setPosition(0.45);
         sleep(1700);
-        if(color==Color.RED) {
+        if(color==Color.RED)
             getJewelHorizontal().setPosition(isColor(Color.RED) ? 0.33 : 0.56);
-        }else if(color==Color.BLUE){
+        else if(color==Color.BLUE)
             getJewelHorizontal().setPosition(isColor(Color.RED) ? 0.56 : 0.33);
-        }
-        sleep(500);
+        sleep(250);
         getJewelHorizontal().setPosition(0.73);
         getJewelVertical().setPosition(0.67);
         sleep(500);

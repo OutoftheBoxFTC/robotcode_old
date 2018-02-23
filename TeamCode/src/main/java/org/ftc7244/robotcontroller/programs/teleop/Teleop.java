@@ -18,7 +18,7 @@ public class Teleop extends LinearOpMode {
     private Westcoast robot;
     private Button driveLeftTrigger, dPadUp, dPadDown, rightTrigger, leftTrigger, leftBumper, bButton, yButton, driverLeftBumper, rightBumper;
     private PressButton aButton, driveRightTrigger;
-    private static final double SLOW_DRIVE_COEFFICIENT = -0.5, LIFT_REST = 0.1, LIFT_RAISE = .8;
+    private static final double SLOW_DRIVE_COEFFICIENT = -0.5, LIFT_REST = 0.1, LIFT_RAISE = 1;
 
     /**
     Driver:
@@ -66,7 +66,7 @@ public class Teleop extends LinearOpMode {
             else
                 robot.drive(gamepad1.left_stick_y * coefficient, gamepad1.right_stick_y * coefficient);
 
-            robot.getIntakeServo().setPosition(rightBumper.isPressed() ? 0.8: .2);
+            robot.getIntakeServo().setPosition(rightBumper.isPressed() ? .45: .2);
             if (driverLeftBumper.isPressed())
                 robot.getSpring().setPosition(0.5);
 
@@ -80,7 +80,7 @@ public class Teleop extends LinearOpMode {
             }
 
             robot.driveIntakeVertical(bButton.isPressed()?.5:yButton.isPressed()?-.5:0);
-            robot.getIntakeLift().setPower(dPadUp.isPressed()?LIFT_RAISE:dPadDown.isPressed()?-LIFT_RAISE - LIFT_REST:LIFT_REST);
+            robot.getIntakeLift().setPower(dPadUp.isPressed()?LIFT_RAISE:dPadDown.isPressed()?-LIFT_RAISE:LIFT_REST);
             if(robot.getRelicSpool().getCurrentPosition() < -1875)
                 robot.getRelicSpool().setPower(gamepad2.left_stick_y < -0.1 ? 0 : gamepad2.left_stick_y);
             else if(robot.getRelicSpool().getCurrentPosition() > 50)
