@@ -104,6 +104,7 @@ public class Westcoast extends Hardware implements NavxRobot{
             spring.setPosition(1);
             spring.setDirection(Servo.Direction.FORWARD);
         }
+        intakeServo.setPosition(0.2);
     }
 
     public void driveIntakeVertical(double power){

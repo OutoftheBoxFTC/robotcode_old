@@ -42,17 +42,17 @@ public class RedLeft extends PIDAutonomous {
                 break;
             case RIGHT:
                 gyroscope.rotate(-85);
-                gyroscope.drive(1, 39);
+                gyroscope.drive(1, 38);
                 break;
             default:
                 gyroscope.rotate(-90);
-                gyroscope.drive(1, 37);
+                gyroscope.drive(1, 38);
                 break;
         }
         robot.getIntakeBottom().setPower(1);
         robot.getIntakeTop().setPower(1);
         gyroscope.drive(-.5, 10);
-        gyroscope.drive(1, 4);
+        gyroscope.drive(1, 6);
         gyroscope.drive(-1, 15);
         gyroscope.rotate(180);
         robot.getIntakeTop().setPower(-1);
