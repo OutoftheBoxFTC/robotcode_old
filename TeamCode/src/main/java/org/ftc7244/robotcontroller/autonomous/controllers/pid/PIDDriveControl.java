@@ -1,12 +1,9 @@
-package org.ftc7244.robotcontroller.autonomous.controllers;
+package org.ftc7244.robotcontroller.autonomous.controllers.pid;
 
 import android.support.annotation.NonNull;
 
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.RobotLog;
 
-import org.ftc7244.datalogger.Logger;
-import org.ftc7244.robotcontroller.Debug;
 import org.ftc7244.robotcontroller.autonomous.Status;
 import org.ftc7244.robotcontroller.autonomous.terminators.Terminator;
 import org.ftc7244.robotcontroller.hardware.Hardware;

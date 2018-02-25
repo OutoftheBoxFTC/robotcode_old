@@ -3,7 +3,7 @@ package org.ftc7244.robotcontroller.programs.debug;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.ftc7244.datalogger.Logger;
-import org.ftc7244.robotcontroller.autonomous.PIDAutonomous;
+import org.ftc7244.robotcontroller.autonomous.ControlSystemAutonomous;
 
 /**
  * Created by Out Of The Box on 12/13/2017.
@@ -12,7 +12,7 @@ import org.ftc7244.robotcontroller.autonomous.PIDAutonomous;
  * rotation, and not just for rotation to a specific degree
  */
 @Autonomous(name = "Turn Random")
-public class TurnRandom extends PIDAutonomous {
+public class TurnRandom extends ControlSystemAutonomous {
 
     @Override
     public void run() throws InterruptedException {

@@ -17,7 +17,7 @@ import org.ftc7244.robotcontroller.sensor.vuforia.ImageTransformProvider;
  * automatically handles wait for startImageReading since most of the setup is completed and only driving
  * instructions are needed.
  */
-public abstract class PIDAutonomous extends LinearOpMode {
+public abstract class ControlSystemAutonomous extends LinearOpMode {
 
     public final static long AUTONOMOUS_DURATION = 30 * 1000;
 
@@ -33,7 +33,7 @@ public abstract class PIDAutonomous extends LinearOpMode {
     /**
      * Loads hardware, pid drives, and sensor providers
      */
-    protected PIDAutonomous() {
+    protected ControlSystemAutonomous() {
         robot = new Westcoast(this);
 
         gyroProvider = new RevIMUGyroscopeProvider();

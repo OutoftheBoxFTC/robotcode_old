@@ -1,4 +1,4 @@
-package org.ftc7244.robotcontroller.autonomous.controllers;
+package org.ftc7244.robotcontroller.autonomous.controllers.pid;
 
 import com.qualcomm.robotcore.util.RobotLog;
 

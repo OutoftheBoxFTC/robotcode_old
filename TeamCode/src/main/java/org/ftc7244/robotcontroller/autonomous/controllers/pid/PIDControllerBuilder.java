@@ -1,4 +1,4 @@
-package org.ftc7244.robotcontroller.autonomous.controllers;
+package org.ftc7244.robotcontroller.autonomous.controllers.pid;
 
 public class PIDControllerBuilder {
     private double kP = 0;

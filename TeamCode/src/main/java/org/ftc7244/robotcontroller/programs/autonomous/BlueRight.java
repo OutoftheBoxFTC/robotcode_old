@@ -5,13 +5,13 @@ import android.graphics.Color;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
-import org.ftc7244.robotcontroller.autonomous.PIDAutonomous;
+import org.ftc7244.robotcontroller.autonomous.ControlSystemAutonomous;
 
 /**
  * Created by BeaverDuck on 12/1/17.
  */
 @Autonomous(name = "Blue Right")
-public class BlueRight extends PIDAutonomous {
+public class BlueRight extends ControlSystemAutonomous {
     @Override
     public void run() throws InterruptedException {
         robot.knockOverJewel(Color.RED);//Check color sensor

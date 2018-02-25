@@ -3,7 +3,7 @@ package org.ftc7244.robotcontroller.autonomous.terminators;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftc7244.robotcontroller.Debug;
-import org.ftc7244.robotcontroller.autonomous.controllers.PIDDriveControl;
+import org.ftc7244.robotcontroller.autonomous.controllers.pid.PIDDriveControl;
 
 /**
  * Once the PID has reached a certain level of accuracy the sensitivity terminator will trigger

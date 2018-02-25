@@ -5,14 +5,14 @@ import android.graphics.Color;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
-import org.ftc7244.robotcontroller.autonomous.PIDAutonomous;
+import org.ftc7244.robotcontroller.autonomous.ControlSystemAutonomous;
 
 
 /**
  * Created by Eeshwar Laptop on 10/29/2017.
  */
 @Autonomous(name = "Red Left")
-public class RedLeft extends PIDAutonomous {
+public class RedLeft extends ControlSystemAutonomous {
 
     public void run() throws InterruptedException{
         RelicRecoveryVuMark image = imageProvider.getImageReading();

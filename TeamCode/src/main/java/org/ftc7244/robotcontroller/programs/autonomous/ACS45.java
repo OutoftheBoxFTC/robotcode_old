@@ -3,14 +3,14 @@ package org.ftc7244.robotcontroller.programs.autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.ftc7244.datalogger.Logger;
-import org.ftc7244.robotcontroller.autonomous.PIDAutonomous;
+import org.ftc7244.robotcontroller.autonomous.ControlSystemAutonomous;
 
 /**
  * Created by ftc72 on 2/21/2018.
  */
 
 @Autonomous(name = "ACS 45")
-public class ACS45 extends PIDAutonomous {
+public class ACS45 extends ControlSystemAutonomous {
 
     @Override
     public void run() throws InterruptedException {

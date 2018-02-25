@@ -1,7 +1,7 @@
 package org.ftc7244.robotcontroller.autonomous.drivers;
 
-import org.ftc7244.robotcontroller.autonomous.controllers.PIDControllerBuilder;
-import org.ftc7244.robotcontroller.autonomous.controllers.PIDDriveControl;
+import org.ftc7244.robotcontroller.autonomous.controllers.pid.PIDControllerBuilder;
+import org.ftc7244.robotcontroller.autonomous.controllers.pid.PIDDriveControl;
 import org.ftc7244.robotcontroller.autonomous.terminators.ConditionalTerminator;
 import org.ftc7244.robotcontroller.autonomous.terminators.SensitivityTerminator;
 import org.ftc7244.robotcontroller.autonomous.terminators.TimerTerminator;
