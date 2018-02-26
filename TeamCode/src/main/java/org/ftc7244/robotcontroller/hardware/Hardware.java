@@ -9,8 +9,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftc7244.robotcontroller.autonomous.Status;
-import org.ftc7244.robotcontroller.autonomous.drivers.GyroscopeDrive;
-import org.ftc7244.robotcontroller.sensor.gyroscope.GyroscopeProvider;
 
 import java.util.Map;
 

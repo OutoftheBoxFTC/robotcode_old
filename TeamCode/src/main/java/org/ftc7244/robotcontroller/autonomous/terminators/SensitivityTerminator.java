@@ -3,29 +3,29 @@ package org.ftc7244.robotcontroller.autonomous.terminators;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftc7244.robotcontroller.Debug;
-import org.ftc7244.robotcontroller.autonomous.controllers.pid.PIDDriveControl;
+import org.ftc7244.robotcontroller.autonomous.controllers.DriveControl;
 
 /**
- * Once the PID has reached a certain level of accuracy the sensitivity terminator will trigger
- * after a time period is passed to prevent early termination of the object passes the PID value
+ * Once the control loop has reached a certain level of accuracy the sensitivity terminator will trigger
+ * after a time period is passed to prevent early termination of the object passes the target value
  * and over compensated
  */
 public class SensitivityTerminator extends Terminator {
 
     private long timestamp, successDuration;
     private double maximumError, target;
-    private PIDDriveControl context;
+    private DriveControl context;
 
     /**
-     * Requires the PID context to know if the values are in the target value and if they are within
-     * a maximum amount of error kill the PID.
+     * Requires the control system context to know if the values are in the target value and if they are within
+     * a maximum amount of error kill the control loop.
      *
-     * @param context         the PID being used in the ${@link PIDDriveControl}
-     * @param target          the target value of the PID
-     * @param maximumError    the absolute value of error the PID can have
+     * @param context         the Control system being used in the ${@link DriveControl}
+     * @param target          the target value of the rotation
+     * @param maximumError    the absolute value of error the control system can have
      * @param successDuration how long after the target value must the target value retain before terminating
      */
-    public SensitivityTerminator(PIDDriveControl context, double target, double maximumError, long successDuration) {
+    public SensitivityTerminator(DriveControl context, double target, double maximumError, long successDuration) {
         this.target = target;
         this.maximumError = maximumError;
         this.successDuration = successDuration;

@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftc7244.datalogger.Logger;
 import org.ftc7244.robotcontroller.autonomous.Status;
+import org.ftc7244.robotcontroller.autonomous.controllers.ControlSystem;
 
 import static java.lang.Double.isInfinite;
 import static java.lang.Double.isNaN;
@@ -12,7 +13,7 @@ import static java.lang.Double.isNaN;
  * Simple PID controller used to respond to a input accordingly. Certain custom features like Integral
  * Range and Output Range were incorporated to support more intelligent drive support.
  */
-public class PIDController {
+public class PIDController extends ControlSystem {
 
     /**
      * This is the coefficient used to calculate the effect of the proportional of the robot.
@@ -45,7 +46,7 @@ public class PIDController {
     private double previousError;
 
 
-    private double setPoint, delay, integralRange, outputRange;
+    private double delay, integralRange, outputRange;
 
     /**
      * How often will the new PID value be calculated.
@@ -66,23 +67,7 @@ public class PIDController {
         reset();
     }
 
-    /**
-     * Update the target value of the PID loop so that the algorithm can respond in a new way
-     * the new target value will be used in the queue.
-     *
-     * @param target the new value
-     */
-    public void setTarget(double target) {
-        this.setPoint = target;
-    }
-
-    /**
-     * Update PID loop based off previous results. This number will be stored in a queue. As well as
-     * being returned to the user
-     *
-     * @param measured what is the measured value? This will give us info based off the target
-     * @return the error correction value from the PID loop
-     */
+    @Override
     public double update(double measured) {
         //grab the error for caching or use in other calculates
         double error = setPoint - measured;
@@ -94,7 +79,7 @@ public class PIDController {
             return 0;
         }
 
-        //calculate error and then find proprtional through adjusting
+        //calculate error and then find proportional through adjusting
         proportional = kP * error;
 
         //check if integral is in range otherwise zero it out
@@ -130,25 +115,14 @@ public class PIDController {
     /**
      * Reset the PID loop. Clearing all previous results
      */
+
+    @Override
     public void reset() {
         this.previousError = 0;
         this.integral = 0;
         this.dt = 0;
         this.cycleTime = 0;
         this.proportional = 0;
-    }
-
-    private void pause(long period) {
-        if (period <= 0) return;
-        long end = System.currentTimeMillis() + period;
-        do {
-            try {
-                Thread.sleep(period);
-            } catch (InterruptedException e) {
-                //ignore
-            }
-            period = end - System.currentTimeMillis();
-        } while (period > 0 && !Status.isStopRequested());
     }
 
     public double getKP() {

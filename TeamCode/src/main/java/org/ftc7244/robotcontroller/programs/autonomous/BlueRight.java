@@ -17,41 +17,41 @@ public class BlueRight extends ControlSystemAutonomous {
         robot.knockOverJewel(Color.RED);//Check color sensor
         robot.getIntakeTop().setPower(-1);
         robot.driveToInch(.2, 31);//Drive off balancing stone
-        gyroscope.rotate(0);
+        gyroscopePID.rotate(0);
         sleep(200);
         robot.getSpring().setPosition(0.5);//Spring out glyph
         RelicRecoveryVuMark image = imageProvider.getImageReading();
         telemetry.addData("Image", image);
         telemetry.update();
         robot.getIntakeServo().setPosition(0.2);
-        gyroscope.rotate(90);//Rotate to face glyph pit
+        gyroscopePID.rotate(90);//Rotate to face glyph pit
         robot.getIntakeBottom().setPower(-1);
         robot.driveIntakeVertical(0.5);
         sleep(200);
         robot.driveIntakeVertical(0);
-        gyroscope.drive(0.6, 20);//Drive to glyph pit
-        gyroscope.drive(0.6, 25);// Drive into glyph pit
+        gyroscopePID.drive(0.6, 20);//Drive to glyph pit
+        gyroscopePID.drive(0.6, 25);// Drive into glyph pit
         //0.2: 0.75
         robot.getIntakeServo().setPosition(0.8);
-        gyroscope.drive(-0.6, 0.6);
+        gyroscopePID.drive(-0.6, 0.6);
         switch(image) {
             case RIGHT:
-                gyroscope.rotate(72);
-                gyroscope.drive(0.85, 38.2);
+                gyroscopePID.rotate(72);
+                gyroscopePID.drive(0.85, 38.2);
                 break;
             case LEFT:
-                gyroscope.rotate(852);
-                gyroscope.drive(0.7, 36);
+                gyroscopePID.rotate(852);
+                gyroscopePID.drive(0.7, 36);
                 break;
             default:
-                gyroscope.rotate(82);
-                gyroscope.drive(0.85, 39);
+                gyroscopePID.rotate(82);
+                gyroscopePID.drive(0.85, 39);
                 break;
         }
         robot.getIntakeBottom().setPower(1);
         robot.getIntakeTop().setPower(1);
-        gyroscope.drive(-0.6, 10);
-        gyroscope.drive(0.6, 4);
-        gyroscope.drive(-0.6, 5);
+        gyroscopePID.drive(-0.6, 10);
+        gyroscopePID.drive(0.6, 4);
+        gyroscopePID.drive(-0.6, 5);
     }
 }

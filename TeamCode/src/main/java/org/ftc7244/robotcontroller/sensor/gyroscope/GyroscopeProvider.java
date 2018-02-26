@@ -13,14 +13,14 @@ import org.ftc7244.robotcontroller.sensor.SensorProvider;
  */
 public abstract class GyroscopeProvider extends SensorProvider {
     /**
-     * The time-stamp being used to record the time when the last gyroscope event occurred.
+     * The time-stamp being used to record the time when the last gyroscopePID event occurred.
      */
     private long timestamp;
 
     private volatile double x, y, z;
 
     /**
-     * Will offset the value of the gyroscope by the value specified which can be used as a way of
+     * Will offset the value of the gyroscopePID by the value specified which can be used as a way of
      * zeroing the offset and changing the heading.
      */
     private volatile double xOffset, zOffset;
@@ -56,7 +56,7 @@ public abstract class GyroscopeProvider extends SensorProvider {
     public abstract boolean isCalibrated();
 
     /**
-     * Shutoff and reset the robots gyroscope
+     * Shutoff and reset the robots gyroscopePID
      */
     public abstract void stop();
 

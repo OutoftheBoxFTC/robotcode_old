@@ -92,7 +92,7 @@ public class PIDControllerBuilder {
 
     /**
      * The range specifies the amount of error the loop can sustain until the integral is reset to
-     * zero. This limits the integral from building too larger when the proportional has a large
+     * zero. This limits the integral from building too much when the proportional has a large
      * enough value to create an impact on its own. If you desire to keep the robot responding quicker
      * to error its generally better to increase the derivative versus enabling integral range. This is
      * more ideal for the situations where the proportional becomes ineffective and more power is desired

@@ -27,7 +27,7 @@ public class PhoneGyroscopeProvider extends GyroscopeProvider implements SensorE
 
 
     /**
-     * The quaternion that stores the difference that is obtained by the gyroscope.
+     * The quaternion that stores the difference that is obtained by the gyroscopePID.
      * Basically it contains a rotational difference encoded into a quaternion.
      * <p>
      * To obtain the absolute orientation one must add this into an initial position by
@@ -40,7 +40,7 @@ public class PhoneGyroscopeProvider extends GyroscopeProvider implements SensorE
     private float errorX, errorY, errorZ, errorCount;
     /**
      * This is a filter-threshold for discarding Gyroscope measurements that are below a certain level and
-     * potentially are only noise and not real motion. Values from the gyroscope are usually between 0 (stop) and
+     * potentially are only noise and not real motion. Values from the gyroscopePID are usually between 0 (stop) and
      * 10 (rapid rotation), so 0.1 seems to be a reasonable threshold to filter noise (usually smaller than 0.1) and
      * real motion (usually > 0.1). Note that there is a chance of missing real motion, if the use is turning the
      * device really slowly, so this value has to find a balance between accepting noise (threshold = 0) and missing
@@ -135,7 +135,7 @@ public class PhoneGyroscopeProvider extends GyroscopeProvider implements SensorE
             deltaQuaternion.setW(-cosThetaOverTwo);
 
             // Matrix rendering in CubeRenderer does not seem to have this problem.
-            // Move current gyro orientation if gyroscope should be used
+            // Move current gyro orientation if gyroscopePID should be used
             deltaQuaternion.multiplyByQuat(currentOrientationQuaternion, currentOrientationQuaternion);
 
             correctedQuaternion.set(currentOrientationQuaternion);

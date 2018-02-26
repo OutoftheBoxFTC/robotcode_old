@@ -17,7 +17,7 @@ public class TurnRandom extends ControlSystemAutonomous {
     @Override
     public void run() throws InterruptedException {
         double degrees = Math.random()*360;
-        gyroscope.rotate(degrees);
+        gyroscopePID.rotate(degrees);
         telemetry.addData("Degrees", degrees);
         telemetry.update();
         while (opModeIsActive()){

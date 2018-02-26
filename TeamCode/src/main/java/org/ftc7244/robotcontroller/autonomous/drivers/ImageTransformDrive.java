@@ -1,7 +1,7 @@
 package org.ftc7244.robotcontroller.autonomous.drivers;
 
+import org.ftc7244.robotcontroller.autonomous.controllers.DriveControl;
 import org.ftc7244.robotcontroller.autonomous.controllers.pid.PIDControllerBuilder;
-import org.ftc7244.robotcontroller.autonomous.controllers.pid.PIDDriveControl;
 import org.ftc7244.robotcontroller.autonomous.terminators.ConditionalTerminator;
 import org.ftc7244.robotcontroller.autonomous.terminators.SensitivityTerminator;
 import org.ftc7244.robotcontroller.autonomous.terminators.TimerTerminator;
@@ -17,7 +17,7 @@ import org.ftc7244.robotcontroller.sensor.vuforia.ImageTransformProvider;
  */
 
 @Deprecated
-public class ImageTransformDrive extends PIDDriveControl {
+public class ImageTransformDrive extends DriveControl {
     private ImageTransformProvider imageProvider;
 
     /**

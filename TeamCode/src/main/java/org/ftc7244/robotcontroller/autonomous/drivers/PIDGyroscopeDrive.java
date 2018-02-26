@@ -3,7 +3,7 @@ package org.ftc7244.robotcontroller.autonomous.drivers;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftc7244.robotcontroller.autonomous.controllers.pid.PIDControllerBuilder;
-import org.ftc7244.robotcontroller.autonomous.controllers.pid.PIDDriveControl;
+import org.ftc7244.robotcontroller.autonomous.controllers.DriveControl;
 import org.ftc7244.robotcontroller.autonomous.terminators.ConditionalTerminator;
 import org.ftc7244.robotcontroller.autonomous.terminators.SensitivityTerminator;
 import org.ftc7244.robotcontroller.autonomous.terminators.Terminator;
@@ -13,11 +13,11 @@ import org.ftc7244.robotcontroller.hardware.Westcoast;
 import org.ftc7244.robotcontroller.sensor.gyroscope.GyroscopeProvider;
 
 /**
- * This class is instrumental in the control of the robot and uses the gyroscope as a frame of
- * reference. It does not require that the gyroscope be the phone or external but uses it to
+ * This class is instrumental in the control of the robot and uses the gyroscopePID as a frame of
+ * reference. It does not require that the gyroscopePID be the phone or external but uses it to
  * transform robot movement
  */
-public class GyroscopeDrive extends PIDDriveControl {
+public class PIDGyroscopeDrive extends DriveControl {
 
     protected GyroscopeProvider gyroProvider;
     protected Hardware robot;
@@ -28,9 +28,9 @@ public class GyroscopeDrive extends PIDDriveControl {
      * not want to debug the code.
      *
      * @param robot        access to motors on the robot
-     * @param gyroProvider base way to read gyroscope values
+     * @param gyroProvider base way to read gyroscopePID values
      */
-    public GyroscopeDrive(Hardware robot, GyroscopeProvider gyroProvider) {
+    public PIDGyroscopeDrive(Hardware robot, GyroscopeProvider gyroProvider) {
         super(new PIDControllerBuilder()
                         .invert()
                         .setProportional(0.01865)
@@ -49,7 +49,7 @@ public class GyroscopeDrive extends PIDDriveControl {
 
     /**
      * This expands the range of gyrosope input from [-180, 180], to [-540, 540]
-     * @return gyroscope input
+     * @return gyroscopePID input
      */
 
     @Override
@@ -98,7 +98,7 @@ public class GyroscopeDrive extends PIDDriveControl {
      * manually terminate if the rotate takes longer than two seconds. This is important because
      * in certain scenarios the robot can be stuck and be unable to complete the rotation.
      *
-     * @param degrees target orientation in degrees
+     * @param degrees target orientation in dewgrees
      * @throws InterruptedException if code fails to terminate on stop requested
      */
     public void rotate(double degrees) throws InterruptedException {

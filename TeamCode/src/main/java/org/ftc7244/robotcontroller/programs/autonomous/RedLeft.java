@@ -29,54 +29,54 @@ public class RedLeft extends ControlSystemAutonomous {
         robot.getSpring().setPosition(0.5);//Spring out glyph
         sleep(750);
         robot.getIntakeServo().setPosition(0.8);
-        gyroscope.rotate(-90);//Rotate to face glyph pit
+        gyroscopePID.rotate(-90);//Rotate to face glyph pit
         robot.getIntakeBottom().setPower(-1);
-        gyroscope.drive(1, 47);//Drive to glyph pit
+        gyroscopePID.drive(1, 47);//Drive to glyph pit
         //0.2: 0.75
         robot.getIntakeServo().setPosition(0.2);
-        gyroscope.drive(-1, 3);
+        gyroscopePID.drive(-1, 3);
         switch(image) {
             case LEFT:
-                gyroscope.rotate(-95);
-                gyroscope.drive(1, 39);
+                gyroscopePID.rotate(-95);
+                gyroscopePID.drive(1, 39);
                 break;
             case RIGHT:
-                gyroscope.rotate(-85);
-                gyroscope.drive(1, 38);
+                gyroscopePID.rotate(-85);
+                gyroscopePID.drive(1, 38);
                 break;
             default:
-                gyroscope.rotate(-90);
-                gyroscope.drive(1, 38);
+                gyroscopePID.rotate(-90);
+                gyroscopePID.drive(1, 38);
                 break;
         }
         robot.getIntakeBottom().setPower(1);
         robot.getIntakeTop().setPower(1);
-        gyroscope.drive(-.5, 10);
-        gyroscope.drive(1, 6);
-        gyroscope.drive(-1, 15);
-        gyroscope.rotate(180);
+        gyroscopePID.drive(-.5, 10);
+        gyroscopePID.drive(1, 6);
+        gyroscopePID.drive(-1, 15);
+        gyroscopePID.rotate(180);
         robot.getIntakeTop().setPower(-1);
         robot.getIntakeBottom().setPower(-1);
         robot.getIntakeServo().setPosition(0.8);
-        gyroscope.drive(1, 20);
+        gyroscopePID.drive(1, 20);
         robot.getIntakeServo().setPosition(0.2);
-        gyroscope.drive(-0.7, 20);
+        gyroscopePID.drive(-0.7, 20);
         switch(image){
             case LEFT:
-                gyroscope.rotate(185);
+                gyroscopePID.rotate(185);
                 break;
             case RIGHT:
-                gyroscope.rotate(175);
+                gyroscopePID.rotate(175);
                 break;
             default:
-                gyroscope.rotate(182);
+                gyroscopePID.rotate(182);
                 break;
         }
-        /*gyroscope.drive(1, 30);
+        /*gyroscopePID.drive(1, 30);
         robot.getIntakeBottom().setPower(1);
         robot.getIntakeTop().setPower(1);
-        gyroscope.drive(-1, 10);
-        gyroscope.drive(1, 4);
-        gyroscope.drive(-0.5, 10);*/
+        gyroscopePID.drive(-1, 10);
+        gyroscopePID.drive(1, 4);
+        gyroscopePID.drive(-0.5, 10);*/
     }
 }

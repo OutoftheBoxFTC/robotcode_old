@@ -1,4 +1,4 @@
-package org.ftc7244.robotcontroller.autonomous.controllers.pid;
+package org.ftc7244.robotcontroller.autonomous.controllers;
 
 import android.support.annotation.NonNull;
 
@@ -10,29 +10,29 @@ import org.ftc7244.robotcontroller.hardware.Hardware;
 
 
 /**
- * Abstract tool that handles a majority of the PID when driving and handles when the PID should
- * terminate based off of ${@link Terminator}. Furthermore, it takes a PID that has its own tunings
+ * Abstract tool that handles a majority of the Control System when driving and handles when the loop should
+ * terminate based off of ${@link Terminator}. Furthermore, it takes a control system that has its own specifications
  * and a sensor with readings to respond with the ${@link #control(double, double, Terminator)} function.
  */
-public abstract class PIDDriveControl {
+public abstract class DriveControl {
 
-    private PIDController controller;
+    private ControlSystem controller;
     protected Hardware robot;
 
-    public PIDDriveControl(PIDController controller, Hardware robot) {
+    public DriveControl(ControlSystem controller, Hardware robot) {
         this.controller = controller;
         this.robot = robot;
     }
 
     /**
-     * Return the value of the sensor so the PID loop knows how to respond
+     * Return the value of the sensor so the control loop knows how to respond
      *
      * @return double of the current value
      */
     public abstract double getReading();
 
     /**
-     * Resets the PID loop then sets the target. After every PID update the current thread is paused
+     * Resets the control loop then sets the target. After every loop update the current thread is paused
      * until the looping count is matched. It will also update the terminators with termination status
      * and requests to terminate unless the code is stopped otherwise
      * <p>
@@ -41,32 +41,25 @@ public abstract class PIDDriveControl {
      *
      * @param target      the target value for the sensor
      * @param powerOffset power level from -1 to 1 to convert a rotate function to a drive function
-     * @param terminator  tells the PID when to end
+     * @param terminator  tells the control loop when to end
      * @throws InterruptedException if the code fails to end on finish request
      */
     protected void control(double target, double powerOffset, @NonNull Terminator terminator) throws InterruptedException {
-        //setup the PID loop
+        //setup the control loop
         controller.reset();
         controller.setTarget(target);
 
         do {
             //tell the terminators the code has yet to finish
             terminator.terminated(false);
-            //get PID correction value
-            double pid = controller.update(getReading());
+            //get control system correction value
+            double correction = controller.update(getReading());
             robot.getOpMode().telemetry.addData("Error", getReading());
             robot.getOpMode().telemetry.update();
-            RobotLog.i(getReading() + ":" + pid);
+            RobotLog.i(getReading() + ":" + correction);
             //debug if wanted
-            /*
-            if (Debug.STATUS) {
-                Logger.getInstance().queueData("PID", pid).queueData("Encoders", robot.getDriveEncoderAverage());
-                robot.getOpMode().telemetry.addData("Heading", getReading());
-                robot.getOpMode().telemetry.update();
-            }
-            */
-            //take the PID and provide poweroffset if the robot wants to drive while using PID
-            robot.drive(powerOffset + pid, powerOffset - pid);
+            //take the correction and provide poweroffset
+            robot.drive(powerOffset + correction, powerOffset - correction);
             //check if the robot should stop driving
 
         } while (!terminator.shouldTerminate() && !Status.isStopRequested());

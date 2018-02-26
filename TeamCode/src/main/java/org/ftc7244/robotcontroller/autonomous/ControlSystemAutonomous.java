@@ -5,14 +5,15 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftc7244.datalogger.Logger;
-import org.ftc7244.robotcontroller.autonomous.drivers.GyroscopeDrive;
+import org.ftc7244.robotcontroller.autonomous.drivers.PIDGyroscopeDrive;
+import org.ftc7244.robotcontroller.autonomous.drivers.SPGyroscopeDrive;
 import org.ftc7244.robotcontroller.hardware.Westcoast;
 import org.ftc7244.robotcontroller.sensor.gyroscope.GyroscopeProvider;
 import org.ftc7244.robotcontroller.sensor.gyroscope.RevIMUGyroscopeProvider;
 import org.ftc7244.robotcontroller.sensor.vuforia.ImageTransformProvider;
 
 /**
- * Contains all the code for different drive types including ${@link GyroscopeDrive}.
+ * Contains all the code for different drive types including ${@link PIDGyroscopeDrive}.
  * Not much happens here beyond the essentials for each control method. It also
  * automatically handles wait for startImageReading since most of the setup is completed and only driving
  * instructions are needed.
@@ -23,7 +24,8 @@ public abstract class ControlSystemAutonomous extends LinearOpMode {
 
     protected final GyroscopeProvider gyroProvider;
 
-    protected final GyroscopeDrive gyroscope;
+    protected final PIDGyroscopeDrive gyroscopePID;
+    protected final SPGyroscopeDrive gyroscopeSP;
 
     protected final ImageTransformProvider imageProvider;
 
@@ -37,10 +39,10 @@ public abstract class ControlSystemAutonomous extends LinearOpMode {
         robot = new Westcoast(this);
 
         gyroProvider = new RevIMUGyroscopeProvider();
-
-        gyroscope = new GyroscopeDrive(robot, gyroProvider);
-
         imageProvider = new ImageTransformProvider();
+
+        gyroscopePID = new PIDGyroscopeDrive(robot, gyroProvider);
+        gyroscopeSP = new SPGyroscopeDrive(robot, gyroProvider);
     }
 
     @Override
@@ -70,7 +72,8 @@ public abstract class ControlSystemAutonomous extends LinearOpMode {
                 idle();
             }
 
-            gyroscope.resetOrientation();
+            gyroscopePID.resetOrientation();
+            gyroscopeSP.resetOrientation();
             end = System.currentTimeMillis() + AUTONOMOUS_DURATION;
             //Calibrates and starts providers
             run();

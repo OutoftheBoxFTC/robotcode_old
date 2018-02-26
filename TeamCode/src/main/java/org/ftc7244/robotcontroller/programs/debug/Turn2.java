@@ -11,6 +11,6 @@ import org.ftc7244.robotcontroller.autonomous.ControlSystemAutonomous;
 public class Turn2 extends ControlSystemAutonomous {
     @Override
     public void run() throws InterruptedException {
-        gyroscope.rotate(6);
+        gyroscopePID.rotate(6);
     }
 }

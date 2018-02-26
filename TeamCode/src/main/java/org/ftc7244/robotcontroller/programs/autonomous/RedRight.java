@@ -26,32 +26,32 @@ public class RedRight extends ControlSystemAutonomous {
         robot.getSpring().setPosition(0.5);//Spring out glyph
         sleep(750);
         robot.getIntakeServo().setPosition(0.8);
-        gyroscope.rotate(45);//Rotate to face glyph pit
+        gyroscopePID.rotate(45);//Rotate to face glyph pit
         robot.getIntakeBottom().setPower(-1);
-        gyroscope.drive(1, 23);//Drive to glyph pit
+        gyroscopePID.drive(1, 23);//Drive to glyph pit
         //0.2 : 0.75
         robot.getIntakeServo().setPosition(0.2);
         sleep(750);
-        gyroscope.drive(-0.75, 10);
+        gyroscopePID.drive(-0.75, 10);
         switch(image){
             case LEFT:
-                gyroscope.rotate(-154);
-                gyroscope.drive(0.5, 51 );
+                gyroscopePID.rotate(-154);
+                gyroscopePID.drive(0.5, 51 );
                 break;
             case RIGHT:
-                gyroscope.rotate(-171.5);
-                gyroscope.drive(1, 48);
+                gyroscopePID.rotate(-171.5);
+                gyroscopePID.drive(1, 48);
                 break;
             default:
-                gyroscope.rotate(-161);
-                gyroscope.drive(1, 45);
+                gyroscopePID.rotate(-161);
+                gyroscopePID.drive(1, 45);
         }
         robot.getIntakeBottom().setPower(1);
         robot.getIntakeTop().setPower(1);
-        gyroscope.drive(-0.5, 8);
-        gyroscope.drive(1, 6);
-        gyroscope.drive(-1, 58);
-        gyroscope.rotate(180);
+        gyroscopePID.drive(-0.5, 8);
+        gyroscopePID.drive(1, 6);
+        gyroscopePID.drive(-1, 58);
+        gyroscopePID.rotate(180);
         robot.getJewelVertical().setPosition(0.26);
         robot.getRelicSpool().setPower(-1);
         while (robot.getRelicSpool().getCurrentPosition()<1875);
