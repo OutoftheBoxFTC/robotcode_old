@@ -66,7 +66,7 @@ public class Teleop extends LinearOpMode {
             else
                 robot.drive(gamepad1.left_stick_y * coefficient, gamepad1.right_stick_y * coefficient);
 
-            robot.getIntakeServo().setPosition(rightBumper.isPressed() ? .45: .2);
+            robot.getIntakeServo().setPosition(rightBumper.isPressed() ? .65: 0.2);
             if (driverLeftBumper.isPressed())
                 robot.getSpring().setPosition(0.5);
 
@@ -95,6 +95,7 @@ public class Teleop extends LinearOpMode {
                 telemetry.addData("Spool", robot.getRelicSpool().getCurrentPosition());
                 telemetry.update();
             }
+            //robot.getJewelHorizontal().setPosition(robot.getBottomIntakeSwitch().getVoltage() > 0 ? 0.45 : 0.33);
         }
     }
 }

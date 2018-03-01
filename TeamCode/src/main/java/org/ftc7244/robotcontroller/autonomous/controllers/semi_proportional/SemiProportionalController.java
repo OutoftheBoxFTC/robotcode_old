@@ -47,12 +47,12 @@ public class SemiProportionalController extends ControlSystem {
         //Decreases the error by the stop offset
         error += (error>0?-1:1)*stopOffset;
         //Use base power if outside the proportional range
-        if(error>=proportionalRange)
+        if(Math.abs(error)>=proportionalRange)
             return basePower;
         //Normalizes error in terms of proportional range
         double normalized = error/proportionalRange;
         //Normalized value acts as a percent of the base power
         double power = normalized * basePower;
-        return power;
+        return -power;
     }
 }

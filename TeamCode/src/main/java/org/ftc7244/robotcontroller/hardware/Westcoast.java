@@ -1,7 +1,6 @@
 package org.ftc7244.robotcontroller.hardware;
 
 import android.graphics.Color;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.qualcomm.hardware.kauailabs.NavxMicroNavigationSensor;
@@ -16,6 +15,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.RobotLog;
 
+import org.ftc7244.datalogger.Logger;
 import org.ftc7244.robotcontroller.Debug;
 import org.ftc7244.robotcontroller.autonomous.Status;
 import org.ftc7244.robotcontroller.sensor.gyroscope.NavxRobot;
@@ -31,7 +31,7 @@ public class Westcoast extends Hardware implements NavxRobot{
     @Nullable
     private Servo jewelVertical, jewelHorizontal, spring, intakeServo, relicWrist, relicFinger;
     @Nullable
-    private AnalogInput vertLimit;
+    private AnalogInput bottomIntakeSwitch;
     @Nullable
     private ColorSensor jewelSensor;
     @Nullable
@@ -79,6 +79,8 @@ public class Westcoast extends Hardware implements NavxRobot{
         this.relicSpool = getOrNull(map.dcMotor, "spooler");
         this.relicWrist = getOrNull(map.servo, "relicArm");
         this.relicFinger = getOrNull(map.servo, "relicClaw");
+
+        this.bottomIntakeSwitch = getOrNull(map.analogInput, "bottomIntakeSwitch");
 
 
         //Set the default direction for all the hardware and also initialize default positions
@@ -264,8 +266,8 @@ public class Westcoast extends Hardware implements NavxRobot{
     }
 
     @Nullable
-    public AnalogInput getVertLimit(){
-        return vertLimit;
+    public AnalogInput getBottomIntakeSwitch(){
+        return bottomIntakeSwitch;
     }
 
     @Nullable
