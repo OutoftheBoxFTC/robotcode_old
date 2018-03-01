@@ -8,10 +8,11 @@ import org.ftc7244.robotcontroller.autonomous.ControlSystemAutonomous;
  * Created by ftc72 on 2/21/2018.
  */
 
-@Autonomous(name = "Linear W/O 45")
-public class LinearWO45 extends ControlSystemAutonomous {
+@Autonomous(name = "Turn 90 SP")
+public class Turn90SP extends ControlSystemAutonomous {
+
     @Override
     public void run() throws InterruptedException {
-        gyroscopeSP.rotate(45);
+        gyroscopeSP.rotate(90);
     }
 }
