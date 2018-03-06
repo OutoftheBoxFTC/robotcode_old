@@ -95,7 +95,7 @@ public class Westcoast extends Hardware implements NavxRobot{
         }
         if(intakeTopRight != null) intakeTopRight.setDirection(DcMotorSimple.Direction.REVERSE);
         if(intakeBottomRight != null) intakeBottomRight.setDirection(DcMotorSimple.Direction.REVERSE);
-        resetMotors(relicSpool);
+        resetMotors(relicSpool, intakeLift);
     }
 
     public void initServos(){

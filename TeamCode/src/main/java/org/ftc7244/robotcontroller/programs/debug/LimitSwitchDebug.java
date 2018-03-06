@@ -14,9 +14,8 @@ public class LimitSwitchDebug extends ControlSystemAutonomous{
     public void run() throws InterruptedException {
         waitForStart();
         while(opModeIsActive()){
-            telemetry.addData("Pressed?", robot.getBottomIntakeSwitch().getVoltage() > 0);
+            telemetry.addData("Pressed?", robot.getBottomIntakeSwitch().getVoltage());
             telemetry.update();
-            robot.getJewelHorizontal().setPosition(robot.getBottomIntakeSwitch().getVoltage() > 0 ? 0.33 : 0.56);
         }
     }
 }

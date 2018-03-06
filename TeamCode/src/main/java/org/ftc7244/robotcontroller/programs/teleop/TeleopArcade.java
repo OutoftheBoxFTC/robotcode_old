@@ -13,7 +13,7 @@ import org.ftc7244.robotcontroller.input.PressButton;
  * Created by ftc7244 on 2/19/2018.
  */
 @TeleOp
-public class TeleopEric extends LinearOpMode {
+public class TeleopArcade extends LinearOpMode {
     private Westcoast robot;
     private Button driveLeftTrigger, dPadUp, dPadDown, rightTrigger, leftTrigger, leftBumper, bButton, yButton, driverLeftBumper, rightBumper;
     private PressButton aButton, driveRightTrigger;

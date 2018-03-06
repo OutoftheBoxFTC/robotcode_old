@@ -59,6 +59,7 @@ public class Teleop extends LinearOpMode {
         aButton = new PressButton(gamepad2, ButtonType.A);
         driveRightTrigger = new PressButton(gamepad1, ButtonType.RIGHT_TRIGGER);
         robot.init();
+        robot.getIntakeLift().setPower(0.1);
         waitForStart();
         robot.initServos();
         while (opModeIsActive()) {
@@ -83,6 +84,9 @@ public class Teleop extends LinearOpMode {
             }
 
             robot.driveIntakeVertical(bButton.isPressed()?.5:yButton.isPressed()?-.5:0);
+            if(dPadDown.isPressed() || dPadUp.isPressed()){
+                robot.getIntakeLift().setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            }
             robot.getIntakeLift().setPower(dPadUp.isPressed()?LIFT_RAISE:dPadDown.isPressed()?-LIFT_RAISE:LIFT_REST);
             if(robot.getRelicSpool().getCurrentPosition() < -1875)
                 robot.getRelicSpool().setPower(gamepad2.left_stick_y < -0.1 ? 0 : gamepad2.left_stick_y);
@@ -98,17 +102,27 @@ public class Teleop extends LinearOpMode {
                 telemetry.addData("Spool", robot.getRelicSpool().getCurrentPosition());
                 telemetry.update();
             }
-            if(dPadDown.isPressed() || dPadUp.isPressed()){
-                if(robot.getBottomIntakeSwitch().getVoltage() > 0){}
+            if(!(dPadDown.isPressed() && dPadUp.isPressed())){
+                if(robot.getBottomIntakeSwitch().getVoltage() > 0.5){
+                    if(robot.getIntakeLift().getCurrentPosition() > 100 && robot.getIntakeLift().getCurrentPosition() < 700){
+                        robot.getIntakeLift().setPower(-0.8);
+                    }else if(robot.getIntakeLift().getCurrentPosition() < 700 && leftTrigger.isPressed()) {
+                        if(robot.getIntakeLift().getCurrentPosition() < 500){
+                            robot.getIntakeLift().setPower((500-robot.getIntakeLift().getCurrentPosition())/500.0);
+                        }
+                    }else{
+                        robot.getIntakeLift().setPower(LIFT_REST);
+                    }
+                }
                 else {
-                    if(robot.getIntakeLift().getCurrentPosition() < 70){
-                        robot.getIntakeLift().setPower(0.2);
+                    if(robot.getIntakeLift().getCurrentPosition() < 500){
+                        robot.getIntakeLift().setPower((500-robot.getIntakeLift().getCurrentPosition())/500.0);
                     }else{
                         robot.getIntakeLift().setPower(LIFT_REST);
                     }
                 }
             }
-            //robot.getJewelHorizontal().setPosition(robot.getBottomIntakeSwitch().getVoltage() > 0 ? 0.45 : 0.33);
+            robot.getJewelHorizontal().setPosition(robot.getBottomIntakeSwitch().getVoltage() > 0.5 ? 0.75 : 0.45);
         }
     }
 }
