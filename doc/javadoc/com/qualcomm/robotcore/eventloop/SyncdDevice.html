@@ -101,11 +101,11 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public interface <span class="typeNameLabel">SyncdDevice</span></pre>
 <div class="block"><a href="../../../../com/qualcomm/robotcore/eventloop/SyncdDevice.html" title="interface in com.qualcomm.robotcore.eventloop"><code>SyncdDevice</code></a> is for a device that wants to be in sync with the event loop. If there is sync'd
- device registered with the event loop manager then the event loop manager will integrate the event
+ device registered with the event loop manager then the event loop manager will iterate the event
  loop in this manner:
  <ol>
    <li>wait until all sync'd device have returned from blockUtilReady()</li>
-   <li>integrate EventLoop.loop()</li>
+   <li>iterate EventLoop.loop()</li>
    <li>call startBlockingWork() on all sync'd device</li>
  </ol>
  Sync'd devices need to register themselves with the event loop manager

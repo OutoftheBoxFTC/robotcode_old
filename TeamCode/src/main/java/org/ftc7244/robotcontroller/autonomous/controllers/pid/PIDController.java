@@ -3,7 +3,6 @@ package org.ftc7244.robotcontroller.autonomous.controllers.pid;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftc7244.datalogger.Logger;
-import org.ftc7244.robotcontroller.autonomous.Status;
 import org.ftc7244.robotcontroller.autonomous.controllers.ControlSystem;
 
 import static java.lang.Double.isInfinite;

@@ -77,7 +77,7 @@ public class PIDControllerBuilder {
     /**
      * Every PID needs to follow a very strict timing in order to prevent adverse effects on the robot
      * as timing is crucial when using any of the control methods. This sets the response rate and
-     * thus the amount of time between recalculating the PID / export. The loop will integrate in an open
+     * thus the amount of time between recalculating the PID / export. The loop will iterate in an open
      * methods if the value is not set otherwise it is a closed loop.
      * <p>
      * THIS SHOULD RARELY BE CHANGED BEYOND A VALUE OF 30

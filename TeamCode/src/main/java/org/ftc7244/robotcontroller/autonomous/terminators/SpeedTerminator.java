@@ -2,10 +2,6 @@ package org.ftc7244.robotcontroller.autonomous.terminators;
 
 import org.ftc7244.robotcontroller.hardware.Hardware;
 
-/**
- * Created by BeaverDuck on 12/13/17.
- */
-
 public class SpeedTerminator extends Terminator {
     private final Hardware robot;
     private final long successTime;
@@ -26,7 +22,7 @@ public class SpeedTerminator extends Terminator {
         lastTimeStamp = System.currentTimeMillis();
         int encoderAverage = robot.getDriveEncoderAverage();
         double speed = (encoderAverage-lastEncoderAvg)/elapsedTime;
-        if(Math.abs(speed)<speed)
+        if(Math.abs(speed)<speedRange)
                 currentSuccessTime += elapsedTime;
         return currentSuccessTime >= successTime;
     }

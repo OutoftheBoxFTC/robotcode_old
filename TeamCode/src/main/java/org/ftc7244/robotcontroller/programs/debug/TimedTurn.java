@@ -5,9 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.ftc7244.robotcontroller.autonomous.ControlSystemAutonomous;
 
-/**
- * Created by ftc72 on 3/1/2018.
- */
 @Autonomous(name = "Timed Turn")
 @Disabled
 public class TimedTurn extends ControlSystemAutonomous {

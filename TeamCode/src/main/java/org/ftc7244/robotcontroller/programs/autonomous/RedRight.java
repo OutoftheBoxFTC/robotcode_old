@@ -49,7 +49,8 @@ public class RedRight extends ControlSystemAutonomous {
         gyroscopePID.drive(-1, 58);//Drive out back to glyph pit
         gyroscopePID.rotate(180);//Rotate so back faces cryptobox
         robot.getIntakeTop().setPower(0);
-        robot.getIntakeBottom().setPower(0);//Shut off intake
-        extendRelicArm();//umm... idk
+        robot.getIntakeBottom().setPower(0);
+        robot.getIntakeLift().setPower(0);//Shut off intake systems
+        extendRelicArm();
     }
 }

@@ -6,9 +6,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import org.ftc7244.robotcontroller.autonomous.ControlSystemAutonomous;
 import org.ftc7244.robotcontroller.hardware.Westcoast;
 
-/**
- * Created by ftc7244 on 2/19/2018.
- */
 @Autonomous(name = "Vuforia Test")
 @Disabled
 public class VuforiaTest extends ControlSystemAutonomous {

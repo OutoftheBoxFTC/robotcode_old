@@ -12,10 +12,6 @@ import org.ftc7244.robotcontroller.autonomous.Status;
 
 import java.util.Map;
 
-/**
- * Created by FTC 7244 on 10/16/2017.
- */
-
 public abstract class Hardware {
     protected OpMode opMode;
     protected double countsPerInch;

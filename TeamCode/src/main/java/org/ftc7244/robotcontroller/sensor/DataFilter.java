@@ -12,6 +12,7 @@ public class DataFilter {
     private int length;
     private volatile double reading;
 
+
     /**
      * @param length Determines how many data points the filter remembers
      */

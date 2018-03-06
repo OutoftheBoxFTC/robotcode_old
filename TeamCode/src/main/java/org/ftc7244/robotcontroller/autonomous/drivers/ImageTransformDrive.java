@@ -52,6 +52,6 @@ public class ImageTransformDrive extends DriveControl {
     public void allignToImage() throws InterruptedException {
         double offset = imageProvider.getImageRotation(ImageTransformProvider.RotationAxis.YAW),
                 degrees = -offset;
-        control(0, 0, new ConditionalTerminator(new SensitivityTerminator(this, degrees, 1, 300), new TimerTerminator(2000)), null);
+        control(0, 0, new ConditionalTerminator(new SensitivityTerminator(this, degrees, 1, 300), new TimerTerminator(2000)));
     }
 }

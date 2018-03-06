@@ -64,7 +64,7 @@ public class Logger implements Runnable {
     }
 
     /**
-     * This method is integrate as an asynchronous task in order to send data in large bunches at a time
+     * This method is iterate as an asynchronous task in order to send data in large bunches at a time
      * interval as to not overload our desktop program. We also send it in bunches of 100 data
      * points to prevent exceeding the size limit for each message
      */

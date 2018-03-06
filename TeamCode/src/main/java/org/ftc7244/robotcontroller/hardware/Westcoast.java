@@ -3,7 +3,6 @@ package org.ftc7244.robotcontroller.hardware;
 import android.graphics.Color;
 import android.support.annotation.Nullable;
 
-import com.qualcomm.hardware.kauailabs.NavxMicroNavigationSensor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -202,7 +201,7 @@ public class Westcoast extends Hardware {
      * @param targetPosition The position intended to travel to
      */
     public void liftIntakeProportional(int targetPosition){
-        intakeLift.setPower(INTAKE_REST_POWER +Math.max(0, targetPosition-intakeLift.getCurrentPosition())/(INTAKE_HOME_POSITION-INTAKE_MIN_POSITION));
+        intakeLift.setPower(INTAKE_REST_POWER + Math.max(0, targetPosition-intakeLift.getCurrentPosition())/(INTAKE_HOME_POSITION-INTAKE_MIN_POSITION));
     }
 
     public boolean glyphInBottomIntake(){

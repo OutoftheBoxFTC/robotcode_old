@@ -410,7 +410,7 @@ Version 2.00 (released on 16.08.19)
  * Improvements made to fix resiliency and responsiveness of the system.
  * For LinearOpMode the user now must for a telemetry.update() to update the telemetry data on the driver station.  This update() mechanism ensures that the driver station gets the updated data properly and at the same time.
  * The Auto Configure function of the Robot Controller is now template based.  If there is a commonly used robot configuration, a template can be created so that the Auto Configure mechanism can be used to quickly configure a robot of this type.
- * The logic to detect a runaway op mode (both in the LinearOpMode and OpMode types) and to abort the integrate, then auto recover has been improved/implemented.
+ * The logic to detect a runaway op mode (both in the LinearOpMode and OpMode types) and to abort the iterate, then auto recover has been improved/implemented.
  * Fix has been incorporated so that Logitech F310 gamepad mappings will be correct for Marshmallow users.
 
 **************************************************************************************
@@ -449,7 +449,7 @@ Release 16.03.09
  * Added support for voltage indicator for legacy (NXT-compatible) motor controllers.
  * Changes made to provide auto stop capabilities for op modes.
     - A LinearOpMode class will stop when the statements in runOpMode() are complete.  User does not have to push the stop button on the driver station.
-    - If an op mode is stopped by the driver station, but there is a integrate away/uninterruptible thread persisting, the app will log an error message then force itself to crash to stop the runaway thread.
+    - If an op mode is stopped by the driver station, but there is a iterate away/uninterruptible thread persisting, the app will log an error message then force itself to crash to stop the runaway thread.
  * Driver Station UI modified to display lowest measured voltage below current voltage (12V battery).
  * Driver Station UI modified to have color background for current voltage (green=good, yellow=caution, red=danger, extremely low voltage).
  * javadoc improved (edits and additional classes).
@@ -507,7 +507,7 @@ Release 16.01.04
  * moved gamepad reset logic inside of initActiveOpMode() for robustness
  * changes made to mitigate risk of race conditions on public methods.
  * changes to try and flag when WiFi Direct name contains non-printable characters.
- * fix to correct race condition between .integrate() and .close() in ReadWriteRunnableStandard.
+ * fix to correct race condition between .iterate() and .close() in ReadWriteRunnableStandard.
  * updated FTDI driver
  * made ReadWriteRunnableStanard interface public.
  * fixed off-by-one errors in Command constructor

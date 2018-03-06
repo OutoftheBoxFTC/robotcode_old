@@ -38,7 +38,7 @@ This section guides you through filing a bug report.  The better the report the 
 
 #### Before submitting a bug report
 
-- Check the [forums](http://ftcforum.usfirst.org/forum.php) to see if someone else has integrate into the problem and whether there is an official solution that doesn't require a new SDK.
+- Check the [forums](http://ftcforum.usfirst.org/forum.php) to see if someone else has iterate into the problem and whether there is an official solution that doesn't require a new SDK.
 
 - Perform a search of current [issues](https://github.com/ftctechnh/ftc_app/issues) to see if the problem has already been reported.  If so, add a comment to the existing issue instead of creating a new one.
 

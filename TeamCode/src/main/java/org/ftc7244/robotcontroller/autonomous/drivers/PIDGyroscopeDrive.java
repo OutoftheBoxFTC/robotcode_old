@@ -81,7 +81,7 @@ public class PIDGyroscopeDrive extends DriveControl {
      * @throws InterruptedException if code fails to terminate on stop requested
      */
     public void drive(double power, double inches, double target) throws InterruptedException {
-        final double ticks = inches * Westcoast.COUNTS_PER_INCH;
+        final double ticks = inches * robot.getCountsPerInch();
         this.targetDegrees = 0;
         robot.resetDriveEncoders();
         if (inches <= 0) RobotLog.e("Invalid distances!");
@@ -153,7 +153,7 @@ public class PIDGyroscopeDrive extends DriveControl {
     }
 
     @Override
-    public PIDGyroscopeDrive setControlSubTask(ControlSystemAutonomous.SleepTask controlSubTask) {
+    public PIDGyroscopeDrive setControlSubTask(ControlSystemAutonomous.SubTask controlSubTask) {
         return (PIDGyroscopeDrive) super.setControlSubTask(controlSubTask);
     }
 }
