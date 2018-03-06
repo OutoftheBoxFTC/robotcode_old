@@ -2,7 +2,6 @@ package org.ftc7244.robotcontroller.programs.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.ftc7244.robotcontroller.hardware.Westcoast;
 import org.ftc7244.robotcontroller.input.Button;
@@ -18,7 +17,7 @@ public class Teleop extends LinearOpMode {
     private Westcoast robot;
     private Button driveLeftTrigger, dPadUp, dPadDown, rightTrigger, leftTrigger, leftBumper, bButton, yButton, driverLeftBumper, rightBumper;
     private PressButton aButton, driveRightTrigger;
-    private static final double SLOW_DRIVE_COEFFICIENT = -0.5, LIFT_REST = 0.1, LIFT_RAISE = 1;
+    private static final double SLOW_DRIVE_COEFFICIENT = -0.5, ACTION_BUFFER=200;
 
     /**
     Driver:
@@ -39,9 +38,6 @@ public class Teleop extends LinearOpMode {
         Y: Intake Open
      */
 
-    /*
-    TODO: Slide be a little bit up, but needs to lower. When the limit switches are pressed, go down. Manual control otherwise though
-     */
     @Override
     public void runOpMode() throws InterruptedException {
         robot = new Westcoast(this);
@@ -59,7 +55,6 @@ public class Teleop extends LinearOpMode {
         aButton = new PressButton(gamepad2, ButtonType.A);
         driveRightTrigger = new PressButton(gamepad1, ButtonType.RIGHT_TRIGGER);
         robot.init();
-        robot.getIntakeLift().setPower(0.1);
         waitForStart();
         robot.initServos();
         while (opModeIsActive()) {
@@ -70,11 +65,13 @@ public class Teleop extends LinearOpMode {
             else
                 robot.drive(gamepad1.left_stick_y * coefficient, gamepad1.right_stick_y * coefficient);
 
-            robot.getIntakeServo().setPosition(rightBumper.isPressed() ? .65: 0.2);
             if (driverLeftBumper.isPressed())
                 robot.getSpring().setPosition(0.5);
 
             //Operator
+                /**Glyph Control*/
+            robot.getIntakeServo().setPosition(rightBumper.isPressed() ? .65: 0.2);
+            robot.driveIntakeVertical(bButton.isPressed()?.5:yButton.isPressed()?-.5:0);
             if (rightTrigger.isPressed()) {
                 robot.getIntakeBottom().setPower(-1);
                 robot.getIntakeTop().setPower(-1);
@@ -83,45 +80,40 @@ public class Teleop extends LinearOpMode {
                 robot.getIntakeTop().setPower(leftBumper.isPressed()?1:0);
             }
 
-            robot.driveIntakeVertical(bButton.isPressed()?.5:yButton.isPressed()?-.5:0);
-            if(dPadDown.isPressed() || dPadUp.isPressed()){
-                robot.getIntakeLift().setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            }
-            robot.getIntakeLift().setPower(dPadUp.isPressed()?LIFT_RAISE:dPadDown.isPressed()?-LIFT_RAISE:LIFT_REST);
-            if(robot.getRelicSpool().getCurrentPosition() < -1875)
+                /**Relic Arm Control*/
+            if(robot.getRelicSpool().getCurrentPosition() < Westcoast.RELIC_SPOOL_MIN)
                 robot.getRelicSpool().setPower(gamepad2.left_stick_y < -0.1 ? 0 : gamepad2.left_stick_y);
-            else if(robot.getRelicSpool().getCurrentPosition() > 50)
+            else if(robot.getRelicSpool().getCurrentPosition() > Westcoast.RELIC_SPOOL_MAX)
                 robot.getRelicSpool().setPower(gamepad2.left_stick_y > 0.1 ? 0 : gamepad2.left_stick_y);
             else
                 robot.getRelicSpool().setPower(gamepad2.left_stick_y);
-            //closer it is to 1, the higher it goes
             robot.getRelicWrist().setPosition(gamepad2.right_stick_y<-0.1?0.6:gamepad2.right_stick_y>0.1?0.1:robot.getRelicWrist().getPosition());
-            //The closer you get to 0, the tighter it gets
             robot.getRelicFinger().setPosition(aButton.isPressed()?0.375:0.7);
-            if(gamepad2.left_stick_y > -0.1 && gamepad2.left_stick_y < 0.1){
-                telemetry.addData("Spool", robot.getRelicSpool().getCurrentPosition());
-                telemetry.update();
+
+                /**Intake lift control*/
+            if(dPadUp.isPressed()||dPadDown.isPressed()){
+                robot.getIntakeLift().setPower(dPadUp.isPressed()?1:dPadDown.isPressed()?-1:Westcoast.INTAKE_REST_POWER);
             }
-            if(!(dPadDown.isPressed() && dPadUp.isPressed())){
-                if(robot.getBottomIntakeSwitch().getVoltage() > 0.5){
-                    if(robot.getIntakeLift().getCurrentPosition() > 100 && robot.getIntakeLift().getCurrentPosition() < 700){
-                        robot.getIntakeLift().setPower(-0.8);
-                    }else if(robot.getIntakeLift().getCurrentPosition() < 700 && leftTrigger.isPressed()) {
-                        if(robot.getIntakeLift().getCurrentPosition() < 500){
-                            robot.getIntakeLift().setPower((500-robot.getIntakeLift().getCurrentPosition())/500.0);
+            else {
+                if(robot.glyphInBottomIntake()){
+                    if(robot.getIntakeLift().getCurrentPosition()<Westcoast.INTAKE_REST_POSITION+ACTION_BUFFER){
+                        if(robot.getIntakeLift().getCurrentPosition()>100){
+                            robot.getIntakeLift().setPower(-1);
                         }
-                    }else{
-                        robot.getIntakeLift().setPower(LIFT_REST);
+                        else if(leftTrigger.isPressed()){
+                            robot.liftIntakeProportional((int) Westcoast.INTAKE_REST_POSITION);
+                        }
+                    }
+                    else {
+                        robot.getIntakeLift().setPower(Westcoast.INTAKE_REST_POWER);
                     }
                 }
                 else {
-                    if(robot.getIntakeLift().getCurrentPosition() < 500){
-                        robot.getIntakeLift().setPower((500-robot.getIntakeLift().getCurrentPosition())/500.0);
-                    }else{
-                        robot.getIntakeLift().setPower(LIFT_REST);
-                    }
+                    robot.liftIntakeProportional((int) Westcoast.INTAKE_REST_POSITION);
                 }
             }
+
+                /**Driver Feedback*/
             robot.getJewelHorizontal().setPosition(robot.getBottomIntakeSwitch().getVoltage() > 0.5 ? 0.75 : 0.45);
         }
     }

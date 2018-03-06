@@ -15,14 +15,14 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.RobotLog;
 
-import org.ftc7244.datalogger.Logger;
 import org.ftc7244.robotcontroller.Debug;
 import org.ftc7244.robotcontroller.autonomous.Status;
 import org.ftc7244.robotcontroller.sensor.gyroscope.NavxRobot;
 
 public class Westcoast extends Hardware implements NavxRobot{
     public static final double COUNTS_PER_INCH = (403.2 / (3.9 * Math.PI)),
-                               RELIC_SPOOL_MIN = -1857, RELIC_SPOOL_MAX = 0;
+                               RELIC_SPOOL_MIN = -1857, RELIC_SPOOL_MAX = 50,
+                               INTAKE_REST_POWER =0.1, INTAKE_REST_POSITION=500;
 
     @Nullable
     private DcMotor driveBackLeft, driveFrontLeft, driveBackRight, driveFrontRight, intakeLift, intakeTop, intakeBottom, relicSpool;
@@ -96,6 +96,7 @@ public class Westcoast extends Hardware implements NavxRobot{
         if(intakeTopRight != null) intakeTopRight.setDirection(DcMotorSimple.Direction.REVERSE);
         if(intakeBottomRight != null) intakeBottomRight.setDirection(DcMotorSimple.Direction.REVERSE);
         resetMotors(relicSpool, intakeLift);
+        if(intakeLift != null)intakeLift.setPower(0.1);
     }
 
     public void initServos(){
@@ -211,6 +212,19 @@ public class Westcoast extends Hardware implements NavxRobot{
         getJewelHorizontal().setPosition(0.73);
         getJewelVertical().setPosition(0.67);
         sleep(500);
+    }
+
+    /**
+     * Sets the intake power proportional to the normalized error from the target in terms of its maximum distance from it
+     * (in this case, the target itself)
+     * @param targetPosition The position intended to travel to
+     */
+    public void liftIntakeProportional(int targetPosition){
+        intakeLift.setPower(INTAKE_REST_POWER +(Math.max(0, targetPosition-intakeLift.getCurrentPosition())/targetPosition));
+    }
+
+    public boolean glyphInBottomIntake(){
+        return bottomIntakeSwitch.getVoltage()>0.5;
     }
 
     @Nullable
