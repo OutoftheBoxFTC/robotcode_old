@@ -21,7 +21,7 @@ import org.ftc7244.robotcontroller.autonomous.Status;
 import org.ftc7244.robotcontroller.sensor.gyroscope.NavxRobot;
 
 public class Westcoast extends Hardware implements NavxRobot{
-    public static final double COUNTS_PER_INCH = 403.2 / (3.9 * Math.PI),
+    public static final double COUNTS_PER_INCH = (403.2 / (3.9 * Math.PI)),
                                RELIC_SPOOL_MIN = -1857, RELIC_SPOOL_MAX = 0;
 
     @Nullable
@@ -118,15 +118,9 @@ public class Westcoast extends Hardware implements NavxRobot{
 
     @Override
     public void drive(double leftPower, double rightPower, long timeMillis) throws InterruptedException{
-        driveFrontLeft.setPower(leftPower);
-        driveBackLeft.setPower(leftPower);
-        driveFrontRight.setPower(-rightPower);
-        driveBackRight.setPower(-rightPower);
+       drive(leftPower, -rightPower);
         sleep(timeMillis);
-        driveFrontLeft.setPower(0);
-        driveBackLeft.setPower(0);
-        driveFrontRight.setPower(0);
-        driveBackRight.setPower(0);
+        drive(0, 0);
     }
 
     @Override
@@ -145,6 +139,10 @@ public class Westcoast extends Hardware implements NavxRobot{
         drive(power, power);
         while(!Status.isStopRequested() && getDriveEncoderAverage() <= target);
         drive(0, 0);
+        driveBackLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        driveBackRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        driveFrontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        driveFrontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     @Override
@@ -154,7 +152,24 @@ public class Westcoast extends Hardware implements NavxRobot{
 
     @Override
     public int getDriveEncoderAverage() {
-        return -(driveBackLeft.getCurrentPosition()+driveBackRight.getCurrentPosition()+driveFrontLeft.getCurrentPosition()+driveFrontRight.getCurrentPosition())/4;
+        return -(-driveBackLeft.getCurrentPosition()+driveBackRight.getCurrentPosition()-driveFrontLeft.getCurrentPosition()+driveFrontRight.getCurrentPosition())/4;
+    }
+
+    @Override
+    public void resetDriveEncoders() {
+        driveBackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        driveBackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        driveFrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        driveFrontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        try {
+            sleep(10);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        driveBackRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        driveBackLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        driveFrontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        driveFrontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     /**

@@ -14,9 +14,10 @@ public class SPGyroscopeDrive extends DriveControl {
     private double target;
 
     public SPGyroscopeDrive(Hardware robot, GyroscopeProvider gyroProvider) {
-        super(new SPControllerBuilder().setBasePower(0.4)
-                .setProportionalRange(45)
-                .setStopOffset(10)
+        super(new SPControllerBuilder()
+                .setBasePower(0.3)
+                .setProportionalRange(60)
+                .setMinimumPower(0.025)
                 .createController(), robot);
         this.gyroProvider = gyroProvider;
     }
@@ -24,7 +25,7 @@ public class SPGyroscopeDrive extends DriveControl {
     @Override
     public double getReading() {
         double reading = this.gyroProvider.getZ();
-        if (Math.abs(target) > 160) {
+        if (Math.abs(target) > 180) {
             if (target > 0 && reading < 0) {
                 return 360 + reading;
             } else if (target < 0 && reading > 0) {
@@ -36,7 +37,7 @@ public class SPGyroscopeDrive extends DriveControl {
 
     public void rotate(double degrees) throws InterruptedException {
         this.target = degrees;
-        control(degrees, 0, new ConditionalTerminator(new TimerTerminator(6000), new SensitivityTerminator(this, target, 2, 0)));
+        control(degrees, 0, new ConditionalTerminator(new TimerTerminator(4000), new SensitivityTerminator(this, target, 1, 30)));
         resetOrientation();
     }
 

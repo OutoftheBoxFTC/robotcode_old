@@ -1,18 +1,17 @@
-package org.ftc7244.robotcontroller.programs.autonomous;
+package org.ftc7244.robotcontroller.programs.debug;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.ftc7244.robotcontroller.autonomous.ControlSystemAutonomous;
 
 /**
- * Created by ftc72 on 2/21/2018.
+ * Created by ftc72 on 3/1/2018.
  */
 
-@Autonomous(name = "Turn 90 SP")
-public class Turn90SP extends ControlSystemAutonomous {
-
+@Autonomous(name = "Turn 45")
+public class Turn45 extends ControlSystemAutonomous {
     @Override
     public void run() throws InterruptedException {
-        gyroscopeSP.rotate(90);
+        gyroscopePID.rotate(45);
     }
 }

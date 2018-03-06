@@ -51,6 +51,10 @@ public abstract class ControlSystemAutonomous extends LinearOpMode {
 
         robot.init();
         robot.initServos();
+        robot.getDriveBackLeft().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.getDriveBackRight().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.getDriveFrontLeft().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.getDriveFrontRight().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.getDriveBackLeft().setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         robot.getDriveBackRight().setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         robot.getDriveFrontLeft().setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

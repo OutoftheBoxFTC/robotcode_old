@@ -9,7 +9,6 @@ import org.ftc7244.robotcontroller.autonomous.ControlSystemAutonomous;
  * Created by ftc72 on 2/21/2018.
  */
 
-@Autonomous(name = "ACS 45")
 public class ACS45 extends ControlSystemAutonomous {
 
     @Override
@@ -18,7 +17,7 @@ public class ACS45 extends ControlSystemAutonomous {
     }
 
     private void turn(double target){
-        double offset = gyroProvider.getZ(), basePower=0.4, slowRange=45, stopOffset=3, polarity = -target<0?-1:1, stopRange = 2;
+        double offset = gyroProvider.getZ(), basePower=0.4, slowRange=45, stopOffset=3, polarity = -target<0?-1:1, stopRange = 1, minPower=0;
         long lastTime = System.currentTimeMillis();
         while (opModeIsActive()&&System.currentTimeMillis()-lastTime<=6000 && Math.abs(target-(gyroProvider.getZ()-offset))>=stopRange){
             if(Math.abs(target-(gyroProvider.getZ()-offset))>slowRange) {
@@ -28,6 +27,8 @@ public class ACS45 extends ControlSystemAutonomous {
             }
             else {
                 double power = -basePower*(target-(gyroProvider.getZ()-offset+stopOffset*polarity))/slowRange;
+                double powerPolarity = polarity<0?-1:1;
+                power=powerPolarity*Math.max(Math.abs(power), minPower);
                 robot.drive(power, -power);
                 Logger.getInstance().queueData("Power", power*100);
             }

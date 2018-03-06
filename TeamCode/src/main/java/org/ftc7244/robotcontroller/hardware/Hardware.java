@@ -124,4 +124,6 @@ public abstract class Hardware {
     public OpMode getOpMode() {
         return opMode;
     }
+
+    public abstract void resetDriveEncoders();
 }

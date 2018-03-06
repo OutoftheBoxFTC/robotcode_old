@@ -3,7 +3,7 @@ package org.ftc7244.robotcontroller.autonomous.controllers.semi_proportional;
 public class SPControllerBuilder {
     private double basePower = 0;
     private double proportionalRange = 0;
-    private double stopOffset = 0;
+    private double minimumPower = 0;
 
     /**
      * The base power serves 2 purposes. The first is to act as a constant power level outside of the
@@ -30,18 +30,13 @@ public class SPControllerBuilder {
     }
 
     /**
-     * The stop offset is the offset from the given target at which the robot will be told to stop. This
-     * way, the robot will still have time to decelerate to a stop, rather than continue turning past the
-     * target after the process has been stopped.
-     * @param stopOffset The offset from the target at which the robot will stop
-     * @return a copy of the controller
      */
-    public SPControllerBuilder setStopOffset(double stopOffset) {
-        this.stopOffset = stopOffset;
+    public SPControllerBuilder setMinimumPower(double minimumPower) {
+        this.minimumPower = minimumPower;
         return this;
     }
 
     public SemiProportionalController createController(){
-        return new SemiProportionalController(basePower, proportionalRange, stopOffset);
+        return new SemiProportionalController(basePower, proportionalRange, minimumPower);
     }
 }

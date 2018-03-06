@@ -1,6 +1,7 @@
 package org.ftc7244.robotcontroller.autonomous.drivers;
 
 import com.qualcomm.robotcore.hardware.AnalogInput;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftc7244.robotcontroller.autonomous.controllers.pid.PIDControllerBuilder;
@@ -34,9 +35,9 @@ public class PIDGyroscopeDrive extends DriveControl {
     public PIDGyroscopeDrive(Hardware robot, GyroscopeProvider gyroProvider) {
         super(new PIDControllerBuilder()
                         .invert()
-                        .setProportional(0.01865)
-                        .setIntegral(0.0000291)
-                        .setDerivative(3.05)
+                        .setProportional(0.003)
+                        .setIntegral(0)
+                        .setDerivative(0)
                         .setIntegralRange(6)
                         .setIntegralReset(true)
                         .setOutputRange(0.45)
@@ -82,7 +83,7 @@ public class PIDGyroscopeDrive extends DriveControl {
     public void drive(double power, double inches, double target) throws InterruptedException {
         final double ticks = inches * Westcoast.COUNTS_PER_INCH;
         this.target = 0;
-        robot.resetDriveMotors();
+        robot.resetDriveEncoders();
         if (inches <= 0) RobotLog.e("Invalid distances!");
         final int offset = robot.getDriveEncoderAverage();
         control(target, power, new Terminator() {
@@ -121,7 +122,7 @@ public class PIDGyroscopeDrive extends DriveControl {
      */
     public void rotate(double degrees) throws InterruptedException {
         this.target = degrees;
-        control(degrees, 0, new ConditionalTerminator(new SensitivityTerminator(this, degrees, 2, 50), new TimerTerminator(6000)));
+        control(degrees, 0, new ConditionalTerminator(new SensitivityTerminator(this, degrees, 0.5, 50), new TimerTerminator(6000)));
         resetOrientation();
     }
 

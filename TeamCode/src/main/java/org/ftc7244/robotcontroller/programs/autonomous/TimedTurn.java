@@ -5,13 +5,12 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.ftc7244.robotcontroller.autonomous.ControlSystemAutonomous;
 
 /**
- * Created by ftc72 on 2/21/2018.
+ * Created by ftc72 on 3/1/2018.
  */
-
-@Autonomous(name = "Turn 45 SP")
-public class Turn45SP extends ControlSystemAutonomous {
+@Autonomous(name = "Timed Turn")
+public class TimedTurn extends ControlSystemAutonomous {
     @Override
     public void run() throws InterruptedException {
-        gyroscopeSP.rotate(45);
+        robot.drive(-1, 1, 3000);
     }
 }

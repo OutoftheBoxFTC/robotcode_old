@@ -39,6 +39,9 @@ public class Teleop extends LinearOpMode {
         Y: Intake Open
      */
 
+    /*
+    TODO: Slide be a little bit up, but needs to lower. When the limit switches are pressed, go down. Manual control otherwise though
+     */
     @Override
     public void runOpMode() throws InterruptedException {
         robot = new Westcoast(this);
@@ -94,6 +97,16 @@ public class Teleop extends LinearOpMode {
             if(gamepad2.left_stick_y > -0.1 && gamepad2.left_stick_y < 0.1){
                 telemetry.addData("Spool", robot.getRelicSpool().getCurrentPosition());
                 telemetry.update();
+            }
+            if(dPadDown.isPressed() || dPadUp.isPressed()){
+                if(robot.getBottomIntakeSwitch().getVoltage() > 0){}
+                else {
+                    if(robot.getIntakeLift().getCurrentPosition() < 70){
+                        robot.getIntakeLift().setPower(0.2);
+                    }else{
+                        robot.getIntakeLift().setPower(LIFT_REST);
+                    }
+                }
             }
             //robot.getJewelHorizontal().setPosition(robot.getBottomIntakeSwitch().getVoltage() > 0 ? 0.45 : 0.33);
         }

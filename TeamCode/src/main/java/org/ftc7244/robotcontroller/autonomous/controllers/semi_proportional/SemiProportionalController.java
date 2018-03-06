@@ -1,5 +1,6 @@
 package org.ftc7244.robotcontroller.autonomous.controllers.semi_proportional;
 
+import org.ftc7244.datalogger.Logger;
 import org.ftc7244.robotcontroller.autonomous.controllers.ControlSystem;
 
 /**
@@ -20,39 +21,44 @@ public class SemiProportionalController extends ControlSystem {
     private double proportionalRange;
 
     /**
-     * This is the offset from the initial target position at which the robot will attempt to reach.
-     * The error will be shifted towards 0 by a factor of this value in order to account for external
-     * factors such as drift or update time.
+     *
      */
-    private double stopOffset;
+    private double minimumPower;
 
 
 
 
-    public SemiProportionalController(double basePower, double proportionalRange, double stopOffset) {
+    public SemiProportionalController(double basePower, double proportionalRange, double minimumPower) {
         this.basePower = basePower;
         this.proportionalRange = proportionalRange;
-        this.stopOffset = stopOffset;
+        this.minimumPower = minimumPower;
     }
 
     @Override
     public void reset() {
-        //Nothing unique to a given process is remembered between iterations of the loop except set point
+
     }
 
     @Override
     public double update(double measured) {
-        //derive error for use in further calcuations
+        //derive error for use in further calculations
         double error = setPoint-measured;
-        //Decreases the error by the stop offset
-        error += (error>0?-1:1)*stopOffset;
         //Use base power if outside the proportional range
         if(Math.abs(error)>=proportionalRange)
             return basePower;
         //Normalizes error in terms of proportional range
         double normalized = error/proportionalRange;
-        //Normalized value acts as a percent of the base power
-        double power = normalized * basePower;
+        //Takes measure of the direction the robot wants to turn
+        double polarity = normalized<0?-1:1;
+        //Calculate power based off proportional
+        double power = normalized*basePower;
+
+        if(Math.abs(power)<=minimumPower){
+            //Calculate the minimum power in the correct direction
+            power =  minimumPower*polarity;
+        }
+        Logger.getInstance().queueData("Error", error).
+                             queueData("Power", power*180);
         return -power;
     }
 }
