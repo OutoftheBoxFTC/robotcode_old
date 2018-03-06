@@ -363,7 +363,7 @@ extends <a href="../../../com/qualcomm/ftccommon/FtcEventLoopBase.html" title="c
 <div class="block">Init method, this will be called before the first call to loop. You should set up
  your hardware in this method.
 
- Threading: called on the RobotSetupRunnable.run() thread, before the EventLoopRunnable.run()
+ Threading: called on the RobotSetupRunnable.integrate() thread, before the EventLoopRunnable.integrate()
  thread is created.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -392,7 +392,7 @@ extends <a href="../../../com/qualcomm/ftccommon/FtcEventLoopBase.html" title="c
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../com/qualcomm/robotcore/eventloop/EventLoop.html#loop--">EventLoop</a></code></span></div>
 <div class="block">This method will be repeatedly called by the event loop manager.
 
- Threading: called on the EventLoopRunnable.run() thread.</div>
+ Threading: called on the EventLoopRunnable.integrate() thread.</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../com/qualcomm/robotcore/exception/RobotCoreException.html" title="class in com.qualcomm.robotcore.exception">RobotCoreException</a></code> - if a RobotCoreException is thrown, it will be handled
@@ -434,7 +434,7 @@ extends <a href="../../../com/qualcomm/ftccommon/FtcEventLoopBase.html" title="c
  into a safe state before this method exits, since there will be no more changes to communicate
  with your robot.
 
- Threading: called on the EventLoopRunnable.run() thread.</div>
+ Threading: called on the EventLoopRunnable.integrate() thread.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/qualcomm/robotcore/eventloop/EventLoop.html#teardown--">teardown</a></code>&nbsp;in interface&nbsp;<code><a href="../../../com/qualcomm/robotcore/eventloop/EventLoop.html" title="interface in com.qualcomm.robotcore.eventloop">EventLoop</a></code></dd>

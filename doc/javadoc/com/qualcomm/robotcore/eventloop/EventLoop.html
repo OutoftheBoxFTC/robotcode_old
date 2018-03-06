@@ -273,7 +273,7 @@ var activeTableTab = "activeTableTab";
 <div class="block">Init method, this will be called before the first call to loop. You should set up
  your hardware in this method.
 
- Threading: called on the RobotSetupRunnable.run() thread, before the EventLoopRunnable.run()
+ Threading: called on the RobotSetupRunnable.integrate() thread, before the EventLoopRunnable.integrate()
  thread is created.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -297,7 +297,7 @@ var activeTableTab = "activeTableTab";
           java.lang.InterruptedException</pre>
 <div class="block">This method will be repeatedly called by the event loop manager.
 
- Threading: called on the EventLoopRunnable.run() thread.</div>
+ Threading: called on the EventLoopRunnable.integrate() thread.</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../../com/qualcomm/robotcore/exception/RobotCoreException.html" title="class in com.qualcomm.robotcore.exception">RobotCoreException</a></code> - if a RobotCoreException is thrown, it will be handled
@@ -337,7 +337,7 @@ var activeTableTab = "activeTableTab";
  into a safe state before this method exits, since there will be no more changes to communicate
  with your robot.
 
- Threading: called on the EventLoopRunnable.run() thread.</div>
+ Threading: called on the EventLoopRunnable.integrate() thread.</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../../com/qualcomm/robotcore/exception/RobotCoreException.html" title="class in com.qualcomm.robotcore.exception">RobotCoreException</a></code> - if a RobotCoreException is thrown, it will be handled by the event
@@ -459,7 +459,7 @@ var activeTableTab = "activeTableTab";
 <div class="block">Process command method, this will be called if the event loop manager receives a user defined
  command. How this command is handled is up to the event loop implementation.
 
- Threading: called on the RecvRunnable.run() thread.</div>
+ Threading: called on the RecvRunnable.integrate() thread.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>command</code> - command to process</dd>

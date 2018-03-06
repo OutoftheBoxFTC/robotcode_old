@@ -92,11 +92,11 @@ public class Teleop extends LinearOpMode {
 
                 /**Intake lift Control*/
             if(dPadUp.isPressed()||dPadDown.isPressed()){
-                robot.getIntakeLift().setPower(dPadUp.isPressed()?1:dPadDown.isPressed()?-1:Westcoast.INTAKE_REST_POWER);
+                robot.getIntakeLift().setPower(dPadUp.isPressed() ? 1 : -1);
             }
             else {
                 if(robot.glyphInBottomIntake()){
-                    if(robot.getIntakeLift().getCurrentPosition()<Westcoast.INTAKE_HOME_POSITION +ACTION_BUFFER){
+                    if(robot.getIntakeLift().getCurrentPosition()<Westcoast.INTAKE_HOME_POSITION + ACTION_BUFFER){
                         if(robot.getIntakeLift().getCurrentPosition()>Westcoast.INTAKE_MIN_POSITION){
                             robot.getIntakeLift().setPower(-1);
                         }

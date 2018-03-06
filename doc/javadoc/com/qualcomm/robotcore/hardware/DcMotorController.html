@@ -296,7 +296,7 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/HardwareDevice.html
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>motor</code> - port of motor</dd>
-<dd><code>mode</code> - run mode</dd>
+<dd><code>mode</code> - integrate mode</dd>
 </dl>
 </li>
 </ul>
@@ -307,12 +307,12 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/HardwareDevice.html
 <li class="blockList">
 <h4>getMotorMode</h4>
 <pre><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.RunMode.html" title="enum in com.qualcomm.robotcore.hardware">DcMotor.RunMode</a>&nbsp;getMotorMode(int&nbsp;motor)</pre>
-<div class="block">Get the current motor mode. Returns the current "run mode".</div>
+<div class="block">Get the current motor mode. Returns the current "integrate mode".</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>motor</code> - port of motor</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>run mode</dd>
+<dd>integrate mode</dd>
 </dl>
 </li>
 </ul>
@@ -419,7 +419,7 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/HardwareDevice.html
                             int&nbsp;position)</pre>
 <div class="block">Set the motor target position. This takes in an integer, which is not scaled.
 
- Motor power should be positive if using run to position</div>
+ Motor power should be positive if using integrate to position</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>motor</code> - port of motor</dd>

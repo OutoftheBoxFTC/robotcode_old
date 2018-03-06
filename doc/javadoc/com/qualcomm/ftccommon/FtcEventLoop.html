@@ -505,7 +505,7 @@ extends <a href="../../../com/qualcomm/ftccommon/FtcEventLoopBase.html" title="c
                  java.lang.InterruptedException</pre>
 <div class="block">Init method
  <p>
- This code will run when the robot first starts up. Place any initialization code in this
+ This code will integrate when the robot first starts up. Place any initialization code in this
  method.
  <p>
  It is important to save a copy of the event loop manager from this method, as that is how
@@ -513,7 +513,7 @@ extends <a href="../../../com/qualcomm/ftccommon/FtcEventLoopBase.html" title="c
  <p>
  If an Exception is thrown then the event loop manager will not start the robot.
  <p>
- Caller synchronizes: called on RobotSetupRunnable.run() thread</div>
+ Caller synchronizes: called on RobotSetupRunnable.integrate() thread</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/qualcomm/robotcore/eventloop/EventLoop.html#init-com.qualcomm.robotcore.eventloop.EventLoopManager-">init</a></code>&nbsp;in interface&nbsp;<code><a href="../../../com/qualcomm/robotcore/eventloop/EventLoop.html" title="interface in com.qualcomm.robotcore.eventloop">EventLoop</a></code></dd>
@@ -546,7 +546,7 @@ extends <a href="../../../com/qualcomm/ftccommon/FtcEventLoopBase.html" title="c
          this iteration of the loop, or it may decide to shut down the robot.</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../com/qualcomm/robotcore/eventloop/EventLoop.html#loop--"><code><p>
- Caller synchronizes: called on EventLoopRunnable.run() thread.</code></a></dd>
+ Caller synchronizes: called on EventLoopRunnable.integrate() thread.</code></a></dd>
 </dl>
 </li>
 </ul>
@@ -597,7 +597,7 @@ extends <a href="../../../com/qualcomm/ftccommon/FtcEventLoopBase.html" title="c
 <dd><code>java.lang.InterruptedException</code></dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../com/qualcomm/robotcore/eventloop/EventLoop.html#teardown--"><code><p>
- Caller synchronizes: called on EventLoopRunnable.run() thread.</code></a></dd>
+ Caller synchronizes: called on EventLoopRunnable.integrate() thread.</code></a></dd>
 </dl>
 </li>
 </ul>
@@ -613,7 +613,7 @@ extends <a href="../../../com/qualcomm/ftccommon/FtcEventLoopBase.html" title="c
 <div class="block">If the driver station sends over a command, it will be routed to this method. You can choose
  what to do with this command, or you can just ignore it completely.
  <p>
- Called on RecvRunnable.run() thread. Method is thread safe, non-interfering</div>
+ Called on RecvRunnable.integrate() thread. Method is thread safe, non-interfering</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../com/qualcomm/robotcore/eventloop/EventLoop.html#processCommand-Command-">processCommand</a></code>&nbsp;in interface&nbsp;<code><a href="../../../com/qualcomm/robotcore/eventloop/EventLoop.html" title="interface in com.qualcomm.robotcore.eventloop">EventLoop</a></code></dd>

@@ -197,12 +197,12 @@ public class Westcoast extends Hardware {
     }
 
     /**
-     * Sets the intake power proportional to the normalized error from the target in terms of its maximum distance from it
-     * (in this case, the target itself)
+     * Sets the intake power proportional to the normalized error from the target in terms of an arbitrary
+     * constant value (in this cause, the difference between the home and min positions of the intake
      * @param targetPosition The position intended to travel to
      */
     public void liftIntakeProportional(int targetPosition){
-        intakeLift.setPower(INTAKE_REST_POWER +(Math.max(0, targetPosition-intakeLift.getCurrentPosition())/targetPosition));
+        intakeLift.setPower(INTAKE_REST_POWER +Math.max(0, targetPosition-intakeLift.getCurrentPosition())/(INTAKE_HOME_POSITION-INTAKE_MIN_POSITION));
     }
 
     public boolean glyphInBottomIntake(){

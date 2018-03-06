@@ -35,7 +35,7 @@ public abstract class ControlSystemAutonomous extends LinearOpMode {
     protected final SleepTask
             RAISE_INTAKE_TO_HOME = new SleepTask() {
         @Override
-        public void run() {
+        public void integrate() {
             robot.liftIntakeProportional(Westcoast.INTAKE_HOME_POSITION);
         }
 
@@ -43,9 +43,10 @@ public abstract class ControlSystemAutonomous extends LinearOpMode {
         public void stop() {
             robot.getIntakeLift().setPower(Westcoast.INTAKE_REST_POWER);
         }
-    }, LOWER_INTAKE_TO_MIN = new SleepTask() {
+    },
+            LOWER_INTAKE_TO_MIN = new SleepTask() {
         @Override
-        public void run() {
+        public void integrate() {
             robot.getIntakeLift().setPower(robot.getIntakeLift().getCurrentPosition()<=Westcoast.INTAKE_MIN_POSITION?Westcoast.INTAKE_REST_POWER:-1);
         }
 
@@ -115,14 +116,14 @@ public abstract class ControlSystemAutonomous extends LinearOpMode {
      * sleep time is served
      *
      * @param sleepTime The time spent waiting
-     * @param runWhileSleeping The command iteratively run while the robot sleeps
+     * @param runWhileSleeping The command iteratively integrate while the robot sleeps
      */
 
     protected void sleepWhile(long sleepTime, SleepTask runWhileSleeping){
         long lastTime = System.currentTimeMillis(),
         currentTime = lastTime;
         while (currentTime-lastTime < sleepTime && opModeIsActive()){
-            runWhileSleeping.run();
+            runWhileSleeping.integrate();
             currentTime = System.currentTimeMillis();
         }
         runWhileSleeping.stop();
@@ -167,10 +168,10 @@ public abstract class ControlSystemAutonomous extends LinearOpMode {
     public abstract void run() throws InterruptedException;
 
     /**
-     * Class to embody tasks which run while the robot is in a period of sleep
+     * Class to embody tasks which integrate while the robot is in a period of sleep
      */
-    private abstract class SleepTask {
-        public abstract void run();
+    public abstract class SleepTask {
+        public abstract void integrate();
         public abstract void stop();
     }
 }

@@ -122,7 +122,7 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public static enum <span class="typeNameLabel">DcMotor.RunMode</span>
 extends java.lang.Enum&lt;<a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.RunMode.html" title="enum in com.qualcomm.robotcore.hardware">DcMotor.RunMode</a>&gt;</pre>
-<div class="block">The run mode of a motor <a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.RunMode.html" title="enum in com.qualcomm.robotcore.hardware"><code>DcMotor.RunMode</code></a> controls how the motor interprets the
+<div class="block">The integrate mode of a motor <a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.RunMode.html" title="enum in com.qualcomm.robotcore.hardware"><code>DcMotor.RunMode</code></a> controls how the motor interprets the
  it's parameter settings passed through power- and encoder-related methods.
  Some of these modes internally use <a href="https://en.wikipedia.org/wiki/PID_controller">PID</a>
  control to achieve their function, while others do not. Those that do are referred
@@ -160,7 +160,7 @@ extends java.lang.Enum&lt;<a href="../../../../com/qualcomm/robotcore/hardware/D
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.RunMode.html#RUN_USING_ENCODER">RUN_USING_ENCODER</a></span></code>
-<div class="block">The motor is to do its best to run at targeted velocity.</div>
+<div class="block">The motor is to do its best to integrate at targeted velocity.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -172,7 +172,7 @@ extends java.lang.Enum&lt;<a href="../../../../com/qualcomm/robotcore/hardware/D
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.RunMode.html#RUN_WITHOUT_ENCODER">RUN_WITHOUT_ENCODER</a></span></code>
-<div class="block">The motor is simply to run at whatever velocity is achieved by apply a particular
+<div class="block">The motor is simply to integrate at whatever velocity is achieved by apply a particular
  power level to the motor.</div>
 </td>
 </tr>
@@ -266,7 +266,7 @@ the order they are declared.</div>
 <li class="blockList">
 <h4>RUN_WITHOUT_ENCODER</h4>
 <pre>public static final&nbsp;<a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.RunMode.html" title="enum in com.qualcomm.robotcore.hardware">DcMotor.RunMode</a> RUN_WITHOUT_ENCODER</pre>
-<div class="block">The motor is simply to run at whatever velocity is achieved by apply a particular
+<div class="block">The motor is simply to integrate at whatever velocity is achieved by apply a particular
  power level to the motor.</div>
 </li>
 </ul>
@@ -277,7 +277,7 @@ the order they are declared.</div>
 <li class="blockList">
 <h4>RUN_USING_ENCODER</h4>
 <pre>public static final&nbsp;<a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.RunMode.html" title="enum in com.qualcomm.robotcore.hardware">DcMotor.RunMode</a> RUN_USING_ENCODER</pre>
-<div class="block">The motor is to do its best to run at targeted velocity. An encoder must be affixed
+<div class="block">The motor is to do its best to integrate at targeted velocity. An encoder must be affixed
  to the motor in order to use this mode. This is a PID mode.</div>
 </li>
 </ul>

@@ -143,7 +143,7 @@
 </dd>
 <dt><span class="memberNameLink"><a href="org/firstinspires/ftc/robotcore/external/navigation/VuforiaLocalizer.Parameters.html#activity">activity</a></span> - Variable in class org.firstinspires.ftc.robotcore.external.navigation.<a href="org/firstinspires/ftc/robotcore/external/navigation/VuforiaLocalizer.Parameters.html" title="class in org.firstinspires.ftc.robotcore.external.navigation">VuforiaLocalizer.Parameters</a></dt>
 <dd>
-<div class="block">The activity in which the localizer is to run.</div>
+<div class="block">The activity in which the localizer is to integrate.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/qualcomm/ftccommon/FtcEventLoopBase.html#activityContext">activityContext</a></span> - Variable in class com.qualcomm.ftccommon.<a href="com/qualcomm/ftccommon/FtcEventLoopBase.html" title="class in com.qualcomm.ftccommon">FtcEventLoopBase</a></dt>
 <dd>&nbsp;</dd>
@@ -1145,7 +1145,7 @@
 <dd>&nbsp;</dd>
 <dt><a href="com/qualcomm/robotcore/hardware/DcMotor.RunMode.html" title="enum in com.qualcomm.robotcore.hardware"><span class="typeNameLink">DcMotor.RunMode</span></a> - Enum in <a href="com/qualcomm/robotcore/hardware/package-summary.html">com.qualcomm.robotcore.hardware</a></dt>
 <dd>
-<div class="block">The run mode of a motor <a href="com/qualcomm/robotcore/hardware/DcMotor.RunMode.html" title="enum in com.qualcomm.robotcore.hardware"><code>DcMotor.RunMode</code></a> controls how the motor interprets the
+<div class="block">The integrate mode of a motor <a href="com/qualcomm/robotcore/hardware/DcMotor.RunMode.html" title="enum in com.qualcomm.robotcore.hardware"><code>DcMotor.RunMode</code></a> controls how the motor interprets the
  it's parameter settings passed through power- and encoder-related methods.</div>
 </dd>
 <dt><a href="com/qualcomm/robotcore/hardware/DcMotor.ZeroPowerBehavior.html" title="enum in com.qualcomm.robotcore.hardware"><span class="typeNameLink">DcMotor.ZeroPowerBehavior</span></a> - Enum in <a href="com/qualcomm/robotcore/hardware/package-summary.html">com.qualcomm.robotcore.hardware</a></dt>
@@ -2502,7 +2502,7 @@
 </dd>
 <dt><span class="memberNameLink"><a href="com/qualcomm/robotcore/hardware/DcMotor.html#getMode--">getMode()</a></span> - Method in interface com.qualcomm.robotcore.hardware.<a href="com/qualcomm/robotcore/hardware/DcMotor.html" title="interface in com.qualcomm.robotcore.hardware">DcMotor</a></dt>
 <dd>
-<div class="block">Returns the current run mode for this motor</div>
+<div class="block">Returns the current integrate mode for this motor</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/qualcomm/robotcore/hardware/DcMotorImpl.html#getMode--">getMode()</a></span> - Method in class com.qualcomm.robotcore.hardware.<a href="com/qualcomm/robotcore/hardware/DcMotorImpl.html" title="class in com.qualcomm.robotcore.hardware">DcMotorImpl</a></dt>
 <dd>
@@ -5488,7 +5488,7 @@
 </dd>
 <dt><span class="memberNameLink"><a href="org/firstinspires/ftc/robotcore/external/matrices/RowMatrixF.html#RowMatrixF-org.firstinspires.ftc.robotcore.external.matrices.VectorF-">RowMatrixF(VectorF)</a></span> - Constructor for class org.firstinspires.ftc.robotcore.external.matrices.<a href="org/firstinspires/ftc/robotcore/external/matrices/RowMatrixF.html" title="class in org.firstinspires.ftc.robotcore.external.matrices">RowMatrixF</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="com/qualcomm/robotcore/eventloop/opmode/LinearOpMode.LinearOpModeHelper.html#run--">run()</a></span> - Method in class com.qualcomm.robotcore.eventloop.opmode.<a href="com/qualcomm/robotcore/eventloop/opmode/LinearOpMode.LinearOpModeHelper.html" title="class in com.qualcomm.robotcore.eventloop.opmode">LinearOpMode.LinearOpModeHelper</a></dt>
+<dt><span class="memberNameLink"><a href="com/qualcomm/robotcore/eventloop/opmode/LinearOpMode.LinearOpModeHelper.html#integrate--">integrate()</a></span> - Method in class com.qualcomm.robotcore.eventloop.opmode.<a href="com/qualcomm/robotcore/eventloop/opmode/LinearOpMode.LinearOpModeHelper.html" title="class in com.qualcomm.robotcore.eventloop.opmode">LinearOpMode.LinearOpModeHelper</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/qualcomm/ftccommon/FtcEventLoopBase.html#runningOnDriverStation">runningOnDriverStation</a></span> - Variable in class com.qualcomm.ftccommon.<a href="com/qualcomm/ftccommon/FtcEventLoopBase.html" title="class in com.qualcomm.ftccommon">FtcEventLoopBase</a></dt>
 <dd>&nbsp;</dd>
@@ -5880,7 +5880,7 @@
 </dd>
 <dt><span class="memberNameLink"><a href="com/qualcomm/robotcore/hardware/DcMotor.html#setMode-com.qualcomm.robotcore.hardware.DcMotor.RunMode-">setMode(DcMotor.RunMode)</a></span> - Method in interface com.qualcomm.robotcore.hardware.<a href="com/qualcomm/robotcore/hardware/DcMotor.html" title="interface in com.qualcomm.robotcore.hardware">DcMotor</a></dt>
 <dd>
-<div class="block">Sets the current run mode for this motor</div>
+<div class="block">Sets the current integrate mode for this motor</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/qualcomm/robotcore/hardware/DcMotorImpl.html#setMode-com.qualcomm.robotcore.hardware.DcMotor.RunMode-">setMode(DcMotor.RunMode)</a></span> - Method in class com.qualcomm.robotcore.hardware.<a href="com/qualcomm/robotcore/hardware/DcMotorImpl.html" title="class in com.qualcomm.robotcore.hardware">DcMotorImpl</a></dt>
 <dd>
@@ -5950,7 +5950,7 @@
 </dd>
 <dt><span class="memberNameLink"><a href="com/qualcomm/robotcore/hardware/DcMotorControllerEx.html#setMotorTargetPosition-int-int-int-">setMotorTargetPosition(int, int, int)</a></span> - Method in interface com.qualcomm.robotcore.hardware.<a href="com/qualcomm/robotcore/hardware/DcMotorControllerEx.html" title="interface in com.qualcomm.robotcore.hardware">DcMotorControllerEx</a></dt>
 <dd>
-<div class="block">Sets the target position and tolerance for a 'run to position' operation.</div>
+<div class="block">Sets the target position and tolerance for a 'integrate to position' operation.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/qualcomm/robotcore/hardware/DcMotor.html#setMotorType-MotorConfigurationType-">setMotorType(MotorConfigurationType)</a></span> - Method in interface com.qualcomm.robotcore.hardware.<a href="com/qualcomm/robotcore/hardware/DcMotor.html" title="interface in com.qualcomm.robotcore.hardware">DcMotor</a></dt>
 <dd>
@@ -6031,7 +6031,7 @@
 <dt><span class="memberNameLink"><a href="com/qualcomm/robotcore/hardware/DcMotorSimple.html#setPower-double-">setPower(double)</a></span> - Method in interface com.qualcomm.robotcore.hardware.<a href="com/qualcomm/robotcore/hardware/DcMotorSimple.html" title="interface in com.qualcomm.robotcore.hardware">DcMotorSimple</a></dt>
 <dd>
 <div class="block">Sets the power level of the motor, expressed as a fraction of the maximum
- possible power / speed supported according to the run mode in which the
+ possible power / speed supported according to the integrate mode in which the
  motor is operating.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/qualcomm/robotcore/hardware/DcMotor.html#setPowerFloat--">setPowerFloat()</a></span> - Method in interface com.qualcomm.robotcore.hardware.<a href="com/qualcomm/robotcore/hardware/DcMotor.html" title="interface in com.qualcomm.robotcore.hardware">DcMotor</a></dt>
@@ -7377,7 +7377,7 @@ the order they are declared.</div>
              obviated by improvements in the modern motor and servo controller implementations.
              Remaining uses of this API are likely unncessarily wasting cycles. If a simple non-zero
              delay is required, the <code>sleep()</code> method is a better choice.
-             If one simply wants to allow other threads to run, <a href="com/qualcomm/robotcore/eventloop/opmode/LinearOpMode.html#idle--"><code>LinearOpMode.idle()</code></a> is a good choice.</span></div>
+             If one simply wants to allow other threads to integrate, <a href="com/qualcomm/robotcore/eventloop/opmode/LinearOpMode.html#idle--"><code>LinearOpMode.idle()</code></a> is a good choice.</span></div>
 </div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/qualcomm/robotcore/eventloop/opmode/LinearOpMode.html#waitForStart--">waitForStart()</a></span> - Method in class com.qualcomm.robotcore.eventloop.opmode.<a href="com/qualcomm/robotcore/eventloop/opmode/LinearOpMode.html" title="class in com.qualcomm.robotcore.eventloop.opmode">LinearOpMode</a></dt>
@@ -7404,7 +7404,7 @@ the order they are declared.</div>
              obviated by improvements in the modern motor and servo controller implementations.
              Remaining uses of this API are likely unncessarily wasting cycles. If a simple non-zero
              delay is required, the <code>sleep()</code> method is a better choice.
-             If one simply wants to allow other threads to run, <a href="com/qualcomm/robotcore/eventloop/opmode/LinearOpMode.html#idle--"><code>LinearOpMode.idle()</code></a> is a good choice.</span></div>
+             If one simply wants to allow other threads to integrate, <a href="com/qualcomm/robotcore/eventloop/opmode/LinearOpMode.html#idle--"><code>LinearOpMode.idle()</code></a> is a good choice.</span></div>
 </div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/qualcomm/ftccommon/FtcWifiDirectChannelSelectorActivity.WifiChannelItemAdapter.html#WifiChannelItemAdapter-Context-int-WifiDirectChannelAndDescription:A-">WifiChannelItemAdapter(Context, int, WifiDirectChannelAndDescription[])</a></span> - Constructor for class com.qualcomm.ftccommon.<a href="com/qualcomm/ftccommon/FtcWifiDirectChannelSelectorActivity.WifiChannelItemAdapter.html" title="class in com.qualcomm.ftccommon">FtcWifiDirectChannelSelectorActivity.WifiChannelItemAdapter</a></dt>

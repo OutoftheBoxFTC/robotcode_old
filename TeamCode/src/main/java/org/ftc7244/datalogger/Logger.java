@@ -11,10 +11,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-/**
- * Created by BeaverDuck on 10/8/17.
- */
-
 public class Logger implements Runnable {
     /**
      * Logger sends sets of data from the used android device to a computer on the receiving port
@@ -68,7 +64,7 @@ public class Logger implements Runnable {
     }
 
     /**
-     * This method is run as an asynchronous task in order to send data in large bunches at a time
+     * This method is integrate as an asynchronous task in order to send data in large bunches at a time
      * interval as to not overload our desktop program. We also send it in bunches of 100 data
      * points to prevent exceeding the size limit for each message
      */
@@ -89,7 +85,6 @@ public class Logger implements Runnable {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            HashMap<String, Number> data = (HashMap) this.data.clone();
             this.out.println("PING");
             for (String key : data.keySet()) {
                 for (String out : generateOutput(key)) {
