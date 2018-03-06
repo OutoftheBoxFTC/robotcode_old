@@ -11,7 +11,7 @@ public class ConditionalTerminator extends Terminator {
 
     /**
      * It by default uses ${@link TerminationMode#OR} and allows for a dynmaic amount of terminators
-     * to decided if the code should end
+     * to decided if the code should stop
      *
      * @param terminators dynamic amount of terminators
      */
@@ -23,8 +23,8 @@ public class ConditionalTerminator extends Terminator {
      * Similar to the single argument but allows for changing of modes.
      * <p>
      * There are different supported modes:
-     * ${@link TerminationMode#OR} will end if any are true
-     * ${@link TerminationMode#AND} will end if ONLY if all true
+     * ${@link TerminationMode#OR} will stop if any are true
+     * ${@link TerminationMode#AND} will stop if ONLY if all true
      *
      * @param mode        the mode to use
      * @param terminators dynamic amount of terminators

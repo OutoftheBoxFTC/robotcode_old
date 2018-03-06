@@ -8,6 +8,13 @@ import org.ftc7244.robotcontroller.autonomous.terminators.TimerTerminator;
 import org.ftc7244.robotcontroller.hardware.Hardware;
 import org.ftc7244.robotcontroller.sensor.gyroscope.GyroscopeProvider;
 
+/**
+ * An attempt of using a simpler control system, implementing and building off of a solely proportional based
+ * control loop
+ *
+ * Deprecated due to inconsistency and dependence of battery charge
+ */
+@Deprecated
 public class SPGyroscopeDrive extends DriveControl {
 
     private GyroscopeProvider gyroProvider;

@@ -5,7 +5,7 @@ public abstract class Terminator {
      * This will tell the DriveControl if the PID can stop executing since the robot has
      * reached a state that would be considered "completed"
      *
-     * @return if the PID should end
+     * @return if the PID should stop
      */
     public abstract boolean shouldTerminate();
 

@@ -1,6 +1,7 @@
 package org.ftc7244.robotcontroller.programs.debug;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.ftc7244.datalogger.Logger;
 import org.ftc7244.robotcontroller.autonomous.ControlSystemAutonomous;
@@ -12,6 +13,7 @@ import org.ftc7244.robotcontroller.autonomous.ControlSystemAutonomous;
  * rotation, and not just for rotation to a specific degree
  */
 @Autonomous(name = "Turn Random")
+@Disabled
 public class TurnRandom extends ControlSystemAutonomous {
 
     @Override

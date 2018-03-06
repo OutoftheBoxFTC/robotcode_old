@@ -1,13 +1,14 @@
 package org.ftc7244.robotcontroller.sensor;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /*
 This filter acts to remove noise in sensor input by giving an average of the previous inputs to a
 given length ago.
  */
 public class DataFilter {
-    private ArrayList<Double> data;
+    private List<Double> data;
     private int length;
     private volatile double reading;
 

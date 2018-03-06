@@ -29,7 +29,7 @@ public abstract class Hardware {
      * This is the codes own way of pausing. This has the the capability of stopping the wait if
      * stop is requested and passing up an exception if it fails as well
      *
-     * @param ms the duration to sleep in milliseconds
+     * @param ms the duration to sleepWhile in milliseconds
      * @throws InterruptedException if the code fails to terminate before stop requested
      */
     public static void sleep(long ms) throws InterruptedException {

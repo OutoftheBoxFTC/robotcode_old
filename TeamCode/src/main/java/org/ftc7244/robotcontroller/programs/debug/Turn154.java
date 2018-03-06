@@ -1,6 +1,7 @@
 package org.ftc7244.robotcontroller.programs.debug;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.ftc7244.robotcontroller.autonomous.ControlSystemAutonomous;
 
@@ -9,6 +10,7 @@ import org.ftc7244.robotcontroller.autonomous.ControlSystemAutonomous;
  */
 
 @Autonomous(name = "Turn -154")
+@Disabled
 public class Turn154 extends ControlSystemAutonomous{
 
     @Override

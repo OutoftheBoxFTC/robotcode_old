@@ -41,8 +41,8 @@ public abstract class DriveControl {
      *
      * @param target      the target value for the sensor
      * @param powerOffset power level from -1 to 1 to convert a rotate function to a drive function
-     * @param terminator  tells the control loop when to end
-     * @throws InterruptedException if the code fails to end on finish request
+     * @param terminator  tells the control loop when to stop
+     * @throws InterruptedException if the code fails to stop on finish request
      */
     protected void control(double target, double powerOffset, @NonNull Terminator terminator) throws InterruptedException {
         //setup the control loop

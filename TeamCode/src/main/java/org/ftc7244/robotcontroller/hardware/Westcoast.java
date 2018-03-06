@@ -17,12 +17,13 @@ import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftc7244.robotcontroller.Debug;
 import org.ftc7244.robotcontroller.autonomous.Status;
-import org.ftc7244.robotcontroller.sensor.gyroscope.NavxRobot;
 
-public class Westcoast extends Hardware implements NavxRobot{
-    public static final double COUNTS_PER_INCH = (403.2 / (3.9 * Math.PI)),
+public class Westcoast extends Hardware {
+    public static final double COUNTS_PER_INCH = 32.9083451562,
                                RELIC_SPOOL_MIN = -1857, RELIC_SPOOL_MAX = 50,
-                               INTAKE_REST_POWER =0.1, INTAKE_REST_POSITION=500;
+                               INTAKE_REST_POWER = 0.1, INTAKE_OPEN = 0.8,
+                               INTAKE_CLOSE = 0.2;
+    public static final int INTAKE_HOME_POSITION = 500, INTAKE_MIN_POSITION = 100;
 
     @Nullable
     private DcMotor driveBackLeft, driveFrontLeft, driveBackRight, driveFrontRight, intakeLift, intakeTop, intakeBottom, relicSpool;
@@ -36,14 +37,12 @@ public class Westcoast extends Hardware implements NavxRobot{
     private ColorSensor jewelSensor;
     @Nullable
     private DistanceSensor jewelDistance;
-    @Nullable
-    private NavxMicroNavigationSensor navX;
+
+    private int blueOffset, redOffset;
 
     public Westcoast(OpMode opMode) {
         super(opMode, COUNTS_PER_INCH);
     }
-    private int blueOffset, redOffset;
-
     /**
      * Identify hardware and then set it up with different objects. Other initialization properties are
      * mset to ensure that everything is in the default position or correct mode for the robot.
@@ -97,6 +96,10 @@ public class Westcoast extends Hardware implements NavxRobot{
         if(intakeBottomRight != null) intakeBottomRight.setDirection(DcMotorSimple.Direction.REVERSE);
         resetMotors(relicSpool, intakeLift);
         if(intakeLift != null)intakeLift.setPower(0.1);
+        driveBackLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        driveBackRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        driveFrontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        driveFrontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public void initServos(){
@@ -119,7 +122,7 @@ public class Westcoast extends Hardware implements NavxRobot{
 
     @Override
     public void drive(double leftPower, double rightPower, long timeMillis) throws InterruptedException{
-       drive(leftPower, -rightPower);
+        drive(leftPower, rightPower);
         sleep(timeMillis);
         drive(0, 0);
     }
@@ -153,7 +156,7 @@ public class Westcoast extends Hardware implements NavxRobot{
 
     @Override
     public int getDriveEncoderAverage() {
-        return -(-driveBackLeft.getCurrentPosition()+driveBackRight.getCurrentPosition()-driveFrontLeft.getCurrentPosition()+driveFrontRight.getCurrentPosition())/4;
+        return (driveBackLeft.getCurrentPosition()-driveBackRight.getCurrentPosition()+driveFrontLeft.getCurrentPosition()-driveFrontRight.getCurrentPosition())/4;
     }
 
     @Override
@@ -191,27 +194,6 @@ public class Westcoast extends Hardware implements NavxRobot{
                 RobotLog.e("Color does not exist!");
                 return false;
         }
-    }
-
-    /**
-     * Lowers the vertical jewel arm, reads the jewel color on the right, and moves
-     * the horizontal jewel arm left or right depending on the given parameter
-     *
-     * @param color color jewel to be knocked off the pedestal
-     * @throws InterruptedException if code fails to terminate on stop requested
-     */
-    public void knockOverJewel(int color) throws InterruptedException {
-        //color we want to get rid of
-        getJewelVertical().setPosition(0.26);getJewelHorizontal().setPosition(0.45);
-        sleep(1700);
-        if(color==Color.RED)
-            getJewelHorizontal().setPosition(isColor(Color.RED) ? 0.33 : 0.56);
-        else if(color==Color.BLUE)
-            getJewelHorizontal().setPosition(isColor(Color.RED) ? 0.56 : 0.33);
-        sleep(250);
-        getJewelHorizontal().setPosition(0.73);
-        getJewelVertical().setPosition(0.67);
-        sleep(500);
     }
 
     /**
@@ -312,11 +294,6 @@ public class Westcoast extends Hardware implements NavxRobot{
     @Nullable
     public DistanceSensor getJewelDistance(){
         return jewelDistance;
-    }
-
-    @Nullable
-    public NavxMicroNavigationSensor getNavX(){
-        return navX;
     }
 
     @Nullable

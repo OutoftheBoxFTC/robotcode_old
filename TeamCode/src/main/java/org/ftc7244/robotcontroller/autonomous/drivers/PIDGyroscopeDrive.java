@@ -74,7 +74,7 @@ public class PIDGyroscopeDrive extends DriveControl {
     /**
      * This will combine the rotate function from the PID loop with a power offset. The power offset
      * then will then be added to the PID to get the drive. It is important to note that both motors
-     * are reset before driving is started and will end once it reaches it's target in inches.
+     * are reset before driving is started and will stop once it reaches it's target in inches.
      *
      * @param power  offset of the PID from -1 to 1
      * @param inches total distance to travel
@@ -97,7 +97,7 @@ public class PIDGyroscopeDrive extends DriveControl {
     /**
      * This will combine the rotate function from the PID loop with a power offset. The power offset
      * then will then be added to the PID to get the drive. It is important to note that both motors
-     * are reset before driving is started and will end once it reaches it's target in inches, or until a limit switch is pressed.
+     * are reset before driving is started and will stop once it reaches it's target in inches, or until a limit switch is pressed.
      */
     public void driveWithLimitSwitch(double power, double inches, final AnalogInput LimitSwitch) throws InterruptedException {
         final double ticks = inches * Westcoast.COUNTS_PER_INCH;
@@ -108,7 +108,7 @@ public class PIDGyroscopeDrive extends DriveControl {
         control(target, power, new Terminator() {
             @Override
             public boolean shouldTerminate() {
-                return LimitSwitch.getVoltage() > 0 || Math.abs(robot.getDriveEncoderAverage() - offset) >= ticks;
+                return LimitSwitch.getVoltage() > 0.5 || Math.abs(robot.getDriveEncoderAverage() - offset) >= ticks;
             }
         });
     }

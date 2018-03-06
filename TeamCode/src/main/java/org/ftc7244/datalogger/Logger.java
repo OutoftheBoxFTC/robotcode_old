@@ -55,7 +55,7 @@ public class Logger implements Runnable {
      * @param tag  identifier for the data
      * @param data data point being added
      * @throws InvalidCharacterException if tag contains ":", which is used for parsing on the
-     *                                   receiving end
+     *                                   receiving stop
      */
 
     public Logger queueData(String tag, Number data) {

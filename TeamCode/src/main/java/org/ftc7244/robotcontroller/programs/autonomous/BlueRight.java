@@ -7,14 +7,11 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 import org.ftc7244.robotcontroller.autonomous.ControlSystemAutonomous;
 
-/**
- * Created by BeaverDuck on 12/1/17.
- */
 @Autonomous(name = "Blue Right")
 public class BlueRight extends ControlSystemAutonomous {
     @Override
     public void run() throws InterruptedException {
-        robot.knockOverJewel(Color.RED);//Check color sensor
+        knockOverJewel(Color.RED);//Check color sensor
         robot.getIntakeTop().setPower(-1);
         robot.driveToInch(.2, 31);//Drive off balancing stone
         gyroscopePID.rotate(0);

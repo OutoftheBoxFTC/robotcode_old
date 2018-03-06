@@ -17,7 +17,7 @@ public class Teleop extends LinearOpMode {
     private Westcoast robot;
     private Button driveLeftTrigger, dPadUp, dPadDown, rightTrigger, leftTrigger, leftBumper, bButton, yButton, driverLeftBumper, rightBumper;
     private PressButton aButton, driveRightTrigger;
-    private static final double SLOW_DRIVE_COEFFICIENT = -0.5, ACTION_BUFFER=200;
+    private static final double SLOW_DRIVE_COEFFICIENT = -0.5, ACTION_BUFFER = 200;
 
     /**
     Driver:
@@ -69,17 +69,6 @@ public class Teleop extends LinearOpMode {
                 robot.getSpring().setPosition(0.5);
 
             //Operator
-                /**Glyph Control*/
-            robot.getIntakeServo().setPosition(rightBumper.isPressed() ? .65: 0.2);
-            robot.driveIntakeVertical(bButton.isPressed()?.5:yButton.isPressed()?-.5:0);
-            if (rightTrigger.isPressed()) {
-                robot.getIntakeBottom().setPower(-1);
-                robot.getIntakeTop().setPower(-1);
-            } else{
-                robot.getIntakeBottom().setPower(leftTrigger.isPressed()?1:0);
-                robot.getIntakeTop().setPower(leftBumper.isPressed()?1:0);
-            }
-
                 /**Relic Arm Control*/
             if(robot.getRelicSpool().getCurrentPosition() < Westcoast.RELIC_SPOOL_MIN)
                 robot.getRelicSpool().setPower(gamepad2.left_stick_y < -0.1 ? 0 : gamepad2.left_stick_y);
@@ -90,18 +79,29 @@ public class Teleop extends LinearOpMode {
             robot.getRelicWrist().setPosition(gamepad2.right_stick_y<-0.1?0.6:gamepad2.right_stick_y>0.1?0.1:robot.getRelicWrist().getPosition());
             robot.getRelicFinger().setPosition(aButton.isPressed()?0.375:0.7);
 
-                /**Intake lift control*/
+            /**Glyph Control*/
+            robot.getIntakeServo().setPosition(rightBumper.isPressed() ? Westcoast.INTAKE_OPEN: Westcoast.INTAKE_CLOSE);
+            robot.driveIntakeVertical(bButton.isPressed()?.5:yButton.isPressed()?-.5:0);
+            if (rightTrigger.isPressed()) {
+                robot.getIntakeBottom().setPower(-1);
+                robot.getIntakeTop().setPower(-1);
+            } else{
+                robot.getIntakeBottom().setPower(leftTrigger.isPressed()?1:0);
+                robot.getIntakeTop().setPower(leftBumper.isPressed()?1:0);
+            }
+
+                /**Intake lift Control*/
             if(dPadUp.isPressed()||dPadDown.isPressed()){
                 robot.getIntakeLift().setPower(dPadUp.isPressed()?1:dPadDown.isPressed()?-1:Westcoast.INTAKE_REST_POWER);
             }
             else {
                 if(robot.glyphInBottomIntake()){
-                    if(robot.getIntakeLift().getCurrentPosition()<Westcoast.INTAKE_REST_POSITION+ACTION_BUFFER){
-                        if(robot.getIntakeLift().getCurrentPosition()>100){
+                    if(robot.getIntakeLift().getCurrentPosition()<Westcoast.INTAKE_HOME_POSITION +ACTION_BUFFER){
+                        if(robot.getIntakeLift().getCurrentPosition()>Westcoast.INTAKE_MIN_POSITION){
                             robot.getIntakeLift().setPower(-1);
                         }
                         else if(leftTrigger.isPressed()){
-                            robot.liftIntakeProportional((int) Westcoast.INTAKE_REST_POSITION);
+                            robot.liftIntakeProportional(Westcoast.INTAKE_HOME_POSITION);
                         }
                     }
                     else {
@@ -109,11 +109,11 @@ public class Teleop extends LinearOpMode {
                     }
                 }
                 else {
-                    robot.liftIntakeProportional((int) Westcoast.INTAKE_REST_POSITION);
+                    robot.liftIntakeProportional(Westcoast.INTAKE_HOME_POSITION);
                 }
             }
 
-                /**Driver Feedback*/
+            //Feedback
             robot.getJewelHorizontal().setPosition(robot.getBottomIntakeSwitch().getVoltage() > 0.5 ? 0.75 : 0.45);
         }
     }

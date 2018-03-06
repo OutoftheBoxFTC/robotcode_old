@@ -5,13 +5,9 @@ import android.graphics.Color;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
-import org.ftc7244.datalogger.Logger;
 import org.ftc7244.robotcontroller.autonomous.ControlSystemAutonomous;
+import org.ftc7244.robotcontroller.hardware.Westcoast;
 
-
-/**
- * Created by Eeshwar Laptop on 10/29/2017.
- */
 @Autonomous(name = "Red Right")
 public class RedRight extends ControlSystemAutonomous {
 
@@ -21,21 +17,17 @@ public class RedRight extends ControlSystemAutonomous {
             image = imageProvider.getImageReading();
             sleep(50);
         }
-        robot.knockOverJewel(Color.BLUE);//Check color sensor
+        knockOverJewel(Color.BLUE);//Check color sensor
         robot.getIntakeTop().setPower(-1);
         robot.driveToInch(.3, 36);//Drive off balancing stone
         robot.getSpring().setPosition(0.5);//Spring out glyph
-        sleep(750);
-        robot.getIntakeServo().setPosition(0.8);
+        sleepWhile(750, RAISE_INTAKE_TO_HOME);
+        robot.getIntakeServo().setPosition(Westcoast.INTAKE_OPEN);
         gyroscopePID.rotate(45);
         robot.getIntakeBottom().setPower(-1);
-        gyroscopePID.drive(1, 23);//Drive to glyph pit
-        //0.2 : 0.75
-        robot.getIntakeServo().setPosition(0.2);
-        robot.getIntakeLift().setPower(1);
-        sleep(100);
-        robot.getIntakeLift().setPower(0.1);
-        sleep(150);//Let block come into intake
+        gyroscopePID.driveWithLimitSwitch(1, 23, robot.getBottomIntakeSwitch());//Drive to glyph pit
+        robot.getIntakeServo().setPosition(Westcoast.INTAKE_CLOSE);
+        sleepWhile(100, LOWER_INTAKE_TO_MIN);
         gyroscopePID.drive(-0.75, 10);
         switch(image){
             case LEFT:
@@ -50,6 +42,7 @@ public class RedRight extends ControlSystemAutonomous {
                 gyroscopePID.rotate(-161);
                 gyroscopePID.drive(1, 45);
         }
+        sleepWhile(100, RAISE_INTAKE_TO_HOME);
         robot.getIntakeBottom().setPower(1);
         robot.getIntakeTop().setPower(1);
         gyroscopePID.drive(-0.5, 8);
@@ -58,8 +51,6 @@ public class RedRight extends ControlSystemAutonomous {
         gyroscopePID.rotate(180);
         robot.getIntakeTop().setPower(0);
         robot.getIntakeBottom().setPower(0);
-        //robot.getRelicSpool().setPower(-1);
-        /*while (robot.getRelicSpool().getCurrentPosition()<1600);
-        robot.getRelicSpool().setPower(0);*/
+        extendRelicArm();
     }
 }
