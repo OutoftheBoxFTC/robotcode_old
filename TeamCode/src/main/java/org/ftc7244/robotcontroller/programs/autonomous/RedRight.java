@@ -44,11 +44,11 @@ public class RedRight extends ControlSystemAutonomous {
                 break;
             case RIGHT:
                 gyroscopePID.rotate(-171.5);
-                gyroscopePID.drive(1, 48);
+                gyroscopePID.drive(0.5, 48);
                 break;
             default:
                 gyroscopePID.rotate(-161);
-                gyroscopePID.drive(1, 45);
+                gyroscopePID.drive(0.5, 47);
         }
         robot.getIntakeBottom().setPower(1);
         robot.getIntakeTop().setPower(1);
@@ -61,27 +61,5 @@ public class RedRight extends ControlSystemAutonomous {
         //robot.getRelicSpool().setPower(-1);
         /*while (robot.getRelicSpool().getCurrentPosition()<1600);
         robot.getRelicSpool().setPower(0);*/
-    }
-
-    private void turn(double target){
-        double offset = gyroProvider.getZ(), basePower=0.4, slowRange=45, stopOffset=10;
-        long lastTime = System.currentTimeMillis();
-        while (opModeIsActive()&&System.currentTimeMillis()-lastTime<=6000 && Math.abs(target-(gyroProvider.getZ()-offset))>=5){
-            if(Math.abs(target-(gyroProvider.getZ()-offset))>slowRange) {
-                robot.drive(basePower, -basePower);
-                telemetry.addData("Power", basePower);
-                Logger.getInstance().queueData("Power", basePower*100);
-            }
-            else {
-                double power = basePower*(target-(gyroProvider.getZ()-offset))/slowRange;
-                robot.drive(power, -power);
-                Logger.getInstance().queueData("Power", power*100);
-            }
-            Logger.getInstance().queueData("Time", 6000-(System.currentTimeMillis()-lastTime)).
-                    queueData("Offset", Math.abs(target-(gyroProvider.getZ()-offset-stopOffset))).
-                    queueData("Encoder Avg", robot.getDriveEncoderAverage());
-            telemetry.update();
-        }
-        robot.drive(0, 0);
     }
 }
