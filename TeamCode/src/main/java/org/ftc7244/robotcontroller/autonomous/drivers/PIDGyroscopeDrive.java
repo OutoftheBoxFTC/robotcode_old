@@ -1,11 +1,11 @@
 package org.ftc7244.robotcontroller.autonomous.drivers;
 
 import com.qualcomm.robotcore.hardware.AnalogInput;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.RobotLog;
 
-import org.ftc7244.robotcontroller.autonomous.ControlSystemAutonomous;
-import org.ftc7244.robotcontroller.autonomous.controllers.DriveControl;
 import org.ftc7244.robotcontroller.autonomous.controllers.pid.PIDControllerBuilder;
+import org.ftc7244.robotcontroller.autonomous.controllers.DriveControl;
 import org.ftc7244.robotcontroller.autonomous.terminators.ConditionalTerminator;
 import org.ftc7244.robotcontroller.autonomous.terminators.SensitivityTerminator;
 import org.ftc7244.robotcontroller.autonomous.terminators.Terminator;
@@ -23,7 +23,8 @@ public class PIDGyroscopeDrive extends DriveControl {
 
     protected GyroscopeProvider gyroProvider;
     protected Hardware robot;
-    private double targetDegrees;
+    private double target;
+
     /**
      * Same as the parent constructor but passes a debug as fault by default since most users will
      * not want to debug the code.
@@ -45,7 +46,7 @@ public class PIDGyroscopeDrive extends DriveControl {
                 robot);
         this.gyroProvider = gyroProvider;
         this.robot = robot;
-        this.targetDegrees = 0;
+        this.target = 0;
     }
 
     /**
@@ -56,15 +57,14 @@ public class PIDGyroscopeDrive extends DriveControl {
     @Override
     public double getReading() {
         double reading = this.gyroProvider.getZ();
-        if (Math.abs(targetDegrees) > 180) {
-            if (targetDegrees > 0 && reading < 0) {
+        if (Math.abs(target) > 160) {
+            if (target > 0 && reading < 0) {
                 return 360 + reading;
-            } else if (targetDegrees < 0 && reading > 0) {
+            } else if (target < 0 && reading > 0) {
                 return -360 + reading;
             }
         }
-
-       return reading- targetDegrees;
+       return reading;
     }
 
     public void drive(double power, double inches) throws InterruptedException {
@@ -74,15 +74,15 @@ public class PIDGyroscopeDrive extends DriveControl {
     /**
      * This will combine the rotate function from the PID loop with a power offset. The power offset
      * then will then be added to the PID to get the drive. It is important to note that both motors
-     * are reset before driving is started and will stop once it reaches it's targetDegrees in inches.
+     * are reset before driving is started and will end once it reaches it's target in inches.
      *
      * @param power  offset of the PID from -1 to 1
      * @param inches total distance to travel
      * @throws InterruptedException if code fails to terminate on stop requested
      */
     public void drive(double power, double inches, double target) throws InterruptedException {
-        final double ticks = inches * robot.getCountsPerInch();
-        this.targetDegrees = 0;
+        final double ticks = inches * Westcoast.COUNTS_PER_INCH;
+        this.target = 0;
         robot.resetDriveEncoders();
         if (inches <= 0) RobotLog.e("Invalid distances!");
         final int offset = robot.getDriveEncoderAverage();
@@ -97,18 +97,18 @@ public class PIDGyroscopeDrive extends DriveControl {
     /**
      * This will combine the rotate function from the PID loop with a power offset. The power offset
      * then will then be added to the PID to get the drive. It is important to note that both motors
-     * are reset before driving is started and will stop once it reaches it's targetDegrees in inches, or until a limit switch is pressed.
+     * are reset before driving is started and will end once it reaches it's target in inches, or until a limit switch is pressed.
      */
     public void driveWithLimitSwitch(double power, double inches, final AnalogInput LimitSwitch) throws InterruptedException {
         final double ticks = inches * Westcoast.COUNTS_PER_INCH;
-        this.targetDegrees = 0;
+        this.target = 0;
         robot.resetDriveMotors();
         if (inches <= 0){RobotLog.e("Invalid Distance");}
         final int offset = robot.getDriveEncoderAverage();
-        control(targetDegrees, power, new Terminator() {
+        control(target, power, new Terminator() {
             @Override
             public boolean shouldTerminate() {
-                return LimitSwitch.getVoltage() > 0.5 || Math.abs(robot.getDriveEncoderAverage() - offset) >= ticks;
+                return LimitSwitch.getVoltage() > 0 || Math.abs(robot.getDriveEncoderAverage() - offset) >= ticks;
             }
         });
     }
@@ -117,13 +117,13 @@ public class PIDGyroscopeDrive extends DriveControl {
      * manually terminate if the rotate takes longer than two seconds. This is important because
      * in certain scenarios the robot can be stuck and be unable to complete the rotation.
      *
-     * @param degrees targetDegrees orientation in dewgrees
+     * @param degrees target orientation in dewgrees
      * @throws InterruptedException if code fails to terminate on stop requested
      */
     public void rotate(double degrees) throws InterruptedException {
-        this.targetDegrees = degrees;
+        this.target = degrees;
         control(degrees, 0, new ConditionalTerminator(new SensitivityTerminator(this, degrees, 0.5, 50), new TimerTerminator(6000)));
-        gyroProvider.setZOffset(gyroProvider.getZOffset()+degrees);
+        resetOrientation();
     }
 
     /**
@@ -152,8 +152,5 @@ public class PIDGyroscopeDrive extends DriveControl {
         }
     }
 
-    @Override
-    public PIDGyroscopeDrive setControlSubTask(ControlSystemAutonomous.SubTask controlSubTask) {
-        return (PIDGyroscopeDrive) super.setControlSubTask(controlSubTask);
-    }
+
 }

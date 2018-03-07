@@ -7,7 +7,6 @@ import org.ftc7244.robotcontroller.autonomous.ControlSystemAutonomous;
 
 
 @Autonomous(name = "Turn 45")
-@Disabled
 public class Turn45 extends ControlSystemAutonomous {
     @Override
     public void run() throws InterruptedException {

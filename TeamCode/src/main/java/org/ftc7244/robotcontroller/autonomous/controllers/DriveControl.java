@@ -20,12 +20,10 @@ public abstract class DriveControl {
     private ControlSystem controller;
     protected Hardware robot;
 
-    private ControlSystemAutonomous.SubTask controlSubTask;
 
     public DriveControl(ControlSystem controller, Hardware robot) {
         this.controller = controller;
         this.robot = robot;
-        controlSubTask = null;
     }
 
     /**
@@ -65,16 +63,9 @@ public abstract class DriveControl {
             //take the correction and provide poweroffset
             robot.drive(powerOffset + correction, powerOffset - correction);
             //check if the robot should stop driving
-            if(controlSubTask != null)controlSubTask.iterate();
         } while (!terminator.shouldTerminate() && !Status.isStopRequested());
         terminator.terminated(true);
-        if(controlSubTask != null)controlSubTask.stop();
         //kill motors just in case
         robot.drive(0, 0);
-    }
-
-    public DriveControl setControlSubTask(ControlSystemAutonomous.SubTask controlSubTask) {
-        this.controlSubTask = controlSubTask;
-        return this;
     }
 }

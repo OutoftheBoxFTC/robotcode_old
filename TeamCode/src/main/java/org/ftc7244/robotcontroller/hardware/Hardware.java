@@ -12,6 +12,10 @@ import org.ftc7244.robotcontroller.autonomous.Status;
 
 import java.util.Map;
 
+/**
+ * Created by FTC 7244 on 10/16/2017.
+ */
+
 public abstract class Hardware {
     protected OpMode opMode;
     protected double countsPerInch;
@@ -25,7 +29,7 @@ public abstract class Hardware {
      * This is the codes own way of pausing. This has the the capability of stopping the wait if
      * stop is requested and passing up an exception if it fails as well
      *
-     * @param ms the duration to sleepWhile in milliseconds
+     * @param ms the duration to sleep in milliseconds
      * @throws InterruptedException if the code fails to terminate before stop requested
      */
     public static void sleep(long ms) throws InterruptedException {

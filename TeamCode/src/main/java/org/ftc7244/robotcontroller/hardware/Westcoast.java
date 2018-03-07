@@ -3,6 +3,7 @@ package org.ftc7244.robotcontroller.hardware;
 import android.graphics.Color;
 import android.support.annotation.Nullable;
 
+import com.qualcomm.hardware.kauailabs.NavxMicroNavigationSensor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -18,11 +19,8 @@ import org.ftc7244.robotcontroller.Debug;
 import org.ftc7244.robotcontroller.autonomous.Status;
 
 public class Westcoast extends Hardware {
-    public static final double COUNTS_PER_INCH = 32.9083451562,
-                               RELIC_SPOOL_MIN = -1857, RELIC_SPOOL_MAX = 50,
-                               INTAKE_REST_POWER = 0.1, INTAKE_OPEN = 0.8,
-                               INTAKE_CLOSE = 0.2;
-    public static final int INTAKE_HOME_POSITION = 500, INTAKE_MIN_POSITION = 100;
+    public static final double COUNTS_PER_INCH = (403.2 / (3.9 * Math.PI)),
+                               RELIC_SPOOL_MIN = -1857, RELIC_SPOOL_MAX = 0;
 
     @Nullable
     private DcMotor driveBackLeft, driveFrontLeft, driveBackRight, driveFrontRight, intakeLift, intakeTop, intakeBottom, relicSpool;
@@ -36,12 +34,14 @@ public class Westcoast extends Hardware {
     private ColorSensor jewelSensor;
     @Nullable
     private DistanceSensor jewelDistance;
-
-    private int blueOffset, redOffset;
+    @Nullable
+    private NavxMicroNavigationSensor navX;
 
     public Westcoast(OpMode opMode) {
         super(opMode, COUNTS_PER_INCH);
     }
+    private int blueOffset, redOffset;
+
     /**
      * Identify hardware and then set it up with different objects. Other initialization properties are
      * mset to ensure that everything is in the default position or correct mode for the robot.
@@ -94,11 +94,6 @@ public class Westcoast extends Hardware {
         if(intakeTopRight != null) intakeTopRight.setDirection(DcMotorSimple.Direction.REVERSE);
         if(intakeBottomRight != null) intakeBottomRight.setDirection(DcMotorSimple.Direction.REVERSE);
         resetMotors(relicSpool, intakeLift);
-        if(intakeLift != null)intakeLift.setPower(0.1);
-        driveBackLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        driveBackRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        driveFrontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        driveFrontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public void initServos(){
@@ -121,7 +116,7 @@ public class Westcoast extends Hardware {
 
     @Override
     public void drive(double leftPower, double rightPower, long timeMillis) throws InterruptedException{
-        drive(leftPower, rightPower);
+       drive(leftPower, -rightPower);
         sleep(timeMillis);
         drive(0, 0);
     }
@@ -155,7 +150,7 @@ public class Westcoast extends Hardware {
 
     @Override
     public int getDriveEncoderAverage() {
-        return (driveBackLeft.getCurrentPosition()-driveBackRight.getCurrentPosition()+driveFrontLeft.getCurrentPosition()-driveFrontRight.getCurrentPosition())/4;
+        return -(-driveBackLeft.getCurrentPosition()+driveBackRight.getCurrentPosition()-driveFrontLeft.getCurrentPosition()+driveFrontRight.getCurrentPosition())/4;
     }
 
     @Override
@@ -196,16 +191,24 @@ public class Westcoast extends Hardware {
     }
 
     /**
-     * Sets the intake power proportional to the normalized error from the target in terms of an arbitrary
-     * constant value (in this cause, the difference between the home and min positions of the intake
-     * @param targetPosition The position intended to travel to
+     * Lowers the vertical jewel arm, reads the jewel color on the right, and moves
+     * the horizontal jewel arm left or right depending on the given parameter
+     *
+     * @param color color jewel to be knocked off the pedestal
+     * @throws InterruptedException if code fails to terminate on stop requested
      */
-    public void liftIntakeProportional(int targetPosition){
-        intakeLift.setPower(INTAKE_REST_POWER + Math.max(0, targetPosition-intakeLift.getCurrentPosition())/(INTAKE_HOME_POSITION-INTAKE_MIN_POSITION));
-    }
-
-    public boolean glyphInBottomIntake(){
-        return bottomIntakeSwitch.getVoltage()>0.5;
+    public void knockOverJewel(int color) throws InterruptedException {
+        //color we want to get rid of
+        getJewelVertical().setPosition(0.26);getJewelHorizontal().setPosition(0.45);
+        sleep(1700);
+        if(color==Color.RED)
+            getJewelHorizontal().setPosition(isColor(Color.RED) ? 0.33 : 0.56);
+        else if(color==Color.BLUE)
+            getJewelHorizontal().setPosition(isColor(Color.RED) ? 0.56 : 0.33);
+        sleep(250);
+        getJewelHorizontal().setPosition(0.73);
+        getJewelVertical().setPosition(0.67);
+        sleep(500);
     }
 
     @Nullable
@@ -293,6 +296,11 @@ public class Westcoast extends Hardware {
     @Nullable
     public DistanceSensor getJewelDistance(){
         return jewelDistance;
+    }
+
+    @Nullable
+    public NavxMicroNavigationSensor getNavX(){
+        return navX;
     }
 
     @Nullable

@@ -7,6 +7,10 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 import org.ftc7244.robotcontroller.autonomous.ControlSystemAutonomous;
 
+
+/**
+ * Created by Eeshwar Laptop on 10/29/2017.
+ */
 @Autonomous(name = "Red Left")
 public class RedLeft extends ControlSystemAutonomous {
 
@@ -19,7 +23,7 @@ public class RedLeft extends ControlSystemAutonomous {
         telemetry.addData("Image", image);
         telemetry.update();
 
-        knockOverJewel(Color.BLUE);//Check color sensor
+        robot.knockOverJewel(Color.BLUE);//Check color sensor
         robot.getIntakeTop().setPower(-1);
         robot.driveToInch(.3, 39);//Drive off balancing stone
         robot.getSpring().setPosition(0.5);//Spring out glyph
