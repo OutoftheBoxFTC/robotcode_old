@@ -91,13 +91,13 @@ public class Teleop extends LinearOpMode {
             } else if (leftTrigger.isPressed()) {
                 robot.getIntakeTop().setPower(1);
                 robot.getIntakeBottom().setPower(1);
-                robot.getIntakeBottomLeft().setPower(-0.5);
-                robot.getIntakeBottomRight().setPower(-0.5);
+                robot.getIntakeTopLeft().setPower(-0.5);
+                robot.getIntakeTopRight().setPower(-0.5);
             } else {
                 robot.getIntakeTop().setPower(0);
                 robot.getIntakeBottom().setPower(0);
-                robot.getIntakeBottomLeft().setPower(-0);
-                robot.getIntakeBottomRight().setPower(-0);
+                robot.getIntakeTopLeft().setPower(-0);
+                robot.getIntakeTopRight().setPower(-0);
             }
             if (leftBumper.isPressed()) {
                 robot.getIntakeTop().setPower(1);
