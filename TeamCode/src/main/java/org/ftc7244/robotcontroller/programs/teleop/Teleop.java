@@ -96,8 +96,8 @@ public class Teleop extends LinearOpMode {
             } else {
                 robot.getIntakeTop().setPower(0);
                 robot.getIntakeBottom().setPower(0);
-                robot.getIntakeTopLeft().setPower(-0);
-                robot.getIntakeTopRight().setPower(-0);
+                robot.getIntakeTopLeft().setPower(0);
+                robot.getIntakeTopRight().setPower(0);
             }
             if (leftBumper.isPressed()) {
                 robot.getIntakeTop().setPower(1);
@@ -116,7 +116,7 @@ public class Teleop extends LinearOpMode {
                         robot.getIntakeLift().setPower(0.2); //hold the intake at it's position
                     }
                 } else { //And a block is NOT in the intake...
-                    if (robot.getIntakeLift().getCurrentPosition() < 500) {//And the intake lift is under it's holding range...
+                    if (robot.getIntakeLift().getCurrentPosition() < 500 && leftTrigger.isPressed()) {//And the intake lift is under it's holding range...
                         robot.getIntakeLift().setPower((500 - robot.getIntakeLift().getCurrentPosition()) / 500.0); //Run the lift using a proportional equation
                     } else { //And the intake lift is over it's holding range...
                         robot.getIntakeLift().setPower(0.2); //Hold the intake at it's position
@@ -126,5 +126,6 @@ public class Teleop extends LinearOpMode {
             }
             robot.getJewelHorizontal().setPosition(robot.getBottomIntakeSwitch().getVoltage() > 0.5 ? 0.45 : 0.75);
         }
+        telemetry.addData("Lift", robot.getIntakeLift().getCurrentPosition());
     }
 }

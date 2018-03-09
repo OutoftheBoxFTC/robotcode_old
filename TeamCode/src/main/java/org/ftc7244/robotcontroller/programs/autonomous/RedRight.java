@@ -32,6 +32,7 @@ public class RedRight extends ControlSystemAutonomous {
         gyroscopePID.drive(1, 23);//Drive to glyph pit
         //0.2 : 0.75
         robot.getIntakeServo().setPosition(0.2);
+        sleep(1000);
         robot.getIntakeLift().setPower(1);
         sleep(100);
         robot.getIntakeLift().setPower(0.1);
@@ -40,20 +41,20 @@ public class RedRight extends ControlSystemAutonomous {
         switch(image){
             case LEFT:
                 gyroscopePID.rotate(-154);
-                gyroscopePID.drive(0.5, 51 );
+                gyroscopePID.drive(0.5, 51);
                 break;
             case RIGHT:
-                gyroscopePID.rotate(-171.5);
-                gyroscopePID.drive(0.5, 48);
+                gyroscopePID.rotate(-168);
+                gyroscopePID.drive(0.5, 53);
                 break;
             default:
                 gyroscopePID.rotate(-161);
-                gyroscopePID.drive(0.5, 47);
+                gyroscopePID.drive(0.5, 50);
         }
         robot.getIntakeBottom().setPower(1);
         robot.getIntakeTop().setPower(1);
         gyroscopePID.drive(-0.5, 8);
-        gyroscopePID.drive(1, 6);
+        gyroscopePID.drive(0.5, 6);
         gyroscopePID.drive(-1, 58);
         gyroscopePID.rotate(180);
         robot.getIntakeTop().setPower(0);
