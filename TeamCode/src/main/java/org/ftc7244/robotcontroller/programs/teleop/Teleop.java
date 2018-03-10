@@ -41,7 +41,6 @@ public class Teleop extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         robot = new Westcoast(this);
-
         driverLeftBumper = new Button(gamepad1, ButtonType.LEFT_BUMPER);
         driveLeftTrigger = new Button(gamepad1, ButtonType.LEFT_TRIGGER);
         dPadUp = new Button(gamepad2, ButtonType.D_PAD_UP);
@@ -55,6 +54,7 @@ public class Teleop extends LinearOpMode {
         aButton = new PressButton(gamepad2, ButtonType.A);
         driveRightTrigger = new PressButton(gamepad1, ButtonType.RIGHT_TRIGGER);
         robot.init();
+        robot.getIntakeLift().setPower(0.1);
         waitForStart();
         robot.initServos();
         while (opModeIsActive()) {
@@ -116,7 +116,7 @@ public class Teleop extends LinearOpMode {
                         robot.getIntakeLift().setPower(0.2); //hold the intake at it's position
                     }
                 } else { //And a block is NOT in the intake...
-                    if (robot.getIntakeLift().getCurrentPosition() < 500 && leftTrigger.isPressed()) {//And the intake lift is under it's holding range...
+                    if (robot.getIntakeLift().getCurrentPosition() < 500 && !leftTrigger.isPressed()) {//And the intake lift is under it's holding range...
                         robot.getIntakeLift().setPower((500 - robot.getIntakeLift().getCurrentPosition()) / 500.0); //Run the lift using a proportional equation
                     } else { //And the intake lift is over it's holding range...
                         robot.getIntakeLift().setPower(0.2); //Hold the intake at it's position
@@ -125,7 +125,8 @@ public class Teleop extends LinearOpMode {
                 }
             }
             robot.getJewelHorizontal().setPosition(robot.getBottomIntakeSwitch().getVoltage() > 0.5 ? 0.45 : 0.75);
+            telemetry.addData("Lift", robot.getIntakeLift().getCurrentPosition());
+            telemetry.update();
         }
-        telemetry.addData("Lift", robot.getIntakeLift().getCurrentPosition());
     }
 }

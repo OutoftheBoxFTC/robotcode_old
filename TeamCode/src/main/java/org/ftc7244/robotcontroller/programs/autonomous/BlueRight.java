@@ -14,44 +14,46 @@ import org.ftc7244.robotcontroller.autonomous.ControlSystemAutonomous;
 public class BlueRight extends ControlSystemAutonomous {
     @Override
     public void run() throws InterruptedException {
-        robot.knockOverJewel(Color.RED);//Check color sensor
-        robot.getIntakeTop().setPower(-1);
-        robot.driveToInch(.2, 31);//Drive off balancing stone
-        gyroscopePID.rotate(0);
-        sleep(200);
-        robot.getSpring().setPosition(0.5);//Spring out glyph
         RelicRecoveryVuMark image = imageProvider.getImageReading();
+        while(image == RelicRecoveryVuMark.UNKNOWN){
+            image = imageProvider.getImageReading();
+            sleep(50);
+        }
         telemetry.addData("Image", image);
         telemetry.update();
-        robot.getIntakeServo().setPosition(0.2);
-        gyroscopePID.rotate(90);//Rotate to face glyph pit
+        robot.knockOverJewel(Color.RED);//Check color sensor
+        robot.getIntakeTop().setPower(-1);
         robot.getIntakeBottom().setPower(-1);
-        robot.driveIntakeVertical(0.5);
-        sleep(200);
-        robot.driveIntakeVertical(0);
-        gyroscopePID.drive(0.6, 20);//Drive to glyph pit
-        gyroscopePID.drive(0.6, 25);// Drive into glyph pit
-        //0.2: 0.75
+        robot.driveToInch(.3, 30);//Drive off balancing stone
+        robot.getSpring().setPosition(0.5);//Spring out glyph
+        sleep(750);
         robot.getIntakeServo().setPosition(0.8);
-        gyroscopePID.drive(-0.6, 0.6);
-        switch(image) {
+        gyroscopePID.rotate(90);//Rotate to face glyph
+        gyroscopePID.drive(1, 28);
+        robot.getIntakeServo().setPosition(0.2);
+        sleep(1000);
+        robot.getIntakeLift().setPower(1);
+        sleep(100);
+        robot.getIntakeLift().setPower(0.1);
+        sleep(150);//Let block come into intake
+        gyroscopePID.drive(-0.75, 3);
+        switch (image){
             case RIGHT:
-                gyroscopePID.rotate(72);
-                gyroscopePID.drive(0.85, 38.2);
+                gyroscopePID.rotate(62.5);
+                gyroscopePID.drive(0.5, 47);
                 break;
             case LEFT:
-                gyroscopePID.rotate(852);
-                gyroscopePID.drive(0.7, 36);
+                gyroscopePID.rotate(79);
+                gyroscopePID.drive(0.5, 36);
                 break;
             default:
-                gyroscopePID.rotate(82);
-                gyroscopePID.drive(0.85, 39);
-                break;
+                gyroscopePID.rotate(68);
+                gyroscopePID.drive(0.5, 42);
         }
         robot.getIntakeBottom().setPower(1);
         robot.getIntakeTop().setPower(1);
-        gyroscopePID.drive(-0.6, 10);
-        gyroscopePID.drive(0.6, 4);
-        gyroscopePID.drive(-0.6, 5);
+        gyroscopePID.drive(-0.5, 11);
+        gyroscopePID.drive(0.5, 9);
+        gyroscopePID.drive(-1, 13);
     }
 }
