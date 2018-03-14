@@ -16,7 +16,8 @@ public class BlueLeft extends ControlSystemAutonomous {
 
     public void run() throws InterruptedException{
         RelicRecoveryVuMark image = imageProvider.getImageReading();
-        while(image == RelicRecoveryVuMark.UNKNOWN){
+        long lastTime = System.nanoTime();
+        while(image == RelicRecoveryVuMark.UNKNOWN&&System.nanoTime()-lastTime<=2000000000){
             image = imageProvider.getImageReading();
             sleep(50);
         }
@@ -37,29 +38,42 @@ public class BlueLeft extends ControlSystemAutonomous {
         robot.getIntakeLift().setPower(0.1);
         sleep(150);//Let block come into intake
         gyroscopePID.drive(-0.75, 10);
+        int degrees = 170;
         switch(image){
             case LEFT:
                 gyroscopePID.rotate(170.5);
-                gyroscopePID.drive(0.5, 51);
+                gyroscopePID.drive(0.5, 48);
+                gyroscopePID.drive(.6, 4);
                 break;
             case RIGHT:
+                degrees = 190;
                 gyroscopePID.rotate(154.1);
-                gyroscopePID.drive(0.5, 51);
+                gyroscopePID.drive(0.5, 45);
+                gyroscopePID.drive(.6, 4);
                 break;
             default:
                 gyroscopePID.rotate(159);
-                gyroscopePID.drive(0.5, 50);
+                gyroscopePID.drive(0.5, 46);
+                gyroscopePID.drive(.6, 4);
         }
         robot.getIntakeBottom().setPower(1);
         robot.getIntakeTop().setPower(1);
-        gyroscopePID.drive(-0.5, 8);
-        gyroscopePID.drive(0.5, 6);
-        gyroscopePID.drive(-1, 58);
-        gyroscopePID.rotate(180);
-        robot.getIntakeTop().setPower(0);
-        robot.getIntakeBottom().setPower(0);
-        //robot.getRelicSpool().setPower(-1);
-        /*while (robot.getRelicSpool().getCurrentPosition()<1600);
-        robot.getRelicSpool().setPower(0);*/
+        gyroscopePID.drive(-.8, 8);
+        gyroscopePID.drive(0.6, 6);
+        gyroscopePID.drive(-1, 29);
+        gyroscopePID.rotate(degrees);
+        robot.getIntakeServo().setPosition(0.8);
+        robot.getIntakeTop().setPower(-1);
+        robot.getIntakeBottom().setPower(-1);
+        gyroscopePID.drive(0.5, 25);
+        robot.getIntakeServo().setPosition(0.2);
+        sleep(500);
+        robot.getIntakeLift().setPower(-1);
+        sleep(100);
+        robot.getIntakeLift().setPower(0);
+        robot.getRelicSpool().setPower(-1);
+        while (robot.getRelicSpool().getCurrentPosition()>-1700);
+        robot.getRelicSpool().setPower(0);
+        gyroscopePID.drive(-0.5, 10);
     }
 }

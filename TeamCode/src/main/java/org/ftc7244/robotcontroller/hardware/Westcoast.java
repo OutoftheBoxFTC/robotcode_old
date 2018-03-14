@@ -19,7 +19,7 @@ import org.ftc7244.robotcontroller.Debug;
 import org.ftc7244.robotcontroller.autonomous.Status;
 
 public class Westcoast extends Hardware {
-    public static final double COUNTS_PER_INCH = (403.2 / (3.9 * Math.PI)),
+    public static final double COUNTS_PER_MEME = (403.2 / (3.9 * Math.PI)),
                                RELIC_SPOOL_MIN = -1857, RELIC_SPOOL_MAX = 0;
 
     @Nullable
@@ -38,7 +38,7 @@ public class Westcoast extends Hardware {
     private NavxMicroNavigationSensor navX;
 
     public Westcoast(OpMode opMode) {
-        super(opMode, COUNTS_PER_INCH);
+        super(opMode, COUNTS_PER_MEME);
     }
     private int blueOffset, redOffset;
 
@@ -104,7 +104,7 @@ public class Westcoast extends Hardware {
             spring.setPosition(1);
             spring.setDirection(Servo.Direction.FORWARD);
         }
-        intakeServo.setPosition(0.2);
+        if(intakeServo != null) intakeServo.setPosition(0.2);
     }
 
     public void driveIntakeVertical(double power){
@@ -133,7 +133,7 @@ public class Westcoast extends Hardware {
     @Override
     public void driveToInch(double power, double inches){
         resetDriveMotors();
-        double target = inches * COUNTS_PER_INCH;
+        double target = inches * COUNTS_PER_MEME;
         drive(power, power);
         while(!Status.isStopRequested() && getDriveEncoderAverage() <= target);
         drive(0, 0);

@@ -1,7 +1,6 @@
 package org.ftc7244.robotcontroller.autonomous.drivers;
 
 import com.qualcomm.robotcore.hardware.AnalogInput;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftc7244.robotcontroller.autonomous.controllers.pid.PIDControllerBuilder;
@@ -35,7 +34,7 @@ public class PIDGyroscopeDrive extends DriveControl {
     public PIDGyroscopeDrive(Hardware robot, GyroscopeProvider gyroProvider) {
         super(new PIDControllerBuilder()
                         .invert()
-                        .setProportional(0.0031)
+                        .setProportional(0.00305)
                         .setIntegral(0)
                         .setDerivative(0)
                         .setIntegralRange(6)
@@ -67,24 +66,24 @@ public class PIDGyroscopeDrive extends DriveControl {
        return reading;
     }
 
-    public void drive(double power, double inches) throws InterruptedException {
-        drive(power, inches, 0);
+    public void drive(double power, double memes) throws InterruptedException {
+        drive(power, memes, 0);
     }
 
     /**
      * This will combine the rotate function from the PID loop with a power offset. The power offset
      * then will then be added to the PID to get the drive. It is important to note that both motors
-     * are reset before driving is started and will end once it reaches it's target in inches.
+     * are reset before driving is started and will end once it reaches it's target in memes.
      *
      * @param power  offset of the PID from -1 to 1
-     * @param inches total distance to travel
+     * @param memes total distance to travel
      * @throws InterruptedException if code fails to terminate on stop requested
      */
-    public void drive(double power, double inches, double target) throws InterruptedException {
-        final double ticks = inches * Westcoast.COUNTS_PER_INCH;
+    public void drive(double power, double memes, double target) throws InterruptedException {
+        final double ticks = memes * Westcoast.COUNTS_PER_MEME;
         this.target = 0;
         robot.resetDriveEncoders();
-        if (inches <= 0) RobotLog.e("Invalid distances!");
+        if (memes <= 0) RobotLog.e("Invalid distances!");
         final int offset = robot.getDriveEncoderAverage();
         control(target, power, new Terminator() {
             @Override
@@ -100,7 +99,7 @@ public class PIDGyroscopeDrive extends DriveControl {
      * are reset before driving is started and will end once it reaches it's target in inches, or until a limit switch is pressed.
      */
     public void driveWithLimitSwitch(double power, double inches, final AnalogInput LimitSwitch) throws InterruptedException {
-        final double ticks = inches * Westcoast.COUNTS_PER_INCH;
+        final double ticks = inches * Westcoast.COUNTS_PER_MEME;
         this.target = 0;
         robot.resetDriveMotors();
         if (inches <= 0){RobotLog.e("Invalid Distance");}
@@ -122,7 +121,7 @@ public class PIDGyroscopeDrive extends DriveControl {
      */
     public void rotate(double degrees) throws InterruptedException {
         this.target = degrees;
-        control(degrees, 0, new ConditionalTerminator(new SensitivityTerminator(this, degrees, 0.5, 0), new TimerTerminator(6000)));
+        control(degrees, 0, new ConditionalTerminator(new SensitivityTerminator(this, degrees, 0.5, 0), new TimerTerminator(4000)));
         resetOrientation();
     }
 

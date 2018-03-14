@@ -7,7 +7,6 @@ import org.ftc7244.robotcontroller.autonomous.ControlSystemAutonomous;
 import org.ftc7244.robotcontroller.hardware.Westcoast;
 
 @Autonomous(name = "Vuforia Test")
-@Disabled
 public class VuforiaTest extends ControlSystemAutonomous {
 
     @Override

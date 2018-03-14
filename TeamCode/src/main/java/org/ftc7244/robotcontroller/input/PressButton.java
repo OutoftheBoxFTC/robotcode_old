@@ -10,11 +10,15 @@ public class PressButton extends Button {
 
     private boolean active, pressed, previousState;
 
-    public PressButton(Gamepad gamepad, ButtonType type) {
+    public PressButton(Gamepad gamepad, ButtonType type, boolean pressed) {
         super(gamepad, type);
         active = false;
-        pressed = false;
+        this.pressed = pressed;
         previousState = false;
+    }
+
+    public PressButton(Gamepad gamepad, ButtonType type) {
+        this(gamepad, type, false);
     }
 
     @Override
@@ -38,5 +42,10 @@ public class PressButton extends Button {
         boolean state = isPressed(), returnVal = state!=previousState;
         previousState = state;
         return returnVal;
+    }
+
+    public void release(){
+        pressed = false;
+        active = false;
     }
 }

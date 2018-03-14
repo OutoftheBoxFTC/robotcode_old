@@ -69,7 +69,7 @@ public class Button {
     }
 
     public boolean isUpdated(){
-        boolean pressed = isPressed(), returnVal = pressed==previousState;
+        boolean pressed = isPressed(), returnVal = pressed!=previousState;
         previousState = pressed;
         return returnVal;
     }
