@@ -28,7 +28,7 @@ public class Status {
      * @return if stop was requested
      */
     public static boolean isStopRequested() {
-        return (autonomous != null && autonomous.isStopRequested()) || Thread.interrupted();
+        return (autonomous != null && (autonomous.isStopRequested()) || !autonomous.opModeIsActive()) || Thread.interrupted();
     }
 
 

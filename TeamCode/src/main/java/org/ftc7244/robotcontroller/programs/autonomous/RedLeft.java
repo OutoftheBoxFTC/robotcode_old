@@ -39,36 +39,42 @@ public class RedLeft extends ControlSystemAutonomous {
         robot.getIntakeLift().setPower(0.1);
         sleep(150);//Let block come into intake
         gyroscopePID.drive(-0.75, 3);
+        int relicExtend = 1000, degrees=10;
         switch (image){
             case LEFT:
-                gyroscopePID.rotate(-61.5);
+                gyroscopePID.rotate(-60); //-150
                 gyroscopePID.drive(0.5, 47);
                 break;
             case RIGHT:
-                gyroscopePID.rotate(-80);
+                gyroscopePID.rotate(-80); //-170
                 gyroscopePID.drive(0.5, 36);
+                relicExtend = 1200;
+                degrees=15;
                 break;
             default:
-                gyroscopePID.rotate(-71);
+                gyroscopePID.rotate(-71); //-161
                 gyroscopePID.drive(0.5, 42);
+                relicExtend = 1200;
         }
         robot.getIntakeBottom().setPower(1);
         robot.getIntakeTop().setPower(1);
-        gyroscopePID.drive(-0.5, 11);
+        sleep(1000);
+        gyroscopePID.drive(-0.3, 11);
         gyroscopePID.drive(0.5, 9);
         gyroscopePID.drive(-1, 13);
-        gyroscopePID.rotate(170);
+        gyroscopePID.rotate(170); //9
         robot.getIntakeServo().setPosition(0.8);
         robot.getIntakeTop().setPower(-1);
         robot.getIntakeBottom().setPower(-1);
-        gyroscopePID.drive(0.5, 25);
+        gyroscopePID.drive(0.5, 30);
         robot.getIntakeServo().setPosition(0.2);
         sleep(500);
         robot.getIntakeLift().setPower(-1);
         sleep(100);
         robot.getIntakeLift().setPower(0);
+        gyroscopePID.rotate(degrees); //19
         robot.getRelicSpool().setPower(-1);
-        while (robot.getRelicSpool().getCurrentPosition()>-1300);
+        while (robot.getRelicSpool().getCurrentPosition()>-relicExtend);
         robot.getRelicSpool().setPower(0);
     }
 }

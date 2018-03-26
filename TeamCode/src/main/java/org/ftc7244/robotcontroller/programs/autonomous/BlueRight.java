@@ -29,7 +29,7 @@ public class BlueRight extends ControlSystemAutonomous {
         robot.getSpring().setPosition(0.5);//Spring out glyph
         sleep(750);
         robot.getIntakeServo().setPosition(0.8);
-        gyroscopePID.rotate(90);//Rotate to face glyph
+        gyroscopePID.rotate(90);//Rotate to face glyph //90
         gyroscopePID.drive(1, 28);
         robot.getIntakeServo().setPosition(0.2);
         sleep(1000);
@@ -38,25 +38,29 @@ public class BlueRight extends ControlSystemAutonomous {
         robot.getIntakeLift().setPower(0.1);
         sleep(150);//Let block come into intake
         gyroscopePID.drive(-0.75, 3);
+        int degrees = 0;
         switch (image){
             case RIGHT:
-                gyroscopePID.rotate(62.5);
+                degrees=5;
+                gyroscopePID.rotate(61); //151
                 gyroscopePID.drive(0.5, 47);
                 break;
             case LEFT:
-                gyroscopePID.rotate(79);
+                gyroscopePID.rotate(79); //169
                 gyroscopePID.drive(0.5, 36);
                 break;
             default:
-                gyroscopePID.rotate(69);
+                degrees = 5;
+                gyroscopePID.rotate(69); //159
                 gyroscopePID.drive(0.5, 42);
         }
         robot.getIntakeBottom().setPower(1);
         robot.getIntakeTop().setPower(1);
-        gyroscopePID.drive(-0.5, 11);
+        sleep(1000);
+        gyroscopePID.drive(-0.3, 11);
         gyroscopePID.drive(0.5, 9);
         gyroscopePID.drive(-1, 13);
-        gyroscopePID.rotate(170);
+        gyroscopePID.rotate(170); //
         robot.getIntakeServo().setPosition(0.8);
         robot.getIntakeTop().setPower(-1);
         robot.getIntakeBottom().setPower(-1);
@@ -66,9 +70,9 @@ public class BlueRight extends ControlSystemAutonomous {
         robot.getIntakeLift().setPower(-1);
         sleep(100);
         robot.getIntakeLift().setPower(0);
+        gyroscopePID.rotate(degrees);
         robot.getRelicSpool().setPower(-1);
-        while (robot.getRelicSpool().getCurrentPosition()>-1700);
+        while (robot.getRelicSpool().getCurrentPosition()>-1000);
         robot.getRelicSpool().setPower(0);
-        gyroscopePID.drive(-0.5, 10);
     }
 }

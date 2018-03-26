@@ -15,6 +15,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.RobotLog;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.ftc7244.robotcontroller.Debug;
 import org.ftc7244.robotcontroller.autonomous.Status;
 
@@ -27,7 +28,7 @@ public class Westcoast extends Hardware {
     @Nullable
     private CRServo intakeBottomLeft, intakeBottomRight, intakeTopLeft, intakeTopRight;
     @Nullable
-    private Servo jewelVertical, jewelHorizontal, spring, intakeServo, relicWrist, relicFinger;
+    private Servo jewelVertical, jewelHorizontal, spring, intakeServo, relicWrist, relicFinger, intakePusher;
     @Nullable
     private AnalogInput bottomIntakeSwitch;
     @Nullable
@@ -79,6 +80,7 @@ public class Westcoast extends Hardware {
         this.relicFinger = getOrNull(map.servo, "relicClaw");
 
         this.bottomIntakeSwitch = getOrNull(map.analogInput, "bottomIntakeSwitch");
+        this.intakePusher = getOrNull(map.servo, "intakeKicker");
 
 
         //Set the default direction for all the hardware and also initialize default positions
@@ -199,8 +201,18 @@ public class Westcoast extends Hardware {
      */
     public void knockOverJewel(int color) throws InterruptedException {
         //color we want to get rid of
-        getJewelVertical().setPosition(0.26);getJewelHorizontal().setPosition(0.45);
-        sleep(1700);
+        getJewelVertical().setPosition(0.16);
+        getJewelHorizontal().setPosition(0.45);
+        long lastTime = System.currentTimeMillis();
+        while (System.currentTimeMillis()-lastTime<=1700){
+            double grayscale = ( (0.3 * getJewelSensor().red()) + (0.59 * getJewelSensor().green()) + (0.11 * getJewelSensor().blue()) );
+            opMode.telemetry.addData("R", getJewelSensor().red());
+            opMode.telemetry.addData("G", getJewelSensor().green());
+            opMode.telemetry.addData("B", getJewelSensor().blue());
+            opMode.telemetry.addData("Distance (INCH)", getJewelDistance().getDistance(DistanceUnit.INCH));
+            opMode.telemetry.addData("Grayscale", grayscale);
+            opMode.telemetry.update();
+        }
         if(color==Color.RED)
             getJewelHorizontal().setPosition(isColor(Color.RED) ? 0.33 : 0.56);
         else if(color==Color.BLUE)
@@ -316,5 +328,10 @@ public class Westcoast extends Hardware {
     @Nullable
     public Servo getRelicFinger() {
         return relicFinger;
+    }
+
+    @Nullable
+    public Servo getIntakePusher() {
+        return intakePusher;
     }
 }

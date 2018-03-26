@@ -1,5 +1,6 @@
 package org.ftc7244.robotcontroller.programs.debug;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -9,6 +10,7 @@ import org.ftc7244.robotcontroller.hardware.Westcoast;
  * Created by ftc72 on 3/13/2018.
  */
 @TeleOp(name = "Relic Spool Debug")
+@Disabled
 public class RelicSpoolDebug extends LinearOpMode{
     private Westcoast robot;
 

@@ -8,7 +8,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.ftc7244.robotcontroller.hardware.Westcoast;
 
 @Autonomous(name = "Color Sensor Debug")
-@Disabled
+//@Disabled
 public class ColourSensorDebug extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {

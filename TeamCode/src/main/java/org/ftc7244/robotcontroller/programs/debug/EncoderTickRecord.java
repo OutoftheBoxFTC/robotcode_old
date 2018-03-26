@@ -5,12 +5,17 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.ftc7244.robotcontroller.autonomous.ControlSystemAutonomous;
 
-
-@Autonomous(name = "Turn 45")
+/**
+ * Created by ftc72 on 3/25/2018.
+ */
+@Autonomous(name = "Encoder Tick Record")
 @Disabled
-public class Turn45 extends ControlSystemAutonomous {
+public class EncoderTickRecord extends ControlSystemAutonomous {
     @Override
     public void run() throws InterruptedException {
-        gyroscopePID.rotate(45);
+        while (opModeIsActive()){
+            telemetry.addData("Encoder", robot.getDriveEncoderAverage());
+            telemetry.update();
+        }
     }
 }

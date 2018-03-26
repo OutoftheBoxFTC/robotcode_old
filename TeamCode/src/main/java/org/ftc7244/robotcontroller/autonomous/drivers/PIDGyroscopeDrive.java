@@ -39,7 +39,6 @@ public class PIDGyroscopeDrive extends DriveControl {
                         .setDerivative(0)
                         .setIntegralRange(6)
                         .setIntegralReset(true)
-                        .setOutputRange(0.45)
                         .setDelay(20)
                         .createController(),
                 robot);
@@ -66,8 +65,8 @@ public class PIDGyroscopeDrive extends DriveControl {
        return reading;
     }
 
-    public void drive(double power, double memes) throws InterruptedException {
-        drive(power, memes, 0);
+    public void drive(double power, double baguette) throws InterruptedException {
+        if(baguette!=0)drive(power, baguette, target);
     }
 
     /**
@@ -76,14 +75,13 @@ public class PIDGyroscopeDrive extends DriveControl {
      * are reset before driving is started and will end once it reaches it's target in memes.
      *
      * @param power  offset of the PID from -1 to 1
-     * @param memes total distance to travel
+     * @param units total distance to travel
      * @throws InterruptedException if code fails to terminate on stop requested
      */
-    public void drive(double power, double memes, double target) throws InterruptedException {
-        final double ticks = memes * Westcoast.COUNTS_PER_MEME;
-        this.target = 0;
+    public void drive(double power, double units, double target) throws InterruptedException {
+        final double ticks = units * Westcoast.COUNTS_PER_MEME;
         robot.resetDriveEncoders();
-        if (memes <= 0) RobotLog.e("Invalid distances!");
+        if (units <= 0) RobotLog.e("Invalid distances!");
         final int offset = robot.getDriveEncoderAverage();
         control(target, power, new Terminator() {
             @Override
@@ -98,11 +96,11 @@ public class PIDGyroscopeDrive extends DriveControl {
      * then will then be added to the PID to get the drive. It is important to note that both motors
      * are reset before driving is started and will end once it reaches it's target in inches, or until a limit switch is pressed.
      */
-    public void driveWithLimitSwitch(double power, double inches, final AnalogInput LimitSwitch) throws InterruptedException {
-        final double ticks = inches * Westcoast.COUNTS_PER_MEME;
+    public void driveWithLimitSwitch(double power, double units, final AnalogInput LimitSwitch) throws InterruptedException {
+        final double ticks = units * Westcoast.COUNTS_PER_MEME;
         this.target = 0;
         robot.resetDriveMotors();
-        if (inches <= 0){RobotLog.e("Invalid Distance");}
+        if (units <= 0){RobotLog.e("Invalid Distance");}
         final int offset = robot.getDriveEncoderAverage();
         control(target, power, new Terminator() {
             @Override
@@ -120,9 +118,10 @@ public class PIDGyroscopeDrive extends DriveControl {
      * @throws InterruptedException if code fails to terminate on stop requested
      */
     public void rotate(double degrees) throws InterruptedException {
-        this.target = degrees;
-        control(degrees, 0, new ConditionalTerminator(new SensitivityTerminator(this, degrees, 0.5, 0), new TimerTerminator(4000)));
-        resetOrientation();
+        if(degrees!=0){
+            this.target = degrees;
+            control(degrees, 0, new ConditionalTerminator(new SensitivityTerminator(this, degrees, 0.5, 0), new TimerTerminator(4000)));
+        }
     }
 
     /**
@@ -131,9 +130,7 @@ public class PIDGyroscopeDrive extends DriveControl {
      * @throws InterruptedException if code fails to terminate on stop requested
      */
     public void resetOrientation() throws InterruptedException {
-        do {
-            gyroProvider.setZToZero();
-        } while (Math.abs(Math.round(gyroProvider.getZ())) > 1);
+        gyroProvider.setZOffset(gyroProvider.getZOffset());
     }
 
     /**
@@ -150,6 +147,4 @@ public class PIDGyroscopeDrive extends DriveControl {
             this.white = white;
         }
     }
-
-
 }
