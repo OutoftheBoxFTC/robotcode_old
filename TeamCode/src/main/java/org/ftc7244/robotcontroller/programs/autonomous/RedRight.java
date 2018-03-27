@@ -72,7 +72,7 @@ public class RedRight extends ControlSystemAutonomous {
         gyroscopePID.drive(-0.3, 5);
         gyroscopePID.drive(0.3, 5);
         gyroscopePID.drive(-0.5, 28);
-        gyroscopePID.rotate(50); //10
+        gyroscopePID.rotate(70); //10
         robot.getIntakeServo().setPosition(0.8);
         robot.getIntakeTop().setPower(-1);
         robot.getIntakeBottom().setPower(-1);

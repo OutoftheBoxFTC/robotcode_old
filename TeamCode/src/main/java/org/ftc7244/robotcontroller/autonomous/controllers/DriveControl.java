@@ -19,6 +19,7 @@ public abstract class DriveControl {
 
     private ControlSystem controller;
     protected Hardware robot;
+    private double old_time;
 
 
     public DriveControl(ControlSystem controller, Hardware robot) {
@@ -50,7 +51,6 @@ public abstract class DriveControl {
         //setup the control loop
         controller.reset();
         controller.setTarget(target);
-
         do {
             //tell the terminators the code has yet to finish
             terminator.terminated(false);
@@ -67,5 +67,9 @@ public abstract class DriveControl {
         terminator.terminated(true);
         //kill motors just in case
         robot.drive(0, 0);
+    }
+
+    public Hardware getRobot() {
+        return robot;
     }
 }

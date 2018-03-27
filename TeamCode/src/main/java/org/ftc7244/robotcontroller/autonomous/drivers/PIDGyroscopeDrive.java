@@ -34,11 +34,13 @@ public class PIDGyroscopeDrive extends DriveControl {
     public PIDGyroscopeDrive(Hardware robot, GyroscopeProvider gyroProvider) {
         super(new PIDControllerBuilder()
                         .invert()
-                        .setProportional(0.00305)
+                        .setProportional(0.0033)
                         .setIntegral(0)
-                        .setDerivative(0)
+                        .setOutputRange(1)
+                        .setDerivative(0.164)
                         .setIntegralRange(6)
                         .setIntegralReset(true)
+                        .setOutputRange(0.5)
                         .setDelay(20)
                         .createController(),
                 robot);
@@ -114,13 +116,13 @@ public class PIDGyroscopeDrive extends DriveControl {
      * manually terminate if the rotate takes longer than two seconds. This is important because
      * in certain scenarios the robot can be stuck and be unable to complete the rotation.
      *
-     * @param degrees target orientation in dewgrees
+     * @param degrees target orientation in degrees
      * @throws InterruptedException if code fails to terminate on stop requested
      */
     public void rotate(double degrees) throws InterruptedException {
         if(degrees!=0){
             this.target = degrees;
-            control(degrees, 0, new ConditionalTerminator(new SensitivityTerminator(this, degrees, 0.5, 0), new TimerTerminator(4000)));
+            control(degrees, 0, new ConditionalTerminator(new SensitivityTerminator(this, degrees, 0.5, 1), new TimerTerminator(6000)));
         }
     }
 

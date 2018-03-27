@@ -13,7 +13,7 @@ import org.ftc7244.robotcontroller.autonomous.controllers.DriveControl;
 public class SensitivityTerminator extends Terminator {
 
     private long timestamp, successDuration;
-    private double maximumError, target;
+    private double maximumError, target, oldTime;
     private DriveControl context;
 
     /**
@@ -30,18 +30,22 @@ public class SensitivityTerminator extends Terminator {
         this.maximumError = maximumError;
         this.successDuration = successDuration;
         this.context = context;
-
         this.timestamp = -1;
     }
 
     @Override
     public boolean shouldTerminate() {
-        if (timestamp == -1 && Math.abs(context.getReading() - target) < maximumError)
+        if (timestamp == -1 && Math.abs(context.getReading() - target) < maximumError) {
             timestamp = System.currentTimeMillis();
+            oldTime = System.currentTimeMillis();
+        }
+
         else if (Math.abs(context.getReading() - target) > maximumError) timestamp = -1;
         if (Debug.STATUS) RobotLog.ii("STOP", context.getReading() + ":" + target);
-
+        context.getRobot().getOpMode().telemetry.addData("Timestamp", timestamp);
+        context.getRobot().getOpMode().telemetry.addData("IPS", ((System.currentTimeMillis() - oldTime) / 1000));
         return Math.abs(System.currentTimeMillis() - timestamp) > successDuration && timestamp != -1;
+
     }
 
     @Override
