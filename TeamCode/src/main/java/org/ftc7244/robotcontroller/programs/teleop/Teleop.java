@@ -16,9 +16,9 @@ import org.ftc7244.robotcontroller.input.PressButton;
 @TeleOp(name = "Teleop")
 public class Teleop extends LinearOpMode {
     private Westcoast robot;
-    private Button driveLeftTrigger, dPadUp, dPadDown, rightTrigger, leftTrigger, leftBumper, bButton, yButton, driverLeftBumper, rightBumper, driveYButton;
+    private Button driveLeftTrigger, dPadUp, dPadDown, rightTrigger, leftTrigger, leftBumper, bButton, yButton, driverLeftBumper, rightBumper, driveYButton, xButton;
     private PressButton aButton, driveRightTrigger;
-    private static final double SLOW_DRIVE_COEFFICIENT = -0.5, ACTION_BUFFER = 200;
+    private static final double SLOW_DRIVE_COEFFICIENT = -0.5, ACTION_BUFFER = 200, INTAKE_PUSHER_OUT = 0.69;
 
     /**
     Driver:
@@ -53,6 +53,7 @@ public class Teleop extends LinearOpMode {
         yButton = new Button(gamepad2, ButtonType.Y);
         rightBumper = new Button(gamepad2, ButtonType.RIGHT_BUMPER);
         aButton = new PressButton(gamepad2, ButtonType.A, true);
+        xButton = new Button(gamepad2, ButtonType.X);
         driveRightTrigger = new PressButton(gamepad1, ButtonType.RIGHT_TRIGGER);
         driveYButton = new PressButton(gamepad1, ButtonType.Y);
 
@@ -88,18 +89,26 @@ public class Teleop extends LinearOpMode {
             if (rightTrigger.isPressed()) {
                 robot.getIntakeBottom().setPower(-1);
                 robot.getIntakeTop().setPower(-1);
+                robot.getIntakeBottomRight().setPower(0);
+                robot.getIntakeBottomLeft().setPower(0);
             }
             else {
                 if (leftTrigger.isPressed()) {
                     robot.getIntakeBottom().setPower(1);
+                    robot.getIntakePusher().setPosition(INTAKE_PUSHER_OUT);
                 } else {
                     robot.getIntakeBottom().setPower(0);
+                    robot.getIntakePusher().setPosition(xButton.isPressed() ? INTAKE_PUSHER_OUT : 0.5);
                 }
                 if(leftBumper.isPressed()) {
+                    robot.getIntakeBottomRight().setPower(0.5);
+                    robot.getIntakeBottomLeft().setPower(0.5);
                     robot.getIntakeTop().setPower(1);
                 }
                 else{
                     robot.getIntakeTop().setPower(0);
+                    robot.getIntakeBottomRight().setPower(0);
+                    robot.getIntakeBottomLeft().setPower(0);
                 }
             }
 
@@ -120,7 +129,7 @@ public class Teleop extends LinearOpMode {
                         robot.getIntakeLift().setPower(0.2); //hold the intake at it's position
                     }
                 } else { //And a block is NOT in the intake...
-                    if (robot.getIntakeLift().getCurrentPosition() < 500 && !leftTrigger.isPressed()) {//And the intake lift is under it's holding range...
+                    if (robot.getIntakeLift().getCurrentPosition() < 500) {//And the intake lift is under it's holding range...
                         robot.getIntakeLift().setPower((500 - robot.getIntakeLift().getCurrentPosition()) / 500.0); //Run the lift using a proportional equation
                     } else { //And the intake lift is over it's holding range...
                         robot.getIntakeLift().setPower(0.2); //Hold the intake at it's position

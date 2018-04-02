@@ -107,6 +107,7 @@ public class Westcoast extends Hardware {
             spring.setDirection(Servo.Direction.FORWARD);
         }
         if(intakeServo != null) intakeServo.setPosition(0.2);
+        if(intakePusher != null) intakePusher.setPosition(0.5);
     }
 
     public void driveIntakeVertical(double power){
