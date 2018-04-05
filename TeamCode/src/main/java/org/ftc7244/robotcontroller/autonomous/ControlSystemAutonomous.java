@@ -97,6 +97,16 @@ public abstract class ControlSystemAutonomous extends LinearOpMode {
         return end;
     }
 
+    protected void outtake(){
+        robot.getIntakeTopLeft().setPower(0);
+        robot.getIntakeTopRight().setPower(0);
+        robot.getIntakeTop().setPower(1);
+        robot.getIntakeBottom().setPower(1);
+        robot.getIntakePusher().setPosition(Westcoast.INTAKE_PUSHER_OUT);
+        sleep(500);
+        robot.getIntakePusher().setPosition(0.5);
+    }
+
     /**
      * The custom autonomous procedure
      * @throws InterruptedException if code fails to terminate on stop requested

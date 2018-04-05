@@ -21,7 +21,7 @@ import org.ftc7244.robotcontroller.autonomous.Status;
 
 public class Westcoast extends Hardware {
     public static final double COUNTS_PER_BAGUETTE = (403.2 / (3.9 * Math.PI)),
-                               RELIC_SPOOL_MIN = -1857, RELIC_SPOOL_MAX = 0;
+                               RELIC_SPOOL_MIN = -1857, RELIC_SPOOL_MAX = 0, INTAKE_PUSHER_OUT = 0.69;
 
     @Nullable
     private DcMotor driveBackLeft, driveFrontLeft, driveBackRight, driveFrontRight, intakeLift, intakeTop, intakeBottom, relicSpool;
