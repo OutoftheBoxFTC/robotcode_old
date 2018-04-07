@@ -95,7 +95,7 @@ public class RedRight extends ControlSystemAutonomous {
         switch(image){
             case LEFT:
                 gyroscopePID.rotate(-125);
-                gyroscopePID.drive(1, 20);
+                gyroscopePID.drive(1, 17);
                 break;
             case RIGHT:
                 gyroscopePID.rotate(-102.5);
