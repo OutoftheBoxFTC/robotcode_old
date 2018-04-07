@@ -98,13 +98,14 @@ public abstract class ControlSystemAutonomous extends LinearOpMode {
     }
 
     protected void outtake(){
-        robot.getIntakeTopLeft().setPower(0);
-        robot.getIntakeTopRight().setPower(0);
+        robot.getIntakeBottomRight().setPower(0.5);
+        robot.getIntakeBottomLeft().setPower(0.5);
         robot.getIntakeTop().setPower(1);
         robot.getIntakeBottom().setPower(1);
         robot.getIntakePusher().setPosition(Westcoast.INTAKE_PUSHER_OUT);
-        sleep(500);
-        robot.getIntakePusher().setPosition(0.5);
+        sleep(1000);
+        robot.getIntakeBottomRight().setPower(0);
+        robot.getIntakeBottomLeft().setPower(0);
     }
 
     /**

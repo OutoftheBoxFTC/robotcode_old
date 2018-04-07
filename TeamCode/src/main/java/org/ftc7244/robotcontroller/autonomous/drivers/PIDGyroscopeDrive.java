@@ -67,8 +67,8 @@ public class PIDGyroscopeDrive extends DriveControl {
        return reading;
     }
 
-    public void drive(double power, double baguette) throws InterruptedException {
-        if(baguette!=0)drive(power, baguette, target);
+    public void drive(double power, double memes) throws InterruptedException {
+        if(memes!=0)drive(power, memes, target);
     }
 
     /**
