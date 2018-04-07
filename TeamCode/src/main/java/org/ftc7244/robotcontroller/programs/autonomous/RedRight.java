@@ -86,16 +86,16 @@ public class RedRight extends ControlSystemAutonomous {
         robot.getIntakeLift().setPower(1);
         while (robot.getIntakeLift().getCurrentPosition()<=300){}
         robot.getIntakeLift().setPower(0.1);
-        if(image.equals(RelicRecoveryVuMark.LEFT))
-            robot.driveIntakeVertical(0.5);
         robot.driveIntakeVertical(0.5);
         sleep(50);
         robot.driveIntakeVertical(0);
+        if(image.equals(RelicRecoveryVuMark.LEFT))
+            robot.driveIntakeVertical(0.5);
         gyroscopePID.drive(-0.8, 30);
         switch(image){
             case LEFT:
                 gyroscopePID.rotate(-125);
-                gyroscopePID.drive(1, 29);
+                gyroscopePID.drive(1, 20);
                 break;
             case RIGHT:
                 gyroscopePID.rotate(-102.5);
