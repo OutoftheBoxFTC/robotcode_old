@@ -75,7 +75,7 @@ public class Teleop extends LinearOpMode {
 
             //Operator
             /**Relic Arm Control*/
-            robot.getRelicSpool().setPower(gamepad2.left_stick_y);
+            robot.getRelicSpool().setPower((gamepad2.left_stick_y < 0 ? -1 : 1) * (gamepad2.left_stick_y * gamepad2.left_stick_y));
             robot.getRelicWrist().setPosition(gamepad2.right_stick_y < -0.1 ? 0.6 : gamepad2.right_stick_y > 0.1 ? 0.1 : robot.getRelicWrist().getPosition());
             robot.getRelicFinger().setPosition(aButton.isPressed() ? 0.375 : 0.7);
 
@@ -89,6 +89,7 @@ public class Teleop extends LinearOpMode {
             if (rightTrigger.isPressed()) {
                 robot.getIntakeBottom().setPower(-1);
                 robot.getIntakeTop().setPower(-1);
+                robot.getIntakePusher().setPosition(0.5);
                 robot.getIntakeBottomRight().setPower(0);
                 robot.getIntakeBottomLeft().setPower(0);
             }

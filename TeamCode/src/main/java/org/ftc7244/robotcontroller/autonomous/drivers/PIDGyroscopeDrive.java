@@ -1,12 +1,17 @@
 package org.ftc7244.robotcontroller.autonomous.drivers;
 
+import android.graphics.Color;
+
 import com.qualcomm.robotcore.hardware.AnalogInput;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.ftc7244.robotcontroller.autonomous.controllers.pid.PIDControllerBuilder;
 import org.ftc7244.robotcontroller.autonomous.controllers.DriveControl;
+import org.ftc7244.robotcontroller.autonomous.terminators.ColorSensorTerminator;
 import org.ftc7244.robotcontroller.autonomous.terminators.ConditionalTerminator;
 import org.ftc7244.robotcontroller.autonomous.terminators.RangeTerminator;
+import org.ftc7244.robotcontroller.autonomous.terminators.TerminationMode;
 import org.ftc7244.robotcontroller.autonomous.terminators.Terminator;
 import org.ftc7244.robotcontroller.autonomous.terminators.TimerTerminator;
 import org.ftc7244.robotcontroller.hardware.Hardware;
@@ -81,7 +86,7 @@ public class PIDGyroscopeDrive extends DriveControl {
      * @throws InterruptedException if code fails to terminate on stop requested
      */
     public void drive(double power, double units, final double target) {
-        final double ticks = units * Westcoast.COUNTS_PER_BAGUETTE;
+        final double ticks = units * Westcoast.COUNTS_PER_INCH;
         robot.resetDriveEncoders();
         if (units <= 0) RobotLog.e("Invalid distances!");
         final int offset = robot.getDriveEncoderAverage();
@@ -94,13 +99,29 @@ public class PIDGyroscopeDrive extends DriveControl {
         });
     }
 
+    public void driveWithColorSensor(double power, double maxUnits, final ColorSensor colorSensor, int color){
+        final double ticks = maxUnits*Westcoast.COUNTS_PER_INCH;
+        this.target = 0;
+        robot.resetDriveEncoders();
+        if(maxUnits<=0){RobotLog.e("Invalid Distance");}
+        final int offset = robot.getDriveEncoderAverage();
+        control(target, power, new ConditionalTerminator(TerminationMode.OR,
+                new ColorSensorTerminator(colorSensor, color, 100, 250),
+                new Terminator() {
+                    @Override
+                    public boolean shouldTerminate() {
+                        return Math.abs(robot.getDriveEncoderAverage()-offset)>=ticks;
+                    }
+                }));
+    }
+
     /**
      * This will combine the rotate function from the PID loop with a power offset. The power offset
      * then will then be added to the PID to get the drive. It is important to note that both motors
      * are reset before driving is started and will end once it reaches it's target in inches, or until a limit switch is pressed.
      */
     public void driveWithLimitSwitch(double power, double units, final AnalogInput LimitSwitch){
-        final double ticks = units * Westcoast.COUNTS_PER_BAGUETTE;
+        final double ticks = units * Westcoast.COUNTS_PER_INCH;
         this.target = 0;
         robot.resetDriveMotors();
         if (units <= 0){RobotLog.e("Invalid Distance");}

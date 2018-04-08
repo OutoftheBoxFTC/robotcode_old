@@ -1,17 +1,17 @@
 package org.ftc7244.robotcontroller.programs.debug;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.ftc7244.robotcontroller.hardware.Westcoast;
 
-@Autonomous(name = "Color Sensor Debug")
-//@Disabled
-public class ColourSensorDebug extends LinearOpMode {
+/**
+ * Created by ftc72 on 4/8/2018.
+ */
+
+public class DriveColorDebug extends LinearOpMode {
     @Override
-    public void runOpMode(){
+    public void runOpMode() {
         Westcoast robot = new Westcoast(this);
         Double grayscale;
         robot.init();

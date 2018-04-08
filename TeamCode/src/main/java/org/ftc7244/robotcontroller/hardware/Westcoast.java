@@ -20,7 +20,7 @@ import org.ftc7244.robotcontroller.Debug;
 import org.ftc7244.robotcontroller.autonomous.Status;
 
 public class Westcoast extends Hardware {
-    public static final double COUNTS_PER_BAGUETTE = (403.2 / (3.9 * Math.PI)),
+    public static final double COUNTS_PER_INCH = (403.2 / (3.9 * Math.PI)),
                                RELIC_SPOOL_MIN = -1857, RELIC_SPOOL_MAX = 0, INTAKE_PUSHER_OUT = 0.69;
 
     @Nullable
@@ -32,14 +32,14 @@ public class Westcoast extends Hardware {
     @Nullable
     private AnalogInput bottomIntakeSwitch;
     @Nullable
-    private ColorSensor jewelSensor;
+    private ColorSensor jewelSensor, driveColor;
     @Nullable
     private DistanceSensor jewelDistance;
     @Nullable
     private NavxMicroNavigationSensor navX;
 
     public Westcoast(OpMode opMode) {
-        super(opMode, COUNTS_PER_BAGUETTE);
+        super(opMode, COUNTS_PER_INCH);
     }
     private int blueOffset, redOffset;
 
@@ -53,6 +53,7 @@ public class Westcoast extends Hardware {
         HardwareMap map = opMode.hardwareMap;
 
         this.jewelSensor = getOrNull(map.colorSensor, "jewelSensor");
+        this.driveColor = getOrNull(map.colorSensor, "driveColor");
         this.jewelDistance = map.get(DistanceSensor.class, "jewelSensor");
         this.spring = getOrNull(map.servo, "spring");
         this.intakeServo = getOrNull(map.servo, "intakeServo");
@@ -140,7 +141,7 @@ public class Westcoast extends Hardware {
     @Override
     public void driveToInch(double power, double inches){
         resetDriveMotors();
-        double target = inches * COUNTS_PER_BAGUETTE;
+        double target = inches * COUNTS_PER_INCH;
         drive(power, power);
         while(!Status.isStopRequested() && getDriveEncoderAverage() <= target);
         drive(0, 0);
@@ -346,5 +347,10 @@ public class Westcoast extends Hardware {
     @Nullable
     public Servo getIntakePusher() {
         return intakePusher;
+    }
+
+    @Nullable
+    public ColorSensor getDriveColor() {
+        return driveColor;
     }
 }
