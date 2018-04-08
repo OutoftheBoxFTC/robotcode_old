@@ -118,9 +118,13 @@ public class Westcoast extends Hardware {
     }
 
     @Override
-    public void drive(double leftPower, double rightPower, long timeMillis) throws InterruptedException{
+    public void drive(double leftPower, double rightPower, long timeMillis){
        drive(leftPower, -rightPower);
-        sleep(timeMillis);
+        try {
+            sleep(timeMillis);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         drive(0, 0);
     }
 
@@ -200,7 +204,7 @@ public class Westcoast extends Hardware {
      * @param color color jewel to be knocked off the pedestal
      * @throws InterruptedException if code fails to terminate on stop requested
      */
-    public void knockOverJewel(int color) throws InterruptedException {
+    public void knockOverJewel(int color) {
         //color we want to get rid of
         getJewelVertical().setPosition(0.16);
         getJewelHorizontal().setPosition(0.45);
@@ -218,10 +222,18 @@ public class Westcoast extends Hardware {
             getJewelHorizontal().setPosition(isColor(Color.RED) ? 0.33 : 0.56);
         else if(color==Color.BLUE)
             getJewelHorizontal().setPosition(isColor(Color.RED) ? 0.56 : 0.33);
-        sleep(250);
+        try {
+            sleep(250);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         getJewelHorizontal().setPosition(0.73);
         getJewelVertical().setPosition(0.67);
-        sleep(500);
+        try {
+            sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Nullable

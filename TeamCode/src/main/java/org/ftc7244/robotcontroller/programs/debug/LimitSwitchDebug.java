@@ -10,7 +10,7 @@ import org.ftc7244.robotcontroller.autonomous.ControlSystemAutonomous;
 @Disabled
 public class LimitSwitchDebug extends ControlSystemAutonomous{
     @Override
-    public void run() throws InterruptedException {
+    public void run(){
         waitForStart();
         while(opModeIsActive()){
             telemetry.addData("Pressed?", robot.getBottomIntakeSwitch().getVoltage());

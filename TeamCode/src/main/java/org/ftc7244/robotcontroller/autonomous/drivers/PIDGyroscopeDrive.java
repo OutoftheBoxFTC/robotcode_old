@@ -67,7 +67,7 @@ public class PIDGyroscopeDrive extends DriveControl {
        return reading;
     }
 
-    public void drive(double power, double memes) throws InterruptedException {
+    public void drive(double power, double memes){
         if(memes!=0)drive(power, memes, target);
     }
 
@@ -80,7 +80,7 @@ public class PIDGyroscopeDrive extends DriveControl {
      * @param units total distance to travel
      * @throws InterruptedException if code fails to terminate on stop requested
      */
-    public void drive(double power, double units, final double target) throws InterruptedException {
+    public void drive(double power, double units, final double target) {
         final double ticks = units * Westcoast.COUNTS_PER_BAGUETTE;
         robot.resetDriveEncoders();
         if (units <= 0) RobotLog.e("Invalid distances!");
@@ -99,7 +99,7 @@ public class PIDGyroscopeDrive extends DriveControl {
      * then will then be added to the PID to get the drive. It is important to note that both motors
      * are reset before driving is started and will end once it reaches it's target in inches, or until a limit switch is pressed.
      */
-    public void driveWithLimitSwitch(double power, double units, final AnalogInput LimitSwitch) throws InterruptedException {
+    public void driveWithLimitSwitch(double power, double units, final AnalogInput LimitSwitch){
         final double ticks = units * Westcoast.COUNTS_PER_BAGUETTE;
         this.target = 0;
         robot.resetDriveMotors();
@@ -120,7 +120,7 @@ public class PIDGyroscopeDrive extends DriveControl {
      * @param degrees target orientation in degrees
      * @throws InterruptedException if code fails to terminate on stop requested
      */
-    public void rotate(double degrees) throws InterruptedException {
+    public void rotate(double degrees){
         if(degrees!=0){
             this.target = degrees;
             control(degrees, 0, new ConditionalTerminator(new RangeTerminator(this, degrees, 1.5), new TimerTerminator(6000)));
@@ -132,7 +132,7 @@ public class PIDGyroscopeDrive extends DriveControl {
      *
      * @throws InterruptedException if code fails to terminate on stop requested
      */
-    public void resetOrientation() throws InterruptedException {
+    public void resetOrientation() {
         gyroProvider.setZOffset(gyroProvider.getZOffset());
     }
 

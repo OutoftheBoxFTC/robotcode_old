@@ -46,7 +46,7 @@ public abstract class ControlSystemAutonomous extends LinearOpMode {
     }
 
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode(){
         Logger.init();
 
         robot.init();
@@ -112,6 +112,6 @@ public abstract class ControlSystemAutonomous extends LinearOpMode {
      * The custom autonomous procedure
      * @throws InterruptedException if code fails to terminate on stop requested
      */
-    public abstract void run() throws InterruptedException;
+    public abstract void run();
 
 }

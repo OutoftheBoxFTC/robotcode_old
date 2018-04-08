@@ -48,7 +48,7 @@ public abstract class DriveControl {
      * @param terminator  tells the control loop when to stop
      * @throws InterruptedException if the code fails to stop on finish request
      */
-    protected void control(double target, double powerOffset, @NonNull Terminator terminator) throws InterruptedException {
+    protected void control(double target, double powerOffset, @NonNull Terminator terminator){
         //setup the control loop
         controller.reset();
         controller.setTarget(target);

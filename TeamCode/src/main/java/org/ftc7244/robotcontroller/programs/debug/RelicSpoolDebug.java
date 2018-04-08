@@ -15,7 +15,7 @@ public class RelicSpoolDebug extends LinearOpMode{
     private Westcoast robot;
 
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode(){
         robot = new Westcoast(this);
         robot.init();
         waitForStart();

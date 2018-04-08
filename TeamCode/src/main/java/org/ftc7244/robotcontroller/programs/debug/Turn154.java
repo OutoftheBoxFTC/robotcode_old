@@ -11,7 +11,7 @@ import org.ftc7244.robotcontroller.autonomous.ControlSystemAutonomous;
 public class Turn154 extends ControlSystemAutonomous{
 
     @Override
-    public void run() throws InterruptedException {
+    public void run(){
         robot.getIntakeLift().setPower(1);
         sleep(100);
         robot.getIntakeLift().setPower(0.1);

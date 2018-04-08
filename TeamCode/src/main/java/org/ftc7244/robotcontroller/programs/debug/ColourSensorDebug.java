@@ -11,7 +11,7 @@ import org.ftc7244.robotcontroller.hardware.Westcoast;
 //@Disabled
 public class ColourSensorDebug extends LinearOpMode {
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode(){
         Westcoast robot = new Westcoast(this);
         Double grayscale;
         robot.init();

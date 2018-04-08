@@ -12,7 +12,7 @@ import org.ftc7244.robotcontroller.autonomous.ControlSystemAutonomous;
 @Disabled
 public class EncoderTickRecord extends ControlSystemAutonomous {
     @Override
-    public void run() throws InterruptedException {
+    public void run() {
         while (opModeIsActive()){
             telemetry.addData("Encoder", robot.getDriveEncoderAverage());
             telemetry.update();

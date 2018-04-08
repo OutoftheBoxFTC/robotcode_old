@@ -10,7 +10,7 @@ import org.ftc7244.robotcontroller.hardware.Westcoast;
 public class VuforiaTest extends ControlSystemAutonomous {
 
     @Override
-    public void run() throws InterruptedException {
+    public void run(){
         Westcoast robot = new Westcoast(this);
         robot.init();
         robot.initServos();

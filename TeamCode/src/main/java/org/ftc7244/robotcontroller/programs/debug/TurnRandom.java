@@ -17,7 +17,7 @@ import org.ftc7244.robotcontroller.autonomous.ControlSystemAutonomous;
 public class TurnRandom extends ControlSystemAutonomous {
 
     @Override
-    public void run() throws InterruptedException {
+    public void run(){
         double degrees = Math.random()*360;
         gyroscopePID.rotate(degrees);
         telemetry.addData("Degrees", degrees);

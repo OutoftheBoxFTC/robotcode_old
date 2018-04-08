@@ -16,7 +16,7 @@ import org.ftc7244.robotcontroller.hardware.Westcoast;
 @Autonomous(name = "Red Right")
 public class RedRight extends ControlSystemAutonomous {
 
-    public void run() throws InterruptedException{
+    public void run(){
         RelicRecoveryVuMark image = imageProvider.getImageReading();
         long lastTime = System.nanoTime();
         while(image == RelicRecoveryVuMark.UNKNOWN&&System.nanoTime()-lastTime<=2000000000){
@@ -26,7 +26,6 @@ public class RedRight extends ControlSystemAutonomous {
 
         telemetry.addData("Image", image);
         telemetry.update();
-
         robot.knockOverJewel(Color.BLUE);//Check color sensor
         robot.getIntakeTop().setPower(-1);
         robot.driveToInch(.3, 38);//Drive off balancing stone
@@ -91,19 +90,22 @@ public class RedRight extends ControlSystemAutonomous {
         robot.driveIntakeVertical(0);
         if(image.equals(RelicRecoveryVuMark.LEFT))
             robot.driveIntakeVertical(0.5);
-        gyroscopePID.drive(-0.8, 30);
         switch(image){
             case LEFT:
+                gyroscopePID.drive(-0.8, 20);
                 gyroscopePID.rotate(-125);
-                gyroscopePID.drive(1, 17);
+                gyroscopePID.drive(1, 21);
                 break;
             case RIGHT:
+                gyroscopePID.drive(-0.8, 10);
                 gyroscopePID.rotate(-102.5);
-                gyroscopePID.drive(0.5, 21);
+                gyroscopePID.drive(0.5, 31);
                 break;
             default:
-                gyroscopePID.rotate(-103);
-                gyroscopePID.drive(0.5, 27);
+                gyroscopePID.drive(-0.8, 20);
+                gyroscopePID.rotate(-105);
+                gyroscopePID.drive(0.5, 29);
+                break;
         }
         robot.driveIntakeVertical(0);
         robot.getIntakeServo().setPosition(0.8);

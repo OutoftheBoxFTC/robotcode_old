@@ -14,6 +14,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
+import org.ftc7244.robotcontroller.autonomous.Status;
 import org.ftc7244.robotcontroller.sensor.DataFilter;
 import org.ftc7244.robotcontroller.sensor.SensorProvider;
 
@@ -134,7 +135,7 @@ public class ImageTransformProvider extends SensorProvider implements Runnable {
     public void run() {
         VectorF translation;
         Orientation rotation;
-        while (running) {
+        while (running && !Status.isStopRequested()) {
             if (!RelicRecoveryVuMark.from(template).equals(RelicRecoveryVuMark.UNKNOWN)) {
                 OpenGLMatrix transform = ((VuforiaTrackableDefaultListener) template.getListener()).getPose();
                 translation = transform.getTranslation();
@@ -151,7 +152,7 @@ public class ImageTransformProvider extends SensorProvider implements Runnable {
             try {
                 Thread.sleep(UPDATE_INTERVAL);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+
             }
         }
     }

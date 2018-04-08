@@ -14,7 +14,7 @@ import org.ftc7244.robotcontroller.autonomous.ControlSystemAutonomous;
 @Autonomous(name = "Red Left")
 public class RedLeft extends ControlSystemAutonomous {
 
-    public void run() throws InterruptedException{
+    public void run(){
         RelicRecoveryVuMark image = imageProvider.getImageReading();
         long lastTime = System.nanoTime();
         while(image == RelicRecoveryVuMark.UNKNOWN&&System.nanoTime()-lastTime<=2000000000){
@@ -38,22 +38,22 @@ public class RedLeft extends ControlSystemAutonomous {
         sleep(100);
         robot.getIntakeLift().setPower(0.1);
         sleep(150);//Let block come into intake
-        gyroscopePID.drive(-0.75, 3);
+        gyroscopePID.drive(-0.75, 1);
         int relicExtend = 1000, degrees=10;
         switch (image){
             case LEFT:
                 gyroscopePID.rotate(-60); //-150
-                gyroscopePID.drive(0.5, 47);
+                gyroscopePID.drive(0.5, 45);
                 break;
             case RIGHT:
                 gyroscopePID.rotate(-80); //-170
-                gyroscopePID.drive(0.5, 36);
+                gyroscopePID.drive(0.5, 34);
                 relicExtend = 1200;
                 degrees=15;
                 break;
             default:
                 gyroscopePID.rotate(-71); //-161
-                gyroscopePID.drive(0.5, 42);
+                gyroscopePID.drive(0.5, 40);
                 relicExtend = 1200;
         }
         robot.getIntakeBottom().setPower(1);

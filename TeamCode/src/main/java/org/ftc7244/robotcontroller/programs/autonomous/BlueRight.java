@@ -13,7 +13,7 @@ import org.ftc7244.robotcontroller.autonomous.ControlSystemAutonomous;
 @Autonomous(name = "Blue Right")
 public class BlueRight extends ControlSystemAutonomous {
     @Override
-    public void run() throws InterruptedException {
+    public void run() {
         RelicRecoveryVuMark image = imageProvider.getImageReading();
         long lastTime = System.nanoTime();
         while(image == RelicRecoveryVuMark.UNKNOWN&&System.nanoTime()-lastTime<=2000000000){

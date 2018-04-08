@@ -13,7 +13,7 @@ import org.ftc7244.robotcontroller.autonomous.ControlSystemAutonomous;
 //@Disabled
 public class ColorSensorTestBlue extends ControlSystemAutonomous {
     @Override
-    public void run() throws InterruptedException {
+    public void run(){
         robot.init();
         robot.initServos();
         waitForStart();
