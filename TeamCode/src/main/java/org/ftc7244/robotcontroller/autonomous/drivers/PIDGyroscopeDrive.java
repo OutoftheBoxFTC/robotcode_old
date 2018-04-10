@@ -106,7 +106,13 @@ public class PIDGyroscopeDrive extends DriveControl {
         if(maxUnits<=0){RobotLog.e("Invalid Distance");}
         final int offset = robot.getDriveEncoderAverage();
         control(target, power, new ConditionalTerminator(TerminationMode.OR,
-                new ColorSensorTerminator(colorSensor, color, 0)));
+                new ColorSensorTerminator(colorSensor, color, 0),
+                new Terminator() {
+                    @Override
+                    public boolean shouldTerminate() {
+                        return Math.abs(robot.getDriveEncoderAverage() - offset) >= ticks;
+                    }
+                }));
     }
 
     /**

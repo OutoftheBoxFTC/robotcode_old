@@ -350,7 +350,7 @@ public class Westcoast extends Hardware {
     }
 
     @Nullable
-    public ColorSensor getDriveColor() {
+    public ColorSensor getDriveColorSensor() {
         return driveColor;
     }
 }

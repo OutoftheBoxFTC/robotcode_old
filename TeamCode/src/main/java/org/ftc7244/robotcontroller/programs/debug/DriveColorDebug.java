@@ -17,10 +17,10 @@ public class DriveColorDebug extends LinearOpMode {
         robot.init();
         waitForStart();
         while(opModeIsActive()){
-            grayscale = ( (0.3 * robot.getDriveColor().red()) + (0.59 * robot.getDriveColor().green()) + (0.11 * robot.getDriveColor().blue()) );
-            telemetry.addData("R", robot.getDriveColor().red());
-            telemetry.addData("G", robot.getDriveColor().green());
-            telemetry.addData("B", robot.getDriveColor().blue());
+            grayscale = ( (0.3 * robot.getDriveColorSensor().red()) + (0.59 * robot.getDriveColorSensor().green()) + (0.11 * robot.getDriveColorSensor().blue()) );
+            telemetry.addData("R", robot.getDriveColorSensor().red());
+            telemetry.addData("G", robot.getDriveColorSensor().green());
+            telemetry.addData("B", robot.getDriveColorSensor().blue());
             telemetry.addData("Grayscale", grayscale);
             telemetry.addData("NaN", grayscale.byteValue());
             telemetry.update();
