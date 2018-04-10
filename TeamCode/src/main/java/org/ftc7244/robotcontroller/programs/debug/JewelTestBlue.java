@@ -9,9 +9,9 @@ import org.ftc7244.robotcontroller.autonomous.ControlSystemAutonomous;
 /**
  * Created by ftc72 on 3/17/2018.
  */
-@Autonomous(name = "Color Sensor Blue Test")
+@Autonomous(name = "Jewel Blue Test")
 //@Disabled
-public class ColorSensorTestBlue extends ControlSystemAutonomous {
+public class JewelTestBlue extends ControlSystemAutonomous {
     @Override
     public void run(){
         robot.init();

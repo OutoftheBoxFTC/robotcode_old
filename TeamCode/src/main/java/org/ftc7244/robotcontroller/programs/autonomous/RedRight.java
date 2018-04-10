@@ -23,7 +23,6 @@ public class RedRight extends ControlSystemAutonomous {
             image = imageProvider.getImageReading();
             sleep(50);
         }
-
         telemetry.addData("Image", image);
         telemetry.update();
         robot.knockOverJewel(Color.BLUE);//Check color sensor

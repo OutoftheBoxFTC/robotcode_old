@@ -59,13 +59,6 @@ public abstract class DriveControl {
             //get control system correction value
             double correction = controller.update(getReading());
             max_power = Math.max(Math.abs(max_power), Math.abs(correction));
-            robot.getOpMode().telemetry.addData("Error", getReading());
-            robot.getOpMode().telemetry.addData("Target", target);
-            robot.getOpMode().telemetry.addData("Encoders", robot.getDriveEncoderAverage());
-            robot.getOpMode().telemetry.addData("Correction", max_power);
-            robot.getOpMode().telemetry.update();
-            Logger.getInstance().queueData("Encoders", robot.getDriveEncoderAverage()).queueData("Target", target);
-            RobotLog.i(getReading() + ":" + correction);
             //debug if wanted
             //take the correction and provide poweroffset
             robot.drive(powerOffset + correction, powerOffset - correction);
@@ -73,10 +66,6 @@ public abstract class DriveControl {
         } while (!terminator.shouldTerminate() && !Status.isStopRequested());
         terminator.terminated(true);
         //kill motors just in case
-        robot.getOpMode().telemetry.addData("Error", getReading());
-        robot.getOpMode().telemetry.addData("Status", target);
-        robot.getOpMode().telemetry.addData("Encoders", robot.getDriveEncoderAverage());
-        robot.getOpMode().telemetry.update();
         robot.drive(0, 0);
     }
 

@@ -99,20 +99,14 @@ public class PIDGyroscopeDrive extends DriveControl {
         });
     }
 
-    public void driveWithColorSensor(double power, double maxUnits, final ColorSensor colorSensor, int color){
+    public void driveWithColorSensor(double power, double maxUnits, final ColorSensor colorSensor, ColorSensorTerminator.Color color){
         final double ticks = maxUnits*Westcoast.COUNTS_PER_INCH;
         this.target = 0;
         robot.resetDriveEncoders();
         if(maxUnits<=0){RobotLog.e("Invalid Distance");}
         final int offset = robot.getDriveEncoderAverage();
         control(target, power, new ConditionalTerminator(TerminationMode.OR,
-                new ColorSensorTerminator(colorSensor, color, 100, 250),
-                new Terminator() {
-                    @Override
-                    public boolean shouldTerminate() {
-                        return Math.abs(robot.getDriveEncoderAverage()-offset)>=ticks;
-                    }
-                }));
+                new ColorSensorTerminator(colorSensor, color, 0)));
     }
 
     /**
