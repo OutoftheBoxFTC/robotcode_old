@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 import org.ftc7244.robotcontroller.autonomous.ControlSystemAutonomous;
+import org.ftc7244.robotcontroller.autonomous.terminators.ColorSensorTerminator;
 
 
 /**
@@ -28,53 +29,41 @@ public class RedLeft extends ControlSystemAutonomous {
         robot.getIntakeBottom().setPower(-1);
         robot.driveToInch(.3, 30);//Drive off balancing stone
         robot.getSpring().setPosition(0.5);//Spring out glyph
-        sleep(750);
-        robot.getIntakeServo().setPosition(0.8);
-        gyroscopePID.rotate(-90);//Rotate to face glyph
-        gyroscopePID.drive(1, 28);
-        robot.getIntakeServo().setPosition(0.2);
-        sleep(1000);
+        sleep(350);
+        robot.getIntakeServo().setPosition(0.75);
         robot.getIntakeLift().setPower(1);
-        sleep(100);
+        while (robot.getIntakeLift().getCurrentPosition()<=200){}
         robot.getIntakeLift().setPower(0.1);
-        sleep(150);//Let block come into intake
-        gyroscopePID.drive(-0.75, 1);
-        int relicExtend = 1000, degrees=10;
+        gyroscopePID.rotate(-75);//Rotate to face glyph
+        gyroscopePID.driveWithColorSensor(0.6, 28, robot.getDriveColor(), ColorSensorTerminator.Color.RED);
+        robot.getIntakeServo().setPosition(0.2);
+        robot.getIntakeLift().setPower(-1);
+        while (robot.getIntakeLift().getCurrentPosition()>=100){}
+        robot.getIntakeLift().setPower(0.1);
+        sleep(250);
+        robot.driveIntakeVertical(0.5);
+        sleep(100);
+        robot.driveIntakeVertical(0);
+        gyroscopePID.drive(-0.5, 1);
         switch (image){
             case LEFT:
-                gyroscopePID.rotate(-60); //-150
-                gyroscopePID.drive(0.5, 45);
+                gyroscopePID.rotate(-151); //-150
+                gyroscopePID.drive(0.8, 41);
+                gyroscopePID.drive(0.5, 4);
                 break;
             case RIGHT:
-                gyroscopePID.rotate(-80); //-170
-                gyroscopePID.drive(0.5, 34);
-                relicExtend = 1200;
-                degrees=15;
+                gyroscopePID.rotate(-168); //-170
+                gyroscopePID.drive(0.8, 36);
+                gyroscopePID.drive(0.5, 4);
                 break;
             default:
-                gyroscopePID.rotate(-71); //-161
-                gyroscopePID.drive(0.5, 40);
-                relicExtend = 1200;
+                gyroscopePID.rotate(-159); //-161
+                gyroscopePID.drive(0.8, 40);
+                gyroscopePID.drive(0.5, 4);
         }
-        robot.getIntakeBottom().setPower(1);
-        robot.getIntakeTop().setPower(1);
-        sleep(1000);
-        gyroscopePID.drive(-0.3, 11);
-        gyroscopePID.drive(0.5, 9);
-        gyroscopePID.drive(-1, 13);
-        gyroscopePID.rotate(170); //9
-        robot.getIntakeServo().setPosition(0.8);
-        robot.getIntakeTop().setPower(-1);
-        robot.getIntakeBottom().setPower(-1);
-        gyroscopePID.drive(0.5, 30);
-        robot.getIntakeServo().setPosition(0.2);
-        sleep(500);
-        robot.getIntakeLift().setPower(-1);
-        sleep(100);
-        robot.getIntakeLift().setPower(0);
-        gyroscopePID.rotate(degrees); //19
-        robot.getRelicSpool().setPower(-1);
-        while (robot.getRelicSpool().getCurrentPosition()>-relicExtend);
-        robot.getRelicSpool().setPower(0);
+        outtake();
+        robot.getIntakePusher().setPosition(0.5);
+        gyroscopePID.drive(-1, 6);
     }
+
 }

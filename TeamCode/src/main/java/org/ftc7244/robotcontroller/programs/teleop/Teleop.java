@@ -80,7 +80,7 @@ public class Teleop extends LinearOpMode {
             robot.getRelicFinger().setPosition(aButton.isPressed() ? 0.375 : 0.7);
 
             /**Glyph Control*/
-            robot.getIntakeServo().setPosition(rightBumper.isPressed() ? 0.8 : 0.2);
+            robot.getIntakeServo().setPosition(rightBumper.isPressed() ? 0.75 : 0.2);
             robot.driveIntakeVertical(bButton.isPressed() ? .5 : yButton.isPressed() ? -.5 : 0);
             if(dPadUp.isPressed() || dPadDown.isPressed()){
                 robot.getIntakeLift().setPower(dPadDown.isPressed() ? -1 : 1);

@@ -32,7 +32,7 @@ public class RedRight extends ControlSystemAutonomous {
         robot.getSpring().setPosition(0.5);//Spring out glyph
         robot.getIntakeLift().setPower(1);
         while (robot.getIntakeLift().getCurrentPosition()<=400){}
-        robot.getIntakeServo().setPosition(0.8);
+        robot.getIntakeServo().setPosition(0.75);
         robot.getIntakeLift().setPower(0.1);
         sleep(150);//Let block come into intake
         gyroscopePID.rotate(50);
