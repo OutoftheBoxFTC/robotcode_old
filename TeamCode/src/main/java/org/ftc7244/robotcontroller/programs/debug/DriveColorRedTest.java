@@ -14,6 +14,6 @@ import org.ftc7244.robotcontroller.autonomous.terminators.ColorSensorTerminator;
 public class DriveColorRedTest extends ControlSystemAutonomous {
     @Override
     public void run() {
-        gyroscopePID.driveWithColorSensor(0.6, 50, robot.getDriveColorSensor(), ColorSensorTerminator.Color.RED);
+        gyroscopePID.driveWithColorSensor(0.6, 50, robot.getDriveColor(), ColorSensorTerminator.Color.RED);
     }
 }

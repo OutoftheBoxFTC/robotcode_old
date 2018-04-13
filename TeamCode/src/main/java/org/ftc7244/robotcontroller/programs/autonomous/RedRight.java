@@ -5,8 +5,10 @@ import android.graphics.Color;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
+import org.ftc7244.datalogger.Logger;
 import org.ftc7244.robotcontroller.autonomous.ControlSystemAutonomous;
 import org.ftc7244.robotcontroller.autonomous.terminators.ColorSensorTerminator;
+import org.ftc7244.robotcontroller.hardware.Westcoast;
 
 
 /**
@@ -35,8 +37,7 @@ public class RedRight extends ControlSystemAutonomous {
         sleep(150);//Let block come into intake
         gyroscopePID.rotate(50);
         robot.getIntakeBottom().setPower(-1);
-        gyroscopePID.drive(1, 10);//Drive to glyph pit
-        //0.2 : 0.75
+        gyroscopePID.driveWithColorSensor(0.6, 20, robot.getDriveColor(), ColorSensorTerminator.Color.RED);
         robot.getIntakeServo().setPosition(0.2);
         sleep(250);
         robot.getIntakeLift().setPower(-1);
@@ -51,22 +52,22 @@ public class RedRight extends ControlSystemAutonomous {
         gyroscopePID.drive(-1, 3);
         switch(image){
             case LEFT:
-                gyroscopePID.rotate(-109); //-108
-                gyroscopePID.driveWithColorSensor(0.6, 36, robot.getDriveColorSensor(), ColorSensorTerminator.Color.RED);
+                gyroscopePID.rotate(-110); //-108
+                gyroscopePID.drive(0.5, 38);
                 gyroscopePID.drive(.3,4);
                 break;
             case RIGHT:
-                gyroscopePID.rotate(-124);//-124
-                gyroscopePID.driveWithColorSensor(0.6, 44, robot.getDriveColorSensor(), ColorSensorTerminator.Color.RED);
+                gyroscopePID.rotate(-125);//-124
+                gyroscopePID.drive(0.5, 45);
                 gyroscopePID.drive(.3,4);
                 break;
             default:
-                gyroscopePID.rotate(-117);//-115
-                gyroscopePID.driveWithColorSensor(0.6, 40, robot.getDriveColorSensor(), ColorSensorTerminator.Color.RED);
+                gyroscopePID.rotate(-118);//-115
+                gyroscopePID.drive(0.5, 40);
                 gyroscopePID.drive(.3, 6);
         }
         outtake();
-        gyroscopePID.driveWithColorSensor(-0.6, 30, robot.getDriveColorSensor(), ColorSensorTerminator.Color.RED);
+        gyroscopePID.drive(-0.6, 30);
         robot.getIntakePusher().setPosition(0.5);
         gyroscopePID.rotate(60);
         robot.getIntakeTop().setPower(-1);
@@ -88,31 +89,25 @@ public class RedRight extends ControlSystemAutonomous {
         robot.driveIntakeVertical(0);
         if(image.equals(RelicRecoveryVuMark.LEFT))
             robot.driveIntakeVertical(0.5);
+        gyroscopePID.driveWithColorSensor(-0.6, 30, robot.getDriveColor(), ColorSensorTerminator.Color.RED);
         switch(image){
             case LEFT:
-                gyroscopePID.drive(-0.8, 20);
-                gyroscopePID.rotate(-125);
-                gyroscopePID.driveWithColorSensor(0.6, 36, robot.getDriveColorSensor(), ColorSensorTerminator.Color.RED);
-                gyroscopePID.drive(0.5, 3);
+                gyroscopePID.rotate(-126);
+                gyroscopePID.drive(1, 36);
                 break;
             case RIGHT:
-                gyroscopePID.drive(-0.8, 10);
-                gyroscopePID.rotate(-102.5);
-                gyroscopePID.driveWithColorSensor(0.6, 31, robot.getDriveColorSensor(), ColorSensorTerminator.Color.RED);
-                gyroscopePID.drive(0.5, 3);
+                gyroscopePID.rotate(-110);
+                gyroscopePID.drive(0.5, 44);
                 break;
             default:
-                gyroscopePID.drive(-0.8, 20);
-                gyroscopePID.rotate(-105);
-                gyroscopePID.driveWithColorSensor(0.6, 29, robot.getDriveColorSensor(), ColorSensorTerminator.Color.RED);
-                gyroscopePID.drive(0.5, 3);
+                gyroscopePID.rotate(-110);
+                gyroscopePID.drive(0.5, 42);
                 break;
         }
         robot.driveIntakeVertical(0);
         robot.getIntakeServo().setPosition(0.8);
         outtake();
-        robot.getIntakeServo().setPosition(0.2);
-        gyroscopePID.drive(-0.5, 7);
+        robot.getIntakeServo().setPosition(0.1);
         robot.getIntakePusher().setPosition(0.5);
     }
 }

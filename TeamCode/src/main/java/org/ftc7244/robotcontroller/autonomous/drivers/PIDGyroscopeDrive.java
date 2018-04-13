@@ -101,7 +101,6 @@ public class PIDGyroscopeDrive extends DriveControl {
 
     public void driveWithColorSensor(double power, double maxUnits, final ColorSensor colorSensor, ColorSensorTerminator.Color color){
         final double ticks = maxUnits*Westcoast.COUNTS_PER_INCH;
-        this.target = 0;
         robot.resetDriveEncoders();
         if(maxUnits<=0){RobotLog.e("Invalid Distance");}
         final int offset = robot.getDriveEncoderAverage();
@@ -122,7 +121,6 @@ public class PIDGyroscopeDrive extends DriveControl {
      */
     public void driveWithLimitSwitch(double power, double units, final AnalogInput LimitSwitch){
         final double ticks = units * Westcoast.COUNTS_PER_INCH;
-        this.target = 0;
         robot.resetDriveMotors();
         if (units <= 0){RobotLog.e("Invalid Distance");}
         final int offset = robot.getDriveEncoderAverage();

@@ -30,13 +30,13 @@ public class ColorSensorTerminator extends Terminator {
     }
 
     public enum Color{
-        RED(90) {
+        RED(60) {
             @Override
             public int getColor(ColorSensor sensor) {
                 return sensor.red();
             }
         },
-        BLUE(60) {
+        BLUE(50) {
             @Override
             public int getColor(ColorSensor sensor) {
                 return sensor.blue();
