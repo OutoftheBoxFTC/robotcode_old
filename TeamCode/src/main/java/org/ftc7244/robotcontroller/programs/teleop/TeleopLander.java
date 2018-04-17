@@ -13,10 +13,10 @@ import org.ftc7244.robotcontroller.input.PressButton;
  * Created on 10/16/2017.
  */
 
-@TeleOp(name = "Teleop")
-public class Teleop extends LinearOpMode {
+@TeleOp(name = "Teleop Lander")
+public class TeleopLander extends LinearOpMode {
     private Westcoast robot;
-    private Button driveLeftTrigger, dPadUp, dPadDown, rightTrigger, leftTrigger, leftBumper, bButton, yButton, driverLeftBumper, rightBumper, driveYButton, xButton;
+    private Button driverRightBumper, dPadUp, dPadDown, rightTrigger, leftTrigger, leftBumper, bButton, yButton, driverLeftBumper, rightBumper, driveYButton, driveXButton;
     private PressButton aButton, driveRightTrigger;
     private static final double SLOW_DRIVE_COEFFICIENT = -0.5, ACTION_BUFFER = 200, INTAKE_PUSHER_OUT = 0.69;
 
@@ -43,7 +43,7 @@ public class Teleop extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         robot = new Westcoast(this);
         driverLeftBumper = new Button(gamepad1, ButtonType.LEFT_BUMPER);
-        driveLeftTrigger = new Button(gamepad1, ButtonType.LEFT_TRIGGER);
+        driverRightBumper = new PressButton(gamepad1, ButtonType.RIGHT_BUMPER);
         dPadUp = new Button(gamepad2, ButtonType.D_PAD_UP);
         dPadDown = new Button(gamepad2, ButtonType.D_PAD_DOWN);
         rightTrigger = new Button(gamepad2, ButtonType.RIGHT_TRIGGER);
@@ -53,7 +53,7 @@ public class Teleop extends LinearOpMode {
         yButton = new Button(gamepad2, ButtonType.Y);
         rightBumper = new Button(gamepad2, ButtonType.RIGHT_BUMPER);
         aButton = new PressButton(gamepad2, ButtonType.A, true);
-        xButton = new PressButton(gamepad2, ButtonType.X);
+        driveXButton = new PressButton(gamepad1, ButtonType.X);
         driveRightTrigger = new PressButton(gamepad1, ButtonType.RIGHT_TRIGGER);
         driveYButton = new PressButton(gamepad1, ButtonType.Y);
 
@@ -64,18 +64,15 @@ public class Teleop extends LinearOpMode {
         robot.initServos();
         while (opModeIsActive()) {
             //Driver
-            double coefficient = driveLeftTrigger.isPressed() ? SLOW_DRIVE_COEFFICIENT : -1;
-            if (driveRightTrigger.isPressed())
-                robot.drive(gamepad1.right_stick_x * coefficient, gamepad1.left_stick_x * coefficient);
-            else
-                robot.drive(gamepad1.left_stick_y * coefficient, gamepad1.right_stick_y * coefficient);
+            double coefficient = driverRightBumper.isPressed()?SLOW_DRIVE_COEFFICIENT:-1;
+            robot.drive(gamepad1.left_stick_y*coefficient, gamepad1.right_stick_y*coefficient);
 
             if (driverLeftBumper.isPressed())
                 robot.getSpring().setPosition(0.5);
 
             //Operator
             /**Relic Arm Control*/
-            robot.getRelicSpool().setPower(xButton.isPressed() ? gamepad2.left_stick_y * 0.5 : gamepad2.left_stick_y);
+            robot.getRelicSpool().setPower(gamepad1.left_trigger-gamepad1.right_trigger);
             robot.getRelicWrist().setPosition(gamepad2.right_stick_y < -0.1 ? 0.6 : gamepad2.right_stick_y > 0.1 ? 0.1 : robot.getRelicWrist().getPosition());
             robot.getRelicFinger().setPosition(aButton.isPressed() ? 0.375 : 0.7);
 

@@ -230,11 +230,7 @@ public class Westcoast extends Hardware {
         }
         getJewelHorizontal().setPosition(0.73);
         getJewelVertical().setPosition(0.67);
-        try {
-            sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
     }
 
     @Nullable

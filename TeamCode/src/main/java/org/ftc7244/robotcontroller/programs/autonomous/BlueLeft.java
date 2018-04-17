@@ -12,7 +12,6 @@ import org.ftc7244.robotcontroller.autonomous.terminators.ColorSensorTerminator;
 /**
  * Created by Eeshwar Laptop on 10/29/2017.
  */
-@Autonomous(name = "Blue Left")
 public class BlueLeft extends ControlSystemAutonomous {
 
     public void run(){
@@ -65,7 +64,7 @@ public class BlueLeft extends ControlSystemAutonomous {
                 gyroscopePID.drive(.3, 1);
         }
         outtake();
-        gyroscopePID.drive(-0.6, 30);
+        gyroscopePID.drive(-0.6, 5);
         robot.getIntakePusher().setPosition(0.5);
         gyroscopePID.rotate(-65);
         robot.getIntakeTop().setPower(-1);

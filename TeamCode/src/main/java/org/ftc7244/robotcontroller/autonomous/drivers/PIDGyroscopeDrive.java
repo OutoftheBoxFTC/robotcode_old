@@ -140,10 +140,8 @@ public class PIDGyroscopeDrive extends DriveControl {
      * @throws InterruptedException if code fails to terminate on stop requested
      */
     public void rotate(double degrees){
-        if(degrees!=0){
-            this.target = degrees;
-            control(degrees, 0, new ConditionalTerminator(new RangeTerminator(this, degrees, 1.5), new TimerTerminator(6000)));
-        }
+        this.target = degrees;
+        control(degrees, 0, new ConditionalTerminator(new RangeTerminator(this, degrees, 1.5), new TimerTerminator(6000)));
     }
 
     /**
