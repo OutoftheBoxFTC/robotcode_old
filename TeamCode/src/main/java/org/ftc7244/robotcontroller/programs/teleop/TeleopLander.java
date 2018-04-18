@@ -62,18 +62,17 @@ public class TeleopLander extends LinearOpMode {
         waitForStart();
         Hardware.resetMotors(robot.getIntakeLift());
         robot.initServos();
+        robot.getSpring().setPosition(0.5);
         while (opModeIsActive()) {
             //Driver
-            double coefficient = driverRightBumper.isPressed()?SLOW_DRIVE_COEFFICIENT:-1;
+            double coefficient = driverRightBumper.isPressed()?SLOW_DRIVE_COEFFICIENT:driverLeftBumper.isPressed() ? SLOW_DRIVE_COEFFICIENT : -1;
             robot.drive(gamepad1.left_stick_y*coefficient, gamepad1.right_stick_y*coefficient);
 
-            if (driverLeftBumper.isPressed())
-                robot.getSpring().setPosition(0.5);
 
             //Operator
             /**Relic Arm Control*/
             robot.getRelicSpool().setPower(gamepad1.left_trigger-gamepad1.right_trigger);
-            robot.getRelicWrist().setPosition(gamepad2.right_stick_y < -0.1 ? 0.6 : gamepad2.right_stick_y > 0.1 ? 0.1 : robot.getRelicWrist().getPosition());
+            robot.getRelicWrist().setPosition(gamepad2.left_stick_y < -0.1 ? 0.6 : gamepad2.left_stick_y > 0.1 ? 0.1 : robot.getRelicWrist().getPosition());
             robot.getRelicFinger().setPosition(aButton.isPressed() ? 0.375 : 0.7);
 
             /**Glyph Control*/
