@@ -44,18 +44,18 @@ public class RedLeft extends ControlSystemAutonomous {
         gyroscopePID.drive(-1, 1);
         switch (image){
             case LEFT:
-                gyroscopePID.rotate(-152); //-150
-                gyroscopePID.drive(1, 41);
+                gyroscopePID.rotate(-154); //-150
+                gyroscopePID.drive(1, 39);
                 gyroscopePID.drive(0.5, 4);
                 break;
             case RIGHT:
-                gyroscopePID.rotate(-168); //-170
+                gyroscopePID.rotate(-171); //-170
                 gyroscopePID.drive(1, 36);
                 gyroscopePID.drive(0.5, 4);
                 break;
             default:
-                gyroscopePID.rotate(-159); //-161
-                gyroscopePID.drive(1, 40);
+                gyroscopePID.rotate(-161); //-161
+                gyroscopePID.drive(1, 37);
                 gyroscopePID.drive(0.5, 4);
         }
         outtake();
@@ -99,13 +99,13 @@ public class RedLeft extends ControlSystemAutonomous {
         gyroscopePID.driveWithColorSensor(-0.6, 30, robot.getDriveColor(), ColorSensorTerminator.Color.RED);
         switch (image) {
             case LEFT:
-                gyroscopePID.rotate(169);
+                gyroscopePID.rotate(170);
                 break;
             case RIGHT:
-                gyroscopePID.rotate(-170);
+                gyroscopePID.rotate(-157);
                 break;
             default:
-                gyroscopePID.rotate(167);
+                gyroscopePID.rotate(175);
         }
         gyroscopePID.drive(1, 26);
         outtake();
