@@ -15,6 +15,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.ftc7244.robotcontroller.autonomous.Status;
+import org.ftc7244.robotcontroller.hardware.Westcoast;
 import org.ftc7244.robotcontroller.sensor.DataFilter;
 import org.ftc7244.robotcontroller.sensor.SensorProvider;
 
@@ -37,11 +38,14 @@ public class ImageTransformProvider extends SensorProvider implements Runnable {
 
     private Thread thread;
 
+    private Westcoast robot;
+
     /**
      * Initializes data filters
      */
-    public ImageTransformProvider() {
+    public ImageTransformProvider(Westcoast robot) {
         vuforiaInitialized = false;
+        this.robot = robot;
         xTrans = new DataFilter(100);
         yTrans = new DataFilter(100);
         zTrans = new DataFilter(100);

@@ -32,25 +32,25 @@ public class RedLeft extends ControlSystemAutonomous {
         sleep(350);
         robot.getIntakeServo().setPosition(0.75);
         robot.getIntakeLift().setPower(1);
-        while (robot.getIntakeLift().getCurrentPosition()<=400){}
+        while (robot.getIntakeLift().getCurrentPosition()<=300){}
         robot.getIntakeLift().setPower(0.1);
         gyroscopePID.rotate(-75);//Rotate to face glyph
         gyroscopePID.driveWithColorSensor(0.6, 28, robot.getDriveColor(), ColorSensorTerminator.Color.RED);
         robot.getIntakeServo().setPosition(0.2);
         robot.getIntakeLift().setPower(1);
-        while(robot.getIntakeLift().getCurrentPosition()<=500){}
+        while(robot.getIntakeLift().getCurrentPosition()<=400){}
         robot.getIntakeLift().setPower(0.1);
         sleep(250);
         gyroscopePID.drive(-1, 1);
         switch (image){
             case LEFT:
-                gyroscopePID.rotate(-154); //-150
+                gyroscopePID.rotate(-152); //-150
                 gyroscopePID.drive(1, 39);
                 gyroscopePID.drive(0.5, 4);
                 break;
             case RIGHT:
-                gyroscopePID.rotate(-171); //-170
-                gyroscopePID.drive(1, 36);
+                gyroscopePID.rotate(-168); //-170
+                gyroscopePID.drive(1, 33);
                 gyroscopePID.drive(0.5, 4);
                 break;
             default:
@@ -102,12 +102,12 @@ public class RedLeft extends ControlSystemAutonomous {
                 gyroscopePID.rotate(170);
                 break;
             case RIGHT:
-                gyroscopePID.rotate(-157);
+                gyroscopePID.rotate(-159);
                 break;
             default:
                 gyroscopePID.rotate(175);
         }
-        gyroscopePID.drive(1, 26);
+        gyroscopePID.drive(1, 25);
         outtake();
         robot.getIntakePusher().setPosition(0.5);
         gyroscopePID.drive(-1, 2);

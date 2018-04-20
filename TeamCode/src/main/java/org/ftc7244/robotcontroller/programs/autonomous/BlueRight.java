@@ -27,35 +27,36 @@ public class BlueRight extends ControlSystemAutonomous {
         robot.knockOverJewel(Color.RED);//Check color sensor
         robot.getIntakeTop().setPower(-1);
         robot.getIntakeBottom().setPower(-1);
-        robot.driveToInch(.3, 30);//Drive off balancing stone
+        robot.driveToInch(.3, 30);//Drive off bal
+        //bancing stone
         robot.getSpring().setPosition(0.5);//Spring out glyph
         sleep(350);
         robot.getIntakeServo().setPosition(0.75);
         robot.getIntakeLift().setPower(1);
-        while (robot.getIntakeLift().getCurrentPosition()<=400){}
+        while (robot.getIntakeLift().getCurrentPosition()<=300){}
         robot.getIntakeLift().setPower(0.1);
-        gyroscopePID.rotate(85);//Rotate to face glyph
+        gyroscopePID.rotate(90);//Rotate to face glyph
         gyroscopePID.driveWithColorSensor(0.6, 28, robot.getDriveColor(), ColorSensorTerminator.Color.RED);
         robot.getIntakeServo().setPosition(0.2);
         robot.getIntakeLift().setPower(1);
-        while(robot.getIntakeLift().getCurrentPosition()<=500){}
+        while(robot.getIntakeLift().getCurrentPosition()<=400){}
         robot.getIntakeLift().setPower(0.1);
         sleep(250);
         gyroscopePID.drive(-1, 1);
         switch (image){
             case RIGHT:
-                gyroscopePID.rotate(146.5); //-150
-                gyroscopePID.drive(1, 41);
+                gyroscopePID.rotate(152.5); //-150
+                gyroscopePID.drive(1, 37);
                 gyroscopePID.drive(0.5, 4);
                 break;
             case LEFT:
-                gyroscopePID.rotate(167); //-170
+                gyroscopePID.rotate(172); //-170
                 gyroscopePID.drive(1, 26);
                 gyroscopePID.drive(0.5, 4);
                 break;
             default:
-                gyroscopePID.rotate(161);
-                gyroscopePID.drive(1, 33);
+                gyroscopePID.rotate(159);
+                gyroscopePID.drive(1, 26);
                 gyroscopePID.drive(0.5, 4);
         }
         outtake();
@@ -72,7 +73,7 @@ public class BlueRight extends ControlSystemAutonomous {
                 gyroscopePID.rotate(5);
         }
         robot.getIntakeLift().setPower(-1);
-        while (robot.getIntakeLift().getCurrentPosition()>=400){}
+        while (robot.getIntakeLift().getCurrentPosition()>=300){}
         robot.getIntakeLift().setPower(0.1);
         robot.getIntakeServo().setPosition(0.75);
         robot.getIntakeTop().setPower(-1);
@@ -98,15 +99,17 @@ public class BlueRight extends ControlSystemAutonomous {
         gyroscopePID.driveWithColorSensor(-0.6, 30, robot.getDriveColor(), ColorSensorTerminator.Color.RED);
         switch (image) {
             case LEFT:
-                gyroscopePID.rotate(160);
+                gyroscopePID.rotate(157);
+                gyroscopePID.drive(1, 27);
                 break;
             case RIGHT:
-                gyroscopePID.rotate(-170);
+                gyroscopePID.rotate(-167);
+                gyroscopePID.drive(1, 27);
                 break;
             default:
-                gyroscopePID.rotate(-179);
+                gyroscopePID.rotate(157);
+                gyroscopePID.drive(1, 24);
         }
-        gyroscopePID.drive(1, 24);
         outtake();
         robot.getIntakePusher().setPosition(0.5);
         gyroscopePID.drive(-1, 2);

@@ -39,7 +39,7 @@ public abstract class ControlSystemAutonomous extends LinearOpMode {
         robot = new Westcoast(this);
 
         gyroProvider = new RevIMUGyroscopeProvider();
-        imageProvider = new ImageTransformProvider();
+        imageProvider = new ImageTransformProvider(robot);
 
         gyroscopePID = new PIDGyroscopeDrive(robot, gyroProvider);
         gyroscopeSP = new SPGyroscopeDrive(robot, gyroProvider);

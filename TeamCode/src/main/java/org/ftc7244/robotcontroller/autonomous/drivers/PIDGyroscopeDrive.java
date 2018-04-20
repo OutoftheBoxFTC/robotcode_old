@@ -72,8 +72,8 @@ public class PIDGyroscopeDrive extends DriveControl {
        return reading;
     }
 
-    public void drive(double power, double memes){
-        if(memes!=0)drive(power, memes, target);
+    public void drive(double power, double units){
+        if(units!=0)drive(power, units, target);
     }
 
     /**

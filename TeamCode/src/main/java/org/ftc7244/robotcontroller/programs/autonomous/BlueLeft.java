@@ -28,7 +28,7 @@ public class BlueLeft extends ControlSystemAutonomous{
         robot.driveToInch(.3, 38);//Drive off balancing stone
         robot.getSpring().setPosition(0.5);//Spring out glyph
         robot.getIntakeLift().setPower(1);
-        while (robot.getIntakeLift().getCurrentPosition()<=400){}
+        while (robot.getIntakeLift().getCurrentPosition()<=300){}
         robot.getIntakeServo().setPosition(0.75);
         robot.getIntakeLift().setPower(0.1);
         sleep(150);//Let block come into intake
@@ -38,7 +38,7 @@ public class BlueLeft extends ControlSystemAutonomous{
         robot.getIntakeServo().setPosition(0.2);
         sleep(250);
         robot.getIntakeLift().setPower(1);
-        while (robot.getIntakeLift().getCurrentPosition()<=500){}
+        while (robot.getIntakeLift().getCurrentPosition()<=400){}
         robot.getIntakeLift().setPower(0.1);
         sleep(100);
         robot.driveIntakeVertical(0);
@@ -58,7 +58,7 @@ public class BlueLeft extends ControlSystemAutonomous{
                 degrees = -75;
                 break;
             default:
-                gyroscopePID.rotate(117);//-115
+                gyroscopePID.rotate(118);//-115
                 gyroscopePID.drive(0.8, 35);
                 gyroscopePID.drive(.3, 4);
         }
@@ -97,7 +97,6 @@ public class BlueLeft extends ControlSystemAutonomous{
                 break;
         }
         robot.driveIntakeVertical(0);
-        robot.getIntakeServo().setPosition(0.8);
         outtake();
         robot.getIntakePusher().setPosition(0.5);
         gyroscopePID.drive(-0.3, 1);
