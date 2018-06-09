@@ -72,7 +72,7 @@ public class TeleopLander extends LinearOpMode {
             //Operator
             /**Relic Arm Control*/
             robot.getRelicSpool().setPower(gamepad1.left_trigger-gamepad1.right_trigger);
-            robot.getRelicWrist().setPosition(gamepad2.left_stick_y < -0.1 ? 0.6 : gamepad2.left_stick_y > 0.1 ? 0.1 : robot.getRelicWrist().getPosition());
+            robot.getRelicWrist().setPosition(gamepad2.left_stick_y < -0.1 ? 0.6 : gamepad2.left_stick_y > 0.1 ? 0.2 : robot.getRelicWrist().getPosition());
             robot.getRelicFinger().setPosition(aButton.isPressed() ? 0.375 : 0.7);
 
             /**Glyph Control*/
@@ -125,8 +125,8 @@ public class TeleopLander extends LinearOpMode {
                         robot.getIntakeLift().setPower(0.2); //hold the intake at it's position
                     }
                 } else { //And a block is NOT in the intake...
-                    if (robot.getIntakeLift().getCurrentPosition() < 500 && !leftTrigger.isPressed()) {//And the intake lift is under it's holding range...
-                        robot.getIntakeLift().setPower((500 - robot.getIntakeLift().getCurrentPosition()) / 500.0); //Run the lift using a proportional equation
+                    if (robot.getIntakeLift().getCurrentPosition() < 490 && !leftTrigger.isPressed()) {//And the intake lift is under it's holding range...
+                        robot.getIntakeLift().setPower((490 - robot.getIntakeLift().getCurrentPosition()) / 490.0); //Run the lift using a proportional equation
                     } else { //And the intake lift is over it's holding range...
                         robot.getIntakeLift().setPower(0.2); //Hold the intake at it's position
 
