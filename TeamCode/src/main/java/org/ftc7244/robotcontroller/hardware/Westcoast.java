@@ -102,7 +102,7 @@ public class Westcoast extends Hardware {
     public void initServos(){
         if(jewelVertical != null) jewelVertical.setPosition(0.67);
         if(jewelHorizontal != null) jewelHorizontal.setPosition(0.73);
-        if(relicWrist != null) relicWrist.setPosition(0.2);
+        if(relicWrist != null) relicWrist.setPosition(0.6);
         if(spring != null){
             spring.setPosition(1);
             spring.setDirection(Servo.Direction.FORWARD);

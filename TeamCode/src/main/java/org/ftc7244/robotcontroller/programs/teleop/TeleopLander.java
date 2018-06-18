@@ -19,7 +19,7 @@ public class TeleopLander extends LinearOpMode {
     private Button driverRightBumper, dPadUp, dPadDown, rightTrigger, leftTrigger, leftBumper, bButton, yButton, driverLeftBumper, rightBumper, driveYButton, driveXButton;
     private PressButton aButton, driveRightTrigger;
     private static final double SLOW_DRIVE_COEFFICIENT = -0.5, ACTION_BUFFER = 200, INTAKE_PUSHER_OUT = 0.69;
-
+    private boolean raised;
     /**
     Driver:
         Left Joystick: Drive Left
@@ -56,7 +56,7 @@ public class TeleopLander extends LinearOpMode {
         driveXButton = new PressButton(gamepad1, ButtonType.X);
         driveRightTrigger = new PressButton(gamepad1, ButtonType.RIGHT_TRIGGER);
         driveYButton = new PressButton(gamepad1, ButtonType.Y);
-
+        raised = false;
         robot.init();
         robot.getIntakeLift().setPower(0.1);
         waitForStart();
@@ -72,7 +72,7 @@ public class TeleopLander extends LinearOpMode {
             //Operator
             /**Relic Arm Control*/
             robot.getRelicSpool().setPower(gamepad1.left_trigger-gamepad1.right_trigger);
-            robot.getRelicWrist().setPosition(gamepad2.left_stick_y < -0.1 ? 0.6 : gamepad2.left_stick_y > 0.1 ? 0.2 : robot.getRelicWrist().getPosition());
+            robot.getRelicWrist().setPosition(gamepad2.left_stick_y < -0.1 ? 0.1 : gamepad2.left_stick_y > 0.1 ? 0.6 : robot.getRelicWrist().getPosition());
             robot.getRelicFinger().setPosition(aButton.isPressed() ? 0.375 : 0.7);
 
             /**Glyph Control*/
@@ -123,10 +123,19 @@ public class TeleopLander extends LinearOpMode {
                         robot.getIntakeLift().setPower(-0.8);//run the intake down
                     } else { //And it is not in the home range...
                         robot.getIntakeLift().setPower(0.2); //hold the intake at it's position
+                        if(!bButton.isPressed() && !raised){
+                            robot.getIntakeTopRight().setPower(0.5);
+                            robot.getIntakeTopLeft().setPower(0.5);
+                            sleep(250);
+                            robot.getIntakeTopRight().setPower(0);
+                            robot.getIntakeTopLeft().setPower(0);
+                            raised = true;
+                        }
                     }
                 } else { //And a block is NOT in the intake...
-                    if (robot.getIntakeLift().getCurrentPosition() < 490 && !leftTrigger.isPressed()) {//And the intake lift is under it's holding range...
-                        robot.getIntakeLift().setPower((490 - robot.getIntakeLift().getCurrentPosition()) / 490.0); //Run the lift using a proportional equation
+                    raised = false;
+                    if (robot.getIntakeLift().getCurrentPosition() < 455 && !leftTrigger.isPressed()) {//And the intake lift is under it's holding range...
+                        robot.getIntakeLift().setPower((455 - robot.getIntakeLift().getCurrentPosition()) / 455.0); //Run the lift using a proportional equation
                     } else { //And the intake lift is over it's holding range...
                         robot.getIntakeLift().setPower(0.2); //Hold the intake at it's position
 
