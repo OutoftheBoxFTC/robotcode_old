@@ -6,6 +6,8 @@ import android.content.res.AssetManager;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -16,41 +18,43 @@ import java.io.InputStream;
 public class FileManager {
     Context context;
     AssetManager am;
-    BufferedInputStream bufferedInputStream;
-    BufferedOutputStream bufferedOutputStream;
+    public BufferedInputStream bufferedInputStream;
+    public BufferedOutputStream bufferedOutputStream;
     String fileName = "PID_tunings.txt";
-    String[] fileList;
+    public String[] fileList;
     File temp;
-    boolean fileExists = false;
+    public boolean fileExists = false;
     String out;
     public FileManager(Context context){
         this.context = context;
     }
 
-    public void initialize() throws IOException {
+    public void initialize() throws IOException, NullPointerException {
         fileList = context.fileList();
         for(int i = 0; i < fileList.length; i ++){
-            if(fileList[i] == fileName){
+            if(fileList[i].compareTo(fileName) == 0){
                 fileExists = true;
                 break;
             }
         }
-        if(fileExists){
-            bufferedOutputStream = new BufferedOutputStream(context.openFileOutput(fileName, 0));
-            bufferedInputStream = new BufferedInputStream(context.openFileInput(fileName));
-        }else{
-            temp = new File(context.getFilesDir(), fileName);
-            bufferedOutputStream = new BufferedOutputStream(context.openFileOutput(fileName, 0));
-            bufferedInputStream = new BufferedInputStream(context.openFileInput(fileName));
-        }
+        temp = new File(context.getFilesDir(), fileName);
+        bufferedInputStream = new BufferedInputStream(new FileInputStream(new File(context.getFilesDir() + "/" + fileName)));
+        bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(new File(context.getFilesDir() + "/" + fileName)));
+        bufferedInputStream.mark(5);
     }
 
     public int readFile(byte[] buffer) throws IOException {
+        bufferedInputStream.reset();
         return bufferedInputStream.read(buffer);
     }
 
     public void writeFile(Double p, Double i, Double d) throws IOException {
         out = (p + "," + i + "," + d);
         bufferedOutputStream.write(out.getBytes(), 0, out.getBytes().length);
+        bufferedOutputStream.flush();
+    }
+
+    public void closeFile() throws IOException {
+        bufferedOutputStream.close();
     }
 }

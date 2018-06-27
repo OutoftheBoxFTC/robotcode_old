@@ -9,10 +9,10 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 /**
- * Created by ftc72 on 6/18/2018.
+ * Created by ftc72 on 6/26/2018.
  */
 @TeleOp
-public class fileIOTests extends OpMode {
+public class fileReadTests extends OpMode {
     FileManager manager;
     byte[] buffer = new byte[128];
     @Override
@@ -24,11 +24,6 @@ public class fileIOTests extends OpMode {
             telemetry.addData("ERROR", e.getMessage());
         } catch(NullPointerException e){
 
-        }
-        try {
-            manager.writeFile(0.1, 0.2, 0.3);
-        } catch (IOException e) {
-            telemetry.addData("ERROR", e.getMessage());
         }
     }
 
@@ -44,17 +39,7 @@ public class fileIOTests extends OpMode {
         } catch (UnsupportedEncodingException e) {
             telemetry.addData("ERROR: ", e.getMessage());
         }
-        telemetry.addData("List", hardwareMap.appContext.getFilesDir());
-
+        telemetry.addData("Exists", manager.fileExists);
         telemetry.update();
-    }
-
-    @Override
-    public void stop(){
-        try {
-            manager.closeFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }
