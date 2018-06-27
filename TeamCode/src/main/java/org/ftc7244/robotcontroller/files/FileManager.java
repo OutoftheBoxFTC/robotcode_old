@@ -7,9 +7,9 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * Created by ftc72 on 6/18/2018.
@@ -22,7 +22,8 @@ public class FileManager {
     public BufferedOutputStream bufferedOutputStream;
     String fileName = "PID_tunings.txt";
     public String[] fileList;
-    File temp;
+    byte[] temp;
+    File file;
     public boolean fileExists = false;
     String out;
     public FileManager(Context context){
@@ -37,10 +38,21 @@ public class FileManager {
                 break;
             }
         }
-        temp = new File(context.getFilesDir(), fileName);
+        file = new File(context.getFilesDir(), fileName);
         bufferedInputStream = new BufferedInputStream(new FileInputStream(new File(context.getFilesDir() + "/" + fileName)));
-        bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(new File(context.getFilesDir() + "/" + fileName)));
         bufferedInputStream.mark(5);
+    }
+
+    public void startWriting() throws IOException {
+        try {
+            bufferedInputStream.read(temp);
+        }catch(NullPointerException e){
+            temp = null;
+        }
+        bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(new File(context.getFilesDir() + "/" + fileName)));
+        if(temp != null) {
+            bufferedOutputStream.write(temp);
+        }
     }
 
     public int readFile(byte[] buffer) throws IOException {

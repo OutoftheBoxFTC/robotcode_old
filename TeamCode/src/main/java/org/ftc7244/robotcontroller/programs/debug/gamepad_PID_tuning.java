@@ -1,12 +1,8 @@
 package org.ftc7244.robotcontroller.programs.debug;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.ftc7244.robotcontroller.autonomous.ControlSystemAutonomous;
 import org.ftc7244.robotcontroller.files.FileManager;
-import org.ftc7244.robotcontroller.input.Button;
-import org.ftc7244.robotcontroller.input.ButtonType;
 
 import java.io.IOException;
 

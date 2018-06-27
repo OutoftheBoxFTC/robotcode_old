@@ -1,7 +1,6 @@
 package org.ftc7244.robotcontroller.programs.debug;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.ftc7244.robotcontroller.files.FileManager;
 
