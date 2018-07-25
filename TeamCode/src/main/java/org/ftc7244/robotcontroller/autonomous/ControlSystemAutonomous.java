@@ -25,7 +25,6 @@ public abstract class ControlSystemAutonomous extends LinearOpMode {
     protected final GyroscopeProvider gyroProvider;
 
     protected final PIDGyroscopeDrive gyroscopePID;
-    protected final SPGyroscopeDrive gyroscopeSP;
 
     protected final ImageTransformProvider imageProvider;
 
@@ -42,7 +41,6 @@ public abstract class ControlSystemAutonomous extends LinearOpMode {
         imageProvider = new ImageTransformProvider(robot);
 
         gyroscopePID = new PIDGyroscopeDrive(robot, gyroProvider);
-        gyroscopeSP = new SPGyroscopeDrive(robot, gyroProvider);
     }
 
     @Override
@@ -77,7 +75,6 @@ public abstract class ControlSystemAutonomous extends LinearOpMode {
             }
 
             gyroscopePID.resetOrientation();
-            gyroscopeSP.resetOrientation();
             end = System.currentTimeMillis() + AUTONOMOUS_DURATION;
             //Calibrates and starts providers
             run();
