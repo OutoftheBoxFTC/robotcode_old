@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.ftc7244.robotcontroller.files.FileManager;
-import org.ftc7244.robotcontroller.network.NetworkManager;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
