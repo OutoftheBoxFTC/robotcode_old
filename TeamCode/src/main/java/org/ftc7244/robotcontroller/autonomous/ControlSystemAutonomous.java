@@ -7,10 +7,13 @@ import com.qualcomm.robotcore.util.RobotLog;
 import org.ftc7244.datalogger.Logger;
 import org.ftc7244.robotcontroller.autonomous.drivers.PIDGyroscopeDrive;
 import org.ftc7244.robotcontroller.autonomous.drivers.SPGyroscopeDrive;
+import org.ftc7244.robotcontroller.files.FileManager;
 import org.ftc7244.robotcontroller.hardware.Westcoast;
 import org.ftc7244.robotcontroller.sensor.gyroscope.GyroscopeProvider;
 import org.ftc7244.robotcontroller.sensor.gyroscope.RevIMUGyroscopeProvider;
 import org.ftc7244.robotcontroller.sensor.vuforia.ImageTransformProvider;
+
+import java.io.IOException;
 
 /**
  * Contains all the code for different drive types including ${@link PIDGyroscopeDrive}.
@@ -24,14 +27,17 @@ public abstract class ControlSystemAutonomous extends LinearOpMode {
 
     protected final GyroscopeProvider gyroProvider;
 
-    protected final PIDGyroscopeDrive gyroscopePID;
+    public PIDGyroscopeDrive gyroscopePID;
     protected final SPGyroscopeDrive gyroscopeSP;
 
     protected final ImageTransformProvider imageProvider;
 
     protected Westcoast robot;
     private long end;
-
+    public double p, i, d;
+    String[] pid;
+    byte[] buffer = new byte[64];
+    public FileManager fileManager;
     /**
      * Loads hardware, pid drives, and sensor providers
      */
@@ -48,7 +54,25 @@ public abstract class ControlSystemAutonomous extends LinearOpMode {
     @Override
     public void runOpMode(){
         Logger.init();
-
+        fileManager = new FileManager(hardwareMap.appContext);
+        try {
+            fileManager.initialize();
+        } catch (IOException e) {
+            telemetry.addData("ERROR", e.getMessage());
+            telemetry.update();
+        }
+        try {
+            fileManager.readFile(buffer);
+        } catch (IOException e) {
+            telemetry.addData("ERROR", e.getMessage());
+            telemetry.update();
+        }
+        pid = (new String(buffer)).split(",");
+        telemetry.addData("List", pid[1]);
+        telemetry.update();
+        //p = Double.valueOf(pid[0]);
+        //i = Double.valueOf(pid[1]);
+        //d = Double.valueOf(pid[2]);
         robot.init();
         robot.initServos();
         robot.getDriveBackLeft().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -106,6 +130,10 @@ public abstract class ControlSystemAutonomous extends LinearOpMode {
         sleep(750);
         robot.getIntakeBottomRight().setPower(0);
         robot.getIntakeBottomLeft().setPower(0);
+    }
+
+    public void updatePID(double p, double i, double d){
+        gyroscopePID = new PIDGyroscopeDrive(robot, gyroProvider);
     }
 
     /**

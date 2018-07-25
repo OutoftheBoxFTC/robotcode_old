@@ -60,6 +60,8 @@ public abstract class DriveControl {
             double correction = controller.update(getReading());
             max_power = Math.max(Math.abs(max_power), Math.abs(correction));
             //debug if wanted
+            robot.getOpMode().telemetry.addData("Current", "90");
+            robot.getOpMode().telemetry.addData("Actual", getReading());
             //take the correction and provide poweroffset
             robot.drive(powerOffset + correction, powerOffset - correction);
             //check if the robot should stop driving
