@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.util.RobotLog;
 import org.ftc7244.datalogger.Logger;
 import org.ftc7244.robotcontroller.autonomous.drivers.PIDGyroscopeDrive;
 import org.ftc7244.robotcontroller.autonomous.drivers.SPGyroscopeDrive;
-import org.ftc7244.robotcontroller.files.FileManager;
 import org.ftc7244.robotcontroller.hardware.Westcoast;
 import org.ftc7244.robotcontroller.sensor.gyroscope.GyroscopeProvider;
 import org.ftc7244.robotcontroller.sensor.gyroscope.RevIMUGyroscopeProvider;
@@ -37,7 +36,6 @@ public abstract class ControlSystemAutonomous extends LinearOpMode {
     public double p, i, d;
     String[] pid;
     byte[] buffer = new byte[64];
-    public FileManager fileManager;
     /**
      * Loads hardware, pid drives, and sensor providers
      */
@@ -54,19 +52,7 @@ public abstract class ControlSystemAutonomous extends LinearOpMode {
     @Override
     public void runOpMode(){
         Logger.init();
-        fileManager = new FileManager(hardwareMap.appContext);
-        try {
-            fileManager.initialize();
-        } catch (IOException e) {
-            telemetry.addData("ERROR", e.getMessage());
-            telemetry.update();
-        }
-        try {
-            fileManager.readFile(buffer);
-        } catch (IOException e) {
-            telemetry.addData("ERROR", e.getMessage());
-            telemetry.update();
-        }
+
         pid = (new String(buffer)).split(",");
         telemetry.addData("List", pid[1]);
         telemetry.update();
